@@ -1,6 +1,6 @@
-from flask import Flask,render_template,request,jsonify
+from flask import Flask,render_template,request
 from chat import buscar
-
+from retorno import retornar_valores
 import pymysql
 app = Flask("mi proyecto nuevo")
 
@@ -43,8 +43,7 @@ def respuesta():
     if request.method == 'POST':
         # Obtener los datos enviados mediante Ajax
         busqueda = request.form.get('bus')
-        respuesta,valor_i = buscar(busqueda)
-
+        respuesta,accion = buscar(busqueda)
         if respuesta:
             # Establecer la conexión a la base de datos
             conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
@@ -52,36 +51,19 @@ def respuesta():
             cursor = conn.cursor()
             # Ejecutar la consulta SQL
             cursor.execute(respuesta)
-
             # Verifica si hay algún resultado antes de obtenerlos
             if cursor.rowcount > 0:
                 # Si hay resultados, obtén los datos de la consulta
                 resultados = cursor.fetchall()
                 cursor.close()
                 conn.close()
-                # Retornar los resultados obtenidos de la consulta
-                # Convertir los resultados a una lista de diccionarios
-                if valor_i >= 0 and valor_i  < 1:
-                    data = [{'carrera': row[0], 'to': row[1], 'indice':str(valor_i)} for row in resultados]
-                if valor_i >= 1 and valor_i  < 2 or valor_i == 3:
-                    data = [{'carrera': row[0], 'nombre': row[1],'ap': row[2],'am': row[3],'ci': row[4],'departamento': row[6], 'indice':str(valor_i)} for row in resultados]
-                if valor_i >= 2 and valor_i  < 3 or valor_i == 4:
-                    data = [{'carrera': row[0], 'nombre': row[1],'ap': row[2],'am': row[3],'ci': row[4],'departamento': row[6], 'indice':str(valor_i)} for row in resultados]
-                if valor_i == 5:
-                    data = [{'carrera': row[1], 'direccion': row[2], 'indice':str(valor_i)} for row in resultados]
-                if valor_i == 6:
-                    data = [{'carrera': row[1], 'direccion': row[2], 'indice':str(valor_i)} for row in resultados]
-
-                #nombre_es,ap_es,am_es,ci,pais_es,departamento,provincia,ciudad,region,sexo
-                # Enviar los datos como JSON al cliente
-                return jsonify(data)
-                # Aquí puedes continuar con tu lógica para procesar los resultados
+                return retornar_valores(resultados,accion)
             else:
                 # Si no hay resultados, realiza alguna acción adecuada
-                return "Lo siento, no tengo una respuesta para esa pregunta o puede argumentar un poco mas.";
+                return "Lo siento, no tengo una respuesta para esa pregunta o puede argumentar un poco mas.1";
 
         else:
-            return ("Lo siento, no tengo una respuesta para esa pregunta o puede argumentar un poco mas.")
+            return ("Lo siento, no tengo una respuesta para esa pregunta o puede argumentar un poco mas.2")
     else:
         # Si no es una solicitud POST, puedes manejarlo aquí
         return "Solicitud no válida"

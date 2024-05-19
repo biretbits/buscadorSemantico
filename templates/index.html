@@ -155,9 +155,9 @@
                 html+="se tiene "+contar+" estudiantes desactivos";
           }
 
-          if(indice == 5){
+          if(indice == "ver_carreras"){
 
-                    html += "La carreras son: ";
+                    html += "Las carreras son las siguientes: ";
                                 html += "<h2>Tabla de carreras de la UNSXX</h2>";
                                 html += "<table class='table table-striped'>";
                                   html += "<thead>";
@@ -183,15 +183,16 @@
                     }
                     html +=" </tbody>";
                           html +="</table>";
-                        html+="se tiene "+contar+" estudiantes desactivos";
+                        html+="Se tiene "+contar+" carreras activos";
           }
 
-          if(indice == 6){
+          if(indice == "ver_carreras_nombre"){
             for (var i = 0; i < data.length; i++) {
               if (data[i].carrera === null  || data[i].carrera === "") {
                       html += "Lo siento, no tengo una respuesta para esa pregunta o puede argumentar un poco mas.";
               } else {
-                  html += "la carrera de " + data[i].carrera + " se encuentra en la direccion "+data[i].direccion;
+
+                  html += "la carrera de " + data[i].carrera + " se encuentra en la direccion "+data[i].direccion+" ";
               }
             }
           }

@@ -1,81 +1,63 @@
+import spacy
+from spacy.matcher import Matcher
+
+# Cargar el modelo en español
+nlp = spacy.load("es_core_news_sm")
+matcher = Matcher(nlp.vocab)
+
+patterns = {
+    "ver_carreras": [
+        {"LEMMA": {"IN": ["mostrar", "ver", "visualizar"]}, "OP": "?"},
+        {"LEMMA": {"IN": ["carrera"]}, "OP": "?"},
+        {"LEMMA": {"IN": ["cual"]}, "OP": "?"},
+        {"LEMMA": {"IN": ["unsxx"]}, "OP": "?"},
+        {"LEMMA": {"IN": ["ingenieria"]}, "OP": "?"},
+        {"LEMMA": {"IN": ["datos","informacion","detalle"]}, "OP": "?"},
+    ],
+    "SHOW_FAILED_STUDENTS": [
+        {"LEMMA": {"IN": ["mostrar", "ver", "visualizar"]}, "OP": "?"},
+        {"LEMMA": {"IN": ["estudiante", "alumno"]}},
+        {"LEMMA": {"IN": ["aplazar", "reprobar",""]}},
+        {"LEMMA": {"IN": ["carrera", "grado"]}, "OP": "?"},
+        {"LOWER": {"IN": ["mecánica", "ingeniería mecánica"]}, "OP": "?"}
+    ],
+    "SHOW_PASSED_STUDENTS": [
+        {"LEMMA": {"IN": ["mostrar", "ver", "visualizar"]}, "OP": "?"},
+        {"LEMMA": {"IN": ["estudiante", "alumno"]}},
+        {"LEMMA": "aprobar", "OP": "?"},
+        {"LOWER": {"IN": ["mecánica", "ingeniería mecánica"]}, "OP": "?"}
+    ],
+    "estudiante carrera activos": [
+        {"LEMMA": {"IN": ["mostrar", "ver", "visualizar"]}, "OP": "?"},
+        {"LEMMA": {"IN": ["estudiante", "alumno"]}},
+    {"LEMMA": {"IN": ["aplazar", "reprobar",""]}},
+        {"LEMMA": "activo"},
+        {"LEMMA": {"IN": ["carrera", "grado"]}},
+        {"LOWER": {"IN": ["mecánica", "ingeniería mecánica"]}, "OP": "?"}
+    ]
+}
 
 
-from comprobar import obtener_carreras_nombre,detectar_numeros_delimiter
-import nltk
-from nltk.tokenize import word_tokenize
-from nltk.corpus import stopwords
-from nltk.stem import WordNetLemmatizer
-from nltk.tokenize import RegexpTokenizer
-from nltk.metrics import jaccard_distance
+# Añadir patrones al matcher con sus etiquetas correspondientes
+for intent, pattern in patterns.items():
+    matcher.add(intent, [pattern])
 
-nltk.download('punkt')
-nltk.download('stopwords')
-nltk.download('wordnet')
+# Texto de ejemplo
+text = "carrera de informatica"
 
-# Definir la lista de pares
-pares = [
-#0
-["todo todos cual cuanto cuantos cantidad estudiante estudiantes carrera",["SELECT c.nombre_carrera, COUNT(*) AS total_estudiantes FROM carrera AS c INNER JOIN estudiante AS e ON c.cod_carrera = e.cod_carrera WHERE c.nombre_carrera like '%{}%';"]],
-    # Desactivos estudiantess por carrera y activos y detalle
-#1
-["activo activos todo todos cantidad estudiante estudiantes carrera quienes quien descripcion detalle  quiero  obten obtenemelo",["SELECT nombre_carrera,nombre_es,ap_es,am_es,ci,pais_es,departamento,provincia,ciudad,region,sexo FROM carrera AS c INNER JOIN estudiante AS e ON c.cod_carrera = e.cod_carrera WHERE e.estado = 'activo' and c.nombre_carrera like '%{}%'"]],
-#2
-["desactivo desactivos todo todos cantidad estudiante estudiantes carrera quienes quien descripcion detalle  quiero  obten obtenemelo",["SELECT nombre_carrera,nombre_es,ap_es,am_es,ci,pais_es,departamento,provincia,ciudad,region,sexo FROM carrera AS c INNER JOIN estudiante AS e ON c.cod_carrera = e.cod_carrera WHERE e.estado = 'desactivo' and c.nombre_carrera like '%{}%' "]],
-#3
-["activo activos todo todos cantidad estudiante estudiantes carrera quienes quien descripcion detalle delimitado quiero limitado delimitamelo limitamelo obten obtenemelo",["SELECT nombre_carrera,nombre_es,ap_es,am_es,ci,pais_es,departamento,provincia,ciudad,region,sexo FROM carrera AS c INNER JOIN estudiante AS e ON c.cod_carrera = e.cod_carrera WHERE e.estado = 'activo' and c.nombre_carrera like '%{}%' limit {};"]],
-#4
-["desactivo desactivos todo todos cantidad estudiante estudiantes carrera quienes quien descripcion detalle delimitado quiero limitado delimitamelo limitamelo obten obtenemelo",["SELECT nombre_carrera,nombre_es,ap_es,am_es,ci,pais_es,departamento,provincia,ciudad,region,sexo FROM carrera AS c INNER JOIN estudiante AS e ON c.cod_carrera = e.cod_carrera WHERE e.estado = 'desactivo' and c.nombre_carrera like '%{}%' limit {};"]],
-#5
-["cuales cual carrera unsxx universidad nacional siglo xx",["select *from carrera;"]],
-#6
-["cuales cual carrera direccion infomacion dato datos lugar",["select *from carrera where nombre_carrera like '%{}%';"]],
-]
+# Procesar el texto
+doc = nlp(text)
+matches = matcher(doc)
 
+# Determinar la intención del usuario
+intention = None
+for match_id, start, end in matches:
+    match_id_str = nlp.vocab.strings[match_id]
+    matched_span = doc[start:end]
+    intention = match_id_str  # Guardar la intención correspondiente
+    print(f"Coincidencia: {matched_span.text}, Intención: {intention}")
 
-# Función para preprocesar y tokenizar el texto
-def preprocess_text(text):
-    tokenizer = RegexpTokenizer(r'\w+')
-    tokens = tokenizer.tokenize(text.lower())
-
-    stop_words = set(stopwords.words('spanish'))
-    filtered_tokens = [word for word in tokens if word not in stop_words]
-
-    lemmatizer = WordNetLemmatizer()
-    lemmatized_tokens = [lemmatizer.lemmatize(word) for word in filtered_tokens]
-
-    return lemmatized_tokens
-
-# Función para calcular la similitud palabra por palabra
-def calculate_similarity_word_by_word(user_tokens, query_tokens):
-    common_words = set(user_tokens) & set(query_tokens)
-    return len(common_words)
-
-def buscar(texto):
-    max_similarity = -1
-    response_index = -1
-    response = ""
-
-    # Tokenizar el texto del usuario
-    user_tokens = preprocess_text(texto)
-
-    # Recorremos los pares de consultas
-    for i, (input_phrase, responses) in enumerate(pares):
-        query_tokens = preprocess_text(input_phrase)
-        similarity = calculate_similarity_word_by_word(user_tokens, query_tokens)
-
-        # Si la similitud es mayor, actualiza la respuesta y el índice
-        if similarity > max_similarity:
-            max_similarity = similarity
-            response = responses[0]  # Asumimos que la consulta genérica está en la posición 0 del array de respuestas
-            response_index = i
-    carreras_encontradas = obtener_carreras_nombre(texto);
-    primera_carrera = carreras_encontradas.pop(0)
-    print("la carrera es ",primera_carrera)
-    response = response.format(primera_carrera)
-    return response, response_index
-
-# Ejemplo de uso
-user_query = "direccion  bioquimica"
-respuesta, indice = buscar(user_query)
-print("Respuesta:", respuesta)
-print("Índice de la consulta seleccionada:", indice)
+if intention:
+    print(f"La intención del usuario es: {intention}")
+else:
+    print("No se pudo determinar la intención del usuario.")
