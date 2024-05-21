@@ -44,7 +44,7 @@ def respuesta():
         # Obtener los datos enviados mediante Ajax
         busqueda = request.form.get('bus')
         respuesta,accion = buscar(busqueda)
-        if respuesta:
+        if respuesta != "argumentar_poco_mas":
             # Establecer la conexión a la base de datos
             conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
             # Crear un cursor para ejecutar consultas

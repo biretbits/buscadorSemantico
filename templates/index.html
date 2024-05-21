@@ -21,7 +21,7 @@
           <form>
             <div class="input-group mb-3">
               <input id='buscar' name='buscar' type="text" class="form-control" placeholder="Buscar..." aria-label="Buscar" aria-describedby="button-addon2">
-              <button class="btn btn-primary" type="button" id="button-addon2" onclick="buscaras()">Buscar</button>
+              <button class="btn btn-primary" type="button" id="button-addon2" onclick="buscarDatos()">Buscar</button>
 
             </div>
           </form>
@@ -35,11 +35,11 @@
       </div>
     </div>
     <script type="text/javascript">
-    function buscaras(){
+    function buscarDatos(){
+
       var bus = document.getElementById("buscar").value;
       var datos=new  FormData();
       datos.append("bus",bus);
-
       $.ajax({
         type: "POST", //type of submit
         cache: false, //important or else you might get wrong data returned to you
@@ -58,131 +58,88 @@
     function retorno1(data){
       var html = '';
       if (typeof data === "string") {
-        html += "<div class='container'>";
-        html +=data;
-        html += "</div>";
+        html += "<div class='container'>";html +=data;html += "</div>";
         $('#respuesta').html(html);
       }else{
-
-          console.log(data.length+" llego");
-          var indice = data[data.length - 1].indice; // Accede al último elemento de la lista
-
-          html += "<div class='container'>";
-          if(indice >= 0 && indice < 1){
-            for (var i = 0; i < data.length; i++) {
-              if (data[i].carrera === null || data[i].to === 0 || data[i].carrera === "" || data[i].to === "") {
-                    html += "Lo siento, no tengo una respuesta para esa pregunta o puede argumentar un poco mas.";
-              } else {
-                  html += "La cantidad de estudiantes de la carrera " + data[i].carrera + " es de " + data[i].to;
-              }
-            }
-          }
-          if(indice >= 1 && indice < 2 || indice == 3){
-
-                    html += "La cantidad de estudiantes activos de la carrera " + data[data.length - 1].carrera + " son los siguientes";
-
-                                html += "<h2>Tabla de estudiantes activos</h2>";
-                                html += "<table class='table table-striped'>";
-                                  html += "<thead>";
-                                    html += "<tr>";
-                                      html += "<th>Nro</th>";
-                                      html += "<th>Nombre</th>";
-                                      html += "<th>Apellido Paterno</th>";
-                                      html += "<th>Apellido Materno</th>";
-                                      html += "<th>Cédula de Identidad</th>";
-                                    html += "  <th>Departamento</th>";
-                                    html += "</tr>";
-                                  html += "</thead>";
-                                html += "  <tbody>";
-                    var  contar = 0;
-                    for (var i = 0; i < data.length; i++) {
-                      if (data[i].carrera === null || data[i].carrera === "") {
-                            html += "Lo siento, no tengo una respuesta para esa pregunta o puede argumentar un poco mas.";
-                      } else {
-                          html +="<tr>";
-                                    html += "<td>"+(i+1)+"</td>";
-                                    html += "<td>"+data[i].nombre+"</td>";
-                                    html += "<td>"+data[i].ap+"</td>";
-                                    html += "<td>"+data[i].am+"</td>";
-                                    html += "<td>"+data[i].ci+"</td>";
-                                    html += "<td>"+data[i].departamento+"</td>";
-                                  html += "</tr>";
-                      }
-                      contar++;
-                    }
-                    html +=" </tbody>";
-                          html +="</table>";
-                        html+="se tiene "+contar+" estudiantes activos";
-          }
-
-
-
-          if(indice >= 2 && indice <3 || indice == 4){
-
-            html += "La cantidad de estudiantes desactivos de la carrera " + data[data.length - 1].carrera + " son los siguientes";
-
-                        html += "<h2>Tabla de estudiantes desactivos</h2>";
-                        html += "<table class='table table-striped'>";
-                          html += "<thead>";
-                            html += "<tr>";
-                              html += "<th>Nro</th>";
-                              html += "<th>Nombre</th>";
-                              html += "<th>Apellido Paterno</th>";
-                              html += "<th>Apellido Materno</th>";
-                              html += "<th>Cédula de Identidad</th>";
-                            html += "  <th>Departamento</th>";
-                            html += "</tr>";
-                          html += "</thead>";
-                        html += "  <tbody>";
-            var  contar = 0;
-            for (var i = 0; i < data.length; i++) {
-              if (data[i].carrera === null || data[i].carrera === "") {
-                    html += "Lo siento, no tengo una respuesta para esa pregunta o puede argumentar un poco mas.";
-              } else {
+        console.log(data[data.length - 1].indice);
+        var indice = data[data.length - 1].indice; // Accede al último elemento de la lista
+        html += "<div class='container'>";
+        if(indice == "total_de_estudiantes_carrera" || indice == "ver_por_nombre_estudiante"){
+          var me = data[data.length - 1].msg;
+          if(me == "argumentar_poco_mas"){
+            html += "<div class='alert alert-secondary' role='alert'> Le pido que argumente un poco mas</div>";
+          }else{
+            html += "<div class='alert alert-secondary' role='alert'>Los estudiantes encontrados de la carrera " + data[data.length - 1].carrera + " son "+data[data.length-1].total+"</div>";
+            html += "<h2>Tabla de estudiantes</h2>";
+            html += "<table class='table table-striped'>";
+              html += "<thead>";
+                html += "<tr>";
+                  html += "<th>Nro</th>";
+                  html += "<th>Nombre</th>";
+                  html += "<th>Apellido Paterno</th>";
+                  html += "<th>Apellido Materno</th>";
+                  html += "<th>Cédula de Identidad</th>";
+                  html += "<th>pais</th>";
+                  html += "<th>Departamento</th>";
+                  html += "<th>provincia</th>";
+                  html += "<th>region</th>";
+                  html += "<th>sexo</th>";
+                html += "</tr>";
+              html += "</thead>";
+              html += "  <tbody>";
+              var  contar = 0;
+              for (var i = 0; i < data.length; i++) {
+                if (data[i].carrera === null || data[i].carrera === ""){
+                  html += "Lo siento, no tengo una respuesta para esa pregunta o puede argumentar un poco mas.";
+                } else {
                   html +="<tr>";
-                            html += "<td>"+(i+1)+"</td>";
-                            html += "<td>"+data[i].nombre+"</td>";
-                            html += "<td>"+data[i].ap+"</td>";
-                            html += "<td>"+data[i].am+"</td>";
-                            html += "<td>"+data[i].ci+"</td>";
-                            html += "<td>"+data[i].departamento+"</td>";
-                          html += "</tr>";
+                    html += "<td>"+(i+1)+"</td>";
+                    html += "<td>"+data[i].nombre+"</td>";
+                    html += "<td>"+data[i].ap+"</td>";
+                    html += "<td>"+data[i].am+"</td>";
+                    html += "<td>"+data[i].ci+"</td>";
+                    html += "<td>"+data[i].pais+"</td>";
+                    html += "<td>"+data[i].dep+"</td>";
+                    html += "<td>"+data[i].provi+"</td>";
+                    html += "<td>"+data[i].regi+"</td>";
+                    html += "<td>"+data[i].sexo+"</td>";
+                  html += "</tr>";
+                }
+                contar++;
               }
-              contar++;
+              html +=" </tbody>";
+            html +="</table>";
             }
-            html +=" </tbody>";
-                  html +="</table>";
-                html+="se tiene "+contar+" estudiantes desactivos";
           }
+
 
           if(indice == "ver_carreras"){
-
-                    html += "Las carreras son las siguientes: ";
-                                html += "<h2>Tabla de carreras de la UNSXX</h2>";
-                                html += "<table class='table table-striped'>";
-                                  html += "<thead>";
-                                    html += "<tr>";
-                                      html += "<th>Nro</th>";
-                                      html += "<th>Carrera</th>";
-                                      html += "<th>Direccion</th>";
-                                    html += "</tr>";
-                                  html += "</thead>";
-                                html += "  <tbody>";
-                    var  contar = 0;
-                    for (var i = 0; i < data.length; i++) {
-                      if (data[i].carrera === null || data[i].carrera === "") {
-                          html += "Lo siento, no tengo una respuesta para esa pregunta o puede argumentar un poco mas.";
-                      } else {
-                          html +="<tr>";
-                                    html += "<td>"+(i+1)+"</td>";
-                                    html += "<td>"+data[i].carrera+"</td>";
-                                    html += "<td>"+data[i].direccion+"</td>";
-                                  html += "</tr>";
-                      }
-                      contar++;
-                    }
-                    html +=" </tbody>";
-                          html +="</table>";
+            html += "Las carreras son las siguientes: ";
+              html += "<h2>Tabla de carreras de la UNSXX</h2>";
+              html += "<table class='table table-striped'>";
+                html += "<thead>";
+                  html += "<tr>";
+                    html += "<th>Nro</th>";
+                    html += "<th>Carrera</th>";
+                    html+= "<th>Direccion</th>";
+                  html += "</tr>";
+                html += "</thead>";
+              html += "  <tbody>";
+              var  contar = 0;
+              for (var i = 0; i < data.length; i++) {
+                if (data[i].carrera === null || data[i].carrera === "") {
+                    html += "Lo siento, no tengo una respuesta para esa pregunta o puede argumentar un poco mas.";
+                } else {
+                  html +="<tr>";
+                    html += "<td>"+(i+1)+"</td>";
+                    html += "<td>"+data[i].carrera+"</td>";
+                    html += "<td>"+data[i].direccion+"</td>";
+                  html += "</tr>";
+                }
+                contar++;
+              }
+              html +=" </tbody>";
+            html +="</table>";
                         html+="Se tiene "+contar+" carreras activos";
           }
 
@@ -194,6 +151,12 @@
 
                   html += "la carrera de " + data[i].carrera + " se encuentra en la direccion "+data[i].direccion+" ";
               }
+            }
+          }
+
+          if(indice == "total_de_estudiantes"){
+            for (var i = 0; i < data.length; i++) {
+                html += "La universidad tiene un total de " + data[i].total + " Estudiantes";
             }
           }
 
