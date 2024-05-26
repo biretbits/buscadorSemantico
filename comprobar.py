@@ -33,6 +33,7 @@ def obtener_carreras_nombre(texto):
 
     # Buscar palabras clave asociadas con carreras universitarias en el texto
     for carrera_keyword in carreras_keywords:
+        print(texto_normalizado)
         if carrera_keyword in texto_normalizado:
             carreras_encontradas.append(carrera_keyword)
 
@@ -110,23 +111,16 @@ def contiene_palabras_sexo_mujer(texto):
 
 def palabras_departamento(texto):
     texto = texto.lower()
+    texto = eliminar_tildes(texto)
     # Lista de nombres de departamentos que pueden consistir en múltiples tokens
-    departamentos_multiples = ["la paz", "santa cruz"]
+
     # Array de palabras activas
-    departamentos = ["oruro", "pando", "potosi", "sucre", "cochabamba", "chuquisaca", "tarija"]
+    departamentos = ["la paz", "santa cruz","oruro", "pando", "potosi", "sucre", "cochabamba", "chuquisaca", "tarija"]
     # Procesar el texto con spaCy
-    doc3 = nlp(texto)
-    # Obtener todas las secuencias de tokens en el texto
-    secuencias = [doc3[i:j].text for i in range(len(doc3)) for j in range(i + 1, len(doc3) + 1)]
-    # Iterar sobre las secuencias de tokens
-    for secuencia in secuencias:
-        # Verificar si la secuencia forma parte de un nombre de departamento múltiple
-        if secuencia in departamentos_multiples:
-            return secuencia
     # Si ninguna secuencia forma un nombre de departamento múltiple, buscar si hay nombres de departamento únicos
-    for token in doc3:
-        if token.text in departamentos:
-            return token.text  # Devuelve el departamento encontrado
+    for token in departamentos:
+        if token in texto:
+            return token  # Devuelve el departamento encontrado
     return "no"
 
 
@@ -148,9 +142,8 @@ def palabras_provincia(texto):
             "ñuflo de chavez","aniceto arce", "burdett o connor","burdett oconnor","eustaquio mendez", "gran chaco",
              "jose maria aviles",
                                "o connor","sanchez de ocaña", "tomas barron"]
-
     texto = texto.lower()
-
+    texto = eliminar_tildes(texto)
     # Procesar el texto con spaCy
     doc4 = nlp(texto)
     # Obtener todas las secuencias de tokens en el texto
@@ -206,7 +199,7 @@ vec_nombre = ["aaron","abdon","abel","abelardo","abrahan","absalon","acacio","ad
 ]
 def encontrar_nombre(texto):
     texto = texto.lower()
-
+    texto = eliminar_tildes(texto)
     # Procesar el texto con spaCy
     doc5 = nlp(texto)
     for token in doc5:
@@ -224,20 +217,37 @@ vec_apellidos = ["aguilar","alonso","alvarez","arias","benitez","blanco","blesa"
 "lipiri","villca","villcaes","villcaez","torrico","titi","pacheco","lima","camiño","mitma","condori","mamani","quispe","sierra","acarapi",
 "lia","huanca","colquillo","huallpa","wallpa","cosio","ayala","galindo","quispia","chaca","achacollo","gallo","romero","jorge","zeballos","chura",
 "michaga","copatiti","acha","fernandes","cayo","coyo","medrano","porco","castillo","humeres","humerez","alizon","chambi","toledo","calani","charali",
-"victorio","choque","huayllani","adam","tola","sola","acebedo","jani jani","janijani","salinas","luna","diaz","jurado"]
+"victorio","choque","huayllani","adam","tola","sola","acebedo","jani jani","janijani","salinas","luna","dias","diaz","jurado"]
 def encontrar_apellido(texto):
     texto = texto.lower()
+    texto = eliminar_tildes(texto)
     apellidos_encontrados = []
 
-    # Procesar el texto con spaCy
-    doc = nlp(texto)
-
     # Verificar si algún apellido está presente en el texto
-    for token in doc:
-        if token.text in vec_apellidos:
-            apellidos_encontrados.append(token.text)
+    for token in vec_apellidos:
+        if token in texto:
+            apellidos_encontrados.append(token)
 
     if apellidos_encontrados:
         return apellidos_encontrados
     else:
         return "no"
+
+def obtener_area(texto):
+    # Cargar el modelo pre-entrenado en español
+    nlp = spacy.load("es_core_news_sm")
+
+    area_keywords = ["tecnologia", "salud", "social"]
+    indice_keywords = [1, 2, 3]
+    area = []
+
+    # Convertir el texto a minúsculas y eliminar tildes
+    texto_normalizado = eliminar_tildes(texto.lower())
+
+    # Procesar el texto con el modelo de SpaCy
+    # Buscar palabras clave asociadas con áreas en el texto
+    for area_keyword, indice_keyword in zip(area_keywords, indice_keywords):
+        if area_keyword in texto_normalizado:
+            area.append(indice_keyword)
+
+    return area

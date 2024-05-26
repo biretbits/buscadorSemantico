@@ -35,9 +35,7 @@
       </div>
     </div>
     <script type="text/javascript">
-    function buscarDatos(){
-      alert(4);
-      var bus = document.getElementById("buscar").value;
+    function buscarDatos(){  var bus = document.getElementById("buscar").value;
       var datos=new  FormData();
       datos.append("bus",bus);
       $.ajax({
@@ -57,14 +55,230 @@
     }
 
     function retorno1(data){
-      var html = '';
+      var html = '';var mensaje="";
       if (typeof data === "string") {
         html += "<div class='container'>";html +=data;html += "</div>";
         $('#respuesta').html(html);
       }else{
-        console.log(data[data.length - 1].indice);
+
         var indice = data[data.length - 1].indice; // Accede al último elemento de la lista
         html += "<div class='container'>";
+
+
+        if(indice == "total_de_estudiantes_carrera"){
+
+          var me = data[data.length - 1].msg;
+          if(me == "argumentar_poco_mas"){
+            html += "<div class='alert alert-secondary' role='alert'> Le pido que argumente un poco mas</div>";
+          }else{
+            var si_activo = data[data.length-1].si_activo;
+            var si_desactivo = data[data.length-1].si_desactivo;
+            var si_m = data[data.length-1].si_m;
+            var si_f = data[data.length-1].si_f;
+            var si_dep = data[data.length-1].si_dep;
+            var si_prov = data[data.length-1].si_prov;
+            var si_nom = data[data.length-1].si_nom;
+            var si_apell = data[data.length-1].si_apell;
+            for (var i = 0; i < 1; i++) {
+              var carrera = data[i].car;
+              var dep = data[i].dep;
+              var provi = data[i].provi;
+              var nom = data[i].nombre;
+              var ap = data[i].ap;
+              var am = data[i].am;
+            }
+            var si = "no";
+            var mensaje = "Los estudiantes ";
+            var retu = verificar(si_activo,si_desactivo,si_m,si_f,si_dep,si_prov,si_nom,si_apell,carrera,dep,provi,nom,ap,am,si);
+
+            html += "<div class='alert alert-secondary' role='alert'>"+mensaje+" "+retu+" son "+data[data.length-1].total+"</div>";
+            html+="<div class='alert alert-secondary' role='alert'>Detallamos en la siguiente tabla</div>"
+
+            html += "<h2>Tabla de estudiantes</h2>";
+            html += "<table class='table table-striped'>";
+              html += "<thead>";
+                html += "<tr>";
+                  html += "<th>Nro</th>";
+                  html += "<th>Nombre</th>";
+                  html += "<th>Apellido Paterno</th>";
+                  html += "<th>Apellido Materno</th>";
+                  html += "<th>Cédula de Identidad</th>";
+                  html += "<th>pais</th>";
+                  html += "<th>Departamento</th>";
+                  html += "<th>provincia</th>";
+                  html += "<th>region</th>";
+                  html += "<th>sexo</th>";
+                    html += "<th>carrera</th>";
+                html += "</tr>";
+              html += "</thead>";
+              html += "  <tbody>";
+              var  contar = 0;
+              for (var i = 0; i < data.length-1; i++) {
+                if (data[i].car === null || data[i].car === ""){
+                  html += "Lo siento, no tengo una respuesta para esa pregunta o puede argumentar un poco mas.";
+                } else {
+                  html +="<tr>";
+                    html += "<td>"+(i+1)+"</td>";
+                    html += "<td>"+data[i].nombre+"</td>";
+                    html += "<td>"+data[i].ap+"</td>";
+                    html += "<td>"+data[i].am+"</td>";
+                    html += "<td>"+data[i].ci+"</td>";
+                    html += "<td>"+data[i].pais+"</td>";
+                    html += "<td>"+data[i].dep+"</td>";
+                    html += "<td>"+data[i].provi+"</td>";
+                    html += "<td>"+data[i].regi+"</td>";
+                    html += "<td>"+data[i].sexo+"</td>";
+                        html += "<td>"+data[i].car+"</td>";
+                  html += "</tr>";
+                }
+                contar++;
+              }
+              html +=" </tbody>";
+            html +="</table>";
+            }
+          }
+
+          if(indice == "datos_especificos_estudiante"){
+
+            var me = data[data.length - 1].msg;
+            if(me == "argumentar_poco_mas"){
+              html += "<div class='alert alert-secondary' role='alert'> Le pido que argumente un poco mas</div>";
+                    }else{
+              var si_activo = "no";
+              var si_desactivo = "no";
+              var si_m = "no";
+              var si_f = "no";
+              var si_dep = "no";
+              var si_prov = "no";
+              var si_nom = data[data.length-1].si_nom;
+              var si_apell = data[data.length-1].si_apell;
+              for (var i = 0; i < 1; i++) {
+                var carrera = data[i].car;
+                var dep = data[i].dep;
+                var provi = data[i].provi;
+                var nom = data[i].nombre;
+                var ap = data[i].ap;
+                var am = data[i].am;
+              }
+              var si = "no";
+              var mensaje = " Los datos del estudiante ";
+              var retu = verificar(si_activo,si_desactivo,si_m,si_f,si_dep,si_prov,si_nom,si_apell,carrera,dep,provi,nom,ap,am,si);
+
+              html += "<div class='alert alert-secondary' role='alert'>"+mensaje+" "+retu+" son los siguientes</div>";
+              html+="<div class='alert alert-secondary' role='alert'>Detallamos en la siguiente tabla</div>"
+
+              html += "<h2>Tabla de estudiantes</h2>";
+              html += "<table class='table table-striped'>";
+                html += "<thead>";
+                  html += "<tr>";
+                    html += "<th>Nro</th>";
+                    html += "<th>Nombre</th>";
+                    html += "<th>Apellido Paterno</th>";
+                    html += "<th>Apellido Materno</th>";
+                    html += "<th>Cédula de Identidad</th>";
+                    html += "<th>pais</th>";
+                    html += "<th>Departamento</th>";
+                    html += "<th>provincia</th>";
+                    html += "<th>region</th>";
+                    html += "<th>sexo</th>";
+                      html += "<th>carrera</th>";
+                  html += "</tr>";
+                html += "</thead>";
+                html += "  <tbody>";
+                var  contar = 0;
+                for (var i = 0; i < data.length-1; i++) {
+                  if (data[i].car === null || data[i].car === ""){
+                    html += "Lo siento, no tengo una respuesta para esa pregunta o puede argumentar un poco mas.";
+                  } else {
+                    html +="<tr>";
+                      html += "<td>"+(i+1)+"</td>";
+                      html += "<td>"+data[i].nombre+"</td>";
+                      html += "<td>"+data[i].ap+"</td>";
+                      html += "<td>"+data[i].am+"</td>";
+                      html += "<td>"+data[i].ci+"</td>";
+                      html += "<td>"+data[i].pais+"</td>";
+                      html += "<td>"+data[i].dep+"</td>";
+                      html += "<td>"+data[i].provi+"</td>";
+                      html += "<td>"+data[i].regi+"</td>";
+                      html += "<td>"+data[i].sexo+"</td>";
+                          html += "<td>"+data[i].car+"</td>";
+                html += "</tr>";
+                  }
+                  contar++;
+              }
+                html +=" </tbody>";
+              html +="</table>";
+              }
+            }
+            if(indice == "estudiantes_de_unsxx"){
+              var me = data[data.length - 1].msg;
+              if(me == "argumentar_poco_mas"){
+                html += "<div class='alert alert-secondary' role='alert'> Le pido que argumente un poco mas</div>";
+                      }else{
+                var si_activo = data[data.length-1].si_activo;
+                var si_desactivo = data[data.length-1].si_desactivo;
+                var si_m = data[data.length-1].si_m;
+                var si_f = data[data.length-1].si_f;
+                var si_dep = data[data.length-1].si_dep;
+                var si_prov = data[data.length-1].si_prov;
+                var si_nom = "no";
+                var si_apell = "no";
+                for (var i = 0; i < 1; i++) {
+                  var dep = data[i].dep;
+                  var provi = data[i].provi;
+                  var nom = data[i].nombre;
+                  var ap = data[i].ap;
+                  var am = data[i].am;
+                }
+                var si = "no";
+                var mensaje = " Los estudiantes";
+                var retu = verificarUNSXX(si_activo,si_desactivo,si_m,si_f,si_dep,si_prov,si_nom,si_apell,dep,provi,nom,ap,am,si);
+
+                html += "<div class='alert alert-secondary' role='alert'>"+mensaje+" "+retu+" son "+data[data.length-1].total+"</div>";
+                html+="<div class='alert alert-secondary' role='alert'>Detallamos en la siguiente tabla</div>"
+
+                html += "<h2>Tabla de estudiantes</h2>";
+                html += "<table class='table table-striped'>";
+                  html += "<thead>";
+                    html += "<tr>";
+                      html += "<th>Nro</th>";
+                      html += "<th>Nombre</th>";
+                      html += "<th>Apellido Paterno</th>";
+                      html += "<th>Apellido Materno</th>";
+                      html += "<th>Cédula de Identidad</th>";
+                      html += "<th>pais</th>";
+                      html += "<th>Departamento</th>";
+                      html += "<th>provincia</th>";
+                      html += "<th>region</th>";
+                      html += "<th>sexo</th>";
+                    html += "</tr>";
+                  html += "</thead>";
+                  html += "  <tbody>";
+                  var  contar = 0;
+                  for (var i = 0; i < data.length-1; i++) {
+                    if (data[i].car === null || data[i].car === ""){
+                      html += "Lo siento, no tengo una respuesta para esa pregunta o puede argumentar un poco mas.";
+                    } else {
+                      html +="<tr>";
+                        html += "<td>"+(i+1)+"</td>";
+                        html += "<td>"+data[i].nombre+"</td>";
+                        html += "<td>"+data[i].ap+"</td>";
+                        html += "<td>"+data[i].am+"</td>";
+                        html += "<td>"+data[i].ci+"</td>";
+                        html += "<td>"+data[i].pais+"</td>";
+                        html += "<td>"+data[i].dep+"</td>";
+                        html += "<td>"+data[i].provi+"</td>";
+                        html += "<td>"+data[i].regi+"</td>";
+                        html += "<td>"+data[i].sexo+"</td>";
+                  html += "</tr>";
+                    }
+                    contar++;
+                }
+                  html +=" </tbody>";
+                html +="</table>";
+                }
+            }
+/*
         if(indice == "total_de_estudiantes_carrera" || indice == "ver_por_nombre_estudiante" || indice == "datos_especificos_estudiante"){
           var me = data[data.length - 1].msg;
           if(me == "argumentar_poco_mas"){
@@ -116,7 +330,7 @@
             html +="</table>";
             }
           }
-
+*/
 
                 /*# Crear una lista de diccionarios a partir de datos
                 data = [{'carrera': row[1], 'direccion': row[2]} for row in datos]
@@ -174,7 +388,48 @@
             }
           }
 
-          
+          if(indice == "seleccionar_carreras_area"){
+            for(var i = 0;i<1;i++){
+              var area = data[i].area;
+              var direccion_area = data[i].direccion_area;
+              var telefono_area = data[i].telefono_area;
+              var nombre_carrera = data[i].nombre_carrera;
+              var direccion_carrera = data[i].direccion_carrera;
+            }
+            var c_area = data[data.length-1].c_area;
+            var si_ar = data[data.length-1].si_ar;
+            var si = "no";
+            var mensaje = "EL area de ";
+            var retu = verificaraREA(si,area,direccion_area,telefono_area,nombre_carrera ,direccion_carrera,si_ar,c_area);
+            html += "<div class='alert alert-secondary' role='alert'>"+mensaje+" "+retu+" tiene las siguientes carreras </div>";
+            html += "<h2>Tabla de carreras</h2>";
+            html += "<table class='table table-striped'>";
+              html += "<thead>";
+                html += "<tr>";
+                  html += "<th>Nro</th>";
+                  html += "<th>Carrera</th>";
+                  html+= "<th>Direccion</th>";
+                html += "</tr>";
+              html += "</thead>";
+            html += "  <tbody>";
+            var  contar = 0;
+            for (var i = 0; i < data.length-1; i++) {
+              if (data[i].nombre_carrera === null || data[i].nombre_carrera === "") {
+                  html += "Lo siento, no tengo una respuesta para esa pregunta o puede argumentar un poco mas.";
+              } else {
+                html +="<tr>";
+                  html += "<td>"+(i+1)+"</td>";
+                  html += "<td>"+data[i].nombre_carrera+"</td>";
+                  html += "<td>"+data[i].direccion_carrera+"</td>";
+                html += "</tr>";
+              }
+              contar++;
+            }
+            html +=" </tbody>";
+            html +="</table>";
+          }
+
+
 
           html +="</container>";
 
@@ -190,6 +445,146 @@
       console.log("Total:", obj.to);
       console.log("Indice:", obj.indice);
     });*/
+    function verificar(si_activo,si_desactivo,si_m,si_f,si_dep,si_prov,si_nom,si_apell,carrera,dep,provi,nom,ap,am,si){
+      men = "";
+
+      if(si_activo != "no"&& si =="no"){
+        men+=" activos ";
+        si = "si";
+      }
+      if(si_desactivo != "no"&& si =="no"){
+          men+=" desactivos ";  si = "si";
+      }else if(si_desactivo != "no"&& si =="si"){
+          men+=", desactivos";
+      }
+      if(si_m != "no"&& si =="no"){
+          men+=" varones ";  si = "si";
+      }else if(si_m != "no"&& si =="si"){
+        men+=", varones";
+      }
+
+      if(si_f != "no"&& si =="no"){
+          men+=" mujeres ";  si = "si";
+      }else if(si_f != "no"&& si =="no"){
+          men+=" , mujeres";
+      }
+
+      if(si_dep != "no"&& si =="no"){
+          men+=" del departamento "+dep+" ";  si = "si";
+      }else if(si_dep != "no"&& si =="si"){
+          men+=" , departamento de "+de;
+      }
+
+      if(si_prov != "no"&& si =="no"){
+          men+=" de la provincia de "+provi+" ";  si = "si";
+      }else if(si_prov != "no"&& si =="si"){
+         men+=" , provincia de "+provi;
+      }
+      var hay = "no";
+      if(si_nom != "no"&& si =="no"){
+          men+=" con el nombre de "+nom+"";  si = "si";
+          hay = "si";
+      }else if(si_nom != "no"&& si =="si"){
+        men+=" , con el nombre de "+nom+"";
+        hay = "si";
+      }
+      if(si_apell != "no"&& si =="no" && hay == "si"){
+        if(ap != ""){
+          men+=" "+ap;
+        }
+        if(am != ""){
+          men+=" "+am;
+        }
+          si = "si";
+      }else if(si_apell != "no"&& si =="si" && hay == "si"){
+        if(ap != ""){
+          men+=" "+ap;
+        }
+        if(am != ""){
+          men+=" "+am;
+        }
+      }
+      men+=" de la carrera de "+carrera;
+      return men;
+    }
+
+    function verificarUNSXX(si_activo,si_desactivo,si_m,si_f,si_dep,si_prov,si_nom,si_apell,dep,provi,nom,ap,am,si){
+      men = "";
+
+      if(si_activo != "no"&& si =="no"){
+        men+=" activos ";
+        si = "si";
+      }
+      if(si_desactivo != "no"&& si =="no"){
+          men+=" desactivos ";  si = "si";
+      }else if(si_desactivo != "no"&& si =="si"){
+          men+=", desactivos";
+      }
+      if(si_m != "no"&& si =="no"){
+          men+=" varones ";  si = "si";
+      }else if(si_m != "no"&& si =="si"){
+        men+=", varones";
+      }
+
+      if(si_f != "no"&& si =="no"){
+          men+=" mujeres ";  si = "si";
+      }else if(si_f != "no"&& si =="no"){
+          men+=" , mujeres";
+      }
+
+      if(si_dep != "no"&& si =="no"){
+          men+=" del departamento "+dep+" ";  si = "si";
+      }else if(si_dep != "no"&& si =="si"){
+          men+=" , departamento de "+dep;
+      }
+
+      if(si_prov != "no"&& si =="no"){
+          men+=" de la provincia de "+provi+" ";  si = "si";
+      }else if(si_prov != "no"&& si =="si"){
+         men+=" , provincia de "+provi;
+      }
+      var hay = "no";
+      if(si_nom != "no"&& si =="no"){
+          men+=" con el nombre de "+nom+"";  si = "si";
+          hay = "si";
+      }else if(si_nom != "no"&& si =="si"){
+        men+=" , con el nombre de "+nom+"";
+        hay = "si";
+      }
+      if(si_apell != "no"&& si =="no" && hay == "si"){
+        if(ap != ""){
+          men+=" "+ap;
+        }
+        if(am != ""){
+          men+=" "+am;
+        }
+          si = "si";
+      }else if(si_apell != "no"&& si =="si" && hay == "si"){
+        if(ap != ""){
+          men+=" "+ap;
+        }
+        if(am != ""){
+          men+=" "+am;
+        }
+      }
+      men+=" en la Universidad";
+      return men;
+    }
+    var ab = ["Tecnologia", "Salud", "Social"];
+    function verificaraREA(si,area,direccion_area,telefono_area,nombre_carrera ,direccion_carrera,si_ar,c_area){
+      var par =  c_area.split("|");
+      var me = "";
+      for(var i=0;i<par.length-1;i++){
+        if(si == "no"){
+          me+=ab[par[i]-1];
+          si = "si";
+        }
+        else if(si == "si"){
+          me+=", "+ab[par[i]-1];
+        }
+      }
+      return me;
+    }
     </script>
 
     <script src="{{ url_for('static', filename='bootstrap-5.0.2/js/bootstrap.min.js') }}" charset="utf-8"></script>
