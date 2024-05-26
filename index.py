@@ -43,21 +43,23 @@ def respuesta():
     if request.method == 'POST':
         # Obtener los datos enviados mediante Ajax
         busqueda = request.form.get('bus')
-        respuesta,accion = buscar(busqueda)
-        if respuesta != "argumentar_poco_mas":
+        respuesta = buscar(busqueda)
+        preg = respuesta[-1]
+        sql_consulta = respuesta[-1]
+        if preg != "argumentar_poco_mas":
             # Establecer la conexión a la base de datos
             conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
             # Crear un cursor para ejecutar consultas
             cursor = conn.cursor()
             # Ejecutar la consulta SQL
-            cursor.execute(respuesta)
+            cursor.execute(sql_consulta)
             # Verifica si hay algún resultado antes de obtenerlos
             if cursor.rowcount > 0:
                 # Si hay resultados, obtén los datos de la consulta
-                resultados = cursor.fetchall()
+                sql_consulta = cursor.fetchall()
                 cursor.close()
                 conn.close()
-                return retornar_valores(resultados,accion)
+                return retornar_valores(sql_consulta,respuesta)
             else:
                 # Si no hay resultados, realiza alguna acción adecuada
                 return "Lo siento, no tengo una respuesta para esa pregunta o puede argumentar un poco mas.1";

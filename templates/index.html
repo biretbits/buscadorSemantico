@@ -36,7 +36,7 @@
     </div>
     <script type="text/javascript">
     function buscarDatos(){
-
+      alert(4);
       var bus = document.getElementById("buscar").value;
       var datos=new  FormData();
       datos.append("bus",bus);
@@ -49,6 +49,7 @@
         contentType:false,
         processData:false,
         success: function(data){
+          alert(data);
           console.log(data);
             retorno1(data);
         },
@@ -64,12 +65,16 @@
         console.log(data[data.length - 1].indice);
         var indice = data[data.length - 1].indice; // Accede al último elemento de la lista
         html += "<div class='container'>";
-        if(indice == "total_de_estudiantes_carrera" || indice == "ver_por_nombre_estudiante"){
+        if(indice == "total_de_estudiantes_carrera" || indice == "ver_por_nombre_estudiante" || indice == "datos_especificos_estudiante"){
           var me = data[data.length - 1].msg;
           if(me == "argumentar_poco_mas"){
             html += "<div class='alert alert-secondary' role='alert'> Le pido que argumente un poco mas</div>";
           }else{
-            html += "<div class='alert alert-secondary' role='alert'>Los estudiantes encontrados de la carrera " + data[data.length - 1].carrera + " son "+data[data.length-1].total+"</div>";
+            if(indice == "datos_especificos_estudiante"){
+              html += "<div class='alert alert-secondary' role='alert'>Los datos del estudiante " + data[data.length - 1].nombre + " "+data[data.length-1].ap+" de la carrera de "+data[data.length - 1].carrera+" son los siguientes</div>";
+            }else{
+              html += "<div class='alert alert-secondary' role='alert'>Los estudiantes encontrados de la carrera " + data[data.length - 1].carrera + " son "+data[data.length-1].total+"</div>";
+            }
             html += "<h2>Tabla de estudiantes</h2>";
             html += "<table class='table table-striped'>";
               html += "<thead>";
@@ -113,8 +118,13 @@
           }
 
 
+                /*# Crear una lista de diccionarios a partir de datos
+                data = [{'carrera': row[1], 'direccion': row[2]} for row in datos]
+                # Crear una lista de diccionarios a partir de ress
+                data += [{'si_car_n': fila[3], 'si_car': fila[4],'indice':accion1} for fila in ress[:len(ress)-2]]*/
           if(indice == "ver_carreras"){
-            html += "Las carreras son las siguientes: ";
+            if(data[data.length-1].si_car != 'no'){
+              html += "Las carreras de la universidad son las siguientes: ";
               html += "<h2>Tabla de carreras de la UNSXX</h2>";
               html += "<table class='table table-striped'>";
                 html += "<thead>";
@@ -139,8 +149,12 @@
                 contar++;
               }
               html +=" </tbody>";
-            html +="</table>";
-                        html+="Se tiene "+contar+" carreras activos";
+              html +="</table>";
+              html+="Se tiene "+contar+" carreras activos";
+            }else  if(data[data.length-1].si_car_n != 'no'){
+              html += "Las carrera de "+data[data.length-1].carrera+" se encuentra en "+data[data.length-1].direccion;
+            }
+
           }
 
           if(indice == "ver_carreras_nombre"){
@@ -159,6 +173,8 @@
                 html += "La universidad tiene un total de " + data[i].total + " Estudiantes";
             }
           }
+
+          
 
           html +="</container>";
 

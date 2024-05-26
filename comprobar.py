@@ -24,7 +24,6 @@ def obtener_carreras_nombre(texto):
     carreras_encontradas = []
     # Convertir el texto a minúsculas y eliminar tildes
     texto_normalizado = eliminar_tildes(texto.lower())
-
     # Procesar el texto con el modelo de Spacy
     doc = nlp(texto_normalizado)
     # Verificar si hay entidades de tipo MISC en el texto
@@ -225,8 +224,7 @@ vec_apellidos = ["aguilar","alonso","alvarez","arias","benitez","blanco","blesa"
 "lipiri","villca","villcaes","villcaez","torrico","titi","pacheco","lima","camiño","mitma","condori","mamani","quispe","sierra","acarapi",
 "lia","huanca","colquillo","huallpa","wallpa","cosio","ayala","galindo","quispia","chaca","achacollo","gallo","romero","jorge","zeballos","chura",
 "michaga","copatiti","acha","fernandes","cayo","coyo","medrano","porco","castillo","humeres","humerez","alizon","chambi","toledo","calani","charali",
-"victorio","choque","huayllani","adam","tola","sola","acebedo","jani jani","janijani","salinas","luna"]
-
+"victorio","choque","huayllani","adam","tola","sola","acebedo","jani jani","janijani","salinas","luna","diaz","jurado"]
 def encontrar_apellido(texto):
     texto = texto.lower()
     apellidos_encontrados = []

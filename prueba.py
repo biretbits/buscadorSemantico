@@ -15,11 +15,14 @@ nltk.download('wordnet')
 
 # Definir la lista de pares
 pares = [
-["provincia provincias cuales cual carrera unsxx direccion datos datos detalle universidad nacional siglo xx lugar informacion encuentra",["ver_carreras"]],
+["cuales cual carrera carreras unsxx direccion datos datos detalle universidad nacional siglo xx lugar informacion encuentra",["ver_carreras"]],
 #6
 ["cuales cual total estudiante estudiantes unxx universidad nacional siglo xx cantidad numero todos",["total_de_estudiantes"]],
-["desahilitados desahilitado habilitado habilitados cuales cual total estudiante estudiantes carrera unxx universidad nacional siglo xx cantidad numero mostrar visualizar detalle sexo activo activos desactivos desactivo departamento pais provincia ciudad region",
+["quiero desahilitados desahilitado habilitado habilitados cuales cual total informacion estudiante estudiantes carrera unxx universidad nacional siglo xx cantidad numero mostrar visualizar detalle sexo activo activos desactivos desactivo departamento pais provincia ciudad region mujeres varones femenino masculino",
 ["total_de_estudiantes_carrera"]],
+["datos datos estudiante estudiantes quiero los del informacion carrera buscar busqueda",["datos_especificos_estudiante"]],
+["todos total del los estudiantes estudiante unsxx de universidad nacional siglo xx cantidad numero mostrar visualizar detalle sexo activo activos desactivos desactivo departamento pais provincia provincias ciudad region mujeres varones masculino femenino",
+["estudiantes_de_unsxx"]]
 
 ]
 
@@ -27,22 +30,45 @@ consultas_sql = {
 "ver_carreras":"select *from carrera",
 "ver_por_nombre_estudiante":" select e.nombre_es,e.ap_es,e.am_es,e.ci,e.pais_es,e.departamento,e.provincia,e.ciudad,e.region,e.sexo,c.nombre_carrera from carrera as c inner join estudiante as e on c.cod_carrera = e.cod_carrera where e.nombre_es like '%{}%' ",
 "ver_carreras_nombre":"select *from carrera where nombre_carrera like '%{}%';",
-"total_de_estudiantes":"SELECT COUNT(*) FROM estudiante;",
-"total_de_estudiantes_carrera":"SELECT e.nombre_es,e.ap_es,e.am_es,e.ci,e.pais_es,e.departamento,e.provincia,e.ciudad,e.region,e.sexo,c.nombre_carrera FROM carrera as c inner join estudiante as e on c.cod_carrera = e.cod_carrera  where c.nombre_carrera like '%{}%' "
-
+"total_de_estudiantes":"SELECT COUNT(*) FROM estudiante",
+"total_de_estudiantes_carrera":"SELECT e.nombre_es,e.ap_es,e.am_es,e.ci,e.pais_es,e.departamento,e.provincia,e.ciudad,e.region,e.sexo,c.nombre_carrera FROM carrera as c inner join estudiante as e on c.cod_carrera = e.cod_carrera  where  ",
+"datos_especificos_estudiante":"SELECT e.nombre_es,e.ap_es,e.am_es,e.ci,e.pais_es,e.departamento,e.provincia,e.ciudad,e.region,e.sexo,c.nombre_carrera FROM carrera as c inner join estudiante as e on c.cod_carrera = e.cod_carrera  where  ",
+"estudiantes_de_unsxx":"select * from estudiante as e where ",
 }
 
-consultas_aux= {"activo_es" :" and e.estado = 'activo'",
-"desactivo_es":" and e.estado = 'desactivo'",
-"sexo_es_f" :" and e.sexo = 'femenino'",
-"sexo_es_m":" and e.sexo = 'masculino'",
-"departamento_es":" and e.departamento = '{}'",
-"provincia_es":" and e.provincia = '{}'",
-"nombre_es":" and e.nombre_es like '%{}%' ",
-"apellido_p_es":" or e.ap_es like '%{}%' ",
-"apellido_m_es":" or e.am_es like '%{}%' ",
-"nombre_carrera":" and c.nombre_carrera like '%{}%' ",}
+consultas_aux= {"activo_es" :" e.estado = 'activo'",
+"desactivo_es":" e.estado = 'desactivo'",
+"sexo_es_f" :" e.sexo = 'femenino'",
+"sexo_es_m":"  e.sexo = 'masculino'",
+"departamento_es":" e.departamento = '{}'",
+"provincia_es":" e.provincia = '{}'",
+"nombre_es":"  e.nombre_es like '%{}%' ",
+"apellido_p_es":"  e.ap_es like '%{}%' ",
+"apellido_m_es":"  e.am_es like '%{}%' ",
+"nombre_carrera":"c.nombre_carrera like '%{}%'",
+
+"nombre_es_especifico":" e.nombre_es = '{}' ",
+"apellido_p_es_especifico":" e.ap_es = '{}' ",
+"apellido_m_es_especifico":" e.am_es = '{}' ",
+
+"activo_es_unsxx" :" e.estado = 'activo' ",
+"desactivo_es_unsxx":" e.estado = 'desactivo' ",
+"sexo_es_f_unsxx" :" e.sexo = 'femenino' ",
+"sexo_es_m_unsxx":" e.sexo = 'masculino' ",
+"departamento_es_unsxx":" e.departamento = '{}' ",
+"provincia_es_unsxx":" e.provincia = '{}'",
+"nombre_carrera":" c.nombre_carrera like '%{}%' ",}
+
+
+#"nombre_es":" and e.nombre_es like '%{}%' ",
+#"apellido_p_es":" and e.ap_es like '%{}%' ",
+#"apellido_m_es":" and e.am_es like '%{}%' ",
+
 # Función para preprocesar y tokenizar el texto
+
+
+
+
 def preprocess_text(text):
     tokenizer = RegexpTokenizer(r'\w+')
     tokens = tokenizer.tokenize(text.lower())
@@ -77,109 +103,375 @@ def buscar(texto):
         if similarity > max_similarity:
             max_similarity = similarity
             response = responses[0]
-
+    print(response)
     nombre_posicion_sql = ""
     if response:
+        vec1=[]
         if response == "ver_carreras":
             carreras_encontradas = obtener_carreras_nombre(texto);
             if carreras_encontradas:
+                vec1.append("si_car_n")
                 # Obtener la primera carrera encontrada
                 primera_carrera = carreras_encontradas.pop(0)
                 nombre_posicion_sql = "ver_carreras_nombre"
                 sql = consultas_sql[nombre_posicion_sql]
                 response = sql.format(primera_carrera)
             else:
+                vec1.append("si_car")
                 nombre_posicion_sql = "ver_carreras"
                 sql = consultas_sql[nombre_posicion_sql]
                 response = sql
-
+            vec1.append(nombre_posicion_sql)
+            vec1.append(response)
 
         if response== "total_de_estudiantes":
             hay = "no"
             response = ""
-            nomb = encontrar_nombre(texto)
-            if nomb != "no":
-                nombre_posicion_sql = "ver_por_nombre_estudiante"
-                sql_aux = consultas_sql["ver_por_nombre_estudiante"]
-                response += sql_aux.format(nomb)
-                hay = "si"
-            ap = encontrar_apellido(texto)
-            if ap != "no":
-                if len(ap) > 1:#numero de apellidos maryor a 1
-                    sql_aux = consultas_aux["apellido_p_es"]
-                    response += sql_aux.format(ap[0])
-                else:
-                    sql_aux = consultas_aux["apellido_p_es"]
-                    response += sql_aux.format(ap[0])
-                    sql_aux = consultas_aux["apellido_m_es"]
-                    response += sql_aux.format(ap[1])
-                hay = "si"
-                nombre_posicion_sql = "ver_por_nombre_estudiante"
-
+            vec1=[]
+            #puede decir el total de estudiante de la carrera infor
             carreras_encontradas = obtener_carreras_nombre(texto);
-            if carreras_encontradas:
+            if carreras_encontradas:#si existe algun nombre de carrera ingresa
                 primera_carrera = carreras_encontradas.pop(0)
-                nombre_posicion_sql = "ver_por_nombre_estudiante"
-                sql_aux = consultas_aux["nombre_carrera"]
-                response += sql_aux.format(primera_carrera)
-                hay = "si"
-
-            if hay == "no":
+                nombre_posicion_sql = "total_de_estudiantes_carrera"
+                sql = consultas_sql[nombre_posicion_sql]
+                response = sql.format(primera_carrera)
+                hay  = 'si'
+                vec1.append("total_es_car")
+            if hay == 'no':
                 nombre_posicion_sql = "total_de_estudiantes"
                 sql = consultas_sql[nombre_posicion_sql]
                 response = sql
-        if response== "total_de_estudiantes_carrera":
-                carreras_encontradas = obtener_carreras_nombre(texto);
-                if carreras_encontradas:
+                vec1.append("total_es_unsxx")
+            vec1.append(nombre_posicion_sql)
+            vec1.append(response)
 
-                    primera_carrera = carreras_encontradas.pop(0)
+        if response== "total_de_estudiantes_carrera":
+                vec = []
+                vec1 = []
+                response = "";
+                carreras_encontradas = obtener_carreras_nombre(texto);
+                if carreras_encontradas:#si existe algun nombre de carrera ingresa
+                    vec.append("si_car")
                     nombre_posicion_sql = "total_de_estudiantes_carrera"
                     sql = consultas_sql[nombre_posicion_sql]
-                    response = sql.format(primera_carrera)
-                    if contiene_palabras_activas(texto):
-                        response += consultas_aux["activo_es"]
-                    elif contiene_palabras_desactivas(texto):
-                        response += consultas_aux["desactivo_es"]
-                    if contiene_palabras_sexo_varon(texto):
-                        response += consultas_aux["sexo_es_m"]
-                    if contiene_palabras_sexo_mujer(texto):
-                        response += consultas_aux["sexo_es_f"]
+
+                    if contiene_palabras_activas(texto):#si contiene la palabra activo ingresa
+                        vec.append("si_activo")
+                    else:
+                        vec.append("no")
+
+                    if contiene_palabras_desactivas(texto):#si contiene la palabra desactivo o al relacionado ingresa
+                        vec.append("si_desactivo")
+                    else:
+                        vec.append("no")
+
+                    if contiene_palabras_sexo_varon(texto):#si contiene la palabra sexo
+                        vec.append("si_m")
+                    else:
+                        vec.append("no")
+                    if contiene_palabras_sexo_mujer(texto):#si contiene femenino ingresa
+                        vec.append("si_f")
+                    else:
+                        vec.append("no")
 
                     dep_encontrado = palabras_departamento(texto)#buscamos si en el texto hay un departamento
                     if dep_encontrado != "no":
-                        sql_aux = consultas_aux["departamento_es"]
-                        response += sql_aux.format(dep_encontrado)
+                        vec.append("si_dep")
+                    else:
+                        vec.append("no")
 
-                    pr_encontrado = palabras_provincia(texto)
+                    pr_encontrado = palabras_provincia(texto)#si contiene algun departamento ingresa
                     if pr_encontrado != "no":
-                        sql_aux = consultas_aux["provincia_es"]
-                        response += sql_aux.format(pr_encontrado)
-
-                    nomb = encontrar_nombre(texto)
+                        vec.append("si_prov")
+                    else:
+                        vec.append("no")
+                    nomb = encontrar_nombre(texto)#si existe algun nombre ingresa
                     if nomb != "no":
-                        sql_aux = consultas_aux["nombre_es"]
-                        response += sql_aux.format(nomb)
-
-                    ap = encontrar_apellido(texto)
+                        vec.append("si_nom")
+                    else:
+                        vec.append("no")
+                    ap = encontrar_apellido(texto)#si hay algun apellido ingresa
                     if ap != "no":
-                        if len(ap) > 1:#numero de apellidos maryor a 1
-                            sql_aux = consultas_aux["apellido_p_es"]
-                            response += sql_aux.format(ap[0])
-                        else:
-                            sql_aux = consultas_aux["apellido_p_es"]
-                            response += sql_aux.format(ap[0])
-                            sql_aux = consultas_aux["apellido_m_es"]
-                            response += sql_aux.format(ap[1])
+                        vec.append("si_apell")
+                    else:
+                        vec.append("no")
+                    si = "no"
+                    for i in range(len(vec)):
+                        vec1.append(vec[i])
+                    vec1.append(nombre_posicion_sql)
+                    for i in range(len(vec)):
+                        if vec[i] == "si_car" and si == "no":
+                            auxi = consultas_aux["nombre_carrera"]
+                            primera_carrera = carreras_encontradas.pop(0)
+                            response += auxi.format(primera_carrera)
+                            si = "si"
+                        elif vec[i] == "si_car" and si == "si":
+                            auxi = consultas_aux["nombre_carrera"]
+                            primera_carrera = carreras_encontradas.pop(0)
+                            response += " and "+auxi.format(primera_carrera)
+                            si = "si"
+                        if vec[i] == "si_activo" and si == "no":
+                            response += consultas_aux["activo_es"]
+                            si = "si"
+                        elif vec[i] == "si_activo" and si == "si":
+                            response += " and "+consultas_aux["activo_es"]
+                            si = "si"
+
+                        if vec[i] == "si_desactivo" and si == "no":
+                            response += consultas_aux["desactivo_es"]
+                            si = "si"
+                        elif vec[i] == "si_desactivo" and si == "si":
+                            response += " and "+consultas_aux["desactivo_es"]
+                            si = "si"
+
+                        if vec[i] == "si_m" and si == "no":
+                            response += consultas_aux["sexo_es_m"]
+                            si = "si"
+                        elif vec[i] == "si_m" and si == "si":
+                            response += " and "+consultas_aux["sexo_es_m"]
+                            si = "si"
+
+                        if vec[i] == "si_f" and si == "no":
+                            response += consultas_aux["sexo_es_f"]
+                            si = "si"
+                        elif vec[i] == "si_f" and si == "si":
+                            response += " and "+consultas_aux["sexo_es_f"]
+                            si = "si"
+
+                        if vec[i] == "si_prov" and si == "no":
+                            sql_aux = consultas_aux["provincia_es"]
+                            si = "si"
+                            response += sql_aux.format(pr_encontrado)
+                        elif vec[i] == "si_prov" and si == "si":
+                            sql_aux = " and "+consultas_aux["provincia_es"]
+                            si = "si"
+                            response += sql_aux.format(pr_encontrado)
+                        if vec[i] == "si_dep" and si == "no":
+                            sql_aux = consultas_aux["departamento_es"]
+                            si = "si"
+                            response += sql_aux.format(dep_encontrado)
+                        elif vec[i] == "si_dep" and si == "si":
+                            sql_aux = " and "+consultas_aux["departamento_es"]
+                            si = "si"
+                            response += sql_aux.format(dep_encontrado)
+                        if vec[i] == "si_nom" and si == "no":
+                            sql_aux = consultas_aux["nombre_es"]
+                            response += sql_aux.format(nomb)
+                            si = "si"
+                        elif vec[i] == "si_nom" and si == "si":
+                            sql_aux = consultas_aux["nombre_es"]
+                            response += " and "+sql_aux.format(nomb)
+                            si = "si"
+                            #apellidos
+                        if vec[i] == "si_apell" and si == "no":
+                            if len(ap) == 1:#numero de apellidos maryor a 1
+                                sql_aux = consultas_aux["apellido_p_es"]
+                                response += sql_aux.format(ap[0])
+                            elif len(ap)>1:
+                                sql_aux = consultas_aux["apellido_p_es"]
+                                response += sql_aux.format(ap[0])
+                                sql_aux = consultas_aux["apellido_m_es"]
+                                response += sql_aux.format(ap[1])
+                            si = "si"
+                        elif vec[i] == "si_apell" and si == "si":
+                            if len(ap) == 1:#numero de apellidos maryor a 1
+                                sql_aux = consultas_aux["apellido_p_es"]
+                                response += " or "+sql_aux.format(ap[0])
+                            elif len(ap)>1:
+                                sql_aux = consultas_aux["apellido_p_es"]
+                                response += " or "+sql_aux.format(ap[0])
+                                sql_aux = consultas_aux["apellido_m_es"]
+                                response += " or "+sql_aux.format(ap[1])
+                            si = "si"
+                        #print(vec[i])
+                        vec[i] = "no"
+                    response = sql+" "+response;
                 else:
                     response = "argumentar_poco_mas"
-        return response,nombre_posicion_sql
+                vec1.append(response)
+        if response == "datos_especificos_estudiante":
+            vec=[]
+            vec1=[]
+            response = ""
+            carreras_encontradas = obtener_carreras_nombre(texto);
+            nombre_posicion_sql = "datos_especificos_estudiante"
+            sql = consultas_sql[nombre_posicion_sql]
+            if carreras_encontradas:#si existe algun nombre de carrera ingresa
+                vec.append("si_car")
+            else:
+                vec.append("no")
+            nomb = encontrar_nombre(texto)#si existe algun nombre ingresa
+            if nomb != "no":
+                vec.append("si_nom")
+            else:
+                vec.append("no")
+            ap = encontrar_apellido(texto)#si hay algun apellido ingresa
+            if ap != "no":
+                vec.append("si_apell")
+            else:
+                vec.append("no")
+            si = "no"
+            print(ap,"  esto son los apellidos")
+            for i in range(len(vec)):
+                vec1.append(vec[i])
+            vec1.append(nombre_posicion_sql)
+            for i in range(len(vec)):
+                if vec[i] == "si_car" and si == "no":
+                    auxi = consultas_aux["nombre_carrera"]
+                    primera_carrera = carreras_encontradas.pop(0)
+                    response += auxi.format(primera_carrera)
+                    si = "si"
+                elif vec[i] == "si_car" and si == "si":
+                    auxi = consultas_aux["nombre_carrera"]
+                    primera_carrera = carreras_encontradas.pop(0)
+                    si = "si"
+                    response += " and "+auxi.format(primera_carrera)
+                if vec[i] == "si_nom" and si == "no":
+                    sql_aux = consultas_aux["nombre_es_especifico"]
+                    response += sql_aux.format(nomb)
+                    si = "si"
+                elif vec[i] == "si_nom" and si == "si":
+                    sql_aux = consultas_aux["nombre_es_especifico"]
+                    response += " and "+sql_aux.format(nomb)
+                    si = "si"
+                    #apellidos
+                if vec[i] == "si_apell" and si == "no":
+                    if len(ap) == 1:#numero de apellidos maryor a 1
+                        sql_aux = consultas_aux["apellido_p_es_especifico"]
+                        response += sql_aux.format(ap[0])
+                    elif len(ap)>1:
+                        sql_aux = consultas_aux["apellido_p_es_especifico"]
+                        response += sql_aux.format(ap[0])
+                        sql_aux = consultas_aux["apellido_m_es_especifico"]
+                        response += sql_aux.format(ap[1])
+                    si = "si"
+                elif vec[i] == "si_apell" and si == "si":
+                    if len(ap) == 1:#numero de apellidos maryor a 1
+                        sql_aux = consultas_aux["apellido_p_es_especifico"]
+                        response += " and "+sql_aux.format(ap[0])
+                    elif len(ap)>1:
+                        sql_aux = consultas_aux["apellido_p_es_especifico"]
+                        response += " and "+sql_aux.format(ap[0])
+                        sql_aux = consultas_aux["apellido_m_es_especifico"]
+                        response += " or "+sql_aux.format(ap[1])
+                    si = "si"
+            response = sql+" "+response
+            vec1.append(response);
+        if response == "estudiantes_de_unsxx":
+            existe  ="no"
+            response = ""
+            vec = []
+            nombre_posicion_sql = "estudiantes_de_unsxx"
+            sql = consultas_sql[nombre_posicion_sql]
+        #realizamos consultas de if para saber en cual llega y poder el and o no
+            if contiene_palabras_activas(texto):#si contiene la palabra activo ingresa
+                vec.append("si_activo")
+            else:
+                vec.append("no")
+
+            if contiene_palabras_desactivas(texto):#si contiene la palabra desactivo o al relacionado ingresa
+                vec.append("si_desactivo")
+            else:
+                vec.append("no")
+            if contiene_palabras_sexo_varon(texto):#si contiene la palabra sexo
+                vec.append("si_m")
+            else:
+                vec.append("no")
+            if contiene_palabras_sexo_mujer(texto):#si contiene femenino ingresa
+                vec.append("si_f")
+            else:
+                vec.append("no")
+            pr_encontrado = palabras_provincia(texto)#si contiene algun departamento ingresa
+            if pr_encontrado != "no":
+                vec.append("si_prov")
+            else:
+                vec.append("no")
+
+            dep_encontrado = palabras_departamento(texto)#buscamos si en el texto hay un departamento
+            if dep_encontrado != "no":
+                vec.append("si_dep")
+            else:
+                vec.append("no")
+            si = "no"
+            vec1 = []
+            for i in range(len(vec)):
+                vec1.append(vec[i])
+            vec1.append(nombre_posicion_sql)
+            for i in range(len(vec)):
+                if vec[i] == "si_activo" and si == "no":
+                    response += consultas_aux["activo_es_unsxx"]
+                    si = "si"
+                elif vec[i] == "si_activo" and si == "si":
+                    response += " and "+consultas_aux["activo_es_unsxx"]
+                    si = "si"
+
+                if vec[i] == "si_desactivo" and si == "no":
+                    response += consultas_aux["desactivo_es_unsxx"]
+                    si = "si"
+                elif vec[i] == "si_desactivo" and si == "si":
+                    response += " and "+consultas_aux["desactivo_es_unsxx"]
+                    si = "si"
+
+                if vec[i] == "si_m" and si == "no":
+                    response += consultas_aux["sexo_es_m_unsxx"]
+                    si = "si"
+                elif vec[i] == "si_m" and si == "si":
+                    response += " and "+consultas_aux["sexo_es_m_unsxx"]
+                    si = "si"
+
+                if vec[i] == "si_f" and si == "no":
+                    response += consultas_aux["sexo_es_f_unsxx"]
+                    si = "si"
+                elif vec[i] == "si_f" and si == "si":
+                    response += " and "+consultas_aux["sexo_es_f_unsxx"]
+                    si = "si"
+
+                if vec[i] == "si_prov" and si == "no":
+                    sql_aux = consultas_aux["provincia_es_unsxx"]
+                    si = "si"
+                    response += sql_aux.format(pr_encontrado)
+                elif vec[i] == "si_prov" and si == "si":
+                    sql_aux = " and "+consultas_aux["provincia_es_unsxx"]
+                    si = "si"
+                    response += sql_aux.format(pr_encontrado)
+                if vec[i] == "si_dep" and si == "no":
+                    sql_aux = consultas_aux["departamento_es_unsxx"]
+                    si = "si"
+                    response += sql_aux.format(dep_encontrado)
+                elif vec[i] == "si_dep" and si == "si":
+                    sql_aux = " and "+consultas_aux["departamento_es_unsxx"]
+                    si = "si"
+                    response += sql_aux.format(dep_encontrado)
+                print(vec[i],  si)
+                vec[i] = "no"
+                #print(vec[i])
+            #print(response,"   eess")
+            response = sql + response
+            vec1.append(response)
+        return vec1
     else:
-        return ("argumentar_poco_mas"),nombre_posicion_sql
+        vec1=[]
+        vec1.append("argumentar_poco_mas")
+        return vect1
+
+textoo = "carreras de la universidad"
+re = buscar(textoo)
+
+print(re[-1])
+#falta
+#cuantas mujeres y cuantos hombres hay en informatica
 
 
-textoo = "el estudiante adrian de informatica"
-re,ac = buscar(textoo)
 
-
-print("es ",re)
-print("accion ", ac)
+#funcionan
+#todos los estudiantes de oruro en la unsxx y esten activos tambien de provincia cercado
+#estudiante de la carrera informatica
+#estudiante de la carrera informatica que esten activos y sexo masculino
+#cuantos estudiantes tiene la carrera de informatica
+#todas las carreras de la unxx
+#detalle de la unsxx
+#me puedes brindar informacion de la carrera informatica
+#quiero la informacion del total de estudiantes de la carrera de mecanica automotriz
+#datos del estudiante juan lima de la carrera de informatica
+#datos del estudiante juan lima jurado de la carrera de informatica
+#total de estudiantes del departamento de oruro unsxx y que sean mujeres
