@@ -80,7 +80,7 @@ def  retornar_valores(datos,ress):
             'indice': accion1
         }
         data.append(nuevos_datos)
-    
+
     if accion1 == "seleccionar_carreras_area":
         data = [{'area': row[1], 'direccion_area': row[2], 'telefono_area': row[3], 'nombre_carrera': row[5],
               'direccion_carrera': row[6]} for row in datos]
@@ -93,5 +93,50 @@ def  retornar_valores(datos,ress):
 
         # Agregar los nuevos datos a la lista de diccionarios
 
+    if accion1 == "estudiante_por_area":
+        numero_de_filas = len(datos)
+        data =[{'cod_es': row[0],'nombre_es': row[1],'ap_es': row[2],'am_es': row[3],'titulo_bachiller': row[4],'ci': row[5],'pais_es': row[6],
+        'departamento': row[7],'provincia': row[8],'ciudad': row[9],'region': row[10],'sexo': row[11],'ano': row[12],
+        'calificacion': row[13],'estado_asignatura': row[14],'desercion': row[15]}for row in datos]
+        nuevos_datos ={
+        "si_activo":ress[0],
+        "si_desactivo":ress[1],
+        "si_m":ress[2],
+        "si_f":ress[3],
+        "si_prov":ress[4],
+        "si_dep":ress[5],
+        "si_des":ress[6],
+        "si_apla":ress[7],
+        "si_ar":ress[8],
+        'c_area':ress[9],
+        'total': numero_de_filas,
+        'indice':accion1
+        }
+        data.append(nuevos_datos)
+
 
     return jsonify(data)
+
+
+
+def seleccionar_estudiante(id):
+    sql_consulta = "select *from estudiante"#seleccionamos todos los estudiantes
+    conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+    # Crear un cursor para ejecutar consultas
+    cursor = conn.cursor()
+    # Ejecutar la consulta SQL
+    cursor.execute(sql_consulta)
+    # Verifica si hay algún resultado antes de obtenerlos
+    if cursor.rowcount > 0:
+        # Si hay resultados, obtén los datos de la consulta
+        sql_consulta = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        nombres = ""
+        for row in datos:
+            if row[id]:
+                nombres+= row[1]+"|"+row[2]+"|"+row[3]
+                break
+        return nombres
+    else:
+        return "no"

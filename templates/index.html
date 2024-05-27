@@ -429,10 +429,72 @@
             html +="</table>";
           }
 
+          if(indice == "estudiante_por_area"){
+            var si_activo = data[data.length-1].si_activo;
+            var si_desactivo = data[data.length-1].si_desactivo;
+            var si_m = data[data.length-1].si_m;
+            var si_f = data[data.length-1].si_f;
+            var si_dep = data[data.length-1].si_dep;
+            var si_prov = data[data.length-1].si_prov;
+            var si_des = data[data.length-1].si_des;
+            var si_apla = data[data.length-1].si_apla;
+            var si_ar = data[data.length-1].si_ar;
+            var c_area = data[data.length-1].c_area;
+            for (var i = 0; i < 1; i++) {
+              var dep = data[i].departamento;
+              var provi = data[i].provincia;
+            }
+            var si = "no";
+            var mensaje = "Los estudiantes ";
+            var retu = verificar2(si_activo,si_desactivo,si_m,si_f,si_dep,si_prov,dep,provi,si_des,si_apla,si_ar,c_area,si);
 
+            html += "<div class='alert alert-secondary' role='alert'>"+mensaje+" "+retu+" son "+data[data.length-1].total+"</div>";
+            html+="<div class='alert alert-secondary' role='alert'>Detallamos en la siguiente tabla</div>"
+
+            html += "<h2>Tabla de estudiantes</h2>";
+            html += "<table class='table table-striped'>";
+              html += "<thead>";
+                html += "<tr>";
+                  html += "<th>Nro</th>";
+                  html += "<th>Nombre</th>";
+                  html += "<th>Apellido Paterno</th>";
+                  html += "<th>Apellido Materno</th>";
+                  html += "<th>Cédula de Identidad</th>";
+                  html += "<th>pais</th>";
+                  html += "<th>Departamento</th>";
+                  html += "<th>provincia</th>";
+                  html += "<th>region</th>";
+                  html += "<th>sexo</th>";
+                    html += "<th>Abandono</th>";
+                html += "</tr>";
+              html += "</thead>";
+              html += "  <tbody>";
+              var  contar = 0;
+              for (var i = 0; i < data.length-1; i++) {
+                if (data[i].car === null || data[i].car === ""){
+                  html += "Lo siento, no tengo una respuesta para esa pregunta o puede argumentar un poco mas.";
+                } else {
+                  html +="<tr>";
+                    html += "<td>"+(i+1)+"</td>";
+                    html += "<td>"+data[i].nombre_es+"</td>";
+                    html += "<td>"+data[i].ap_es+"</td>";
+                    html += "<td>"+data[i].am_es+"</td>";
+                    html += "<td>"+data[i].ci+"</td>";
+                    html += "<td>"+data[i].pais_es+"</td>";
+                    html += "<td>"+data[i].departamento+"</td>";
+                    html += "<td>"+data[i].provincia+"</td>";
+                    html += "<td>"+data[i].region+"</td>";
+                    html += "<td>"+data[i].sexo+"</td>";
+                    html += "<td>"+data[i].desercion+"</td>";
+                  html += "</tr>";
+                }
+                contar++;
+              }
+              html +=" </tbody>";
+            html +="</table>";
+            }
 
           html +="</container>";
-
 
           $('#respuesta').html(html);
         }
@@ -585,6 +647,70 @@
       }
       return me;
     }
+
+    function verificar2(si_activo,si_desactivo,si_m,si_f,si_dep,si_prov,dep,provi,si_des,si_apla,si_ar,c_area,si){
+      men = "";
+
+      if(si_activo != "no"&& si =="no"){
+        men+=" activos ";
+        si = "si";
+      }
+      if(si_desactivo != "no"&& si =="no"){
+          men+=" desactivos ";  si = "si";
+      }else if(si_desactivo != "no"&& si =="si"){
+          men+=", desactivos";
+      }
+      if(si_m != "no"&& si =="no"){
+          men+=" varones ";  si = "si";
+      }else if(si_m != "no"&& si =="si"){
+        men+=", varones";
+      }
+
+      if(si_f != "no"&& si =="no"){
+          men+=" mujeres ";  si = "si";
+      }else if(si_f != "no"&& si =="no"){
+          men+=" , mujeres";
+      }
+
+      if(si_dep != "no"&& si =="no"){
+          men+=" del departamento "+dep+" ";  si = "si";
+      }else if(si_dep != "no"&& si =="si"){
+          men+=" , departamento de "+dep;
+      }
+
+      if(si_prov != "no"&& si =="no"){
+          men+=" de la provincia de "+provi+" ";  si = "si";
+      }else if(si_prov != "no"&& si =="si"){
+         men+=" , provincia de "+provi;
+      }
+
+      if(si_des != "no"&& si =="no"){
+          men+=" desertores ";  si = "si";
+      }else if(si_des != "no"&& si =="si"){
+        men+=", desertores"; si = "si";
+      }
+      if(si_apla != "no"&& si =="no"){
+          men+=" reprobados ";  si = "si";
+      }else if(si_apla != "no"&& si =="si"){
+        men+=", reprobados";si = "si";
+      }
+      var si1 = "no";
+      if(si_ar != "no"&& si =="si"){
+        var par =  c_area.split("|");
+        for(var i=0;i<par.length-1;i++){
+          if(si1 == "no" && si == "si"){
+            men+=" del area "+ab[par[i]-1];
+            si1 = "si";
+          }
+          else if(si1 == "si"){
+            men+=", del area "+ab[par[i]-1];
+          }
+        }
+          si = "si";
+      }
+      return men;
+    }
+
     </script>
 
     <script src="{{ url_for('static', filename='bootstrap-5.0.2/js/bootstrap.min.js') }}" charset="utf-8"></script>

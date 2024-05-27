@@ -3,6 +3,7 @@ import unicodedata
 import nltk
 from nltk.tokenize import word_tokenize
 from nltk import pos_tag
+import pymysql
 
 # Cargar el modelo de lenguaje en español
 nlp = spacy.load("es_core_news_sm")
@@ -251,3 +252,23 @@ def obtener_area(texto):
             area.append(indice_keyword)
 
     return area
+
+def palabra_desercion(texto):
+    texto = texto.lower()
+    texto = eliminar_tildes(texto)  # Suponiendo que eliminar_tildes(texto) está definida
+    des_keywords = ["desercion", "desertados", "abandonados", "abandono", "abandonaron", "desertaron", "retiraron", "retirados", "desertaron"]
+    for palabra_clave in des_keywords:
+        if palabra_clave in texto:
+            return palabra_clave
+    return "no"
+
+def palabra_aplazaron(texto):
+    texto = texto.lower()
+    texto = eliminar_tildes(texto)  # Suponiendo que eliminar_tildes(texto) está definida
+    apla_keywords = ["aplazaron","aplasados","aplazados", "reprobados", "reprobaron"]
+    for palabra_clave in apla_keywords:
+        print(palabra_clave)
+        if palabra_clave in texto:
+            print(palabra_clave)
+            return palabra_clave
+    return "no"
