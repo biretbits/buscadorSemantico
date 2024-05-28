@@ -2,7 +2,7 @@
 
 from comprobar import obtener_carreras_nombre,detectar_numeros_delimiter,contiene_palabras_activas,contiene_palabras_desactivas,contiene_palabras_sexo_varon,contiene_palabras_sexo_mujer
 from comprobar import palabras_departamento,palabras_provincia,encontrar_nombre,encontrar_apellido,obtener_area,palabra_desercion
-from comprobar import palabra_aplazaron
+from comprobar import palabra_aplazaron,palabra_aprobados,palabra_curso,obtener_que_curso_quiere
 import nltk
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
@@ -19,26 +19,26 @@ pares = [
 ["cuales cual carrera carreras unsxx direccion datos datos detalle universidad nacional siglo xx lugar informacion encuentra",["ver_carreras"]],
 #6
 ["cuales cual total estudiante estudiantes unxx universidad nacional siglo xx cantidad numero todos",["total_de_estudiantes"]],
-["quiero desahilitados desahilitado habilitado habilitados cuales cual total informacion estudiante estudiantes carrera unxx universidad nacional siglo xx cantidad numero mostrar visualizar detalle sexo activo activos desactivos desactivo departamento pais provincia ciudad region mujeres varones femenino masculino",
+["quiero desahilitados desahilitado habilitado habilitados cuales cual total informacion estudiante estudiantes carrera unxx universidad nacional siglo xx cantidad numero mostrar visualizar detalle sexo activo activos desactivos desactivo departamento pais provincia ciudad region mujeres varones femenino masculino aplazaron aplazados reprobados reprobaron",
 ["total_de_estudiantes_carrera"]],
 ["datos datos estudiante estudiantes quiero los del informacion carrera buscar busqueda",["datos_especificos_estudiante"]],
 ["todos total del los estudiantes estudiante unsxx de universidad nacional siglo xx cantidad numero mostrar visualizar detalle sexo activo activos desactivos desactivo departamento pais provincia provincias ciudad region mujeres varones masculino femenino",
 ["estudiantes_de_unsxx"]],
 ["todas total mostrar detalle detalles informacion visualizar carreras carrera area tecnologia salud social unsxx",["seleccionar_carreras_area"]
 ],
-["todas total mostrar detalle detalles informacion visualizar estudiante estudiantes carreras carrera area tecnologia salud social unsxx cuantos todos aplazaron aplazados reprobados reprobaron activos habilitados mujeres varones ciudad departamento",["estudiante_por_area"]]]
+["todas total mostrar detalle detalles informacion visualizar estudiante estudiantes area tecnologia salud social unsxx cuantos todos aplazaron aplazados reprobados reprobaron activos habilitados mujeres varones ciudad departamento",["estudiante_por_area"]]]
 
 
 consultas_sql = {
 "ver_carreras":"select *from carrera",
 "ver_por_nombre_estudiante":" select e.nombre_es,e.ap_es,e.am_es,e.ci,e.pais_es,e.departamento,e.provincia,e.ciudad,e.region,e.sexo,c.nombre_carrera from carrera as c inner join estudiante as e on c.cod_carrera = e.cod_carrera where e.nombre_es like '%{}%' ",
-"ver_carreras_nombre":"select *from carrera where nombre_carrera like '%{}%';",
+"ver_carreras_nombre":"select *from carrera where cod_carrera = {};",
 "total_de_estudiantes":"SELECT COUNT(*) FROM estudiante",
-"total_de_estudiantes_carrera":"SELECT e.nombre_es,e.ap_es,e.am_es,e.ci,e.pais_es,e.departamento,e.provincia,e.ciudad,e.region,e.sexo,c.nombre_carrera FROM carrera as c inner join estudiante as e on c.cod_carrera = e.cod_carrera  where  ",
+"total_de_estudiantes_carrera":"select *from estudiante as e inner join estudiante_perdio as ep on e.cod_es = ep.cod_es",
 "datos_especificos_estudiante":"SELECT e.nombre_es,e.ap_es,e.am_es,e.ci,e.pais_es,e.departamento,e.provincia,e.ciudad,e.region,e.sexo,c.nombre_carrera FROM carrera as c inner join estudiante as e on c.cod_carrera = e.cod_carrera  where  ",
 "estudiantes_de_unsxx":"select * from estudiante as e where ",
 "seleccionar_carreras_area":"select *from area as a inner join carrera as c on a.cod_area = c.cod_area where ",
-"estudiante_por_area":" select distinct e.cod_es,e.nombre_es,ap_es,am_es,e.titulo_bachiller,e.ci,e.pais_es,e.departamento,e.provincia,e.ciudad,e.region,e.sexo,ca.ano,ca.calificacion,ca.estado_asignatura,ca.desercion from estudiante as e inner join cursa_asignatura as ca on e.cod_es = ca.cod_es ",
+"estudiante_por_area":"select *from estudiante as e inner join estudiante_perdio as ep on e.cod_es = ep.cod_es",
 }
 #e.estado = 'desactivo' or e.cod_area = 3 and e.sexo = 'femenino' or  e.sexo = 'masculino';"
 consultas_aux= {"activo_es" :" e.estado = 'activo'",
@@ -47,10 +47,10 @@ consultas_aux= {"activo_es" :" e.estado = 'activo'",
 "sexo_es_m":"  e.sexo = 'masculino'",
 "departamento_es":" e.departamento = '{}'",
 "provincia_es":" e.provincia = '{}'",
-"nombre_es":"  e.nombre_es like '%{}%' ",
-"apellido_p_es":"  e.ap_es like '%{}%' ",
-"apellido_m_es":"  e.am_es like '%{}%' ",
-"nombre_carrera":"c.nombre_carrera like '%{}%'",
+"nombre_es":"  e.nombre_es = '{}' ",
+"apellido_p_es":"  e.ap_es = '{}' ",
+"apellido_m_es":"  e.am_es = '{}' ",
+"nombre_carrera":" e.cod_carrera = {}",
 
 "nombre_es_especifico":" e.nombre_es = '{}' ",
 "apellido_p_es_especifico":" e.ap_es = '{}' ",
@@ -62,11 +62,12 @@ consultas_aux= {"activo_es" :" e.estado = 'activo'",
 "sexo_es_m_unsxx":" e.sexo = 'masculino' ",
 "departamento_es_unsxx":" e.departamento = '{}' ",
 "provincia_es_unsxx":" e.provincia = '{}'",
-"nombre_carrera":" c.nombre_carrera like '%{}%' ",
+"nombre_carrera":" e.cod_carrera = {} ",
 "cod_area":" c.cod_area = {}",
-"cod_area_cursa":" ca.cod_area = {}",
-"desercion":" ca.desercion = '{}'",
-"aplazaron":" ca.estado_asignatura = '{}'"
+"cod_area_cursa":" e.cod_area = {}",
+"desercion":" abandono = '{}'",
+"aplazaron":" estado_ano = '{}'",
+"curso_estudiante":" ep.cod_grado = {}"
 }
 
 
@@ -164,7 +165,7 @@ def buscar(texto):
                     vec.append("si_car")
                     nombre_posicion_sql = "total_de_estudiantes_carrera"
                     sql = consultas_sql[nombre_posicion_sql]
-
+                    print(carreras_encontradas,"  estas son las carreras")
                     if contiene_palabras_activas(texto):#si contiene la palabra activo ingresa
                         vec.append("si_activo")
                     else:
@@ -205,14 +206,45 @@ def buscar(texto):
                         vec.append("si_apell")
                     else:
                         vec.append("no")
+                    desercion = palabra_desercion(texto)#buscamos palabras relacionados con desercion o relacionado
+                    if desercion != "no":
+                        vec.append("si_des")
+                    else:
+                        vec.append("no")
+                    aplazar = palabra_aplazaron(texto)#buscamos palabras relacionados con aplazar
+                    print(aplazar,"  aplazadoss")
+                    if aplazar != "no":
+                        vec.append("si_apla")
+                        aplazar = "reprobado"
+                    else:
+                        vec.append("no")
+
+                    aprobado = palabra_aprobados(texto)
+                    if aprobado != "no":
+                        vec.append("si_apro")
+                        aprobado = "aprobado"
+                    else:
+                        vec.append("no")
+
+                    curso = palabra_curso(texto)
+                    id_curso = "";
+                    if curso != "no":#existe la palabra curso
+                        vec.append("si_curso")
+                        id_curso=obtener_que_curso_quiere(texto)
+                    else:
+                        vec.append("no")
                     si = "no"
                     for i in range(len(vec)):
                         vec1.append(vec[i])
                     vec1.append(nombre_posicion_sql)
+                    print(carreras_encontradas)
+                    print(vec)
                     for i in range(len(vec)):
+
                         if vec[i] == "si_car" and si == "no":
                             auxi = consultas_aux["nombre_carrera"]
                             primera_carrera = carreras_encontradas.pop(0)
+                            print(primera_carrera)
                             response += auxi.format(primera_carrera)
                             si = "si"
                         elif vec[i] == "si_car" and si == "si":
@@ -293,8 +325,46 @@ def buscar(texto):
                                 sql_aux = consultas_aux["apellido_m_es"]
                                 response += " or "+sql_aux.format(ap[1])
                             si = "si"
+                        if vec[i] == "si_des" and si == "no":
+                            sql_aux = consultas_aux["desercion"]
+                            si = "si"
+                            response+= sql_aux.format(desercion)
+                        elif vec[i] == "si_des" and si=="si":
+                            sql_aux = " and "+consultas_aux["desercion"]
+                            si = "si"
+                            response+= sql_aux.format(desercion)
+                        if vec[i] == "si_apro" and  si == "no":
+                            sql_aux = consultas_aux["aplazaron"]
+                            si = "si"
+                            response+= sql_aux.format(aprobado)
+                        elif vec[i] == "si_apro" and si=="si":
+                            sql_aux = " and "+consultas_aux["aplazaron"]
+                            si = "si"
+                            response+= sql_aux.format(aprobado)
+
+                        if vec[i] == "si_apla" and  si == "no":
+                            sql_aux = consultas_aux["aplazaron"]
+                            si = "si"
+                            response+= sql_aux.format(aplazar)
+                        elif vec[i] == "si_apla" and si=="si":
+                            sql_aux = " and "+consultas_aux["aplazaron"]
+                            si = "si"
+                            response+= sql_aux.format(aplazar)
+
+                        if vec[i] == "si_curso" and si == "no":
+                            sql_aux = consultas_aux["curso_estudiante"]
+                            si = "si"
+                            response+= sql_aux.format(id_curso.pop(0))
+                        elif vec[i] == "si_curso" and si == "si":
+                            sql_aux = consultas_aux["curso_estudiante"]
+                            si = "si"
+                            response+= " and "+sql_aux.format(id_curso.pop(0))
                         #print(vec[i])
                         vec[i] = "no"
+                    if si == "no":#si se mantienen en no entonces aumentamos WHERE
+                        response = response
+                    else:
+                        response=" where "+response
                     response = sql+" "+response;
                 else:
                     response = "argumentar_poco_mas"
@@ -524,10 +594,19 @@ def buscar(texto):
                 vec.append("si_des")
             else:
                 vec.append("no")
+
             aplazar = palabra_aplazaron(texto)#buscamos palabras relacionados con aplazar
             print(aplazar,"  aplazadoss")
             if aplazar != "no":
                 vec.append("si_apla")
+                aplazar = "reprobado"
+            else:
+                vec.append("no")
+
+            aprobado = palabra_aprobados(texto)
+            if aprobado != "no":
+                vec.append("si_apro")
+                aprobado = "aprobado"
             else:
                 vec.append("no")
             ar = obtener_area(texto)  # Supongamos que esto devuelve una lista de áreas
@@ -589,19 +668,29 @@ def buscar(texto):
                 if vec[i] == "si_des" and si == "no":
                     sql_aux = consultas_aux["desercion"]
                     si = "si"
-                    response+= sql_aux.format('si')
+                    response+= sql_aux.format(desercion)
                 elif vec[i] == "si_des" and si=="si":
                     sql_aux = " and "+consultas_aux["desercion"]
                     si = "si"
-                    response+= sql_aux.format('si')
-                if vec[i] == "si_apla" and si == "no":
+                    response+= sql_aux.format(desercion)
+
+                if vec[i] == "si_apro" and  si == "no":
                     sql_aux = consultas_aux["aplazaron"]
                     si = "si"
-                    response+= sql_aux.format('activo')
+                    response+= sql_aux.format(aprobado)
+                elif vec[i] == "si_apro" and si=="si":
+                    sql_aux = " and "+consultas_aux["aplazaron"]
+                    si = "si"
+                    response+= sql_aux.format(aprobado)
+
+                if vec[i] == "si_apla" and  si == "no":
+                    sql_aux = consultas_aux["aplazaron"]
+                    si = "si"
+                    response+= sql_aux.format(aplazar)
                 elif vec[i] == "si_apla" and si=="si":
                     sql_aux = " and "+consultas_aux["aplazaron"]
                     si = "si"
-                    response+= sql_aux.format('activo')
+                    response+= sql_aux.format(aplazar)
 
                 if vec[i] == "si_ar" and si == "no":
                     sql_aux = consultas_aux["cod_area_cursa"]  # Supongamos que consultas_aux es un diccionario con consultas auxiliares

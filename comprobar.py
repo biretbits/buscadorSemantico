@@ -18,27 +18,32 @@ def obtener_carreras_nombre(texto):
     # Cargar el modelo pre-entrenado en español
     nlp = spacy.load("es_core_news_sm")
 
-    carreras_keywords = ["informatica", "mecanica automotriz", "minas", "electromecanica",
-     "mecanica","agronomia","enfermeria","bioquimica","bio quimica","electro mecanica","civil","medicina",
-     "minas topografia","derecho","contaduria","contaduria publica","comunicacion social","ciencias de la educacion"
+    carreras_keywords = ["informatica",
+    "mecanica automotriz",
+    "minas",
+     "electromecanica",
+     "mecanica",
+     "agronomia","enfermeria",
+     "bioquimica",
+     "bio quimica",
+     "electro mecanica",
+     "civil","medicina",
+     "minas topografia","derecho","contaduria","contaduria publica",
+     "comunicacion social","ciencias de la educacion"
      ,"laboratorio clinico","odontologia","odonto","infor"]
+
+    id_carrera = ["1", "5", "3", "4","5","6","13","17","17",
+     "4","2","14","3","8","10","10","16","9","12","11","11","1"]
     carreras_encontradas = []
     # Convertir el texto a minúsculas y eliminar tildes
     texto_normalizado = eliminar_tildes(texto.lower())
-    # Procesar el texto con el modelo de Spacy
-    doc = nlp(texto_normalizado)
-    # Verificar si hay entidades de tipo MISC en el texto
-    for ent in doc.ents:
-        if ent.label_ == "MISC":
-            carreras_encontradas.append(ent.text)
 
     # Buscar palabras clave asociadas con carreras universitarias en el texto
-    for carrera_keyword in carreras_keywords:
-        print(texto_normalizado)
-        if carrera_keyword in texto_normalizado:
-            carreras_encontradas.append(carrera_keyword)
-
+    for car, id_keyword in zip(carreras_keywords, id_carrera):
+        if car in texto_normalizado:
+            carreras_encontradas.append(id_keyword)
     return carreras_encontradas
+
 
 def detectar_numeros_delimiter(texto):
     texto = texto.lower();
@@ -259,7 +264,7 @@ def palabra_desercion(texto):
     des_keywords = ["desercion", "desertados", "abandonados", "abandono", "abandonaron", "desertaron", "retiraron", "retirados", "desertaron"]
     for palabra_clave in des_keywords:
         if palabra_clave in texto:
-            return palabra_clave
+            return "si"
     return "no"
 
 def palabra_aplazaron(texto):
@@ -270,5 +275,39 @@ def palabra_aplazaron(texto):
         print(palabra_clave)
         if palabra_clave in texto:
             print(palabra_clave)
-            return palabra_clave
+            return "si"
     return "no"
+def palabra_aprobados(texto):
+    texto = texto.lower()
+    texto = eliminar_tildes(texto)  # Suponiendo que eliminar_tildes(texto) está definida
+    apla_keywords = ["aprobados","aprobado"]
+    for palabra_clave in apla_keywords:
+        print(palabra_clave)
+        if palabra_clave in texto:
+            print(palabra_clave)
+            return "si"
+    return "no"
+
+def palabra_curso(texto):
+    texto = texto.lower()
+    texto = eliminar_tildes(texto)  # Suponiendo que eliminar_tildes(texto) está definida
+    apla_keywords = ["curso","cursos","grado","grados"]
+    for palabra_clave in apla_keywords:
+        print(palabra_clave)
+        if palabra_clave in texto:
+            print(palabra_clave)
+            return "si"
+    return "no"
+def obtener_que_curso_quiere(texto):
+    texto = texto.lower()
+    texto = eliminar_tildes(texto)  # Suponiendo que eliminar_tildes(texto) está definida
+    curso_keywords = ["1","1er año","1er","1ro","primero","primer","primer año","2","2do año","2do","segundo",
+    "segundo año","3","3er","3er año","tercero","tercer año","tercer","4","4to","4to año","cuarto","cuarto año","5","5to",
+    "5to año","quinto","quinto año"]
+    id_curso = ["1","1","1","1","1","1","1","2","2","2","2","2","3","3","3","3","3","3",
+    "4","4","4","4","4","5","5","5","5","5"]
+    curso=[]
+    for curso_keyword, id_curso in zip(curso_keywords, id_curso):
+        if curso_keyword in texto:
+            curso.append(id_curso)
+    return curso

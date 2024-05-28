@@ -74,3 +74,22 @@ if __name__ == '__main__':   //ejecutamos el progama
 
     </body>
     </html>
+
+
+
+    if vec[i] == "si_des" and si == "no":
+                sql_aux = consultas_aux["desercion"]
+                si = "si"
+                response+= sql_aux.format('si')
+            elif vec[i] == "si_des" and si=="si":
+                sql_aux = " and "+consultas_aux["desercion"]
+                si = "si"
+                response+= sql_aux.format('si')
+            if vec[i] == "si_apla" and si == "no":
+                sql_aux = consultas_aux["aplazaron"]
+                si = "si"
+                response+= sql_aux.format('activo')
+            elif vec[i] == "si_apla" and si=="si":
+                sql_aux = " and "+consultas_aux["aplazaron"]
+                si = "si"
+                response+= sql_aux.format('activo')

@@ -1,5 +1,5 @@
 from flask import jsonify
-
+from sql import nombre_carrera
 
 def  retornar_valores(datos,ress):
     accion1 = ress[-2]
@@ -19,10 +19,13 @@ def  retornar_valores(datos,ress):
         else:
             # Obtener el número de filas
             numero_de_filas = len(datos)
+            print(datos[0][13],"    es el id de una de las carreras lo que me llega")
             # Crear la lista de diccionarios a partir de 'datos'
-            data = [{'nombre': row[0], 'ap': row[1], 'am': row[2], 'ci': row[3], 'pais': row[4],
-                     'dep': row[5], 'provi': row[6], 'ciudad': row[7], 'regi': row[8], 'sexo': row[9],'car': row[10]} for row in datos]
-
+            nom_car = nombre_carrera(datos[0][13]);
+            data = [{'nombre': row[1], 'ap': row[2], 'am': row[3], 'ci': row[5], 'pais': row[6],
+                     'dep': row[7], 'provi': row[8], 'ciudad': row[9], 'regi': row[10],
+                      'sexo': row[11],'estado_ano':row[16],
+                      'abandono':row[17]} for row in datos]
             # Crear un diccionario con los nuevos datos
             nuevos_datos = {
                 'si_car_n': ress[0],
@@ -34,9 +37,16 @@ def  retornar_valores(datos,ress):
                 'si_prov': ress[6],
                 'si_nom': ress[7],
                 'si_apell': ress[8],
+                'si_des': ress[9],
+                'si_apla': ress[10],
+                'si_apro': ress[11],
+                'car':nom_car,
                 'total': numero_de_filas,
                 'indice': accion1
             }
+
+
+
 
             # Agregar los nuevos datos a la lista de diccionarios
             data.append(nuevos_datos)
@@ -95,9 +105,12 @@ def  retornar_valores(datos,ress):
 
     if accion1 == "estudiante_por_area":
         numero_de_filas = len(datos)
-        data =[{'cod_es': row[0],'nombre_es': row[1],'ap_es': row[2],'am_es': row[3],'titulo_bachiller': row[4],'ci': row[5],'pais_es': row[6],
-        'departamento': row[7],'provincia': row[8],'ciudad': row[9],'region': row[10],'sexo': row[11],'ano': row[12],
-        'calificacion': row[13],'estado_asignatura': row[14],'desercion': row[15]}for row in datos]
+
+        data =[{'cod_es': row[0],'nombre_es': row[1],'ap_es': row[2],'am_es': row[3],
+        'titulo_bachiller': row[4],'ci': row[5],'pais_es': row[6],
+        'departamento': row[7],'provincia': row[8],'ciudad': row[9],'region': row[10],
+        'sexo': row[11],'cod_area': row[12],
+        'cod_carrera': row[13],'estado_ano': row[16],'abandono': row[17]}for row in datos]
         nuevos_datos ={
         "si_activo":ress[0],
         "si_desactivo":ress[1],
@@ -107,36 +120,14 @@ def  retornar_valores(datos,ress):
         "si_dep":ress[5],
         "si_des":ress[6],
         "si_apla":ress[7],
-        "si_ar":ress[8],
-        'c_area':ress[9],
+        "si_apro":ress[8],
+        "si_ar":ress[9],
+        'c_area':ress[10],
         'total': numero_de_filas,
         'indice':accion1
         }
+
         data.append(nuevos_datos)
 
 
     return jsonify(data)
-
-
-
-def seleccionar_estudiante(id):
-    sql_consulta = "select *from estudiante"#seleccionamos todos los estudiantes
-    conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
-    # Crear un cursor para ejecutar consultas
-    cursor = conn.cursor()
-    # Ejecutar la consulta SQL
-    cursor.execute(sql_consulta)
-    # Verifica si hay algún resultado antes de obtenerlos
-    if cursor.rowcount > 0:
-        # Si hay resultados, obtén los datos de la consulta
-        sql_consulta = cursor.fetchall()
-        cursor.close()
-        conn.close()
-        nombres = ""
-        for row in datos:
-            if row[id]:
-                nombres+= row[1]+"|"+row[2]+"|"+row[3]
-                break
-        return nombres
-    else:
-        return "no"
