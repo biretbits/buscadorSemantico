@@ -16,16 +16,20 @@ estado char(15),
 foreign key(cod_area)references area(cod_area)on delete restrict on update restrict
 );
 
+
 create table estudiante_perdio(
 cod_p int not null auto_increment,
 estado_ano char(45),
 abandono char(45),
 cod_grado int,
+cod_docente int,
 cod_carrera int,
 cod_es int,
 cod_area int,
+fecha date,
 primary key(cod_p),
 foreign key(cod_grado)references grado(cod_grado)on delete restrict on update restrict,
+foreign key(cod_docente)references docente(cod_docente)on delete restrict on update restrict,
 foreign key(cod_carrera,cod_es)references estudiante(cod_carrera,cod_es)on delete restrict on update restrict,
 foreign key(cod_area)references area(cod_area)on delete restrict on update restrict);
 
@@ -2154,20 +2158,6 @@ cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
 ,20,26,70,11,5,2,1,1,1,'activo');
 
 
-create table estudiante_perdio(
-cod_p int not null auto_increment,
-estado_ano char(45),
-abandono char(45),
-cod_grado int,
-cod_docente int,
-cod_carrera int,
-cod_es int,
-cod_area int,
-primary key(cod_p),
-foreign key(cod_grado)references grado(cod_grado)on delete restrict on update restrict,
-foreign key(cod_docente)references docente(cod_docente)on delete restrict on update restrict,
-foreign key(cod_carrera,cod_es)references estudiante(cod_carrera,cod_es)on delete restrict on update restrict,
-foreign key(cod_area)references area(cod_area)on delete restrict on update restrict);
 
 update cursa_asignatura set calificacion  = 30 where cod_es = 1;
 update cursa_asignatura set calificacion  = 53 where cod_es = 2;
@@ -2194,50 +2184,50 @@ update cursa_asignatura set calificacion  = 20 where cod_es = 21;
 
 
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('reprobado','no',1,1,1,1);
+cod_es,cod_area,fecha)values('reprobado','no',1,1,1,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('aprobado','no',1,1,2,1);
+cod_es,cod_area,fecha)values('aprobado','no',1,1,2,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('reprobado','no',1,1,3,1);
+cod_es,cod_area,fecha)values('reprobado','no',1,1,3,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('aprobado','no',1,1,4,1);
+cod_es,cod_area,fecha)values('aprobado','no',1,1,4,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('reprobado','no',1,1,5,1);
+cod_es,cod_area,fecha)values('reprobado','no',1,1,5,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('reprobado','no',1,1,6,1);
+cod_es,cod_area,fecha)values('reprobado','no',1,1,6,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('reprobado','no',1,1,7,1);
+cod_es,cod_area,fecha)values('reprobado','no',1,1,7,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('reprobado','no',1,1,8,1);
+cod_es,cod_area,fecha)values('reprobado','no',1,1,8,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('reprobado','no',1,1,9,1);
+cod_es,cod_area,fecha)values('reprobado','no',1,1,9,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('reprobado','no',1,1,10,1);
+cod_es,cod_area,fecha)values('reprobado','no',1,1,10,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('aprobado','no',1,1,11,1);
+cod_es,cod_area,fecha)values('aprobado','no',1,1,11,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('aprobado','no',1,1,12,1);
+cod_es,cod_area,fecha)values('aprobado','no',1,1,12,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('reprobado','si',1,1,13,1);
+cod_es,cod_area,fecha)values('reprobado','si',1,1,13,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('reprobado','si',1,1,14,1);
+cod_es,cod_area,fecha)values('reprobado','si',1,1,14,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('aprobado','no',1,1,15,1);
+cod_es,cod_area,fecha)values('aprobado','no',1,1,15,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('reprobado','no',1,1,16,1);
+cod_es,cod_area,fecha)values('reprobado','no',1,1,16,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('reprobado','no',1,1,17,1);
+cod_es,cod_area,fecha)values('reprobado','no',1,1,17,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('aprobado','no',1,1,18,1);
+cod_es,cod_area,fecha)values('aprobado','no',1,1,18,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('reprobado','si',1,1,19,1);
+cod_es,cod_area,fecha)values('reprobado','si',1,1,19,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('aprobado','no',1,1,20,1);
+cod_es,cod_area,fecha)values('aprobado','no',1,1,20,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('reprobado','si',1,1,21,1);
+cod_es,cod_area,fecha)values('reprobado','si',1,1,21,1,'2024-02-03');
 
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('aprobado','no',2,1,31,1);
+cod_es,cod_area,fecha)values('aprobado','no',2,1,31,1,'2024-02-03');
 
 
 update cursa_asignatura set calificacion  = 20 where cod_es = 28;
@@ -2255,31 +2245,31 @@ update cursa_asignatura set calificacion  = 85 where cod_es = 39;
 update cursa_asignatura set calificacion  = 60 where cod_es = 40;
 
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('reprobado','si',2,1,28,1);
+cod_es,cod_area,fecha)values('reprobado','si',2,1,28,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('aprobado','no',2,1,29,1);
+cod_es,cod_area,fecha)values('aprobado','no',2,1,29,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('aprobado','no',2,1,30,1);
+cod_es,cod_area,fecha)values('aprobado','no',2,1,30,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('aprobado','no',2,1,31,1);
+cod_es,cod_area,fecha)values('aprobado','no',2,1,31,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('reprobado','no',2,1,32,1);
+cod_es,cod_area,fecha)values('reprobado','no',2,1,32,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('aprobado','no',2,1,33,1);
+cod_es,cod_area,fecha)values('aprobado','no',2,1,33,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('reprobado','no',2,1,34,1);
+cod_es,cod_area,fecha)values('reprobado','no',2,1,34,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('aprobado','no',2,1,35,1);
+cod_es,cod_area,fecha)values('aprobado','no',2,1,35,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('reprobado','si',2,1,36,1);
+cod_es,cod_area,fecha)values('reprobado','si',2,1,36,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('aprobado','no',2,1,37,1);
+cod_es,cod_area,fecha)values('aprobado','no',2,1,37,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('reprobado','no',2,1,38,1);
+cod_es,cod_area,fecha)values('reprobado','no',2,1,38,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('aprobado','no',2,1,39,1);
+cod_es,cod_area,fecha)values('aprobado','no',2,1,39,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('aprobado','no',2,1,40,1);
+cod_es,cod_area,fecha)values('aprobado','no',2,1,40,1,'2024-02-03');
 
 
 
@@ -2295,27 +2285,27 @@ update cursa_asignatura set calificacion  = 10 where cod_es = 49;
 update cursa_asignatura set calificacion  = 69 where cod_es = 50;
 update cursa_asignatura set calificacion  = 50 where cod_es = 51;
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('reprobado','no',3,1,41,1);
+cod_es,cod_area,fecha)values('reprobado','no',3,1,41,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('aprobado','no',3,1,42,1);
+cod_es,cod_area,fecha)values('aprobado','no',3,1,42,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('aprobado','no',3,1,43,1);
+cod_es,cod_area,fecha)values('aprobado','no',3,1,43,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('aprobado','no',3,1,44,1);
+cod_es,cod_area,fecha)values('aprobado','no',3,1,44,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('reprobado','si',3,1,45,1);
+cod_es,cod_area,fecha)values('reprobado','si',3,1,45,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('aprobado','no',3,1,46,1);
+cod_es,cod_area,fecha)values('aprobado','no',3,1,46,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('reprobado','no',3,1,47,1);
+cod_es,cod_area,fecha)values('reprobado','no',3,1,47,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('aprobado','no',3,1,48,1);
+cod_es,cod_area,fecha)values('aprobado','no',3,1,48,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('reprobado','no',3,1,49,1);
+cod_es,cod_area,fecha)values('reprobado','no',3,1,49,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('aprobado','no',3,1,50,1);
+cod_es,cod_area,fecha)values('aprobado','no',3,1,50,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('reprobado','no',3,1,41,1);
+cod_es,cod_area,fecha)values('reprobado','no',3,1,41,1,'2024-02-03');
 
 
 update cursa_asignatura set calificacion  = 100 where cod_es = 52;
@@ -2329,23 +2319,23 @@ update cursa_asignatura set calificacion  = 96 where cod_es = 59;
 update cursa_asignatura set calificacion  = 10 where cod_es = 60;
 
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('aprobado','no',4,1,52,1);
+cod_es,cod_area,fecha)values('aprobado','no',4,1,52,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('aprobado','no',4,1,53,1);
+cod_es,cod_area,fecha)values('aprobado','no',4,1,53,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('aprobado','no',4,1,54,1);
+cod_es,cod_area,fecha)values('aprobado','no',4,1,54,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('aprobado','no',4,1,55,1);
+cod_es,cod_area,fecha)values('aprobado','no',4,1,55,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('reprobado','si',4,1,56,1);
+cod_es,cod_area,fecha)values('reprobado','si',4,1,56,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('aprobado','no',4,1,57,1);
+cod_es,cod_area,fecha)values('aprobado','no',4,1,57,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('reprobado','no',4,1,58,1);
+cod_es,cod_area,fecha)values('reprobado','no',4,1,58,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('aprobado','no',4,1,59,1);
+cod_es,cod_area,fecha)values('aprobado','no',4,1,59,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('reprobado','no',4,1,60,1);
+cod_es,cod_area,fecha)values('reprobado','no',4,1,60,1,'2024-02-03');
 
 update cursa_asignatura set calificacion  = 100 where cod_es = 61;
 update cursa_asignatura set calificacion  = 51 where cod_es = 62;
@@ -2356,16 +2346,20 @@ update cursa_asignatura set calificacion  = 50 where cod_es = 66;
 update cursa_asignatura set calificacion  = 95 where cod_es = 67;
 
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('aprobado','no',5,1,61,1);
+cod_es,cod_area,fecha)values('aprobado','no',5,1,61,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('reprobado','no',5,1,62,1);
+cod_es,cod_area,fecha)values('reprobado','no',5,1,62,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('aprobado','no',5,1,63,1);
+cod_es,cod_area,fecha)values('aprobado','no',5,1,63,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('reprobado','si',5,1,64,1);
+cod_es,cod_area,fecha)values('reprobado','si',5,1,64,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('aprobado','no',5,1,65,1);
+cod_es,cod_area,fecha)values('aprobado','no',5,1,65,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('reprobado','no',5,1,66,1);
+cod_es,cod_area,fecha)values('reprobado','no',5,1,66,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
-cod_es,cod_area)values('aprobado','no',5,1,69,1);
+cod_es,cod_area,fecha)values('aprobado','no',5,1,69,1,'2024-02-03');
+
+
+
+instalar pip install datefinder

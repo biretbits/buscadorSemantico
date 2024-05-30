@@ -3,7 +3,7 @@
 from comprobar import obtener_carreras_nombre,detectar_numeros_delimiter,contiene_palabras_activas,contiene_palabras_desactivas,contiene_palabras_sexo_varon,contiene_palabras_sexo_mujer
 from comprobar import palabras_departamento,palabras_provincia,encontrar_nombre,encontrar_apellido,obtener_area,palabra_desercion
 from comprobar import palabra_aplazaron,palabra_aprobados,palabra_curso,obtener_que_curso_quiere
-from comprobar import palabra_nota
+from comprobar import palabra_nota,fechas
 from sql import seleccionar_estudiante
 import nltk
 from nltk.tokenize import word_tokenize
@@ -18,7 +18,7 @@ nltk.download('wordnet')
 
 # Definir la lista de pares
 pares = [
-["carrera carreras unsxx direccion datos datos detalle universidad nacional siglo xx lugar informacion encuentra",["ver_carreras"]],
+["todas carrera carreras unsxx direccion datos datos detalle universidad nacional siglo xx lugar informacion encuentra",["ver_carreras"]],
 #6
 ["total estudiante estudiantes unxx universidad nacional siglo xx cantidad numero todos",["total_de_estudiantes"]],
 ["desahilitados desahilitado habilitado habilitados informacion estudiante estudiantes carrera unxx universidad nacional siglo xx cantidad numero mostrar visualizar detalle detalles sexo activo activos desactivos desactivo departamento pais provincia ciudad region mujeres varones femenino masculino aplazaron aplazados reprobados reprobaron",
@@ -31,18 +31,16 @@ pares = [
 ["todas total mostrar detalle detalles informacion visualizar estudiante estudiantes area tecnologia salud social unsxx cuantos todos aplazaron aplazados reprobados reprobaron activos habilitados mujeres varones ciudad departamento",["estudiante_por_area"]],
 ["calificacion nota notas calificaciones detalles materia materias asignatura asignaturas informacion estudiante estudiantes carrera unxx universidad nacional siglo xx cantidad numero mostrar visualizar detalle",
 ["seleccionar_asignatura_estudiante"]],
-["todas total mostrar detalle detalles informacion visualizar estudiante estudiantes area tecnologia salud social unsxx cuantos todos aplazaron aplazados reprobados reprobaron activos habilitados mujeres varones ciudad departamento areas estadistica estadisticas desercion",
+["unsxx universidad todas total mostrar detalle detalles informacion visualizar estudiante estudiantes area tecnologia salud social unsxx cuantos todos aplazaron aplazados reprobados reprobaron activos habilitados mujeres varones ciudad departamento areas estadistica estadisticas desercion",
 ["total_de_estudiantes_estadisticas"]],
 ]
-
-
 consultas_sql = {
 "ver_carreras":"select *from carrera",
 "ver_por_nombre_estudiante":" select e.nombre_es,e.ap_es,e.am_es,e.ci,e.pais_es,e.departamento,e.provincia,e.ciudad,e.region,e.sexo,c.nombre_carrera from carrera as c inner join estudiante as e on c.cod_carrera = e.cod_carrera where e.nombre_es like '%{}%' ",
 "ver_carreras_nombre":"select *from carrera where cod_carrera = {};",
 "total_de_estudiantes":"SELECT COUNT(*) FROM estudiante",
 "total_de_estudiantes_carrera":"select *from estudiante as e inner join estudiante_perdio as ep on e.cod_es = ep.cod_es",
-"datos_especificos_estudiante":"SELECT e.nombre_es,e.ap_es,e.am_es,e.ci,e.pais_es,e.departamento,e.provincia,e.ciudad,e.region,e.sexo,c.nombre_carrera FROM carrera as c inner join estudiante as e on c.cod_carrera = e.cod_carrera  where  ",
+"datos_especificos_estudiante":"SELECT e.nombre_es,e.ap_es,e.am_es,e.ci,e.pais_es,e.departamento,e.provincia,e.ciudad,e.region,e.sexo,c.nombre_carrera,e.cod_es FROM carrera as c inner join estudiante as e on c.cod_carrera = e.cod_carrera  where  ",
 "estudiantes_de_unsxx":"select * from estudiante as e where ",
 "seleccionar_carreras_area":"select *from area as a inner join carrera as c on a.cod_area = c.cod_area where ",
 "estudiante_por_area":"select *from estudiante as e inner join estudiante_perdio as ep on e.cod_es = ep.cod_es",
@@ -80,7 +78,9 @@ consultas_aux= {"activo_es" :" e.estado = 'activo'",
 "curso_estudiante":" ep.cod_grado = {}",
 "id_carrera":" cod_carrera = {}",
 "id_estudiante": "cod_es = {}",
-"id_grado": "cod_grado = {}"
+"id_grado": "cod_grado = {}",
+"fechai": " fecha >= '{}'",
+"fechaf": " fecha <= '{}'",
 }
 
 
@@ -240,12 +240,19 @@ def buscar(texto):
                         vec.append("no")
 
                     curso = palabra_curso(texto)
+                    print(curso,"    curso son ")
                     id_curso = "no";
-                    id_curso=obtener_que_curso_quiere(texto)
-                    if curso != "no" or id_curso != "no":#existe la palabra curso
-                        vec.append("si_curso")
+
+
+                    if curso != "no":
+                        id_curso=obtener_que_curso_quiere(texto)
+                        if id_curso != "no":
+                            vec.append("si_curso")
+                        else:
+                            vec.append("no")
                     else:
                         vec.append("no")
+
                     si = "no"
                     for i in range(len(vec)):
                         vec1.append(vec[i])
@@ -854,12 +861,58 @@ def buscar(texto):
                 vec.append("si_apro")
             else:
                 vec.append("no")
+
+            fecha = fechas(texto)
+            if len(fecha) >= 1:#si existe fechas
+                vec.append("si_fecha")
+                if len(fecha) == 1:
+                    fecha1 = fecha[0]
+                    fecha2 = ""
+                elif len(fecha)>1:
+                    fecha1 = fecha[0]
+                    fecha2 = fecha[1]
+            else:#no hay fechas
+                vec.append("no")
+                fecha1 = ""
+                fecha2 = ""
+
+            print(fecha)
             nombre_posicion_sql = "total_de_estudiantes_estadisticas"
             sql = consultas_sql[nombre_posicion_sql]
             for i in range(len(vec)):
                 vec1.append(vec[i])
+            si = "no"
+            for i in range(len(vec)):
+                if vec[i] == "si_fecha" and si == "no":
+                    if fecha1 != "":#si es diferente de vacio
+                        sql_aux = consultas_aux["fechai"]
+                        response+=" ( "+sql_aux.format(fecha1)
+                    if fecha2 != "":
+                        sql_aux = consultas_aux["fechaf"]
+                        response+=" and "+sql_aux.format(fecha2)+")"
+                    else:
+                        sql_aux = consultas_aux["fechaf"]
+                        response+=" and "+sql_aux.format(fecha1)+")"
+                    si = "si"
+                elif vec[i] == "si_fecha" and si == "si":
+                    if fecha1 != "":#si es diferente de vacio
+                        sql_aux = consultas_aux["fechai"]
+                        response+=" and ( "+sql_aux.format(fecha1)
+                    if fecha2 != "":
+                        sql_aux = consultas_aux["fechaf"]
+                        response+=" and "+sql_aux.format(fecha2)+")"
+                    else:
+                        sql_aux = consultas_aux["fechaf"]
+                        response+=" and "+sql_aux.format(fecha1)+")"
+                    si = "si"
+                vec[i] = "no"
+            if si == "no":#si se mantienen en no entonces aumentamos WHERE
+                response = response
+            else:
+                response=" where "+response
             vec1.append(nombre_posicion_sql)
-            vec1.append(sql)
+            response = sql + response
+            vec1.append(response)
         return vec1
     else:
         vec1=[]

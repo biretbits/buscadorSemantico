@@ -4,7 +4,7 @@ import nltk
 from nltk.tokenize import word_tokenize
 from nltk import pos_tag
 import pymysql
-
+import re
 # Cargar el modelo de lenguaje en español
 nlp = spacy.load("es_core_news_sm")
 
@@ -328,5 +328,29 @@ def palabra_nota(texto):
 
 
 
+fecha_regex = re.compile(
+    r'\b(?:\d{1,2}[-/.\s]?\d{1,2}[-/.\s]?\d{2,4})\b|'  # dd/mm/aaaa, dd-mm-aaaa, dd.mm.aaaa
+    r'\b(?:\d{4}[-/.\s]?\d{1,2}[-/.\s]?\d{1,2})\b|'    # aaaa/mm/dd, aaaa-mm-dd, aaaa.mm.dd
+    r'\b(?:\d{1,2} (?:de )?(?:ene(?:ro)?|feb(?:rero)?|mar(?:zo)?|abr(?:il)?|may(?:o)?|jun(?:io)?|jul(?:io)?|ago(?:sto)?|sep(?:tiembre)?|oct(?:ubre)?|nov(?:iembre)?|dic(?:iembre)?) (?:de )?\d{2,4})\b'  # dd de mes de aaaa
+)
+
+def fechas(texto):
+    fechas_encontradas = fecha_regex.findall(texto)
+    fechas_formateadas = [formatear_fecha(fecha) for fecha in fechas_encontradas]
+    return fechas_formateadas
+
+def formatear_fecha(fecha):
+    # Separar la fecha en sus componentes (día, mes, año)
+    if '/' in fecha:
+        partes = fecha.split('/')
+    elif '-' in fecha:
+        partes = fecha.split('-')
+    else:
+        partes = fecha.split('.')
+    # Reordenar los componentes para el formato deseado (año, mes, día)
+    if len(partes) == 3:
+        return partes[2] + '-' + partes[1] + '-' + partes[0]
+    else:
+        return fecha
 
 #funciones de allar el dato si exite o no

@@ -87,7 +87,7 @@ def seleccionar_carrera():
         return "no"
 
 
-def nombre_carrera(id):
+def nombre_carrera_retor(id):
 
         # Consulta SQL para seleccionar un estudiante por su ID
         sql_consulta = "SELECT * FROM carrera WHERE cod_carrera = %s"
@@ -215,5 +215,25 @@ def obtener_nombre(id):
         nombres+= sql_consulta[1]+" "+sql_consulta[2]+" "+sql_consulta[3]
 
         return nombres
+    else:
+        return "no"
+
+def obtener_datos_de_curso(id):
+    sql_consulta = "select *from estudiante_perdio where cod_es = %s"#seleccionamos todos los estudiantes
+    conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+    # Crear un cursor para ejecutar consultas
+    cursor = conn.cursor()
+    # Ejecutar la consulta SQL
+    cursor.execute(sql_consulta,id)
+    # Verifica si hay algún resultado antes de obtenerlos
+    if cursor.rowcount > 0:
+        # Si hay resultados, obtén los datos de la consulta
+        sql_consulta = cursor.fetchone()
+        cursor.close()
+        conn.close()
+        grado = ""
+        grado = sql_consulta[3]
+
+        return grado
     else:
         return "no"
