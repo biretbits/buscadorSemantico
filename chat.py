@@ -3,6 +3,8 @@
 from comprobar import obtener_carreras_nombre,detectar_numeros_delimiter,contiene_palabras_activas,contiene_palabras_desactivas,contiene_palabras_sexo_varon,contiene_palabras_sexo_mujer
 from comprobar import palabras_departamento,palabras_provincia,encontrar_nombre,encontrar_apellido,obtener_area,palabra_desercion
 from comprobar import palabra_aplazaron,palabra_aprobados,palabra_curso,obtener_que_curso_quiere
+from comprobar import palabra_nota
+from sql import seleccionar_estudiante
 import nltk
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
@@ -16,17 +18,22 @@ nltk.download('wordnet')
 
 # Definir la lista de pares
 pares = [
-["cuales cual carrera carreras unsxx direccion datos datos detalle universidad nacional siglo xx lugar informacion encuentra",["ver_carreras"]],
+["carrera carreras unsxx direccion datos datos detalle universidad nacional siglo xx lugar informacion encuentra",["ver_carreras"]],
 #6
-["cuales cual total estudiante estudiantes unxx universidad nacional siglo xx cantidad numero todos",["total_de_estudiantes"]],
-["quiero desahilitados desahilitado habilitado habilitados cuales cual total informacion estudiante estudiantes carrera unxx universidad nacional siglo xx cantidad numero mostrar visualizar detalle sexo activo activos desactivos desactivo departamento pais provincia ciudad region mujeres varones femenino masculino aplazaron aplazados reprobados reprobaron",
+["total estudiante estudiantes unxx universidad nacional siglo xx cantidad numero todos",["total_de_estudiantes"]],
+["desahilitados desahilitado habilitado habilitados informacion estudiante estudiantes carrera unxx universidad nacional siglo xx cantidad numero mostrar visualizar detalle detalles sexo activo activos desactivos desactivo departamento pais provincia ciudad region mujeres varones femenino masculino aplazaron aplazados reprobados reprobaron",
 ["total_de_estudiantes_carrera"]],
-["datos datos estudiante estudiantes quiero los del informacion carrera buscar busqueda",["datos_especificos_estudiante"]],
-["todos total del los estudiantes estudiante unsxx de universidad nacional siglo xx cantidad numero mostrar visualizar detalle sexo activo activos desactivos desactivo departamento pais provincia provincias ciudad region mujeres varones masculino femenino",
+["datos datos estudiante estudiantes informacion carrera buscar busqueda",["datos_especificos_estudiante"]],
+["todos total estudiantes estudiante unsxx de universidad nacional siglo xx cantidad numero mostrar visualizar detalle sexo activo activos desactivos desactivo departamento pais provincia provincias ciudad region mujeres varones masculino femenino",
 ["estudiantes_de_unsxx"]],
 ["todas total mostrar detalle detalles informacion visualizar carreras carrera area tecnologia salud social unsxx",["seleccionar_carreras_area"]
 ],
-["todas total mostrar detalle detalles informacion visualizar estudiante estudiantes area tecnologia salud social unsxx cuantos todos aplazaron aplazados reprobados reprobaron activos habilitados mujeres varones ciudad departamento",["estudiante_por_area"]]]
+["todas total mostrar detalle detalles informacion visualizar estudiante estudiantes area tecnologia salud social unsxx cuantos todos aplazaron aplazados reprobados reprobaron activos habilitados mujeres varones ciudad departamento",["estudiante_por_area"]],
+["calificacion nota notas calificaciones detalles materia materias asignatura asignaturas informacion estudiante estudiantes carrera unxx universidad nacional siglo xx cantidad numero mostrar visualizar detalle",
+["seleccionar_asignatura_estudiante"]],
+["todas total mostrar detalle detalles informacion visualizar estudiante estudiantes area tecnologia salud social unsxx cuantos todos aplazaron aplazados reprobados reprobaron activos habilitados mujeres varones ciudad departamento areas estadistica estadisticas desercion",
+["total_de_estudiantes_estadisticas"]],
+]
 
 
 consultas_sql = {
@@ -39,6 +46,9 @@ consultas_sql = {
 "estudiantes_de_unsxx":"select * from estudiante as e where ",
 "seleccionar_carreras_area":"select *from area as a inner join carrera as c on a.cod_area = c.cod_area where ",
 "estudiante_por_area":"select *from estudiante as e inner join estudiante_perdio as ep on e.cod_es = ep.cod_es",
+"seleccionar_asignatura_estudiante":"select *from cursa_asignatura",
+"seleccionar_asignatura_estudiante_calificacion":"select *from cursa_asignatura",
+"total_de_estudiantes_estadisticas":"select * from estudiante_perdio",
 }
 #e.estado = 'desactivo' or e.cod_area = 3 and e.sexo = 'femenino' or  e.sexo = 'masculino';"
 consultas_aux= {"activo_es" :" e.estado = 'activo'",
@@ -67,7 +77,10 @@ consultas_aux= {"activo_es" :" e.estado = 'activo'",
 "cod_area_cursa":" e.cod_area = {}",
 "desercion":" abandono = '{}'",
 "aplazaron":" estado_ano = '{}'",
-"curso_estudiante":" ep.cod_grado = {}"
+"curso_estudiante":" ep.cod_grado = {}",
+"id_carrera":" cod_carrera = {}",
+"id_estudiante": "cod_es = {}",
+"id_grado": "cod_grado = {}"
 }
 
 
@@ -227,10 +240,10 @@ def buscar(texto):
                         vec.append("no")
 
                     curso = palabra_curso(texto)
-                    id_curso = "";
-                    if curso != "no":#existe la palabra curso
+                    id_curso = "no";
+                    id_curso=obtener_que_curso_quiere(texto)
+                    if curso != "no" or id_curso != "no":#existe la palabra curso
                         vec.append("si_curso")
-                        id_curso=obtener_que_curso_quiere(texto)
                     else:
                         vec.append("no")
                     si = "no"
@@ -239,6 +252,8 @@ def buscar(texto):
                     vec1.append(nombre_posicion_sql)
                     print(carreras_encontradas)
                     print(vec)
+                    nombres = 'no'
+                    apellidos = 'no'
                     for i in range(len(vec)):
 
                         if vec[i] == "si_car" and si == "no":
@@ -296,15 +311,19 @@ def buscar(texto):
                             sql_aux = " and "+consultas_aux["departamento_es"]
                             si = "si"
                             response += sql_aux.format(dep_encontrado)
+
                         if vec[i] == "si_nom" and si == "no":
-                            sql_aux = consultas_aux["nombre_es"]
+                            sql_aux = "("+consultas_aux["nombre_es"]
                             response += sql_aux.format(nomb)
                             si = "si"
+                            nombres = "si"
                         elif vec[i] == "si_nom" and si == "si":
                             sql_aux = consultas_aux["nombre_es"]
-                            response += " and "+sql_aux.format(nomb)
+                            response += " and ("+sql_aux.format(nomb)
                             si = "si"
+                            nombres = "si"
                             #apellidos
+
                         if vec[i] == "si_apell" and si == "no":
                             if len(ap) == 1:#numero de apellidos maryor a 1
                                 sql_aux = consultas_aux["apellido_p_es"]
@@ -315,16 +334,25 @@ def buscar(texto):
                                 sql_aux = consultas_aux["apellido_m_es"]
                                 response += sql_aux.format(ap[1])
                             si = "si"
+                            if nombres == "si":
+                                response+=") "
+                                apellidos = 'si'
                         elif vec[i] == "si_apell" and si == "si":
                             if len(ap) == 1:#numero de apellidos maryor a 1
                                 sql_aux = consultas_aux["apellido_p_es"]
-                                response += " or "+sql_aux.format(ap[0])
+                                response += " and "+sql_aux.format(ap[0])
                             elif len(ap)>1:
                                 sql_aux = consultas_aux["apellido_p_es"]
-                                response += " or "+sql_aux.format(ap[0])
+                                response += " and "+sql_aux.format(ap[0])
                                 sql_aux = consultas_aux["apellido_m_es"]
-                                response += " or "+sql_aux.format(ap[1])
+                                response += " and "+sql_aux.format(ap[1])
                             si = "si"
+                            if nombres == "si":
+                                response+=") "
+                                apellidos = 'si'
+                        if apellidos == "no" and vec[i] == "si_apell" and si == "si":#no existe apellidos entonces cerramos en nombre el parentesis
+                            response+=") "
+
                         if vec[i] == "si_des" and si == "no":
                             sql_aux = consultas_aux["desercion"]
                             si = "si"
@@ -443,7 +471,7 @@ def buscar(texto):
             vec = []
             nombre_posicion_sql = "estudiantes_de_unsxx"
             sql = consultas_sql[nombre_posicion_sql]
-        #realizamos consultas de if para saber en cual llega y poder el and o no
+        #realizamos consultas de if para saber en  llega y poder el and o no
             if contiene_palabras_activas(texto):#si contiene la palabra activo ingresa
                 vec.append("si_activo")
             else:
@@ -715,6 +743,123 @@ def buscar(texto):
 
             response = sql + response
             vec1.append(response)
+
+        if response == "seleccionar_asignatura_estudiante":
+            vec = []
+            vec1 = []
+            response = "";
+            if palabra_nota(texto) != "no":
+                vec.append("si_cali")
+            else:
+                vec.append("no")
+            carreras_encontradas = obtener_carreras_nombre(texto);
+            nombre_posicion_sql = "seleccionar_asignatura_estudiante"
+            sql = consultas_sql[nombre_posicion_sql]
+
+            if carreras_encontradas:#si existe algun nombre de carrera ingresa
+                vec.append("si_car")
+                print(carreras_encontradas,"  estas son las carreras")
+            else:
+                vec.append("no")
+            nombre = "no"
+            apellido = "no"
+            nomb = encontrar_nombre(texto)#si existe algun nombre ingresa
+            if nomb != "no":
+                nombre = "si"
+            ap = encontrar_apellido(texto)#si hay algun apellido ingresa
+            if ap != "no" and nombre == "si":
+                apellido = "si"
+            if nombre == "si" or apellido == "si":
+                id_estudiante = seleccionar_estudiante(nomb,ap,carreras_encontradas)#buscamos el id con el nombre y apellido del estudiante
+                print(id_estudiante,"   no hay estudiante")
+                if id_estudiante == "no":
+                    vec.append("no")
+                    vec1.append(nomb)
+                    vec1.append(ap[0])
+                else:
+                    vec.append("si_nom_apell")
+                    vec1.append("")
+                    vec1.append("")
+            else:
+                vec.append("no")
+                vec1.append("")
+                vec1.append("")
+            curso = palabra_curso(texto)
+            id_curso = "no";
+            id_curso=obtener_que_curso_quiere(texto)
+            if curso != "no" or id_curso != "no" and  len(id_curso) != 0:#existe la palabra curso
+                vec.append("si_curso")
+            else:
+                vec.append("no")
+            si = "no"
+            print(id_curso)
+            for i in range(len(vec)):
+                vec1.append(vec[i])
+            vec1.append(nombre_posicion_sql)
+
+            for i in range(len(vec)):
+                if vec[i] == "si_car" and si == "no":
+                    sql_aux = consultas_aux["id_carrera"]  # Supongamos que consultas_aux es un diccionario con consultas auxiliares
+                    response += sql_aux.format(carreras_encontradas[0])
+                    si = "si"
+                elif vec[i] == "si_car" and si == "si":
+                    sql_aux = consultas_aux["id_carrera"]  # Supongamos que consultas_aux es un diccionario con consultas auxiliares
+                    response += " and "+sql_aux.format(carreras_encontradas[0])
+                    si = "si"
+                if vec[i] == "si_nom_apell" and si == "no":
+                    sql_aux = consultas_aux["id_estudiante"]
+                    response+=sql_aux.format(id_estudiante)
+                    si = "si"
+                elif vec[i] == "si_nom_apell" and si == "si":
+                    sql_aux = consultas_aux["id_estudiante"]
+                    response+=" and "+sql_aux.format(id_estudiante)
+                    si = "si"
+
+                if vec[i] == "si_curso" and si == "no":
+                    sql_aux = consultas_aux["id_grado"]
+                    si = "si"
+                    response+= sql_aux.format(id_curso.pop(0))
+                elif vec[i] == "si_curso" and si == "si":
+                    sql_aux = consultas_aux["id_grado"]
+                    si = "si"
+                    response+= " and "+sql_aux.format(id_curso.pop(0))
+                vec[i] = "no"
+            if si == "no":#si se mantienen en no entonces aumentamos WHERE
+                response = response
+            else:
+                response=" where "+response
+            response = sql+response
+            vec1.append(nombre_posicion_sql)
+            vec1.append(response)
+
+        if response == "total_de_estudiantes_estadisticas":#obtener estadistica de estudiantes aprobados y reprobados
+            vec = []
+            vec1 = []
+            response = "";
+            desercion = palabra_desercion(texto)#buscamos palabras relacionados con desercion o relacionado
+            if desercion != "no":
+                vec.append("si_des")
+            else:
+                vec.append("no")
+
+            aplazar = palabra_aplazaron(texto)#buscamos palabras relacionados con aplazar
+
+            if aplazar != "no":
+                vec.append("si_apla")
+            else:
+                vec.append("no")
+
+            aprobado = palabra_aprobados(texto)
+            if aprobado != "no":
+                vec.append("si_apro")
+            else:
+                vec.append("no")
+            nombre_posicion_sql = "total_de_estudiantes_estadisticas"
+            sql = consultas_sql[nombre_posicion_sql]
+            for i in range(len(vec)):
+                vec1.append(vec[i])
+            vec1.append(nombre_posicion_sql)
+            vec1.append(sql)
         return vec1
     else:
         vec1=[]

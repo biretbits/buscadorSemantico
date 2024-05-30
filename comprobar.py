@@ -223,7 +223,8 @@ vec_apellidos = ["aguilar","alonso","alvarez","arias","benitez","blanco","blesa"
 "lipiri","villca","villcaes","villcaez","torrico","titi","pacheco","lima","camiño","mitma","condori","mamani","quispe","sierra","acarapi",
 "lia","huanca","colquillo","huallpa","wallpa","cosio","ayala","galindo","quispia","chaca","achacollo","gallo","romero","jorge","zeballos","chura",
 "michaga","copatiti","acha","fernandes","cayo","coyo","medrano","porco","castillo","humeres","humerez","alizon","chambi","toledo","calani","charali",
-"victorio","choque","huayllani","adam","tola","sola","acebedo","jani jani","janijani","salinas","luna","dias","diaz","jurado"]
+"victorio","choque","huayllani","adam","tola","sola","acebedo","jani jani","janijani","salinas","luna","dias","diaz","jurado",
+"callahuara"]
 def encontrar_apellido(texto):
     texto = texto.lower()
     texto = eliminar_tildes(texto)
@@ -261,7 +262,8 @@ def obtener_area(texto):
 def palabra_desercion(texto):
     texto = texto.lower()
     texto = eliminar_tildes(texto)  # Suponiendo que eliminar_tildes(texto) está definida
-    des_keywords = ["desercion", "desertados", "abandonados", "abandono", "abandonaron", "desertaron", "retiraron", "retirados", "desertaron"]
+    des_keywords = ["desercion", "desertados", "abandonados", "abandono", "abandonaron", "desertaron", "retiraron", "retirados", "desertaron"
+    ,"desertores"]
     for palabra_clave in des_keywords:
         if palabra_clave in texto:
             return "si"
@@ -311,3 +313,20 @@ def obtener_que_curso_quiere(texto):
         if curso_keyword in texto:
             curso.append(id_curso)
     return curso
+
+
+def palabra_nota(texto):
+    texto = texto.lower()
+    texto = eliminar_tildes(texto)  # Suponiendo que eliminar_tildes(texto) está definida
+    apla_keywords = ["calificacion","nota","calificaciones","notas"]
+    for palabra_clave in apla_keywords:
+        print(palabra_clave)
+        if palabra_clave in texto:
+            print(palabra_clave)
+            return "si"
+    return "no"
+
+
+
+
+#funciones de allar el dato si exite o no

@@ -1,8 +1,10 @@
 from flask import jsonify
-from sql import nombre_carrera
+from sql import nombre_carrera,grado_Estudiante,obtener_nombre,nombre_materia
 
 def  retornar_valores(datos,ress):
     accion1 = ress[-2]
+    html = ""
+    html += "<div class='container'>"
     if accion1 == "ver_carreras":
         # Crear una lista de diccionarios a partir de datos
         data = [{'carrera': row[1], 'direccion': row[2]} for row in datos]
@@ -24,8 +26,8 @@ def  retornar_valores(datos,ress):
             nom_car = nombre_carrera(datos[0][13]);
             data = [{'nombre': row[1], 'ap': row[2], 'am': row[3], 'ci': row[5], 'pais': row[6],
                      'dep': row[7], 'provi': row[8], 'ciudad': row[9], 'regi': row[10],
-                      'sexo': row[11],'estado_ano':row[16],
-                      'abandono':row[17]} for row in datos]
+                      'sexo': row[11],'carrera_nom':nombre_carrera(row[13]),'estado_ano':row[16],
+                      'abandono':row[17],'grado':grado_Estudiante(row[18])} for row in datos]
             # Crear un diccionario con los nuevos datos
             nuevos_datos = {
                 'si_car_n': ress[0],
@@ -40,6 +42,7 @@ def  retornar_valores(datos,ress):
                 'si_des': ress[9],
                 'si_apla': ress[10],
                 'si_apro': ress[11],
+                'si_curso':ress[12],
                 'car':nom_car,
                 'total': numero_de_filas,
                 'indice': accion1
@@ -129,5 +132,122 @@ def  retornar_valores(datos,ress):
 
         data.append(nuevos_datos)
 
+    if accion1 == "seleccionar_asignatura_estudiante":
 
-    return jsonify(data)
+        data = [{'cod_cursa': row[0],'ano': row[1],'calificacion':row[2],'nombre_es':obtener_nombre(row[5]),
+        'cod_docente':row[7],'nombre_asignatura':nombre_materia(row[8]),'nombre_carrera':nombre_carrera(row[10]),
+        'grado':grado_Estudiante(row[11])} for row in datos]
+        nuevos_datos = {
+            "nombre": ress[0],
+            "apellid_p": ress[1],
+            "si_cali": ress[2],
+            "si_car": ress[3],
+            "si_nom_apell": ress[4],
+            "si_curso": ress[5],
+            'indice':accion1
+        }
+        data.append(nuevos_datos)
+    if accion1 == "total_de_estudiantes_estadisticas":
+
+
+        si_des = ress[0]
+        si_apla = ress[1]
+        si_apro = ress[2]
+        vapro = [0] * 18
+        vaplaz = [0] * 18
+        vdes = [0] * 18
+        vndes = [0] * 18
+        capro = 0
+        caplaz = 0
+        cdes = 0
+        cndes = 0
+        total = 0
+        for row in datos:
+            print(row[1])
+            if row[2] == "si":
+                cdes += 1
+                vdes[row[4]] += 1
+            elif row[2] == "no":
+                cndes += 1
+                vndes[row[4]] += 1
+
+            if row[1] == "aprobado":
+                capro += 1
+                vapro[row[4]] += 1
+            elif row[1] == "reprobado":
+                caplaz += 1
+                vaplaz[row[4]] += 1
+
+            total += 1
+
+        mensaje = "La cantidad de "
+        si = "no"
+        if si_des != "no" and si == "no":
+            mensaje += " desertores "
+            si = "si"
+        if si_apla != "no" and si == "no":
+            mensaje += " reprobados "
+            si = "si"
+        elif si_apla != "no" and si == "si":
+            mensaje += ", reprobados "
+            si = "si"
+        if si_apro != "no" and si == "no":
+            mensaje += " aprobados "
+            si = "si"
+        elif si_apro != "no" and si == "si":
+            mensaje += ", aprobados "
+            si = "si"
+
+
+            mensaje += " es lo siguiente por área y carreras"
+            html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
+            # Crear el gráfico de torta
+            html += "<center><canvas id='grafica1' width='250' height='250'></canvas></center>"
+
+            # Datos para el gráfico
+            html += "<script>"
+            html += "var data = {"
+            html += "'labels': ['Aprobado', 'Reprobado'],"
+            html += "'datasets': [{"
+            html += "'data': [" + str(30) + ", " + str(50) + "], "  # Valores para cada sección de la torta
+            html += "'backgroundColor': ['#FF6384', '#36A2EB'] "  # Colores para cada sección
+            html += "}]"
+            html += "};"
+
+            html += "var options = {"
+            html += "'responsive': true,"
+            html += "'maintainAspectRatio': false"
+            html += "};"
+
+            html+="var ctx = document.getElementById('grafica1').getContext('2d');"
+
+            html+="var myPieChart = new Chart(ctx, {"
+            html+=" type: 'pie',"
+            html+=" data: data,"
+            html+=" options: options"
+            html+="});"
+            html += "</script>"
+
+
+        html += "</container>"
+    return html
+
+    ac = {
+1: "Ingenieria Informatica",
+2: "Ingenieria civil",
+3: "Ingenieria de minas",
+4: "Ingenieria electromecanica",
+5: "Ingenieria mecanica automotriz",
+6: "Ingenieria agronomia",
+7: "Ingenieria evaporiticos del litio",
+8: "Derecho",
+9: "Ciencias de la Educacion",
+10: "contaduria",
+11: "Odontologia",
+12: "Laboratorio Clinico",
+13: "Enfermeria",
+14: "Medicina",
+15: "Ingenieria bio medica",
+16: "comunicacion social",
+17: "bioquimica"
+}
