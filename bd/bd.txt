@@ -246,6 +246,15 @@ cod_grado)on delete restrict on update restrict
 
 
 
+CREATE TABLE embeddings (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    texto TEXT,
+    embedding LONGBLOB,
+    consulta TEXT
+);
+
+
+
 
 
 
@@ -2363,3 +2372,5 @@ cod_es,cod_area,fecha)values('aprobado','no',5,1,69,1,'2024-02-03');
 
 
 instalar pip install datefinder
+pip install python-dotenv
+pip show sentence-transformers

@@ -18,20 +18,21 @@ nltk.download('wordnet')
 
 # Definir la lista de pares
 pares = [
-["todas carrera carreras unsxx direccion datos datos detalle universidad nacional siglo xx lugar informacion encuentra",["ver_carreras"]],
+["informacion todas datos datos detalle carrera carreras unsxx direccion  universidad nacional siglo xx lugar  encuentra",["ver_carreras"]],
+
 #6
-["total estudiante estudiantes unxx universidad nacional siglo xx cantidad numero todos",["total_de_estudiantes"]],
-["desahilitados desahilitado habilitado habilitados informacion estudiante estudiantes carrera unxx universidad nacional siglo xx cantidad numero mostrar visualizar detalle detalles sexo activo activos desactivos desactivo departamento pais provincia ciudad region mujeres varones femenino masculino aplazaron aplazados reprobados reprobaron",
+["informacion cantidad numero todos total estudiante estudiantes unxx universidad nacional siglo xx",["total_de_estudiantes"]],
+["informmacion todas total cantidad numero mostrar detalle detalles visualizar  desahilitados desahilitado habilitado habilitados  estudiante estudiantes carrera  sexo activo activos desactivos desactivo departamento pais provincia ciudad region mujeres varones femenino masculino aplazaron aplazados reprobados reprobaron",
 ["total_de_estudiantes_carrera"]],
-["datos datos estudiante estudiantes informacion carrera buscar busqueda",["datos_especificos_estudiante"]],
-["todos total estudiantes estudiante unsxx de universidad nacional siglo xx cantidad numero mostrar visualizar detalle sexo activo activos desactivos desactivo departamento pais provincia provincias ciudad region mujeres varones masculino femenino",
+["informmacion todas total mostrar detalle detalles visualizar estudiante estudiantes carrera buscar busqueda",["datos_especificos_estudiante"]],
+["informacion cantidad numero mostrar visualizar detalle todos total estudiantes estudiante unsxx de universidad nacional siglo xx  sexo activo activos desactivos desactivo departamento pais provincia provincias ciudad region mujeres varones masculino femenino",
 ["estudiantes_de_unsxx"]],
-["todas total mostrar detalle detalles informacion visualizar carreras carrera area tecnologia salud social unsxx",["seleccionar_carreras_area"]
+["informmacion todas total mostrar detalle detalles visualizar carreras carrera area tecnologia salud social unsxx",["seleccionar_carreras_area"]
 ],
 ["todas total mostrar detalle detalles informacion visualizar estudiante estudiantes area tecnologia salud social unsxx cuantos todos aplazaron aplazados reprobados reprobaron activos habilitados mujeres varones ciudad departamento",["estudiante_por_area"]],
 ["calificacion nota notas calificaciones detalles materia materias asignatura asignaturas informacion estudiante estudiantes carrera unxx universidad nacional siglo xx cantidad numero mostrar visualizar detalle",
 ["seleccionar_asignatura_estudiante"]],
-["unsxx universidad todas total mostrar detalle detalles informacion visualizar estudiante estudiantes area tecnologia salud social unsxx cuantos todos aplazaron aplazados reprobados reprobaron activos habilitados mujeres varones ciudad departamento areas estadistica estadisticas desercion",
+["todas total mostrar detalle detalles informacion visualizar estudiante estudiantes area areas tecnologia salud social unsxx cuantos todos aplazaron aplazados reprobados reprobaron activos habilitados mujeres varones ciudad departamento areas estadistica estadisticas desercion indice unsxx universidad nacional siglo xx",
 ["total_de_estudiantes_estadisticas"]],
 ]
 consultas_sql = {
@@ -400,6 +401,7 @@ def buscar(texto):
                         response = response
                     else:
                         response=" where "+response
+
                     response = sql+" "+response;
                 else:
                     response = "argumentar_poco_mas"
@@ -765,12 +767,12 @@ def buscar(texto):
 
             if carreras_encontradas:#si existe algun nombre de carrera ingresa
                 vec.append("si_car")
-                print(carreras_encontradas,"  estas son las carreras")
             else:
                 vec.append("no")
             nombre = "no"
             apellido = "no"
             nomb = encontrar_nombre(texto)#si existe algun nombre ingresa
+            print(nomb)
             if nomb != "no":
                 nombre = "si"
             ap = encontrar_apellido(texto)#si hay algun apellido ingresa
@@ -918,7 +920,8 @@ def buscar(texto):
         vec1=[]
         vec1.append("argumentar_poco_mas")
         return vect1
-textoo = "estadistica de estudiantes reprobados en la unsxx de fechas del 03/02/2024"
+
+textoo = "cuales son las asignaturas del estudiante andrea lopes informatica"
 re = buscar(textoo)
 
 print(re)
@@ -952,3 +955,4 @@ print(re)
 #cuales son las materias del estudiante fabian sierra de la carrera de informatica del 2do año
 #cuantos estudiantes reprobados hay en la carrera de informatica
 #estadistica de estudiantes reprobados en la unsxx de fechas del 03/02/2024
+#estudiantes aprobados en la universidad en las 3 areas

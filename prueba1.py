@@ -5,35 +5,18 @@ from comprobar import palabras_departamento,palabras_provincia,encontrar_nombre,
 from comprobar import palabra_aplazaron,palabra_aprobados,palabra_curso,obtener_que_curso_quiere
 from comprobar import palabra_nota,fechas
 from sql import seleccionar_estudiante
-import nltk
-from nltk.tokenize import word_tokenize
-from nltk.corpus import stopwords
-from nltk.stem import WordNetLemmatizer
-from nltk.tokenize import RegexpTokenizer
-from nltk.metrics import jaccard_distance
-
-nltk.download('punkt')
-nltk.download('stopwords')
-nltk.download('wordnet')
+import numpy as np
+from dotenv import dotenv_values
+from sentence_transformers import SentenceTransformer
 
 # Definir la lista de pares
 pares = [
-["informacion todas datos datos detalle carrera carreras unsxx direccion  universidad nacional siglo xx lugar  encuentra",["ver_carreras"]],
-
-#6
-["informacion cantidad numero todos total estudiante estudiantes unxx universidad nacional siglo xx",["total_de_estudiantes"]],
-["informmacion todas total cantidad numero mostrar detalle detalles visualizar  desahilitados desahilitado habilitado habilitados  estudiante estudiantes carrera  sexo activo activos desactivos desactivo departamento pais provincia ciudad region mujeres varones femenino masculino aplazaron aplazados reprobados reprobaron",
-["total_de_estudiantes_carrera"]],
-["informmacion todas total mostrar detalle detalles visualizar estudiante estudiantes carrera buscar busqueda",["datos_especificos_estudiante"]],
-["informacion cantidad numero mostrar visualizar detalle todos total estudiantes estudiante unsxx de universidad nacional siglo xx  sexo activo activos desactivos desactivo departamento pais provincia provincias ciudad region mujeres varones masculino femenino",
+["informacion de todas las carreras",["ver_carreras"]],
+["informacion del estudiante de la carrera",["datos_especificos_estudiante"]],
+["informacion de los estudiantes de la carrera",["total_de_estudiantes_carrera"]],
+["informacion de estudiantes",
 ["estudiantes_de_unsxx"]],
-["informmacion todas total mostrar detalle detalles visualizar carreras carrera area tecnologia salud social unsxx",["seleccionar_carreras_area"]
-],
-["todas total mostrar detalle detalles informacion visualizar estudiante estudiantes area tecnologia salud social unsxx cuantos todos aplazaron aplazados reprobados reprobaron activos habilitados mujeres varones ciudad departamento",["estudiante_por_area"]],
-["calificacion nota notas calificaciones detalles materia materias asignatura asignaturas informacion estudiante estudiantes carrera unxx universidad nacional siglo xx cantidad numero mostrar visualizar detalle",
-["seleccionar_asignatura_estudiante"]],
-["todas total mostrar detalle detalles informacion visualizar estudiante estudiantes area areas tecnologia salud social unsxx cuantos todos aplazaron aplazados reprobados reprobaron activos habilitados mujeres varones ciudad departamento areas estadistica estadisticas desercion indice unsxx universidad nacional siglo xx",
-["total_de_estudiantes_estadisticas"]],
+#["total de estudiantes en las tres areas tecnologia salud social",["total_estudiantes_area"]]
 ]
 consultas_sql = {
 "ver_carreras":"select *from carrera",
@@ -85,52 +68,68 @@ consultas_aux= {"activo_es" :" e.estado = 'activo'",
 }
 
 
-#"nombre_es":" and e.nombre_es like '%{}%' ",
-#"apellido_p_es":" and e.ap_es like '%{}%' ",
-#"apellido_m_es":" and e.am_es like '%{}%' ",
+config = dotenv_values(".env")
 
-# Función para preprocesar y tokenizar el texto
+# Cargar el modelo Sentence-Transformers
+modelo = SentenceTransformer('roberta-base-nli-stsb-mean-tokens')
 
+# Función para obtener el embedding de un texto
+def obtener_embedding(texto):
+    embedding = modelo.encode([texto])[0]
+    return embedding
 
+# Funciones para calcular la similitud
+def similitud_coseno(a, b):
+    return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
 
+def similitud(texto1, texto2):
+    embedding1 = obtener_embedding(texto1)
+    embedding2 = obtener_embedding(texto2)
+    return similitud_coseno(embedding1, embedding2)
 
-def preprocess_text(text):
-    tokenizer = RegexpTokenizer(r'\w+')
-    tokens = tokenizer.tokenize(text.lower())
+def lista_similitud(texto, lista_textos):
+    embedding1 = obtener_embedding(texto)
+    similitudes = []
+    for texto2 in lista_textos:
+        embedding2 = obtener_embedding(texto2[0])
+        similitudes.append(similitud_coseno(embedding1, embedding2))
+    return similitudes
 
-    stop_words = set(stopwords.words('spanish'))
-    filtered_tokens = [word for word in tokens if word not in stop_words]
+def texto_mas_similar(texto, lista_textos):
+    similitudes = lista_similitud(texto, lista_textos)
+    return lista_textos[similitudes.index(max(similitudes))]
 
-    lemmatizer = WordNetLemmatizer()
-    lemmatized_tokens = [lemmatizer.lemmatize(word) for word in filtered_tokens]
+def texto_mas_similar_con_similitud(texto, lista_textos):
+    similitudes = lista_similitud(texto, lista_textos)
+    return lista_textos[similitudes.index(max(similitudes))], max(similitudes)
 
-    return lemmatized_tokens
+def texto_mas_similar_con_umbral_similitud(texto, lista_textos, umbral):
+    similitudes = lista_similitud(texto, lista_textos)
+    max_similitud = max(similitudes)
+    if max_similitud < umbral:
+        return None, max_similitud
+    return lista_textos[similitudes.index(max_similitud)], max_similitud
 
-# Función para calcular la similitud palabra por palabra
-def calculate_similarity_word_by_word(user_tokens, query_tokens):
-    common_words = set(user_tokens) & set(query_tokens)
-    return len(common_words)
+def obtener_consulta_sql(texto, lista_textos, consultas_sql):
+    texto_mas_sim = texto_mas_similar(texto, lista_textos)
+      # Obtener la consulta SQL asociada al texto más similar
+    print(texto_mas_sim, "los textos similares son ")
+    if texto_mas_sim:
+        return texto_mas_sim[1]  # Formatear la consulta SQL si necesita algún parámetro
+    else:
+        return "argumentar_poco_mas"  # Manejar el caso donde no se encuentra la consulta SQL
 
 def buscar(texto):
-    max_similarity = -1
-    response_index = -1
+
     consulta = ""
     response = "argumentar_poco_mas"
-    # Tokenizar el texto del usuario
-    user_tokens = preprocess_text(texto)
-
-    # Recorremos los pares de consultas
-    for i, (input_phrase, responses) in enumerate(pares):
-        query_tokens = preprocess_text(input_phrase)
-        similarity = calculate_similarity_word_by_word(user_tokens, query_tokens)
-
-        # Si la similitud es mayor, actualiza la respuesta y el índice
-        if similarity > max_similarity:
-            max_similarity = similarity
-            response = responses[0]
-    print(response)
+    resp = obtener_consulta_sql(texto, pares, consultas_sql)
+    print(response,"   esta es la respuesta")
+    response = resp[0]
     nombre_posicion_sql = ""
-    if response:
+    print(response," preguntamos")
+    if response != "argumentar_poco_mas" and response != "":
+        print(response," preguntamos 545")
         vec1=[]
         if response == "ver_carreras":
             carreras_encontradas = obtener_carreras_nombre(texto);
@@ -401,7 +400,6 @@ def buscar(texto):
                         response = response
                     else:
                         response=" where "+response
-
                     response = sql+" "+response;
                 else:
                     response = "argumentar_poco_mas"
@@ -767,12 +765,12 @@ def buscar(texto):
 
             if carreras_encontradas:#si existe algun nombre de carrera ingresa
                 vec.append("si_car")
+                print(carreras_encontradas,"  estas son las carreras")
             else:
                 vec.append("no")
             nombre = "no"
             apellido = "no"
             nomb = encontrar_nombre(texto)#si existe algun nombre ingresa
-            print(nomb)
             if nomb != "no":
                 nombre = "si"
             ap = encontrar_apellido(texto)#si hay algun apellido ingresa
@@ -920,3 +918,37 @@ def buscar(texto):
         vec1=[]
         vec1.append("argumentar_poco_mas")
         return vect1
+textoo = "detalle de los estudiantes activos de la universidad nacional siglo xx"
+re = buscar(textoo)
+
+print(re)
+#falta
+#cuantas mujeres y cuantos hombres hay en informatica
+
+
+
+#funcionan
+#todos los estudiantes de oruro en la unsxx y esten activos tambien de provincia cercado
+#estudiante de la carrera informatica
+#estudiante de la carrera informatica que esten activos y sexo masculino
+#cuantos estudiantes tiene la carrera de informatica
+#todas las carreras de la unxx
+#detalle de la unsxx
+#me puedes brindar informacion de la carrera informatica
+# la informacion del total de estudiantes de la carrera de mecanica automotriz
+#datos del estudiante juan lima de la carrera de informatica
+#datos del estudiante juan lima jurado de la carrera de informatica
+#total de estudiantes del departamento de oruro unsxx y que sean mujeres
+#todos los estudiantes del departamento de oruro unsxx
+#area de tecnologia cuantos estudiantes tiene
+#area de tecnologia cuantos estudiantes tiene y activos
+#cuantos estudiantes son del departamento de oruro en  el area tecnologia
+#cuantos estudiantes aplazados tenemos en el area tecnologia
+#cuantos estudiantes desertados tenemos en el area tecnologia
+#total de estudiantes reprobados en el area de tecnologia
+#total de estudiantes aprobados en el area de tecnologia
+#cuantos estudiantes reprobados hay en la carrera de informatica
+#cuales son las materias del estudiante fabian sierra de la carrera de informatica
+#cuales son las materias del estudiante fabian sierra de la carrera de informatica del 2do año
+#cuantos estudiantes reprobados hay en la carrera de informatica
+#estadistica de estudiantes reprobados en la unsxx de fechas del 03/02/2024

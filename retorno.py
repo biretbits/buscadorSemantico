@@ -1,10 +1,32 @@
 from flask import jsonify
 from sql import nombre_carrera_retor,grado_Estudiante,obtener_nombre,nombre_materia,obtener_datos_de_curso
-
+from sql import seleccionarAreas
+ac = {
+0: "Ingenieria Informatica",
+1: "Ingenieria civil",
+2: "Ingenieria de minas",
+3: "Ingenieria electromecanica",
+4: "Ingenieria mecanica automotriz",
+5: "Ingenieria agronomia",
+6: "Ingenieria evaporiticos del litio",
+7: "Derecho",
+8: "Ciencias de la Educacion",
+9: "contaduria",
+10: "Odontologia",
+11: "Laboratorio Clinico",
+12: "Enfermeria",
+13: "Medicina",
+14: "Ingenieria bio medica",
+15: "comunicacion social",
+16: "bioquimica"
+}
+areasU = {
+0:'Tecnologia',1:"Salud",2:"Sociales"
+}
 def  retornar_valores(datos,ress):
     accion1 = ress[-2]
     print("la accion es : ",accion1)
-    print(ress)
+    print(ress,"   trae los siguientes datos ")
     html = ""
     html += "<div class='container'>"
     if accion1 == "ver_carreras":
@@ -58,7 +80,7 @@ def  retornar_valores(datos,ress):
             # Obtener el número de filasp
             print("la carrera es ",datos[0][13])
             valor = datos[0][13]
-            print(valor, " kdffasdfasd f sd fas df ")
+            print(valor, " kdffasdfasd f sd fas df ",ress)
             total = len(datos)
             si_activo = ress[1]
             si_desactivo = ress[2]
@@ -427,7 +449,7 @@ def  retornar_valores(datos,ress):
         mensaje = ""
         si_hay = "no"
         nom_apell = ress[4]
-        calif = res[2]
+        calif = ress[2]
         if nom_apell != "no":
 
             k = 0
@@ -491,32 +513,38 @@ def  retornar_valores(datos,ress):
         si_des = ress[0]
         si_apla = ress[1]
         si_apro = ress[2]
-        vapro = [0] * 18
-        vaplaz = [0] * 18
-        vdes = [0] * 18
-        vndes = [0] * 18
+        vapro = [0] * 17
+        vaplaz = [0] * 17
+        vdes = [0] * 17
+        vndes = [0] * 17
+        vareasApro = [0] * 3
+        vareasApla = [0] * 3
         capro = 0
         caplaz = 0
         cdes = 0
         cndes = 0
         total = 0
+        ctec = 0
+        csal = 0
+        csoc = 0
         for row in datos:
             #comtamos datos
             if row[2] == "si":
                 cdes += 1
-                vdes[row[5]] += 1
+                vdes[row[5]-1] += 1
+
             elif row[2] == "no":
                 cndes += 1
-                vndes[row[5]] += 1
+                vndes[row[5]-1] += 1
 
             if row[1] == "aprobado":
                 capro += 1
-                vapro[row[5]] += 1
+                vapro[row[5]-1] += 1
+                vareasApro[row[7]-1] += 1
             elif row[1] == "reprobado":
                 caplaz += 1
-                vaplaz[row[5]] += 1
-
-            total += 1
+                vaplaz[row[5]-1] += 1
+                vareasApla[row[7]-1] += 1
 
         mensaje = "La cantidad de "
         si = "no"
@@ -538,7 +566,41 @@ def  retornar_valores(datos,ress):
         mensaje += " es lo siguiente por área y carreras"
         html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
         # Crear el gráfico de torta
-        html += "<center><canvas id='grafica1' width='250' height='250'></canvas></center>"
+        html += "<div class='row'>"
+        html += "<h2>Total</h2>"
+        html += "<center><canvas id='grafica' width='250' height='250'></canvas></center>"
+        html += "</div>"
+        #crear para areas
+        html += "<div class='row'>"
+        html += "<h2>Areas</h2>"
+        print("areas son ",len(areasU), areasU[1])
+        for i in range(len(areasU)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
+            html += "<div class='col-lg-3'>"
+            html += "<div class='panel panel-default text-center'>"
+            html += "<div class='panel-heading'>"
+            html += areasU[i]
+            html += "</div>"
+            html += "<div class='panel-body'>"
+            html += "<center><canvas id='graficaa"+str(i)+"' width='250' height='250'></canvas></center>"
+            html += "</div>"
+            html += "</div>"
+            html += "</div>"
+        html += "</div>"
+
+        html += "<div class='row'>"
+        html += "<h2>Carreras</h2>"
+        for i in range(17):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
+            html += "<div class='col-lg-3'>"
+            html += "<div class='panel panel-default text-center'>"
+            html += "<div class='panel-heading'>"
+            html += ac[i]
+            html += "</div>"
+            html += "<div class='panel-body'>"
+            html += "<center><canvas id='grafica"+str(i)+"' width='250' height='250'></canvas></center>"
+            html += "</div>"
+            html += "</div>"
+            html += "</div>"
+        html += "</div>"
 
         # Datos para el gráfico
         html += "<script>"
@@ -549,44 +611,68 @@ def  retornar_valores(datos,ress):
         html += "'backgroundColor': ['#FF6384', '#36A2EB'] "  # Colores para cada sección
         html += "}]"
         html += "};"
-
         html += "var options = {"
         html += "'responsive': true,"
         html += "'maintainAspectRatio': false"
         html += "};"
-
-        html+="var ctx = document.getElementById('grafica1').getContext('2d');"
-
+        html+="var ctx = document.getElementById('grafica').getContext('2d');"
         html+="var myPieChart = new Chart(ctx, {"
         html+=" type: 'pie',"
         html+=" data: data,"
         html+=" options: options"
         html+="});"
         html += "</script>"
+        j = 0
+        for i in range(17):#creamos un grafico para cada canvas
+            html += "<script>"
+            html += "var data = {"
+            html += "'labels': ['Aprobado', 'Reprobado'],"
+            html += "'datasets': [{"
 
+            html += "'data': [" + str(vapro[i]) + ", " + str(vaplaz[i]) + "], "  # Valores para cada sección de la torta
+            html += "'backgroundColor': ['#FF6384', '#36A2EB'] "  # Colores para cada sección
+            html += "}]"
+            html += "};"
+            html += "var options = {"
+            html += "'responsive': true,"
+            html += "'maintainAspectRatio': false"
+            html += "};"
+
+            html+="var ctx = document.getElementById('grafica"+str(i)+"').getContext('2d');"
+            html+="var myPieChart = new Chart(ctx, {"
+            html+=" type: 'pie',"
+            html+=" data: data,"
+            html+=" options: options"
+            html+="});"
+            html += "</script>"
+        #para las areass
+        for i in range(len(areasU)):#creamos un grafico para cada canvas
+            html += "<script>"
+            html += "var data = {"
+            html += "'labels': ['Aprobado', 'Reprobado'],"
+            html += "'datasets': [{"
+
+            html += "'data': [" + str(vareasApro[i]) + ", " + str(vareasApla[i]) + "], "  # Valores para cada sección de la torta
+            html += "'backgroundColor': ['#FF6384', '#36A2EB'] "  # Colores para cada sección
+            html += "}]"
+            html += "};"
+            html += "var options = {"
+            html += "'responsive': true,"
+            html += "'maintainAspectRatio': false"
+            html += "};"
+
+            html+="var ctx = document.getElementById('graficaa"+str(i)+"').getContext('2d');"
+            html+="var myPieChart = new Chart(ctx, {"
+            html+=" type: 'pie',"
+            html+=" data: data,"
+            html+=" options: options"
+            html+="});"
+            html += "</script>"
 
         html += "</container>"
     return html
 
-    ac = {
-1: "Ingenieria Informatica",
-2: "Ingenieria civil",
-3: "Ingenieria de minas",
-4: "Ingenieria electromecanica",
-5: "Ingenieria mecanica automotriz",
-6: "Ingenieria agronomia",
-7: "Ingenieria evaporiticos del litio",
-8: "Derecho",
-9: "Ciencias de la Educacion",
-10: "contaduria",
-11: "Odontologia",
-12: "Laboratorio Clinico",
-13: "Enfermeria",
-14: "Medicina",
-15: "Ingenieria bio medica",
-16: "comunicacion social",
-17: "bioquimica"
-}
+
 
 def verificar_grado(si_car, si_curso, carrera, grado, si):
     men = ""

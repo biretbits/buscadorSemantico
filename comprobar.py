@@ -224,7 +224,7 @@ vec_apellidos = ["aguilar","alonso","alvarez","arias","benitez","blanco","blesa"
 "lia","huanca","colquillo","huallpa","wallpa","cosio","ayala","galindo","quispia","chaca","achacollo","gallo","romero","jorge","zeballos","chura",
 "michaga","copatiti","acha","fernandes","cayo","coyo","medrano","porco","castillo","humeres","humerez","alizon","chambi","toledo","calani","charali",
 "victorio","choque","huayllani","adam","tola","sola","acebedo","jani jani","janijani","salinas","luna","dias","diaz","jurado",
-"callahuara"]
+"callahuara","lopes","lopez"]
 def encontrar_apellido(texto):
     texto = texto.lower()
     texto = eliminar_tildes(texto)

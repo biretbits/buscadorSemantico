@@ -237,3 +237,21 @@ def obtener_datos_de_curso(id):
         return grado
     else:
         return "no"
+
+def seleccionarAreas():
+        sql_consulta = "select *from area"#seleccionamos todos los estudiantes
+        conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+        # Crear un cursor para ejecutar consultas
+        cursor = conn.cursor()
+        # Ejecutar la consulta SQL
+        cursor.execute(sql_consulta)
+        # Verifica si hay algún resultado antes de obtenerlos
+        if cursor.rowcount > 0:
+            # Si hay resultados, obtén los datos de la consulta
+            sql_consulta = cursor.fetchall()
+            cursor.close()
+            conn.close()
+
+            return sql_consulta
+        else:
+            return "no"
