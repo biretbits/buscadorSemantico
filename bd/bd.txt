@@ -249,8 +249,7 @@ cod_grado)on delete restrict on update restrict
 CREATE TABLE embeddings (
     id INT AUTO_INCREMENT PRIMARY KEY,
     texto TEXT,
-    embedding LONGBLOB,
-    consulta TEXT
+    embedding LONGBLOB
 );
 
 

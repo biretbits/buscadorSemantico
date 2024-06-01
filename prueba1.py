@@ -755,8 +755,10 @@ def buscar(texto):
             vec = []
             vec1 = []
             response = "";
+            contar_parametros = 0
             if palabra_nota(texto) != "no":
                 vec.append("si_cali")
+                
             else:
                 vec.append("no")
             carreras_encontradas = obtener_carreras_nombre(texto);

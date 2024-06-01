@@ -1,39 +1,46 @@
 
 
+import pymysql
 from comprobar import obtener_carreras_nombre,detectar_numeros_delimiter,contiene_palabras_activas,contiene_palabras_desactivas,contiene_palabras_sexo_varon,contiene_palabras_sexo_mujer
 from comprobar import palabras_departamento,palabras_provincia,encontrar_nombre,encontrar_apellido,obtener_area,palabra_desercion
 from comprobar import palabra_aplazaron,palabra_aprobados,palabra_curso,obtener_que_curso_quiere
 from comprobar import palabra_nota,fechas
-from sql import seleccionar_estudiante
-import nltk
-from nltk.tokenize import word_tokenize
-from nltk.corpus import stopwords
-from nltk.stem import WordNetLemmatizer
-from nltk.tokenize import RegexpTokenizer
-from nltk.metrics import jaccard_distance
+from sql import seleccionar_estudiante1
+from sentence_transformers import SentenceTransformer, util
+import numpy as np
 
-nltk.download('punkt')
-nltk.download('stopwords')
-nltk.download('wordnet')
+# Cargar el modelo pre-entrenado
+model = SentenceTransformer('all-MiniLM-L6-v1')
+sentencias = [
+    "informacion de las carreras de la unsxx universidad nacional siglo xx",
+    "informacion catidad de estudiantes de la unsxx universidad nacional siglo xx",
+    "informacion de estudiantes de la carrera de la unsxx universidad nacional siglo xx",
+    "informacion del estudiante de la carrera de la unsxx universidad nacional siglo xx",
+    "informacion de estudiantes de la unsxx universidad nacional siglo xx",
+    "informacion de carreras del area tecnologia salud unsxx de la unsxx universidad nacional siglo xx",
+    "informacion de estudiantes del area tecnologia salud social de la unsxx universidad nacional siglo xx",
+    "informacion de la calificacion del estudiante de la carrera de la unxx universidad nacional siglo xx",
+    "estadistica de estudiantes del area o areas de la unsxx universidad nacional siglo xx",
+    "cuales son las carreras de la unsxx universidad nacional siglo xx",
+    "informacion de la carrera de de la unsxx universidad nacional siglo xx",
+    "cuales son las materias del estudiante de la unsxx universidad nacional siglo xx",
 
+]
 # Definir la lista de pares
-pares = [
-["informacion todas datos datos detalle carrera carreras unsxx direccion  universidad nacional siglo xx lugar  encuentra",["ver_carreras"]],
 
-#6
-["informacion cantidad numero todos total estudiante estudiantes unxx universidad nacional siglo xx",["total_de_estudiantes"]],
-["informmacion todas total cantidad numero mostrar detalle detalles visualizar  desahilitados desahilitado habilitado habilitados  estudiante estudiantes carrera  sexo activo activos desactivos desactivo departamento pais provincia ciudad region mujeres varones femenino masculino aplazaron aplazados reprobados reprobaron",
-["total_de_estudiantes_carrera"]],
-["informmacion todas total mostrar detalle detalles visualizar estudiante estudiantes carrera buscar busqueda",["datos_especificos_estudiante"]],
-["informacion cantidad numero mostrar visualizar detalle todos total estudiantes estudiante unsxx de universidad nacional siglo xx  sexo activo activos desactivos desactivo departamento pais provincia provincias ciudad region mujeres varones masculino femenino",
-["estudiantes_de_unsxx"]],
-["informmacion todas total mostrar detalle detalles visualizar carreras carrera area tecnologia salud social unsxx",["seleccionar_carreras_area"]
-],
-["todas total mostrar detalle detalles informacion visualizar estudiante estudiantes area tecnologia salud social unsxx cuantos todos aplazaron aplazados reprobados reprobaron activos habilitados mujeres varones ciudad departamento",["estudiante_por_area"]],
-["calificacion nota notas calificaciones detalles materia materias asignatura asignaturas informacion estudiante estudiantes carrera unxx universidad nacional siglo xx cantidad numero mostrar visualizar detalle",
-["seleccionar_asignatura_estudiante"]],
-["todas total mostrar detalle detalles informacion visualizar estudiante estudiantes area areas tecnologia salud social unsxx cuantos todos aplazaron aplazados reprobados reprobaron activos habilitados mujeres varones ciudad departamento areas estadistica estadisticas desercion indice unsxx universidad nacional siglo xx",
-["total_de_estudiantes_estadisticas"]],
+respuesta =[
+'ver_carreras',
+'total_de_estudiantes',
+'total_de_estudiantes_carrera',
+'total_de_estudiantes_carrera',
+'estudiantes_de_unsxx',
+"seleccionar_carreras_area",
+"estudiante_por_area",
+"seleccionar_asignatura_estudiante",
+"total_de_estudiantes_estadisticas",
+'ver_carreras',
+'ver_carreras',
+"seleccionar_asignatura_estudiante",
 ]
 consultas_sql = {
 "ver_carreras":"select *from carrera",
@@ -93,42 +100,70 @@ consultas_aux= {"activo_es" :" e.estado = 'activo'",
 
 
 
+def maximo(resultado_tensor):
+    k = 0
+    j = 0
+    max = 0
+    for score in resultado_tensor:
+        if score > max:
+            max = score
+            j = k
+        k = k + 1
+    return j
 
-def preprocess_text(text):
-    tokenizer = RegexpTokenizer(r'\w+')
-    tokens = tokenizer.tokenize(text.lower())
+def obtener_embedding(texto):
+    # Conexión a la base de datos
+    conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
 
-    stop_words = set(stopwords.words('spanish'))
-    filtered_tokens = [word for word in tokens if word not in stop_words]
+    cursor = conn.cursor()
+    # Consulta SQL para obtener el embedding
+    sql_consulta = "SELECT embedding FROM embeddings WHERE texto = %s"
+    # Ejecutar la consulta SQL
+    cursor.execute(sql_consulta, (texto))
 
-    lemmatizer = WordNetLemmatizer()
-    lemmatized_tokens = [lemmatizer.lemmatize(word) for word in filtered_tokens]
+    # Verificar si hay algún resultado antes de obtenerlos
+    if cursor.rowcount > 0:
+        # Si hay resultados, obtener el embedding de la consulta
+        embedding_str = cursor.fetchone()[0]
+        # Convertir la cadena de texto del embedding a un array numpy
+        embedding = np.frombuffer(embedding_str, dtype=np.float32)
+        return embedding
+    else:
+        # Si no se encuentra el embedding, calcularlo con el modelo
+        texto_embedding = model.encode(texto)
+        # Convertir el embedding a bytes
+        embedding_bytes = texto_embedding.tobytes()
+        # Insertar el texto y el embedding en la base de datos
+        sql_insert = "INSERT INTO embeddings (texto, embedding) VALUES (%s, %s)"
+        cursor.execute(sql_insert, (texto, embedding_bytes))
+        conn.commit()
+        return texto_embedding
 
-    return lemmatized_tokens
-
-# Función para calcular la similitud palabra por palabra
-def calculate_similarity_word_by_word(user_tokens, query_tokens):
-    common_words = set(user_tokens) & set(query_tokens)
-    return len(common_words)
 
 def buscar(texto):
-    max_similarity = -1
-    response_index = -1
+
     consulta = ""
     response = "argumentar_poco_mas"
     # Tokenizar el texto del usuario
-    user_tokens = preprocess_text(texto)
+    # Codificar las oraciones en un espacio semántico
+    texto_embedding = obtener_embedding(texto)
+    # Inicializar lista para almacenar los resultados de la similitud del coseno
+    coseno_salida = []
+    # Calcular la similitud coseno entre la consulta y todas las oraciones
+    for s in sentencias:
+        sentencia_embedding = obtener_embedding(s)
+        coseno_similar = util.cos_sim(texto_embedding, sentencia_embedding)
+        coseno_salida.append(coseno_similar.item())
 
-    # Recorremos los pares de consultas
-    for i, (input_phrase, responses) in enumerate(pares):
-        query_tokens = preprocess_text(input_phrase)
-        similarity = calculate_similarity_word_by_word(user_tokens, query_tokens)
+    # Ordenar las oraciones según la similitud
+    #resultados = zip(range(len(cosine_scores)), cosine_scores)
+    #sorted_results = sorted(resultados, key=lambda x: x[1], reverse=True)
+    #resultado_tensor = sorted_results[0][1]
+    print(coseno_salida)
+    posicionMax = maximo(coseno_salida)
+    print(posicionMax,"   el maximo indice es")
+    response = respuesta[posicionMax]
 
-        # Si la similitud es mayor, actualiza la respuesta y el índice
-        if similarity > max_similarity:
-            max_similarity = similarity
-            response = responses[0]
-    print(response)
     nombre_posicion_sql = ""
     if response:
         vec1=[]
@@ -173,7 +208,7 @@ def buscar(texto):
         if response== "total_de_estudiantes_carrera":
                 vec = []
                 vec1 = []
-                response = "";
+                response = ""
                 carreras_encontradas = obtener_carreras_nombre(texto);
                 if carreras_encontradas:#si existe algun nombre de carrera ingresa
                     vec.append("si_car")
@@ -410,225 +445,259 @@ def buscar(texto):
             vec=[]
             vec1=[]
             response = ""
-            carreras_encontradas = obtener_carreras_nombre(texto);
-            nombre_posicion_sql = "datos_especificos_estudiante"
-            sql = consultas_sql[nombre_posicion_sql]
-            if carreras_encontradas:#si existe algun nombre de carrera ingresa
-                vec.append("si_car")
+            contar_parametros=0
+            carreras_encontradas = obtener_carreras_nombre(texto)
+            if carreras_encontradas:#si hay carrera por lo menos entonces buscamos datos de la carrera
+
+                nombre_posicion_sql = "datos_especificos_estudiante"
+                sql = consultas_sql[nombre_posicion_sql]
+                if carreras_encontradas:#si existe algun nombre de carrera ingresa
+                    vec.append("si_car")
+                else:
+                    vec.append("no")
+                    contar_parametros+=1
+                nomb = encontrar_nombre(texto)#si existe algun nombre ingresa
+                if nomb != "no":
+                    vec.append("si_nom")
+                else:
+                    vec.append("no")
+                    contar_parametros+=1
+                ap = encontrar_apellido(texto)#si hay algun apellido ingresa
+                if ap != "no":
+                    vec.append("si_apell")
+                else:
+                    vec.append("no")
+                si = "no"
+                if contar_parametros>0:
+                    response = "argumentar_poco_mas"
+                else:
+                    print(ap,"  esto son los apellidos")
+                    for i in range(len(vec)):
+                        vec1.append(vec[i])
+                    vec1.append(nombre_posicion_sql)
+                    for i in range(len(vec)):
+                        if vec[i] == "si_car" and si == "no":
+                            auxi = consultas_aux["nombre_carrera"]
+                            primera_carrera = carreras_encontradas.pop(0)
+                            response += auxi.format(primera_carrera)
+                            si = "si"
+                        elif vec[i] == "si_car" and si == "si":
+                            auxi = consultas_aux["nombre_carrera"]
+                            primera_carrera = carreras_encontradas.pop(0)
+                            si = "si"
+                            response += " and "+auxi.format(primera_carrera)
+                        if vec[i] == "si_nom" and si == "no":
+                            sql_aux = consultas_aux["nombre_es_especifico"]
+                            response += sql_aux.format(nomb)
+                            si = "si"
+                        elif vec[i] == "si_nom" and si == "si":
+                            sql_aux = consultas_aux["nombre_es_especifico"]
+                            response += " and "+sql_aux.format(nomb)
+                            si = "si"
+                            #apellidos
+                        if vec[i] == "si_apell" and si == "no":
+                            if len(ap) == 1:#numero de apellidos maryor a 1
+                                sql_aux = consultas_aux["apellido_p_es_especifico"]
+                                response += sql_aux.format(ap[0])
+                            elif len(ap)>1:
+                                sql_aux = consultas_aux["apellido_p_es_especifico"]
+                                response += sql_aux.format(ap[0])
+                                sql_aux = consultas_aux["apellido_m_es_especifico"]
+                                response += sql_aux.format(ap[1])
+                            si = "si"
+                        elif vec[i] == "si_apell" and si == "si":
+                            if len(ap) == 1:#numero de apellidos maryor a 1
+                                sql_aux = consultas_aux["apellido_p_es_especifico"]
+                                response += " and "+sql_aux.format(ap[0])
+                            elif len(ap)>1:
+                                sql_aux = consultas_aux["apellido_p_es_especifico"]
+                                response += " and "+sql_aux.format(ap[0])
+                                sql_aux = consultas_aux["apellido_m_es_especifico"]
+                                response += " or "+sql_aux.format(ap[1])
+                            si = "si"
+                    response = sql+" "+response
             else:
-                vec.append("no")
-            nomb = encontrar_nombre(texto)#si existe algun nombre ingresa
-            if nomb != "no":
-                vec.append("si_nom")
-            else:
-                vec.append("no")
-            ap = encontrar_apellido(texto)#si hay algun apellido ingresa
-            if ap != "no":
-                vec.append("si_apell")
-            else:
-                vec.append("no")
-            si = "no"
-            print(ap,"  esto son los apellidos")
-            for i in range(len(vec)):
-                vec1.append(vec[i])
-            vec1.append(nombre_posicion_sql)
-            for i in range(len(vec)):
-                if vec[i] == "si_car" and si == "no":
-                    auxi = consultas_aux["nombre_carrera"]
-                    primera_carrera = carreras_encontradas.pop(0)
-                    response += auxi.format(primera_carrera)
-                    si = "si"
-                elif vec[i] == "si_car" and si == "si":
-                    auxi = consultas_aux["nombre_carrera"]
-                    primera_carrera = carreras_encontradas.pop(0)
-                    si = "si"
-                    response += " and "+auxi.format(primera_carrera)
-                if vec[i] == "si_nom" and si == "no":
-                    sql_aux = consultas_aux["nombre_es_especifico"]
-                    response += sql_aux.format(nomb)
-                    si = "si"
-                elif vec[i] == "si_nom" and si == "si":
-                    sql_aux = consultas_aux["nombre_es_especifico"]
-                    response += " and "+sql_aux.format(nomb)
-                    si = "si"
-                    #apellidos
-                if vec[i] == "si_apell" and si == "no":
-                    if len(ap) == 1:#numero de apellidos maryor a 1
-                        sql_aux = consultas_aux["apellido_p_es_especifico"]
-                        response += sql_aux.format(ap[0])
-                    elif len(ap)>1:
-                        sql_aux = consultas_aux["apellido_p_es_especifico"]
-                        response += sql_aux.format(ap[0])
-                        sql_aux = consultas_aux["apellido_m_es_especifico"]
-                        response += sql_aux.format(ap[1])
-                    si = "si"
-                elif vec[i] == "si_apell" and si == "si":
-                    if len(ap) == 1:#numero de apellidos maryor a 1
-                        sql_aux = consultas_aux["apellido_p_es_especifico"]
-                        response += " and "+sql_aux.format(ap[0])
-                    elif len(ap)>1:
-                        sql_aux = consultas_aux["apellido_p_es_especifico"]
-                        response += " and "+sql_aux.format(ap[0])
-                        sql_aux = consultas_aux["apellido_m_es_especifico"]
-                        response += " or "+sql_aux.format(ap[1])
-                    si = "si"
-            response = sql+" "+response
+                response = "argumentar_poco_mas"
             vec1.append(response);
         if response == "estudiantes_de_unsxx":
             existe  ="no"
             response = ""
             vec = []
+            contar_parametros=0
             nombre_posicion_sql = "estudiantes_de_unsxx"
             sql = consultas_sql[nombre_posicion_sql]
         #realizamos consultas de if para saber en  llega y poder el and o no
             if contiene_palabras_activas(texto):#si contiene la palabra activo ingresa
                 vec.append("si_activo")
+                contar_parametros=0
             else:
                 vec.append("no")
 
             if contiene_palabras_desactivas(texto):#si contiene la palabra desactivo o al relacionado ingresa
                 vec.append("si_desactivo")
+                contar_parametros=0
             else:
                 vec.append("no")
             if contiene_palabras_sexo_varon(texto):#si contiene la palabra sexo
                 vec.append("si_m")
+                contar_parametros+=1
             else:
                 vec.append("no")
             if contiene_palabras_sexo_mujer(texto):#si contiene femenino ingresa
                 vec.append("si_f")
+                contar_parametros+=1
             else:
                 vec.append("no")
             pr_encontrado = palabras_provincia(texto)#si contiene algun departamento ingresa
             if pr_encontrado != "no":
                 vec.append("si_prov")
+                contar_parametros+=1
             else:
                 vec.append("no")
 
             dep_encontrado = palabras_departamento(texto)#buscamos si en el texto hay un departamento
             if dep_encontrado != "no":
                 vec.append("si_dep")
+                contar_parametros+=1
             else:
                 vec.append("no")
             si = "no"
             vec1 = []
-            for i in range(len(vec)):
-                vec1.append(vec[i])
-            vec1.append(nombre_posicion_sql)
-            for i in range(len(vec)):
-                if vec[i] == "si_activo" and si == "no":
-                    response += consultas_aux["activo_es_unsxx"]
-                    si = "si"
-                elif vec[i] == "si_activo" and si == "si":
-                    response += " and "+consultas_aux["activo_es_unsxx"]
-                    si = "si"
+            if contar_parametros==0:
+                response = "argumentar_poco_mas"
+            else:
+                for i in range(len(vec)):
+                    vec1.append(vec[i])
+                vec1.append(nombre_posicion_sql)
+                for i in range(len(vec)):
+                    if vec[i] == "si_activo" and si == "no":
+                        response += consultas_aux["activo_es_unsxx"]
+                        si = "si"
+                    elif vec[i] == "si_activo" and si == "si":
+                        response += " and "+consultas_aux["activo_es_unsxx"]
+                        si = "si"
 
-                if vec[i] == "si_desactivo" and si == "no":
-                    response += consultas_aux["desactivo_es_unsxx"]
-                    si = "si"
-                elif vec[i] == "si_desactivo" and si == "si":
-                    response += " and "+consultas_aux["desactivo_es_unsxx"]
-                    si = "si"
+                    if vec[i] == "si_desactivo" and si == "no":
+                        response += consultas_aux["desactivo_es_unsxx"]
+                        si = "si"
+                    elif vec[i] == "si_desactivo" and si == "si":
+                        response += " and "+consultas_aux["desactivo_es_unsxx"]
+                        si = "si"
 
-                if vec[i] == "si_m" and si == "no":
-                    response += consultas_aux["sexo_es_m_unsxx"]
-                    si = "si"
-                elif vec[i] == "si_m" and si == "si":
-                    response += " and "+consultas_aux["sexo_es_m_unsxx"]
-                    si = "si"
+                    if vec[i] == "si_m" and si == "no":
+                        response += consultas_aux["sexo_es_m_unsxx"]
+                        si = "si"
+                    elif vec[i] == "si_m" and si == "si":
+                        response += " and "+consultas_aux["sexo_es_m_unsxx"]
+                        si = "si"
 
-                if vec[i] == "si_f" and si == "no":
-                    response += consultas_aux["sexo_es_f_unsxx"]
-                    si = "si"
-                elif vec[i] == "si_f" and si == "si":
-                    response += " and "+consultas_aux["sexo_es_f_unsxx"]
-                    si = "si"
+                    if vec[i] == "si_f" and si == "no":
+                        response += consultas_aux["sexo_es_f_unsxx"]
+                        si = "si"
+                    elif vec[i] == "si_f" and si == "si":
+                        response += " and "+consultas_aux["sexo_es_f_unsxx"]
+                        si = "si"
 
-                if vec[i] == "si_prov" and si == "no":
-                    sql_aux = consultas_aux["provincia_es_unsxx"]
-                    si = "si"
-                    response += sql_aux.format(pr_encontrado)
-                elif vec[i] == "si_prov" and si == "si":
-                    sql_aux = " and "+consultas_aux["provincia_es_unsxx"]
-                    si = "si"
-                    response += sql_aux.format(pr_encontrado)
-                if vec[i] == "si_dep" and si == "no":
-                    sql_aux = consultas_aux["departamento_es_unsxx"]
-                    si = "si"
-                    response += sql_aux.format(dep_encontrado)
-                elif vec[i] == "si_dep" and si == "si":
-                    sql_aux = " and "+consultas_aux["departamento_es_unsxx"]
-                    si = "si"
-                    response += sql_aux.format(dep_encontrado)
-                print(vec[i],  si)
-                vec[i] = "no"
-                #print(vec[i])
-            #print(response,"   eess")
-            response = sql + response
+                    if vec[i] == "si_prov" and si == "no":
+                        sql_aux = consultas_aux["provincia_es_unsxx"]
+                        si = "si"
+                        response += sql_aux.format(pr_encontrado)
+                    elif vec[i] == "si_prov" and si == "si":
+                        sql_aux = " and "+consultas_aux["provincia_es_unsxx"]
+                        si = "si"
+                        response += sql_aux.format(pr_encontrado)
+                    if vec[i] == "si_dep" and si == "no":
+                        sql_aux = consultas_aux["departamento_es_unsxx"]
+                        si = "si"
+                        response += sql_aux.format(dep_encontrado)
+                    elif vec[i] == "si_dep" and si == "si":
+                        sql_aux = " and "+consultas_aux["departamento_es_unsxx"]
+                        si = "si"
+                        response += sql_aux.format(dep_encontrado)
+                    print(vec[i],  si)
+                    vec[i] = "no"
+                    #print(vec[i])
+                #print(response,"   eess")
+                response = sql + response
             vec1.append(response)
         if response == "seleccionar_carreras_area":#nos permite seleccionar todas las carreras por area
             vec1 = []
             response = ""
+            contar_parametros=0
             ar = obtener_area(texto)  # Supongamos que esto devuelve una lista de áreas
             if ar:
                 vec1.append("si_ar")  # Agrega "si_ar" a vec1 si se encontraron áreas en el texto
+                contar_parametros+=1
             else:
                 vec1.append("no")  # Agrega "no" a vec1 si no se encontraron áreas en el texto
             nombre_posicion_sql = "seleccionar_carreras_area"
             sql = consultas_sql[nombre_posicion_sql]  # Obtiene la consulta SQL según el nombre de la posición
             si = "no"
             unir = ""
-            for i in range(len(ar)):
-                sql_aux = consultas_aux["cod_area"]  # Supongamos que consultas_aux es un diccionario con consultas auxiliares
-                if si == "no":
-                    response += sql_aux.format(ar[i])  # Agrega la consulta auxiliar al response si es la primera iteración
-                    unir+=str(ar[i])+"|"
-                    si = "si"
-                elif si == "si":
-                    unir+=str(ar[i])+"|"
-                    response += " or " + sql_aux.format(ar[i])  # Agrega "or" y la consulta auxiliar al response para otras iteracpara otras iteraciones
-            vec1.append(unir)
-            vec1.append(nombre_posicion_sql)  # Agrega el nombre de la posición SQL a vec1
-            response = sql + response  # Combina la consulta principal con las consultas auxiliares
+            if contar_parametros ==0:
+                response = "argumentar_poco_mas"
+            else:
+                for i in range(len(ar)):
+                    sql_aux = consultas_aux["cod_area"]  # Supongamos que consultas_aux es un diccionario con consultas auxiliares
+                    if si == "no":
+                        response += sql_aux.format(ar[i])  # Agrega la consulta auxiliar al response si es la primera iteración
+                        unir+=str(ar[i])+"|"
+                        si = "si"
+                    elif si == "si":
+                        unir+=str(ar[i])+"|"
+                        response += " or " + sql_aux.format(ar[i])  # Agrega "or" y la consulta auxiliar al response para otras iteracpara otras iteraciones
+                vec1.append(unir)
+                vec1.append(nombre_posicion_sql)  # Agrega el nombre de la posición SQL a vec1
+                response = sql + response  # Combina la consulta principal con las consultas auxiliares
             vec1.append(response)  # Agrega la consulta completa a vec1
         if response == "estudiante_por_area":#obtner estudiantes por area
             existe  ="no"
             response = ""
             vec = []
+            contar_parametros+=1
             nombre_posicion_sql = "estudiante_por_area"#creamos una varible para referenciar a mi array consultas_sql
             sql = consultas_sql[nombre_posicion_sql]#obtenemos la consulta
             #realizamos preguntas del texto ingresado para saber que es lo que busca el usuario
+
             if contiene_palabras_activas(texto):#si contiene la palabra activo ingresa
                 vec.append("si_activo")
+                contar_parametros+=1
             else:
                 vec.append("no")
 
             if contiene_palabras_desactivas(texto):#si contiene la palabra desactivo o al relacionado ingresa
                 vec.append("si_desactivo")
+                contar_parametros+=1
             else:
                 vec.append("no")
             if contiene_palabras_sexo_varon(texto):#si contiene la palabra sexo
                 vec.append("si_m")
+                contar_parametros+=1
             else:
                 vec.append("no")
             if contiene_palabras_sexo_mujer(texto):#si contiene femenino ingresa
                 vec.append("si_f")
+                contar_parametros+=1
             else:
                 vec.append("no")
             pr_encontrado = palabras_provincia(texto)#si contiene algun departamento ingresa
             if pr_encontrado != "no":
                 vec.append("si_prov")
+                contar_parametros+=1
             else:
                 vec.append("no")
 
             dep_encontrado = palabras_departamento(texto)#buscamos si en el texto hay un departamento
             if dep_encontrado != "no":
                 vec.append("si_dep")
+                contar_parametros+=1
             else:
                 vec.append("no")
 
             desercion = palabra_desercion(texto)#buscamos palabras relacionados con desercion o relacionado
             if desercion != "no":
                 vec.append("si_des")
+                contar_parametros+=1
             else:
                 vec.append("no")
 
@@ -637,6 +706,7 @@ def buscar(texto):
             if aplazar != "no":
                 vec.append("si_apla")
                 aplazar = "reprobado"
+                contar_parametros+=1
             else:
                 vec.append("no")
 
@@ -644,6 +714,7 @@ def buscar(texto):
             if aprobado != "no":
                 vec.append("si_apro")
                 aprobado = "aprobado"
+                contar_parametros+=1
             else:
                 vec.append("no")
             ar = obtener_area(texto)  # Supongamos que esto devuelve una lista de áreas
@@ -654,109 +725,113 @@ def buscar(texto):
             si = "no"
             vec1 = []
             unir = ""
-            for i in range(len(vec)):
-                vec1.append(vec[i])
-
-            for i in range(len(vec)):
-                if vec[i] == "si_activo" and si == "no":
-                    response += consultas_aux["activo_es_unsxx"]
-                    si = "si"
-                elif vec[i] == "si_activo" and si == "si":
-                    response += " and "+consultas_aux["activo_es_unsxx"]
-                    si = "si"
-
-                if vec[i] == "si_desactivo" and si == "no":
-                    response += consultas_aux["desactivo_es_unsxx"]
-                    si = "si"
-                elif vec[i] == "si_desactivo" and si == "si":
-                    response += " and "+consultas_aux["desactivo_es_unsxx"]
-                    si = "si"
-
-                if vec[i] == "si_m" and si == "no":
-                    response += consultas_aux["sexo_es_m_unsxx"]
-                    si = "si"
-                elif vec[i] == "si_m" and si == "si":
-                    response += " and "+consultas_aux["sexo_es_m_unsxx"]
-                    si = "si"
-
-                if vec[i] == "si_f" and si == "no":
-                    response += consultas_aux["sexo_es_f_unsxx"]
-                    si = "si"
-                elif vec[i] == "si_f" and si == "si":
-                    response += " and "+consultas_aux["sexo_es_f_unsxx"]
-                    si = "si"
-
-                if vec[i] == "si_prov" and si == "no":
-                    sql_aux = consultas_aux["provincia_es_unsxx"]
-                    si = "si"
-                    response += sql_aux.format(pr_encontrado)
-                elif vec[i] == "si_prov" and si == "si":
-                    sql_aux = " and "+consultas_aux["provincia_es_unsxx"]
-                    si = "si"
-                    response += sql_aux.format(pr_encontrado)
-                if vec[i] == "si_dep" and si == "no":
-                    sql_aux = consultas_aux["departamento_es_unsxx"]
-                    si = "si"
-                    response += sql_aux.format(dep_encontrado)
-                elif vec[i] == "si_dep" and si == "si":
-                    sql_aux = " and "+consultas_aux["departamento_es_unsxx"]
-                    si = "si"
-                    response += sql_aux.format(dep_encontrado)
-                if vec[i] == "si_des" and si == "no":
-                    sql_aux = consultas_aux["desercion"]
-                    si = "si"
-                    response+= sql_aux.format(desercion)
-                elif vec[i] == "si_des" and si=="si":
-                    sql_aux = " and "+consultas_aux["desercion"]
-                    si = "si"
-                    response+= sql_aux.format(desercion)
-
-                if vec[i] == "si_apro" and  si == "no":
-                    sql_aux = consultas_aux["aplazaron"]
-                    si = "si"
-                    response+= sql_aux.format(aprobado)
-                elif vec[i] == "si_apro" and si=="si":
-                    sql_aux = " and "+consultas_aux["aplazaron"]
-                    si = "si"
-                    response+= sql_aux.format(aprobado)
-
-                if vec[i] == "si_apla" and  si == "no":
-                    sql_aux = consultas_aux["aplazaron"]
-                    si = "si"
-                    response+= sql_aux.format(aplazar)
-                elif vec[i] == "si_apla" and si=="si":
-                    sql_aux = " and "+consultas_aux["aplazaron"]
-                    si = "si"
-                    response+= sql_aux.format(aplazar)
-
-                if vec[i] == "si_ar" and si == "no":
-                    sql_aux = consultas_aux["cod_area_cursa"]  # Supongamos que consultas_aux es un diccionario con consultas auxiliares
-                    response += sql_aux.format(ar[0])  # Agrega la consulta auxiliar al response si es la primera iteración
-                    unir+=str(ar[0])+"|"
-                    si = "si"
-                elif vec[i] == "si_ar" and si == "si":
-                    sql_aux = consultas_aux["cod_area_cursa"]  # Supongamos que consultas_aux es un diccionario con consultas auxiliares
-                    unir+=str(ar[0])+"|"
-                    response += " and " + sql_aux.format(ar[0])  # Agrega "or" y la consulta auxiliar al response para otras iteracpara otras iteraciones
-                    si = "si"
-                print(vec[i],  si)
-                vec[i] = "no"
-                #print(vec[i])
-            #print(response,"   eess")
-            vec1.append(unir)
-            vec1.append(nombre_posicion_sql)
-            if si == "no":#si se mantienen en no entonces aumentamos WHERE
-                response = response
+            if contar_parametros==0:
+                response = "argumentar_poco_mas"
             else:
-                response=" where "+response
+                for i in range(len(vec)):
+                    vec1.append(vec[i])
 
-            response = sql + response
+                for i in range(len(vec)):
+                    if vec[i] == "si_activo" and si == "no":
+                        response += consultas_aux["activo_es_unsxx"]
+                        si = "si"
+                    elif vec[i] == "si_activo" and si == "si":
+                        response += " and "+consultas_aux["activo_es_unsxx"]
+                        si = "si"
+
+                    if vec[i] == "si_desactivo" and si == "no":
+                        response += consultas_aux["desactivo_es_unsxx"]
+                        si = "si"
+                    elif vec[i] == "si_desactivo" and si == "si":
+                        response += " and "+consultas_aux["desactivo_es_unsxx"]
+                        si = "si"
+
+                    if vec[i] == "si_m" and si == "no":
+                        response += consultas_aux["sexo_es_m_unsxx"]
+                        si = "si"
+                    elif vec[i] == "si_m" and si == "si":
+                        response += " and "+consultas_aux["sexo_es_m_unsxx"]
+                        si = "si"
+
+                    if vec[i] == "si_f" and si == "no":
+                        response += consultas_aux["sexo_es_f_unsxx"]
+                        si = "si"
+                    elif vec[i] == "si_f" and si == "si":
+                        response += " and "+consultas_aux["sexo_es_f_unsxx"]
+                        si = "si"
+
+                    if vec[i] == "si_prov" and si == "no":
+                        sql_aux = consultas_aux["provincia_es_unsxx"]
+                        si = "si"
+                        response += sql_aux.format(pr_encontrado)
+                    elif vec[i] == "si_prov" and si == "si":
+                        sql_aux = " and "+consultas_aux["provincia_es_unsxx"]
+                        si = "si"
+                        response += sql_aux.format(pr_encontrado)
+                    if vec[i] == "si_dep" and si == "no":
+                        sql_aux = consultas_aux["departamento_es_unsxx"]
+                        si = "si"
+                        response += sql_aux.format(dep_encontrado)
+                    elif vec[i] == "si_dep" and si == "si":
+                        sql_aux = " and "+consultas_aux["departamento_es_unsxx"]
+                        si = "si"
+                        response += sql_aux.format(dep_encontrado)
+                    if vec[i] == "si_des" and si == "no":
+                        sql_aux = consultas_aux["desercion"]
+                        si = "si"
+                        response+= sql_aux.format(desercion)
+                    elif vec[i] == "si_des" and si=="si":
+                        sql_aux = " and "+consultas_aux["desercion"]
+                        si = "si"
+                        response+= sql_aux.format(desercion)
+
+                    if vec[i] == "si_apro" and  si == "no":
+                        sql_aux = consultas_aux["aplazaron"]
+                        si = "si"
+                        response+= sql_aux.format(aprobado)
+                    elif vec[i] == "si_apro" and si=="si":
+                        sql_aux = " and "+consultas_aux["aplazaron"]
+                        si = "si"
+                        response+= sql_aux.format(aprobado)
+
+                    if vec[i] == "si_apla" and  si == "no":
+                        sql_aux = consultas_aux["aplazaron"]
+                        si = "si"
+                        response+= sql_aux.format(aplazar)
+                    elif vec[i] == "si_apla" and si=="si":
+                        sql_aux = " and "+consultas_aux["aplazaron"]
+                        si = "si"
+                        response+= sql_aux.format(aplazar)
+
+                    if vec[i] == "si_ar" and si == "no":
+                        sql_aux = consultas_aux["cod_area_cursa"]  # Supongamos que consultas_aux es un diccionario con consultas auxiliares
+                        response += sql_aux.format(ar[0])  # Agrega la consulta auxiliar al response si es la primera iteración
+                        unir+=str(ar[0])+"|"
+                        si = "si"
+                    elif vec[i] == "si_ar" and si == "si":
+                        sql_aux = consultas_aux["cod_area_cursa"]  # Supongamos que consultas_aux es un diccionario con consultas auxiliares
+                        unir+=str(ar[0])+"|"
+                        response += " and " + sql_aux.format(ar[0])  # Agrega "or" y la consulta auxiliar al response para otras iteracpara otras iteraciones
+                        si = "si"
+                    print(vec[i],  si)
+                    vec[i] = "no"
+                    #print(vec[i])
+                #print(response,"   eess")
+                vec1.append(unir)
+                vec1.append(nombre_posicion_sql)
+                if si == "no":#si se mantienen en no entonces aumentamos WHERE
+                    response = response
+                else:
+                    response=" where "+response
+
+                response = sql + response
             vec1.append(response)
 
         if response == "seleccionar_asignatura_estudiante":
             vec = []
             vec1 = []
             response = "";
+            contar_parametros = 0
             if palabra_nota(texto) != "no":
                 vec.append("si_cali")
             else:
@@ -767,6 +842,7 @@ def buscar(texto):
 
             if carreras_encontradas:#si existe algun nombre de carrera ingresa
                 vec.append("si_car")
+                contar_parametros+=1
             else:
                 vec.append("no")
             nombre = "no"
@@ -775,79 +851,90 @@ def buscar(texto):
             print(nomb)
             if nomb != "no":
                 nombre = "si"
+                contar_parametros+=1
             ap = encontrar_apellido(texto)#si hay algun apellido ingresa
             if ap != "no" and nombre == "si":
                 apellido = "si"
-            if nombre == "si" or apellido == "si":
-                id_estudiante = seleccionar_estudiante(nomb,ap,carreras_encontradas)#buscamos el id con el nombre y apellido del estudiante
-                print(id_estudiante,"   no hay estudiante")
-                if id_estudiante == "no":
-                    vec.append("no")
-                    vec1.append(nomb)
-                    vec1.append(ap[0])
+            print(contar_parametros,"  los paramentso son ")
+            if contar_parametros >= 2:
+                if nombre == "si" or apellido == "si":
+                    id_estudiante = seleccionar_estudiante1(nomb,ap,carreras_encontradas)#buscamos el id con el nombre y apellido del estudiante
+                    print(id_estudiante,"   no hay estudiante")
+                    if id_estudiante == "no":
+                        vec.append("no")
+                        vec1.append(nomb)
+                        vec1.append(ap[0])
+                    else:
+                        vec.append("si_nom_apell")
+                        vec1.append("")
+                        vec1.append("")
                 else:
-                    vec.append("si_nom_apell")
+                    vec.append("no")
                     vec1.append("")
                     vec1.append("")
-            else:
-                vec.append("no")
-                vec1.append("")
-                vec1.append("")
-            curso = palabra_curso(texto)
-            id_curso = "no";
-            id_curso=obtener_que_curso_quiere(texto)
-            if curso != "no" or id_curso != "no" and  len(id_curso) != 0:#existe la palabra curso
-                vec.append("si_curso")
-            else:
-                vec.append("no")
-            si = "no"
-            print(id_curso)
-            for i in range(len(vec)):
-                vec1.append(vec[i])
-            vec1.append(nombre_posicion_sql)
+                curso = palabra_curso(texto)
+                id_curso = "no";
+                id_curso=obtener_que_curso_quiere(texto)
+                if curso != "no" or id_curso != "no" and  len(id_curso) != 0:#existe la palabra curso
+                    vec.append("si_curso")
+                else:
+                    vec.append("no")
+                si = "no"
+                if contar_parametros == 0 and contar_parametros<=2:
+                    response = "argumentar_poco_mas"
+                else:
+                    for i in range(len(vec)):
+                        vec1.append(vec[i])
+                    vec1.append(nombre_posicion_sql)
 
-            for i in range(len(vec)):
-                if vec[i] == "si_car" and si == "no":
-                    sql_aux = consultas_aux["id_carrera"]  # Supongamos que consultas_aux es un diccionario con consultas auxiliares
-                    response += sql_aux.format(carreras_encontradas[0])
-                    si = "si"
-                elif vec[i] == "si_car" and si == "si":
-                    sql_aux = consultas_aux["id_carrera"]  # Supongamos que consultas_aux es un diccionario con consultas auxiliares
-                    response += " and "+sql_aux.format(carreras_encontradas[0])
-                    si = "si"
-                if vec[i] == "si_nom_apell" and si == "no":
-                    sql_aux = consultas_aux["id_estudiante"]
-                    response+=sql_aux.format(id_estudiante)
-                    si = "si"
-                elif vec[i] == "si_nom_apell" and si == "si":
-                    sql_aux = consultas_aux["id_estudiante"]
-                    response+=" and "+sql_aux.format(id_estudiante)
-                    si = "si"
+                    for i in range(len(vec)):
+                        if vec[i] == "si_car" and si == "no":
+                            sql_aux = consultas_aux["id_carrera"]  # Supongamos que consultas_aux es un diccionario con consultas auxiliares
+                            response += sql_aux.format(carreras_encontradas[0])
+                            si = "si"
+                        elif vec[i] == "si_car" and si == "si":
+                            sql_aux = consultas_aux["id_carrera"]  # Supongamos que consultas_aux es un diccionario con consultas auxiliares
+                            response += " and "+sql_aux.format(carreras_encontradas[0])
+                            si = "si"
+                        if vec[i] == "si_nom_apell" and si == "no":
+                            sql_aux = consultas_aux["id_estudiante"]
+                            response+=sql_aux.format(id_estudiante)
+                            si = "si"
+                        elif vec[i] == "si_nom_apell" and si == "si":
+                            sql_aux = consultas_aux["id_estudiante"]
+                            response+=" and "+sql_aux.format(id_estudiante)
+                            si = "si"
 
-                if vec[i] == "si_curso" and si == "no":
-                    sql_aux = consultas_aux["id_grado"]
-                    si = "si"
-                    response+= sql_aux.format(id_curso.pop(0))
-                elif vec[i] == "si_curso" and si == "si":
-                    sql_aux = consultas_aux["id_grado"]
-                    si = "si"
-                    response+= " and "+sql_aux.format(id_curso.pop(0))
-                vec[i] = "no"
-            if si == "no":#si se mantienen en no entonces aumentamos WHERE
-                response = response
+                        if vec[i] == "si_curso" and si == "no":
+                            sql_aux = consultas_aux["id_grado"]
+                            si = "si"
+                            response+= sql_aux.format(id_curso.pop(0))
+                        elif vec[i] == "si_curso" and si == "si":
+                            sql_aux = consultas_aux["id_grado"]
+                            si = "si"
+                            response+= " and "+sql_aux.format(id_curso.pop(0))
+                        vec[i] = "no"
+                    if si == "no":#si se mantienen en no entonces aumentamos WHERE
+                        response = response
+                    else:
+                        response=" where "+response
+                    response = sql+response
+                    vec1.append(nombre_posicion_sql)
             else:
-                response=" where "+response
-            response = sql+response
-            vec1.append(nombre_posicion_sql)
+                response = "argumentar_poco_mas"
             vec1.append(response)
 
         if response == "total_de_estudiantes_estadisticas":#obtener estadistica de estudiantes aprobados y reprobados
             vec = []
             vec1 = []
             response = "";
+            #por lo menos necesito un parametro para realizar la busqueda
+            contar_parametros = 0
+
             desercion = palabra_desercion(texto)#buscamos palabras relacionados con desercion o relacionado
             if desercion != "no":
                 vec.append("si_des")
+                contar_parametros+=1
             else:
                 vec.append("no")
 
@@ -855,12 +942,14 @@ def buscar(texto):
 
             if aplazar != "no":
                 vec.append("si_apla")
+                contar_parametros+=1
             else:
                 vec.append("no")
 
             aprobado = palabra_aprobados(texto)
             if aprobado != "no":
                 vec.append("si_apro")
+                contar_parametros+=1
             else:
                 vec.append("no")
 
@@ -879,41 +968,44 @@ def buscar(texto):
                 fecha2 = ""
 
             print(fecha)
-            nombre_posicion_sql = "total_de_estudiantes_estadisticas"
-            sql = consultas_sql[nombre_posicion_sql]
-            for i in range(len(vec)):
-                vec1.append(vec[i])
-            si = "no"
-            for i in range(len(vec)):
-                if vec[i] == "si_fecha" and si == "no":
-                    if fecha1 != "":#si es diferente de vacio
-                        sql_aux = consultas_aux["fechai"]
-                        response+=" ( "+sql_aux.format(fecha1)
-                    if fecha2 != "":
-                        sql_aux = consultas_aux["fechaf"]
-                        response+=" and "+sql_aux.format(fecha2)+")"
-                    else:
-                        sql_aux = consultas_aux["fechaf"]
-                        response+=" and "+sql_aux.format(fecha1)+")"
-                    si = "si"
-                elif vec[i] == "si_fecha" and si == "si":
-                    if fecha1 != "":#si es diferente de vacio
-                        sql_aux = consultas_aux["fechai"]
-                        response+=" and ( "+sql_aux.format(fecha1)
-                    if fecha2 != "":
-                        sql_aux = consultas_aux["fechaf"]
-                        response+=" and "+sql_aux.format(fecha2)+")"
-                    else:
-                        sql_aux = consultas_aux["fechaf"]
-                        response+=" and "+sql_aux.format(fecha1)+")"
-                    si = "si"
-                vec[i] = "no"
-            if si == "no":#si se mantienen en no entonces aumentamos WHERE
-                response = response
+            if contar_parametros == 0:
+                response = "argumentar_poco_mas"
             else:
-                response=" where "+response
-            vec1.append(nombre_posicion_sql)
-            response = sql + response
+                nombre_posicion_sql = "total_de_estudiantes_estadisticas"
+                sql = consultas_sql[nombre_posicion_sql]
+                for i in range(len(vec)):
+                    vec1.append(vec[i])
+                si = "no"
+                for i in range(len(vec)):
+                    if vec[i] == "si_fecha" and si == "no":
+                        if fecha1 != "":#si es diferente de vacio
+                            sql_aux = consultas_aux["fechai"]
+                            response+=" ( "+sql_aux.format(fecha1)
+                        if fecha2 != "":
+                            sql_aux = consultas_aux["fechaf"]
+                            response+=" and "+sql_aux.format(fecha2)+")"
+                        else:
+                            sql_aux = consultas_aux["fechaf"]
+                            response+=" and "+sql_aux.format(fecha1)+")"
+                        si = "si"
+                    elif vec[i] == "si_fecha" and si == "si":
+                        if fecha1 != "":#si es diferente de vacio
+                            sql_aux = consultas_aux["fechai"]
+                            response+=" and ( "+sql_aux.format(fecha1)
+                        if fecha2 != "":
+                            sql_aux = consultas_aux["fechaf"]
+                            response+=" and "+sql_aux.format(fecha2)+")"
+                        else:
+                            sql_aux = consultas_aux["fechaf"]
+                            response+=" and "+sql_aux.format(fecha1)+")"
+                        si = "si"
+                    vec[i] = "no"
+                if si == "no":#si se mantienen en no entonces aumentamos WHERE
+                    response = response
+                else:
+                    response=" where "+response
+                vec1.append(nombre_posicion_sql)
+                response = sql + response
             vec1.append(response)
         return vec1
     else:
@@ -921,7 +1013,7 @@ def buscar(texto):
         vec1.append("argumentar_poco_mas")
         return vect1
 
-textoo = "cuales son las asignaturas del estudiante andrea lopes informatica"
+textoo = "informacion de estudiantes activos mario diaz de la carrera de informatica"
 re = buscar(textoo)
 
 print(re)

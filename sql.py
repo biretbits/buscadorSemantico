@@ -46,27 +46,7 @@ def seleccionarAsignatura():
             # Si no hay resultados, devolver un mensaje indicando que no se encontró el estudiante
             return "no"
 
-def seleccionar_estudiante(id):
-    sql_consulta = "select *from estudiante"#seleccionamos todos los estudiantes
-    conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
-    # Crear un cursor para ejecutar consultas
-    cursor = conn.cursor()
-    # Ejecutar la consulta SQL
-    cursor.execute(sql_consulta)
-    # Verifica si hay algún resultado antes de obtenerlos
-    if cursor.rowcount > 0:
-        # Si hay resultados, obtén los datos de la consulta
-        sql_consulta = cursor.fetchall()
-        cursor.close()
-        conn.close()
-        nombres = ""
-        for row in datos:
-            if row[id]:
-                nombres+= row[1]+"|"+row[2]+"|"+row[3]
-                break
-        return nombres
-    else:
-        return "no"
+
 
 def seleccionar_carrera():
     sql_consulta = "select *from carrera"#seleccionamos todos los estudiantes
@@ -133,7 +113,7 @@ def grado_Estudiante(id):
             # Si no hay resultados, devolver un mensaje indicando que no se encontró el estudiante
             return "no"
 
-def seleccionar_estudiante(nombre, apellidos, carrera):
+def seleccionar_estudiante1(nombre, apellidos, carrera):
     ap = ""
     am = ""
     id_car = ""
