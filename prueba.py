@@ -1,10 +1,9 @@
 
-
 import pymysql
 from comprobar import obtener_carreras_nombre,detectar_numeros_delimiter,contiene_palabras_activas,contiene_palabras_desactivas,contiene_palabras_sexo_varon,contiene_palabras_sexo_mujer
 from comprobar import palabras_departamento,palabras_provincia,encontrar_nombre,encontrar_apellido,obtener_area,palabra_desercion
 from comprobar import palabra_aplazaron,palabra_aprobados,palabra_curso,obtener_que_curso_quiere
-from comprobar import palabra_nota,fechas
+from comprobar import palabra_nota,fechas,obtener_ano
 from sql import seleccionar_estudiante1
 from sentence_transformers import SentenceTransformer, util
 import numpy as np
@@ -12,18 +11,19 @@ import numpy as np
 # Cargar el modelo pre-entrenado
 model = SentenceTransformer('all-MiniLM-L6-v1')
 sentencias = [
-    "informacion de las carreras de la unsxx universidad nacional siglo xx",
-    "informacion catidad de estudiantes de la unsxx universidad nacional siglo xx",
-    "informacion de estudiantes de la carrera de la unsxx universidad nacional siglo xx",
-    "informacion del estudiante de la carrera de la unsxx universidad nacional siglo xx",
-    "informacion de estudiantes de la unsxx universidad nacional siglo xx",
-    "informacion de carreras del area tecnologia salud unsxx de la unsxx universidad nacional siglo xx",
-    "informacion de estudiantes del area tecnologia salud social de la unsxx universidad nacional siglo xx",
-    "informacion de la calificacion del estudiante de la carrera de la unxx universidad nacional siglo xx",
-    "estadistica de estudiantes del area o areas de la unsxx universidad nacional siglo xx",
-    "cuales son las carreras de la unsxx universidad nacional siglo xx",
-    "informacion de la carrera de de la unsxx universidad nacional siglo xx",
-    "cuales son las materias del estudiante de la unsxx universidad nacional siglo xx",
+    "informacion carreras unsxx universidad nacional siglo xx",
+    "informacion catidad estudiantes unsxx universidad nacional siglo xx",
+    "informacion estudiantes carrera unsxx universidad nacional siglo xx",
+    "informacion estudiante carrera unsxx universidad nacional siglo xx",
+    "informacion estudiantes unsxx universidad nacional siglo xx",
+    "informacion carreras area tecnologia salud social unsxx universidad nacional siglo xx",
+    "informacion estudiantes area tecnologia salud social unsxx universidad nacional siglo xx",
+    "informacion calificacion estudiante carrera unxx universidad nacional siglo xx",
+    "estadistica estudiantes area areas carreras tecnologia salud social unsxx universidad nacional siglo xx",
+    "cuales carreras unsxx universidad nacional siglo xx",
+    "informacion carrera unsxx universidad nacional siglo xx",
+    "cuales materias estudiante unsxx universidad nacional siglo xx",
+    "estadistica estudiantes desertores area areas carreras tecnologia salud social unsxx universidad nacional siglo xx",
 
 ]
 # Definir la lista de pares
@@ -41,6 +41,7 @@ respuesta =[
 'ver_carreras',
 'ver_carreras',
 "seleccionar_asignatura_estudiante",
+"seleccionar_estudiantes_desertores",
 ]
 consultas_sql = {
 "ver_carreras":"select *from carrera",
@@ -163,7 +164,7 @@ def buscar(texto):
     posicionMax = maximo(coseno_salida)
     print(posicionMax,"   el maximo indice es")
     response = respuesta[posicionMax]
-
+    print(response, "la respuesta es ")
     nombre_posicion_sql = ""
     if response:
         vec1=[]
@@ -214,22 +215,22 @@ def buscar(texto):
                     vec.append("si_car")
                     nombre_posicion_sql = "total_de_estudiantes_carrera"
                     sql = consultas_sql[nombre_posicion_sql]
-                    print(carreras_encontradas,"  estas son las carreras")
-                    if contiene_palabras_activas(texto):#si contiene la palabra activo ingresa
+                    print(carreras_encontradas,"  estas son las carreras",texto)
+                    if  contiene_palabras_activas(texto) != "no":#si contiene la palabra activo ingresa
                         vec.append("si_activo")
                     else:
                         vec.append("no")
 
-                    if contiene_palabras_desactivas(texto):#si contiene la palabra desactivo o al relacionado ingresa
+                    if contiene_palabras_desactivas(texto) != "no":#si contiene la palabra desactivo o al relacionado ingresa
                         vec.append("si_desactivo")
                     else:
                         vec.append("no")
 
-                    if contiene_palabras_sexo_varon(texto):#si contiene la palabra sexo
+                    if contiene_palabras_sexo_varon(texto) != "no":#si contiene la palabra sexo
                         vec.append("si_m")
                     else:
                         vec.append("no")
-                    if contiene_palabras_sexo_mujer(texto):#si contiene femenino ingresa
+                    if contiene_palabras_sexo_mujer(texto) != "no":#si contiene femenino ingresa
                         vec.append("si_f")
                     else:
                         vec.append("no")
@@ -527,23 +528,23 @@ def buscar(texto):
             nombre_posicion_sql = "estudiantes_de_unsxx"
             sql = consultas_sql[nombre_posicion_sql]
         #realizamos consultas de if para saber en  llega y poder el and o no
-            if contiene_palabras_activas(texto):#si contiene la palabra activo ingresa
+            if contiene_palabras_activas(texto) != "no":#si contiene la palabra activo ingresa
                 vec.append("si_activo")
                 contar_parametros=0
             else:
                 vec.append("no")
 
-            if contiene_palabras_desactivas(texto):#si contiene la palabra desactivo o al relacionado ingresa
+            if contiene_palabras_desactivas(texto) != "no":#si contiene la palabra desactivo o al relacionado ingresa
                 vec.append("si_desactivo")
                 contar_parametros=0
             else:
                 vec.append("no")
-            if contiene_palabras_sexo_varon(texto):#si contiene la palabra sexo
+            if contiene_palabras_sexo_varon(texto) != "no":#si contiene la palabra sexo
                 vec.append("si_m")
                 contar_parametros+=1
             else:
                 vec.append("no")
-            if contiene_palabras_sexo_mujer(texto):#si contiene femenino ingresa
+            if contiene_palabras_sexo_mujer(texto) != "no":#si contiene femenino ingresa
                 vec.append("si_f")
                 contar_parametros+=1
             else:
@@ -654,28 +655,28 @@ def buscar(texto):
             existe  ="no"
             response = ""
             vec = []
-            contar_parametros+=1
+            contar_parametros=0
             nombre_posicion_sql = "estudiante_por_area"#creamos una varible para referenciar a mi array consultas_sql
             sql = consultas_sql[nombre_posicion_sql]#obtenemos la consulta
             #realizamos preguntas del texto ingresado para saber que es lo que busca el usuario
 
-            if contiene_palabras_activas(texto):#si contiene la palabra activo ingresa
+            if  contiene_palabras_activas(texto) != "no":#si contiene la palabra activo ingresa
                 vec.append("si_activo")
                 contar_parametros+=1
             else:
                 vec.append("no")
 
-            if contiene_palabras_desactivas(texto):#si contiene la palabra desactivo o al relacionado ingresa
+            if contiene_palabras_desactivas(texto) != "no":#si contiene la palabra desactivo o al relacionado ingresa
                 vec.append("si_desactivo")
                 contar_parametros+=1
             else:
                 vec.append("no")
-            if contiene_palabras_sexo_varon(texto):#si contiene la palabra sexo
+            if contiene_palabras_sexo_varon(texto) != "no":#si contiene la palabra sexo
                 vec.append("si_m")
                 contar_parametros+=1
             else:
                 vec.append("no")
-            if contiene_palabras_sexo_mujer(texto):#si contiene femenino ingresa
+            if contiene_palabras_sexo_mujer(texto) != "no":#si contiene femenino ingresa
                 vec.append("si_f")
                 contar_parametros+=1
             else:
@@ -930,31 +931,9 @@ def buscar(texto):
             response = "";
             #por lo menos necesito un parametro para realizar la busqueda
             contar_parametros = 0
-
-            desercion = palabra_desercion(texto)#buscamos palabras relacionados con desercion o relacionado
-            if desercion != "no":
-                vec.append("si_des")
-                contar_parametros+=1
-            else:
-                vec.append("no")
-
-            aplazar = palabra_aplazaron(texto)#buscamos palabras relacionados con aplazar
-
-            if aplazar != "no":
-                vec.append("si_apla")
-                contar_parametros+=1
-            else:
-                vec.append("no")
-
-            aprobado = palabra_aprobados(texto)
-            if aprobado != "no":
-                vec.append("si_apro")
-                contar_parametros+=1
-            else:
-                vec.append("no")
-
             fecha = fechas(texto)
             if len(fecha) >= 1:#si existe fechas
+                contar_parametros+=1
                 vec.append("si_fecha")
                 if len(fecha) == 1:
                     fecha1 = fecha[0]
@@ -967,15 +946,19 @@ def buscar(texto):
                 fecha1 = ""
                 fecha2 = ""
 
-            print(fecha)
             if contar_parametros == 0:
-                response = "argumentar_poco_mas"
+                response = "argumentar_poco_mas456"
             else:
                 nombre_posicion_sql = "total_de_estudiantes_estadisticas"
                 sql = consultas_sql[nombre_posicion_sql]
-                for i in range(len(vec)):
-                    vec1.append(vec[i])
+
                 si = "no"
+                if fecha2 == "" and fecha1 != "":
+                    vec1.append(fecha1)
+                    vec1.append(fecha1)
+                else:
+                    vec1.append(fecha1)
+                    vec1.append(fecha2)
                 for i in range(len(vec)):
                     if vec[i] == "si_fecha" and si == "no":
                         if fecha1 != "":#si es diferente de vacio
@@ -1006,14 +989,18 @@ def buscar(texto):
                     response=" where "+response
                 vec1.append(nombre_posicion_sql)
                 response = sql + response
-            vec1.append(response)
+                vec1.append(response)
+            if response == "seleccionar_estudiantes_desertores":
+                response = "seleccionar_estudiantes_desertores"
+
+                vec1.append(response)
         return vec1
     else:
         vec1=[]
-        vec1.append("argumentar_poco_mas")
+        vec1.append("argumentar_poco_mas2")
         return vect1
+textoo = "estadistica de estudiantes reprobados unsxx de las 3 areas del año 2024"
 
-textoo = "informacion de estudiantes activos mario diaz de la carrera de informatica"
 re = buscar(textoo)
 
 print(re)
@@ -1048,3 +1035,10 @@ print(re)
 #cuantos estudiantes reprobados hay en la carrera de informatica
 #estadistica de estudiantes reprobados en la unsxx de fechas del 03/02/2024
 #estudiantes aprobados en la universidad en las 3 areas
+vv = [
+    [[1, 45, 10, 15], [2, 3, 4, 5]],
+    [[19, 17, 16, 17], [28, 9, 8, 7]]
+]
+
+
+print("impirmiendo posicion   ", vv[0][1][3])

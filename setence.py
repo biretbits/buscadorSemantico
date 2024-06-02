@@ -33,3 +33,14 @@ print(results)
 # Imprimir los resultados ordenados
 #for sentence, score in sorted_results:
 #    print(f"Similitud: {score} - Oración: '{sentence}'")
+import datetime
+
+array_personalizado = {}
+
+inicio_anio = 2015
+fin_anio = 2029
+
+for anio in range(inicio_anio, fin_anio + 1):
+    array_personalizado[anio] = [5, 0, 0, 0, 0, 0]
+
+print(array_personalizado[2015][0])

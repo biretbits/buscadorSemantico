@@ -69,8 +69,8 @@ def contiene_palabras_activas(texto):
     for token in doc1:
         # Verificar si el token esta en el array de palabras activas
         if token.text in palabras_activas:
-            return True
-    return False
+            return "si"
+    return "no"
 
 # Funcion para procesar un texto y verificar si contiene palabras desactivas
 def contiene_palabras_desactivas(texto):
@@ -83,8 +83,8 @@ def contiene_palabras_desactivas(texto):
     for token in doc2:
         # Verificar si el token esta en el array de palabras activas
         if token.text in palabras_desactivas:
-            return True
-    return False
+            return "si"
+    return "no"
 
 # Funcion para procesar un texto y verificar si contiene palabras desactivas
 def contiene_palabras_sexo_varon(texto):
@@ -97,8 +97,8 @@ def contiene_palabras_sexo_varon(texto):
     for token in doc2:
         # Verificar si el token esta en el array de palabras activas
         if token.text in palabras_desactivas:
-            return True
-    return False
+            return "no"
+    return "si"
 
 # Funcion para procesar un texto y verificar si contiene palabras desactivas
 def contiene_palabras_sexo_mujer(texto):
@@ -111,8 +111,8 @@ def contiene_palabras_sexo_mujer(texto):
     for token in doc2:
         # Verificar si el token esta en el array de palabras activas
         if token.text in palabras_desactivas:
-            return True
-    return False
+            return "no"
+    return "si"
 
 
 def palabras_departamento(texto):
@@ -272,7 +272,7 @@ def palabra_desercion(texto):
 def palabra_aplazaron(texto):
     texto = texto.lower()
     texto = eliminar_tildes(texto)  # Suponiendo que eliminar_tildes(texto) está definida
-    apla_keywords = ["aplazaron","aplasados","aplazados", "reprobados", "reprobaron"]
+    apla_keywords = ["aplazaron","aplasados","aplazados", "reprobados", "reprobaron","aplazar"]
     for palabra_clave in apla_keywords:
         print(palabra_clave)
         if palabra_clave in texto:
@@ -336,8 +336,31 @@ fecha_regex = re.compile(
 
 def fechas(texto):
     fechas_encontradas = fecha_regex.findall(texto)
-    fechas_formateadas = [formatear_fecha(fecha) for fecha in fechas_encontradas]
-    return fechas_formateadas
+    c = 0
+    fecha_e = []
+    if len(fechas_encontradas) == 1:
+        if es_entero(fechas_encontradas[0]):#si la fecha es un entero
+            fecha_e.append(fechas_encontradas[0]+"-01-01")
+            fecha_e.append(fechas_encontradas[0]+"-12-30")
+        else:
+            newFecha = formatear_fecha(fechas_encontradas[0])
+            soloAno = formatear_fecha_solo_ano(newFecha)
+            fecha_e.append(soloAno+"-01-01")
+            fecha_e.append(soloAno+"-12-30")
+    elif len(fechas_encontradas) >1:
+        for fe in fechas_encontradas:
+            if es_entero(fe):#si la fecha es un entero
+                if c == 0:
+                    fecha_e.append(fe+"-01-01")
+                if c == 1:
+                    fecha_e.append(fe+"-12-30")
+            else:#no es estero puede que la fecha se asi 01/01/2025 y tenemos que cambiar a esto 01-01-2025
+                fecha_e.append(formatear_fecha(fe))
+            c = c + 1
+    return fecha_e
+
+def es_entero(cadena):
+    return cadena.isdigit()
 
 def formatear_fecha(fecha):
     # Separar la fecha en sus componentes (día, mes, año)
@@ -353,4 +376,36 @@ def formatear_fecha(fecha):
     else:
         return fecha
 
+def obtener_ano(texto):
+    fechas_encontradas = fecha_regex.findall(texto)
+    fecha_e = []
+    for fe in fechas_encontradas:
+        if not es_entero(fe):#si la fecha es un entero
+            fecha_e.append(formatear_fecha_solo_ano(fe))
+        else:
+            fecha_e.append(fe)
+    return fecha_e
 #funciones de allar el dato si exite o no
+def formatear_fecha_solo_ano(fecha):
+    # Separar la fecha en sus componentes (día, mes, año)
+    if '/' in fecha:
+        partes = fecha.split('/')
+    elif '-' in fecha:
+        partes = fecha.split('-')
+    else:
+        partes = fecha.split('.')
+    # Reordenar los componentes para el formato deseado (año, mes, día)
+    if len(partes) == 3:
+        return partes[2]
+    else:
+        return "2024"
+def obtener_ano_de_fecha(fecha):
+    # Separar la fecha en sus componentes (día, mes, año)
+    if '/' in fecha:
+        partes = fecha.split('/')
+    elif '-' in fecha:
+        partes = fecha.split('-')
+    else:
+        partes = fecha.split('.')
+    # Reordenar los componentes para el formato deseado (año, mes, día)
+    return partes[0]

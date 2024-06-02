@@ -2367,7 +2367,8 @@ insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
 cod_es,cod_area,fecha)values('reprobado','no',5,1,66,1,'2024-02-03');
 insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
 cod_es,cod_area,fecha)values('aprobado','no',5,1,69,1,'2024-02-03');
-
+insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
+cod_es,cod_area,fecha)values('aprobado','no',5,1,69,1,'2023-02-03');
 
 
 instalar pip install datefinder

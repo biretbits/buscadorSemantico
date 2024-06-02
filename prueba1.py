@@ -758,7 +758,6 @@ def buscar(texto):
             contar_parametros = 0
             if palabra_nota(texto) != "no":
                 vec.append("si_cali")
-                
             else:
                 vec.append("no")
             carreras_encontradas = obtener_carreras_nombre(texto);
@@ -779,7 +778,7 @@ def buscar(texto):
             if ap != "no" and nombre == "si":
                 apellido = "si"
             if nombre == "si" or apellido == "si":
-                id_estudiante = seleccionar_estudiante(nomb,ap,carreras_encontradas)#buscamos el id con el nombre y apellido del estudiante
+                id_estudiante = seleccionar_estudiante1(nomb,ap,carreras_encontradas)#buscamos el id con el nombre y apellido del estudiante
                 print(id_estudiante,"   no hay estudiante")
                 if id_estudiante == "no":
                     vec.append("no")

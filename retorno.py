@@ -1,6 +1,8 @@
 from flask import jsonify
 from sql import nombre_carrera_retor,grado_Estudiante,obtener_nombre,nombre_materia,obtener_datos_de_curso
-from sql import seleccionarAreas
+from sql import seleccionarAreas,seleccionar_carrera
+from comprobar import formatear_fecha_solo_ano,obtener_ano_de_fecha
+from datetime import datetime
 ac = {
 0: "Ingenieria Informatica",
 1: "Ingenieria civil",
@@ -20,6 +22,10 @@ ac = {
 15: "comunicacion social",
 16: "bioquimica"
 }
+#en la base de datos las carreras comienza de 1
+#pero como los array comienzan en 0 por eso resto una posicion
+
+
 areasU = {
 0:'Tecnologia',1:"Salud",2:"Sociales"
 }
@@ -28,7 +34,7 @@ def  retornar_valores(datos,ress):
     print("la accion es : ",accion1)
     print(ress,"   trae los siguientes datos ")
     html = ""
-    html += "<div class='container'>"
+    html += "<div class='container justify-content-center align-items-center' style='min-height: 100vh;'>"
     if accion1 == "ver_carreras":
         if ress[0] != 'no':
             html += "Las carreras de la universidad son las siguientes: "
@@ -510,13 +516,14 @@ def  retornar_valores(datos,ress):
         else:
             html+="<div class='alert alert-secondary' role='alert'>"+mensaje+"</div>"
     if accion1 == "total_de_estudiantes_estadisticas":
-        si_des = ress[0]
-        si_apla = ress[1]
-        si_apro = ress[2]
+        fecha1 = ress[0]
+        fecha2 = ress[1]
+        if fecha1>fecha2:
+            aux = fecha1
+            fecha1 = fecha2
+            fecha2 = aux
         vapro = [0] * 17
         vaplaz = [0] * 17
-        vdes = [0] * 17
-        vndes = [0] * 17
         vareasApro = [0] * 3
         vareasApla = [0] * 3
         capro = 0
@@ -527,16 +534,90 @@ def  retornar_valores(datos,ress):
         ctec = 0
         csal = 0
         csoc = 0
+        c_infor = {}#xontar estudiantes aprobados por carrera y curso
+        c_inforr = {}#contar estudiantes reprobados por carrera y cursos
+        c_civil = {}#xontar estudiantes aprobados por carrera y curso
+        c_civilr = {}#contar estudiantes reprobados por carrera y cursos
+        c_minas = {}#xontar estudiantes aprobados por carrera y curso
+        c_minasr = {}#contar estudiantes reprobados por carrera y cursos
+        c_elec = {}#xontar estudiantes aprobados por carrera y curso
+        c_elecr = {}#contar estudiantes reprobados por carrera y cursos
+        c_mec = {}#xontar estudiantes aprobados por carrera y curso
+        c_mecr = {}#contar estudiantes reprobados por carrera y cursos
+        c_agro = {}#xontar estudiantes aprobados por carrera y curso
+        c_agror = {}#contar estudiantes reprobados por carrera y cursos
+        c_lit = {}#xontar estudiantes aprobados por carrera y curso
+        c_litr = {}#contar estudiantes reprobados por carrera y cursos
+        c_der = {}#xontar estudiantes aprobados por carrera y curso
+        c_derr = {}#contar estudiantes reprobados por carrera y cursos
+        c_cie = {}#xontar estudiantes aprobados por carrera y curso
+        c_cier = {}#contar estudiantes reprobados por carrera y cursos
+        c_cont = {}#xontar estudiantes aprobados por carrera y curso
+        c_contr = {}#contar estudiantes reprobados por carrera y cursos
+        c_odon = {}#xontar estudiantes aprobados por carrera y curso
+        c_odonr = {}#contar estudiantes reprobados por carrera y cursos
+        c_lab = {}#xontar estudiantes aprobados por carrera y curso
+        c_labr = {}#contar estudiantes reprobados por carrera y cursos
+        c_enf = {}#xontar estudiantes aprobados por carrera y curso
+        c_enfr = {}#contar estudiantes reprobados por carrera y cursos
+        c_med = {}#xontar estudiantes aprobados por carrera y curso
+        c_medr = {}#contar estudiantes reprobados por carrera y cursos
+        c_bio = {}#xontar estudiantes aprobados por carrera y curso
+        c_bior = {}#contar estudiantes reprobados por carrera y cursos
+        c_cso = {}#xontar estudiantes aprobados por carrera y curso
+        c_csor = {}#contar estudiantes reprobados por carrera y cursos
+        c_quim = {}#xontar estudiantes aprobados por carrera y curso
+        c_quimr = {}#contar estudiantes reprobados por carrera y cursos
+        a11 = int(obtener_ano_de_fecha(fecha1))
+        a22 = int(obtener_ano_de_fecha(fecha2))
+        a1 = int(obtener_ano_de_fecha(fecha1))
+        a2 = int(obtener_ano_de_fecha(fecha2))
+        print(a1,a2,"  sirbe para ")
+        for anio in range(a1, a2 + (1)):
+            print(anio, "  el ano es " )
+            c_infor[anio] = [0,0,0,0,0]
+            c_inforr[anio] = [0,0,0,0,0]
+            c_civil[anio] = [0,0,0,0,0]
+            c_civilr[anio] = [0,0,0,0,0]
+            c_minas[anio] = [0,0,0,0,0]
+            c_minasr[anio] = [0,0,0,0,0]
+            c_elec[anio] = [0,0,0,0,0]
+            c_elecr[anio] = [0,0,0,0,0]
+            c_mec[anio] = [0,0,0,0,0]
+            c_mecr[anio] = [0,0,0,0,0]
+            c_agro[anio] = [0,0,0,0,0]
+            c_agror[anio] = [0,0,0,0,0]
+            c_lit[anio] = [0,0,0,0,0]
+            c_litr[anio] = [0,0,0,0,0]
+            c_der[anio] = [0,0,0,0,0]
+            c_derr[anio] = [0,0,0,0,0]
+            c_cie[anio] = [0,0,0,0,0]
+            c_cier[anio] = [0,0,0,0,0]
+            c_cont[anio] = [0,0,0,0,0]
+            c_contr[anio] = [0,0,0,0,0]
+            c_odon[anio] = [0,0,0,0,0]
+            c_odonr[anio] = [0,0,0,0,0]
+            c_lab[anio] = [0,0,0,0,0]
+            c_labr[anio] = [0,0,0,0,0]
+            c_enf[anio] = [0,0,0,0,0]
+            c_enfr[anio] = [0,0,0,0,0]
+            c_med[anio] = [0,0,0,0,0]
+            c_medr[anio] = [0,0,0,0,0]
+            c_bio[anio] = [0,0,0,0,0]
+            c_bior[anio] = [0,0,0,0,0]
+            c_cso[anio] = [0,0,0,0,0]
+            c_csor[anio] = [0,0,0,0,0]
+            c_quim[anio] = [0,0,0,0,0]
+            c_quimr[anio] = [0,0,0,0,0]
+        #carreras_a= [carreraa[0] for carreraa in ro]#aqui tengo todas las carreras pero sus id
+        curso ={0:'1er año',1:"2do año",2:"3er año",3:'4to año',4:'5to año'}
+        guardar = []
+        guardar1 = []
+        if isinstance(fecha1, str):
+            fecha1 = datetime.strptime(fecha1, "%Y-%m-%d").date()
+        if isinstance(fecha2, str):
+            fecha2 = datetime.strptime(fecha2, "%Y-%m-%d").date()
         for row in datos:
-            #comtamos datos
-            if row[2] == "si":
-                cdes += 1
-                vdes[row[5]-1] += 1
-
-            elif row[2] == "no":
-                cndes += 1
-                vndes[row[5]-1] += 1
-
             if row[1] == "aprobado":
                 capro += 1
                 vapro[row[5]-1] += 1
@@ -546,23 +627,84 @@ def  retornar_valores(datos,ress):
                 vaplaz[row[5]-1] += 1
                 vareasApla[row[7]-1] += 1
 
-        mensaje = "La cantidad de "
-        si = "no"
-        if si_des != "no" and si == "no":
-            mensaje += " desertores "
-            si = "si"
-        if si_apla != "no" and si == "no":
-            mensaje += " reprobados "
-            si = "si"
-        elif si_apla != "no" and si == "si":
-            mensaje += ", reprobados "
-            si = "si"
-        if si_apro != "no" and si == "no":
-            mensaje += " aprobados "
-            si = "si"
-        elif si_apro != "no" and si == "si":
-            mensaje += ", aprobados "
-            si = "si"
+            if row[8]>=fecha1 and row[8] <= fecha2:#la fecha obtenidad tiene que estar en ese rango
+
+                anoBD = int(obtener_ano_de_fecha(row[8].strftime("%Y-%m-%d")))
+
+                if row[1] == "aprobado":
+                    if row[5] == 1:
+                        c_infor[anoBD][row[3]-1]+=1
+                    if row[5] == 2:
+                        c_civil[anoBD][row[3]-1]+=1
+                    if row[5] == 3:
+                        c_minas[anoBD][row[3]-1]+=1
+                    if row[5] == 4:
+                        c_elec[anoBD][row[3]-1]+=1
+                    if row[5] == 5:
+                        c_mec[anoBD][row[3]-1]+=1
+                    if row[5] == 6:
+                        c_agro[anoBD][row[3]-1]+=1
+                    if row[5] == 7:
+                        c_lit[anoBD][row[3]-1]+=1
+                    if row[5] == 8:
+                        c_der[anoBD][row[3]-1]+=1
+                    if row[5] == 9:
+                        c_cie[anoBD][row[3]-1]+=1
+                    if row[5] == 10:
+                        c_cont[anoBD][row[3]-1]+=1
+                    if row[5] == 11:
+                        c_odon[anoBD][row[3]-1]+=1
+                    if row[5] == 12:
+                        c_lab[anoBD][row[3]-1]+=1
+                    if row[5] == 13:
+                        c_enf[anoBD][row[3]-1]+=1
+                    if row[5] == 14:
+                        c_med[anoBD][row[3]-1]+=1
+                    if row[5] == 15:
+                        c_bio[anoBD][row[3]-1]+=1
+                    if row[5] == 16:
+                        c_cso[anoBD][row[3]-1]+=1
+                    if row[5] == 17:
+                        c_quim[anoBD][row[3]-1]+=1
+
+                elif row[1] == "reprobado":
+                    if row[5] == 1:
+                        c_inforr[anoBD][row[3]-1]+=1
+                    if row[5] == 2:
+                        c_civilr[anoBD][row[3]-1]+=1
+                    if row[5] == 3:
+                        c_minasr[anoBD][row[3]-1]+=1
+                    if row[5] == 4:
+                        c_elecr[anoBD][row[3]-1]+=1
+                    if row[5] == 5:
+                        c_mecr[anoBD][row[3]-1]+=1
+                    if row[5] == 6:
+                        c_agror[anoBD][row[3]-1]+=1
+                    if row[5] == 7:
+                        c_litr[anoBD][row[3]-1]+=1
+                    if row[5] == 8:
+                        c_derr[anoBD][row[3]-1]+=1
+                    if row[5] == 9:
+                        c_cier[anoBD][row[3]-1]+=1
+                    if row[5] == 10:
+                        c_contr[anoBD][row[3]-1]+=1
+                    if row[5] == 11:
+                        c_odonr[anoBD][row[3]-1]+=1
+                    if row[5] == 12:
+                        c_labr[anoBD][row[3]-1]+=1
+                    if row[5] == 13:
+                        c_enfr[anoBD][row[3]-1]+=1
+                    if row[5] == 14:
+                        c_medr[anoBD][row[3]-1]+=1
+                    if row[5] == 15:
+                        c_bior[anoBD][row[3]-1]+=1
+                    if row[5] == 16:
+                        c_csor[anoBD][row[3]-1]+=1
+                    if row[5] == 17:
+                        c_quimr[anoBD][row[3]-1]+=1
+
+        print(c_infor)
+        mensaje = "La cantidad de Estudiantes reprobados y aprobados "
         mensaje += " es lo siguiente por área y carreras"
         html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
         # Crear el gráfico de torta
@@ -572,7 +714,7 @@ def  retornar_valores(datos,ress):
         html += "</div>"
         #crear para areas
         html += "<div class='row'>"
-        html += "<h2>Areas</h2>"
+        html += "<h4 align='center'>Areas</h4>"
         print("areas son ",len(areasU), areasU[1])
         for i in range(len(areasU)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
             html += "<div class='col-lg-3'>"
@@ -587,20 +729,40 @@ def  retornar_valores(datos,ress):
             html += "</div>"
         html += "</div>"
 
-        html += "<div class='row'>"
-        html += "<h2>Carreras</h2>"
+
         for i in range(17):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
+            html += "<div class='row'>"
+            html += "<h4 align = 'center'>Carrera</h4>"
+            html += "<h5 align = 'center'>"+ac[i]+"</h5>"
             html += "<div class='col-lg-3'>"
             html += "<div class='panel panel-default text-center'>"
             html += "<div class='panel-heading'>"
-            html += ac[i]
+
             html += "</div>"
             html += "<div class='panel-body'>"
             html += "<center><canvas id='grafica"+str(i)+"' width='250' height='250'></canvas></center>"
             html += "</div>"
             html += "</div>"
             html += "</div>"
-        html += "</div>"
+            html += "</div>"
+            html += "<div class='row'>"
+            k = 0
+            for anio in range(a1, a2 + 1):#recorremos las fechas
+                html += "<h5 align='center'>Año "+str(anio)+"</h5>"
+                for j in range(5):#recorremos todos los cursos aprobados por año
+
+                    html += "<div class='col-lg-3'>"
+                    html += "<div class='panel panel-default text-center'>"
+                    html += "<div class='panel-heading'>"
+                    html += curso[j]
+                    html += "</div>"
+                    html += "<div class='panel-body'>"
+                    html += "<center><canvas id='graficaCurso"+str(i)+str(k)+str(j)+"' width='250' height='250'></canvas></center>"
+                    html += "</div>"
+                    html += "</div>"
+                    html += "</div>"
+                k = k + 1
+            html += "</div>"
 
         # Datos para el gráfico
         html += "<script>"
@@ -622,7 +784,7 @@ def  retornar_valores(datos,ress):
         html+=" options: options"
         html+="});"
         html += "</script>"
-        j = 0
+        h = 1
         for i in range(17):#creamos un grafico para cada canvas
             html += "<script>"
             html += "var data = {"
@@ -630,7 +792,7 @@ def  retornar_valores(datos,ress):
             html += "'datasets': [{"
 
             html += "'data': [" + str(vapro[i]) + ", " + str(vaplaz[i]) + "], "  # Valores para cada sección de la torta
-            html += "'backgroundColor': ['#FF6384', '#36A2EB'] "  # Colores para cada sección
+            html += "'backgroundColor': ['lime', 'orange'] "  # Colores para cada sección
             html += "}]"
             html += "};"
             html += "var options = {"
@@ -644,6 +806,67 @@ def  retornar_valores(datos,ress):
             html+=" data: data,"
             html+=" options: options"
             html+="});"
+            html += "</script>"
+            k = 0
+            html += "<script>"
+            for anio in range(a11, a22 + 1):#recorremos las fechas
+
+                for j in range(5):#recorremos todos los cursos aprobados por año
+                    html += "var data = {"
+                    html += "'labels': ['Aprobado', 'Reprobado'],"
+                    html += "'datasets': [{"
+
+                    if h == 1:
+                        html += "'data': [" + str(c_infor[anio][j]) + ", " + str(c_inforr[anio][j]) + "], "  # Valores para cada sección de la torta
+                    if h == 2:
+                        html += "'data': [" + str(c_civil[anio][j]) + ", " + str(c_civilr[anio][j]) + "], "  # Valores para cada sección de la torta
+                    if h == 3:
+                        html += "'data': [" + str(c_minas[anio][j]) + ", " + str(c_minasr[anio][j]) + "], "  # Valores para cada sección de la torta
+                    if h == 4:
+                        html += "'data': [" + str(c_elec[anio][j]) + ", " + str(c_elecr[anio][j]) + "], "  # Valores para cada sección de la torta
+                    if h == 5:
+                        html += "'data': [" + str(c_mec[anio][j]) + ", " + str(c_mecr[anio][j]) + "], "  # Valores para cada sección de la torta
+                    if h == 6:
+                        html += "'data': [" + str(c_agro[anio][j]) + ", " + str(c_agror[anio][j]) + "], "  # Valores para cada sección de la torta
+                    if h == 7:
+                        html += "'data': [" + str(c_lit[anio][j]) + ", " + str(c_litr[anio][j]) + "], "  # Valores para cada sección de la torta
+                    if h == 8:
+                        html += "'data': [" + str(c_der[anio][j]) + ", " + str(c_derr[anio][j]) + "], "  # Valores para cada sección de la torta
+                    if h == 9:
+                        html += "'data': [" + str(c_cie[anio][j]) + ", " + str(c_cier[anio][j]) + "], "  # Valores para cada sección de la torta
+                    if h == 10:
+                        html += "'data': [" + str(c_cont[anio][j]) + ", " + str(c_contr[anio][j]) + "], "  # Valores para cada sección de la torta
+                    if h == 11:
+                        html += "'data': [" + str(c_odon[anio][j]) + ", " + str(c_odonr[anio][j]) + "], "  # Valores para cada sección de la torta
+                    if h == 12:
+                        html += "'data': [" + str(c_lab[anio][j]) + ", " + str(c_labr[anio][j]) + "], "  # Valores para cada sección de la torta
+                    if h == 13:
+                        html += "'data': [" + str(c_enf[anio][j]) + ", " + str(c_enfr[anio][j]) + "], "  # Valores para cada sección de la torta
+                    if h == 14:
+                        html += "'data': [" + str(c_med[anio][j]) + ", " + str(c_medr[anio][j]) + "], "  # Valores para cada sección de la torta
+                    if h == 15:
+                        html += "'data': [" + str(c_bio[anio][j]) + ", " + str(c_bior[anio][j]) + "], "  # Valores para cada sección de la torta
+                    if h == 16:
+                        html += "'data': [" + str(c_cso[anio][j]) + ", " + str(c_csor[anio][j]) + "], "  # Valores para cada sección de la torta
+                    if h == 17:
+                        html += "'data': [" + str(c_quim[anio][j]) + ", " + str(c_quimr[anio][j]) + "], "  # es de la carrera de bioquimica
+
+                    html += "'backgroundColor': ['blue', 'red'] "  # Colores para cada sección
+                    html += "}]"
+                    html += "};"
+                    html += "var options = {"
+                    html += "'responsive': true,"
+                    html += "'maintainAspectRatio': false"
+                    html += "};"
+
+                    html+="var ctx = document.getElementById('graficaCurso"+str(i)+str(k)+str(j)+"').getContext('2d');"
+                    html+="var myPieChart = new Chart(ctx, {"
+                    html+=" type: 'pie',"
+                    html+=" data: data,"
+                    html+=" options: options"
+                    html+="});"
+                k = k + 1
+            h = h + 1
             html += "</script>"
         #para las areass
         for i in range(len(areasU)):#creamos un grafico para cada canvas
