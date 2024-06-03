@@ -24,11 +24,44 @@ ac = {
 }
 #en la base de datos las carreras comienza de 1
 #pero como los array comienzan en 0 por eso resto una posicion
-
-
 areasU = {
 0:'Tecnologia',1:"Salud",2:"Sociales"
 }
+
+c_infor = {}#xontar estudiantes aprobados por carrera y curso
+c_inforr = {}#contar estudiantes reprobados por carrera y cursos
+c_civil = {}#xontar estudiantes aprobados por carrera y curso
+c_civilr = {}#contar estudiantes reprobados por carrera y cursos
+c_minas = {}#xontar estudiantes aprobados por carrera y curso
+c_minasr = {}#contar estudiantes reprobados por carrera y cursos
+c_elec = {}#xontar estudiantes aprobados por carrera y curso
+c_elecr = {}#contar estudiantes reprobados por carrera y cursos
+c_mec = {}#xontar estudiantes aprobados por carrera y curso
+c_mecr = {}#contar estudiantes reprobados por carrera y cursos
+c_agro = {}#xontar estudiantes aprobados por carrera y curso
+c_agror = {}#contar estudiantes reprobados por carrera y cursos
+c_lit = {}#xontar estudiantes aprobados por carrera y curso
+c_litr = {}#contar estudiantes reprobados por carrera y cursos
+c_der = {}#xontar estudiantes aprobados por carrera y curso
+c_derr = {}#contar estudiantes reprobados por carrera y cursos
+c_cie = {}#xontar estudiantes aprobados por carrera y curso
+c_cier = {}#contar estudiantes reprobados por carrera y cursos
+c_cont = {}#xontar estudiantes aprobados por carrera y curso
+c_contr = {}#contar estudiantes reprobados por carrera y cursos
+c_odon = {}#xontar estudiantes aprobados por carrera y curso
+c_odonr = {}#contar estudiantes reprobados por carrera y cursos
+c_lab = {}#xontar estudiantes aprobados por carrera y curso
+c_labr = {}#contar estudiantes reprobados por carrera y cursos
+c_enf = {}#xontar estudiantes aprobados por carrera y curso
+c_enfr = {}#contar estudiantes reprobados por carrera y cursos
+c_med = {}#xontar estudiantes aprobados por carrera y curso
+c_medr = {}#contar estudiantes reprobados por carrera y cursos
+c_bio = {}#xontar estudiantes aprobados por carrera y curso
+c_bior = {}#contar estudiantes reprobados por carrera y cursos
+c_cso = {}#xontar estudiantes aprobados por carrera y curso
+c_csor = {}#contar estudiantes reprobados por carrera y cursos
+c_quim = {}#xontar estudiantes aprobados por carrera y curso
+c_quimr = {}#contar estudiantes reprobados por carrera y cursos
 def  retornar_valores(datos,ress):
     accion1 = ress[-2]
     print("la accion es : ",accion1)
@@ -534,40 +567,6 @@ def  retornar_valores(datos,ress):
         ctec = 0
         csal = 0
         csoc = 0
-        c_infor = {}#xontar estudiantes aprobados por carrera y curso
-        c_inforr = {}#contar estudiantes reprobados por carrera y cursos
-        c_civil = {}#xontar estudiantes aprobados por carrera y curso
-        c_civilr = {}#contar estudiantes reprobados por carrera y cursos
-        c_minas = {}#xontar estudiantes aprobados por carrera y curso
-        c_minasr = {}#contar estudiantes reprobados por carrera y cursos
-        c_elec = {}#xontar estudiantes aprobados por carrera y curso
-        c_elecr = {}#contar estudiantes reprobados por carrera y cursos
-        c_mec = {}#xontar estudiantes aprobados por carrera y curso
-        c_mecr = {}#contar estudiantes reprobados por carrera y cursos
-        c_agro = {}#xontar estudiantes aprobados por carrera y curso
-        c_agror = {}#contar estudiantes reprobados por carrera y cursos
-        c_lit = {}#xontar estudiantes aprobados por carrera y curso
-        c_litr = {}#contar estudiantes reprobados por carrera y cursos
-        c_der = {}#xontar estudiantes aprobados por carrera y curso
-        c_derr = {}#contar estudiantes reprobados por carrera y cursos
-        c_cie = {}#xontar estudiantes aprobados por carrera y curso
-        c_cier = {}#contar estudiantes reprobados por carrera y cursos
-        c_cont = {}#xontar estudiantes aprobados por carrera y curso
-        c_contr = {}#contar estudiantes reprobados por carrera y cursos
-        c_odon = {}#xontar estudiantes aprobados por carrera y curso
-        c_odonr = {}#contar estudiantes reprobados por carrera y cursos
-        c_lab = {}#xontar estudiantes aprobados por carrera y curso
-        c_labr = {}#contar estudiantes reprobados por carrera y cursos
-        c_enf = {}#xontar estudiantes aprobados por carrera y curso
-        c_enfr = {}#contar estudiantes reprobados por carrera y cursos
-        c_med = {}#xontar estudiantes aprobados por carrera y curso
-        c_medr = {}#contar estudiantes reprobados por carrera y cursos
-        c_bio = {}#xontar estudiantes aprobados por carrera y curso
-        c_bior = {}#contar estudiantes reprobados por carrera y cursos
-        c_cso = {}#xontar estudiantes aprobados por carrera y curso
-        c_csor = {}#contar estudiantes reprobados por carrera y cursos
-        c_quim = {}#xontar estudiantes aprobados por carrera y curso
-        c_quimr = {}#contar estudiantes reprobados por carrera y cursos
         a11 = int(obtener_ano_de_fecha(fecha1))
         a22 = int(obtener_ano_de_fecha(fecha2))
         a1 = int(obtener_ano_de_fecha(fecha1))
@@ -891,9 +890,588 @@ def  retornar_valores(datos,ress):
             html+=" options: options"
             html+="});"
             html += "</script>"
+    if accion1 == "seleccionar_estudiantes_desertores":
+        fecha1 = ress[0]
+        fecha2 = ress[1]
+        if fecha1>fecha2:
+            aux = fecha1
+            fecha1 = fecha2
+            fecha2 = aux
+        vapro = [0] * 17
+        vaplaz = [0] * 17
+        vareasApro = [0] * 3
+        vareasApla = [0] * 3
+        capro = 0
+        caplaz = 0
+        cdes = 0
+        cndes = 0
+        total = 0
+        ctec = 0
+        csal = 0
+        csoc = 0
+        a11 = int(obtener_ano_de_fecha(fecha1))
+        a22 = int(obtener_ano_de_fecha(fecha2))
+        a1 = int(obtener_ano_de_fecha(fecha1))
+        a2 = int(obtener_ano_de_fecha(fecha2))
+        for anio in range(a1, a2 + (1)):
+            print(anio, "  el ano es " )
+            c_infor[anio] = [0,0,0,0,0]
+            c_inforr[anio] = [0,0,0,0,0]
+            c_civil[anio] = [0,0,0,0,0]
+            c_civilr[anio] = [0,0,0,0,0]
+            c_minas[anio] = [0,0,0,0,0]
+            c_minasr[anio] = [0,0,0,0,0]
+            c_elec[anio] = [0,0,0,0,0]
+            c_elecr[anio] = [0,0,0,0,0]
+            c_mec[anio] = [0,0,0,0,0]
+            c_mecr[anio] = [0,0,0,0,0]
+            c_agro[anio] = [0,0,0,0,0]
+            c_agror[anio] = [0,0,0,0,0]
+            c_lit[anio] = [0,0,0,0,0]
+            c_litr[anio] = [0,0,0,0,0]
+            c_der[anio] = [0,0,0,0,0]
+            c_derr[anio] = [0,0,0,0,0]
+            c_cie[anio] = [0,0,0,0,0]
+            c_cier[anio] = [0,0,0,0,0]
+            c_cont[anio] = [0,0,0,0,0]
+            c_contr[anio] = [0,0,0,0,0]
+            c_odon[anio] = [0,0,0,0,0]
+            c_odonr[anio] = [0,0,0,0,0]
+            c_lab[anio] = [0,0,0,0,0]
+            c_labr[anio] = [0,0,0,0,0]
+            c_enf[anio] = [0,0,0,0,0]
+            c_enfr[anio] = [0,0,0,0,0]
+            c_med[anio] = [0,0,0,0,0]
+            c_medr[anio] = [0,0,0,0,0]
+            c_bio[anio] = [0,0,0,0,0]
+            c_bior[anio] = [0,0,0,0,0]
+            c_cso[anio] = [0,0,0,0,0]
+            c_csor[anio] = [0,0,0,0,0]
+            c_quim[anio] = [0,0,0,0,0]
+            c_quimr[anio] = [0,0,0,0,0]
+        #carreras_a= [carreraa[0] for carreraa in ro]#aqui tengo todas las carreras pero sus id
+        curso ={0:'1er año',1:"2do año",2:"3er año",3:'4to año',4:'5to año'}
+        guardar = []
+        guardar1 = []
+        if isinstance(fecha1, str):
+            fecha1 = datetime.strptime(fecha1, "%Y-%m-%d").date()
+        if isinstance(fecha2, str):
+            fecha2 = datetime.strptime(fecha2, "%Y-%m-%d").date()
+        for row in datos:
+            if row[2] == "no":#no abandonaron
+                capro += 1
+                vapro[row[5]-1] += 1
+                vareasApro[row[7]-1] += 1
+            elif row[2] == "si":#si abandonaron
+                caplaz += 1
+                vaplaz[row[5]-1] += 1
+                vareasApla[row[7]-1] += 1
 
-        html += "</container>"
+            if row[8]>=fecha1 and row[8] <= fecha2:#la fecha obtenidad tiene que estar en ese rango
+
+                anoBD = int(obtener_ano_de_fecha(row[8].strftime("%Y-%m-%d")))
+
+                if row[2] == "no":
+                    if row[5] == 1:
+                        c_infor[anoBD][row[3]-1]+=1
+                    if row[5] == 2:
+                        c_civil[anoBD][row[3]-1]+=1
+                    if row[5] == 3:
+                        c_minas[anoBD][row[3]-1]+=1
+                    if row[5] == 4:
+                        c_elec[anoBD][row[3]-1]+=1
+                    if row[5] == 5:
+                        c_mec[anoBD][row[3]-1]+=1
+                    if row[5] == 6:
+                        c_agro[anoBD][row[3]-1]+=1
+                    if row[5] == 7:
+                        c_lit[anoBD][row[3]-1]+=1
+                    if row[5] == 8:
+                        c_der[anoBD][row[3]-1]+=1
+                    if row[5] == 9:
+                        c_cie[anoBD][row[3]-1]+=1
+                    if row[5] == 10:
+                        c_cont[anoBD][row[3]-1]+=1
+                    if row[5] == 11:
+                        c_odon[anoBD][row[3]-1]+=1
+                    if row[5] == 12:
+                        c_lab[anoBD][row[3]-1]+=1
+                    if row[5] == 13:
+                        c_enf[anoBD][row[3]-1]+=1
+                    if row[5] == 14:
+                        c_med[anoBD][row[3]-1]+=1
+                    if row[5] == 15:
+                        c_bio[anoBD][row[3]-1]+=1
+                    if row[5] == 16:
+                        c_cso[anoBD][row[3]-1]+=1
+                    if row[5] == 17:
+                        c_quim[anoBD][row[3]-1]+=1
+
+                elif row[2] == "si":
+                    if row[5] == 1:
+                        c_inforr[anoBD][row[3]-1]+=1
+                    if row[5] == 2:
+                        c_civilr[anoBD][row[3]-1]+=1
+                    if row[5] == 3:
+                        c_minasr[anoBD][row[3]-1]+=1
+                    if row[5] == 4:
+                        c_elecr[anoBD][row[3]-1]+=1
+                    if row[5] == 5:
+                        c_mecr[anoBD][row[3]-1]+=1
+                    if row[5] == 6:
+                        c_agror[anoBD][row[3]-1]+=1
+                    if row[5] == 7:
+                        c_litr[anoBD][row[3]-1]+=1
+                    if row[5] == 8:
+                        c_derr[anoBD][row[3]-1]+=1
+                    if row[5] == 9:
+                        c_cier[anoBD][row[3]-1]+=1
+                    if row[5] == 10:
+                        c_contr[anoBD][row[3]-1]+=1
+                    if row[5] == 11:
+                        c_odonr[anoBD][row[3]-1]+=1
+                    if row[5] == 12:
+                        c_labr[anoBD][row[3]-1]+=1
+                    if row[5] == 13:
+                        c_enfr[anoBD][row[3]-1]+=1
+                    if row[5] == 14:
+                        c_medr[anoBD][row[3]-1]+=1
+                    if row[5] == 15:
+                        c_bior[anoBD][row[3]-1]+=1
+                    if row[5] == 16:
+                        c_csor[anoBD][row[3]-1]+=1
+                    if row[5] == 17:
+                        c_quimr[anoBD][row[3]-1]+=1
+
+        mensaje = "La cantidad de estudiantes que desertaron "
+        mensaje += "es lo siguiente por área y carreras"
+        html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
+        # Crear el gráfico de torta
+        html += "<div class='row bg-warning'style = 'border: 1px solid black;'>"
+        html += "<h5 align='center'>Total</h5>"
+        html += "<div class='col-lg-12'>"
+        html += "<div class='panel panel-default text-center bg-light' style = 'border: 1px solid black;'>"
+        html += "<div class='panel-heading'>"
+        html += "</div>"
+        html += "<div class='panel-body'>"
+        html += "<center><h6>Estudiantes que siguen son: "+str(capro)+"</h6></center>"
+        html += "<center><h6>Estudiantes que abandonaron son: "+str(caplaz)+"</h6></center>"
+        html += "</div>"
+        html += "</div>"
+        html += "</div>"
+        html += "</div>"
+        html += "<br>"
+        #crear para areas
+        html += "<div class='row bg-warning'style = 'border: 1px solid black;'>"
+        html += "<h4 align='center'>Areas</h4>"
+        print("areas son ",len(areasU), areasU[1])
+        for i in range(len(areasU)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
+            html += "<div class='col-lg-4'>"
+            html += "<div class='panel panel-default text-center bg-info' style = 'border: 1px solid black;'>"
+            html += "<div class='panel-heading'>"
+            html += areasU[i]
+            html += "</div>"
+            html += "<div class='panel-body'>"
+            html += "<center><h6>Estudiantes que siguen son: "+str(vareasApro[i])+"</h6></center>"
+            html += "<center><h6>Estudiantes que abandonaron son: "+str(vareasApla[i])+"</h6></center>"
+            html += "</div>"
+            html += "</div>"
+            html += "</div>"
+        html += "</div>"
+        html += "<br>"
+        h = 1
+
+        for i in range(17):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
+            html += "<div class='row bg-warning'>"
+            html += "<h5 align = 'center'>Carrera</h5>"
+            html += "<h6 align = 'center'>"+ac[i]+"</h6>"
+            html += "<div class='col-lg-12 p-4' style = 'background-color:RGBA(255, 250, 0, 0.5)'>"
+            html += "<div class='panel panel-default text-center'>"
+            html += "<div class='panel-heading'>"
+            html += "</div>"
+            html += "<div class='panel-body'>"
+            html += "<center><h6>Estudiantes que siguen son: "+str(vapro[i])+"</h6></center>"
+            html += "<center><h6>Estudiantes que abandonaron son: "+str(vaplaz[i])+"</h6></center>"
+            html += "</div>"
+            html += "</div>"
+            html += "</div>"
+            html += "</div>"
+            html += "<div class='row'>"
+            k = 0
+            for anio in range(a1, a2 + 1):#recorremos las fechas
+                html += "<h6 align='center'>Año "+str(anio)+"</h6>"
+                for j in range(5):#recorremos todos los cursos aprobados por año
+
+                    html += "<div class='col-lg-3' style = 'background-color:RGBA(0, 255, 250, 0.3);border: 1px solid black;'>"
+                    html += "<div class='panel panel-default text-center'>"
+                    html += "<div class='panel-heading'>"
+                    html += "<b>"+curso[j]+"</b>"
+                    html += "</div>"
+                    html += "<div class='panel-body'>"
+                    if h == 1:
+                        html += "<h6>Estudiantes que siguen son: " + str(c_infor[anio][j]) + "</h6>"
+                        html +="<h6>Estudiantes que abandonaron son: " + str(c_inforr[anio][j]) + "</h6>"  # Valores para cada sección de la torta
+                    if h == 2:
+                        html += "<h6>Estudiantes que siguen son: " + str(c_civil[anio][j]) + "</h6>"
+                        html +="<h6>Estudiantes que abandonaron son: " + str(c_civilr[anio][j]) + "</h6>"  # Valores para cada sección de la torta
+                    if h == 3:
+                        html += "<h6>Estudiantes que siguen son: " + str(c_minas[anio][j]) + "</h6>"
+                        html +="<h6>Estudiantes que abandonaron son: " + str(c_minasr[anio][j]) + "</h6>"  # Valores para cada sección de la torta
+                    if h == 4:
+                        html += "<h6>Estudiantes que siguen son: " + str(c_elec[anio][j]) + "</h6>"
+                        html +="<h6>Estudiantes que abandonaron son: " + str(c_elecr[anio][j]) + "</h6>"  # Valores para cada sección de la torta
+                    if h == 5:
+                        html += "<h6>Estudiantes que siguen son: " + str(c_mec[anio][j]) + "</h6>"
+                        html +="<h6>Estudiantes que abandonaron son: " + str(c_mecr[anio][j]) + "</h6>"  # Valores para cada sección de la torta
+                    if h == 6:
+                        html += "<h6>Estudiantes que siguen son: " + str(c_agro[anio][j]) + "</h6>"
+                        html +="<h6>Estudiantes que abandonaron son: " + str(c_agror[anio][j]) + "</h6>"  # Valores para cada sección de la torta
+                    if h == 7:
+                        html += "<h6>Estudiantes que siguen son: " + str(c_lit[anio][j]) + "</h6>"
+                        html +="<h6>Estudiantes que abandonaron son: " + str(c_litr[anio][j]) + "</h6>"  # Valores para cada sección de la torta
+                    if h == 8:
+                        html += "<h6>Estudiantes que siguen son: " + str(c_der[anio][j]) + "</h6>"
+                        html +="<h6>Estudiantes que abandonaron son: " + str(c_derr[anio][j]) + "</h6>"  # Valores para cada sección de la torta
+                    if h == 9:
+                        html += "<h6>Estudiantes que siguen son: " + str(c_cie[anio][j]) + "</h6>"
+                        html +="<h6>Estudiantes que abandonaron son: " + str(c_cier[anio][j]) + "</h6>"  # Valores para cada sección de la torta
+                    if h == 10:
+                        html += "<h6>Estudiantes que siguen son: " + str(c_cont[anio][j]) + "</h6>"
+                        html +="<h6>Estudiantes que abandonaron son: " + str(c_contr[anio][j]) + "</h6>"  # Valores para cada sección de la torta
+                    if h == 11:
+                        html += "<h6>Estudiantes que siguen son: " + str(c_odon[anio][j]) + "</h6>"
+                        html +="<h6>Estudiantes que abandonaron son: " + str(c_odonr[anio][j]) + "</h6>"  # Valores para cada sección de la torta
+                    if h == 12:
+                        html += "<h6>Estudiantes que siguen son: " + str(c_lab[anio][j]) + "</h6>"
+                        html +="<h6>Estudiantes que abandonaron son: " + str(c_labr[anio][j]) + "</h6>"  # Valores para cada sección de la torta
+                    if h == 13:
+                        html += "<h6>Estudiantes que siguen son: " + str(c_enf[anio][j]) + "</h6>"
+                        html +="<h6>Estudiantes que abandonaron son: " + str(c_enfr[anio][j]) + "</h6>"  # Valores para cada sección de la torta
+                    if h == 14:
+                        html += "<h6>Estudiantes que siguen son: " + str(c_med[anio][j]) + "</h6>"
+                        html +="<h6>Estudiantes que abandonaron son: " + str(c_medr[anio][j]) + "</h6>"  # Valores para cada sección de la torta
+                    if h == 15:
+                        html += "<h6>Estudiantes que siguen son: " + str(c_bio[anio][j]) + "</h6>"
+                        html +="<h6>Estudiantes que abandonaron son: " + str(c_bior[anio][j]) + "</h6>"  # Valores para cada sección de la torta
+                    if h == 16:
+                        html += "<h6>Estudiantes que siguen son: " + str(c_cso[anio][j]) + "</h6>"
+                        html +="<h6>Estudiantes que abandonaron son: " + str(c_csor[anio][j]) + "</h6>"  # Valores para cada sección de la torta
+                    if h == 17:
+                        html += "<h6>Estudiantes que siguen son: " + str(c_quim[anio][j]) + "</h6>"
+                        html +="<h6>Estudiantes que abandonaron son: " + str(c_quimr[anio][j]) + "</h6>"  # Valores para cada sección de la torta
+                    html += "</div>"
+                    html += "</div>"
+                    html += "</div>"
+                k = k + 1
+            h = h + 1
+            html += "</div>"
+            html += "<br>"
+    if accion1 == "diferencia_entre_primero_quinto":
+        fecha1 = ress[0]
+        fecha2 = ress[1]
+        if fecha1>fecha2:
+            aux = fecha1
+            fecha1 = fecha2
+            fecha2 = aux
+        vapro = [0] * 17
+        vaplaz = [0] * 17
+        vareasApro = [0] * 3
+        vareasApla = [0] * 3
+        capro = 0
+        caplaz = 0
+        cdes = 0
+        cndes = 0
+        total = 0
+        ctec = 0
+        csal = 0
+        csoc = 0
+        a11 = int(obtener_ano_de_fecha(fecha1))
+        a22 = int(obtener_ano_de_fecha(fecha2))
+        a1 = int(obtener_ano_de_fecha(fecha1))
+        a2 = int(obtener_ano_de_fecha(fecha2))
+        for anio in range(a1, a2 + (1)):
+            c_infor[anio] = [0,0,0,0,0]
+            c_inforr[anio] = [0,0,0,0,0]
+            c_civil[anio] = [0,0,0,0,0]
+            c_civilr[anio] = [0,0,0,0,0]
+            c_minas[anio] = [0,0,0,0,0]
+            c_minasr[anio] = [0,0,0,0,0]
+            c_elec[anio] = [0,0,0,0,0]
+            c_elecr[anio] = [0,0,0,0,0]
+            c_mec[anio] = [0,0,0,0,0]
+            c_mecr[anio] = [0,0,0,0,0]
+            c_agro[anio] = [0,0,0,0,0]
+            c_agror[anio] = [0,0,0,0,0]
+            c_lit[anio] = [0,0,0,0,0]
+            c_litr[anio] = [0,0,0,0,0]
+            c_der[anio] = [0,0,0,0,0]
+            c_derr[anio] = [0,0,0,0,0]
+            c_cie[anio] = [0,0,0,0,0]
+            c_cier[anio] = [0,0,0,0,0]
+            c_cont[anio] = [0,0,0,0,0]
+            c_contr[anio] = [0,0,0,0,0]
+            c_odon[anio] = [0,0,0,0,0]
+            c_odonr[anio] = [0,0,0,0,0]
+            c_lab[anio] = [0,0,0,0,0]
+            c_labr[anio] = [0,0,0,0,0]
+            c_enf[anio] = [0,0,0,0,0]
+            c_enfr[anio] = [0,0,0,0,0]
+            c_med[anio] = [0,0,0,0,0]
+            c_medr[anio] = [0,0,0,0,0]
+            c_bio[anio] = [0,0,0,0,0]
+            c_bior[anio] = [0,0,0,0,0]
+            c_cso[anio] = [0,0,0,0,0]
+            c_csor[anio] = [0,0,0,0,0]
+            c_quim[anio] = [0,0,0,0,0]
+            c_quimr[anio] = [0,0,0,0,0]
+        #carreras_a= [carreraa[0] for carreraa in ro]#aqui tengo todas las carreras pero sus id
+        curso ={0:'1er año',1:"2do año",2:"3er año",3:'4to año',4:'5to año'}
+        guardar = []
+        guardar1 = []
+        if isinstance(fecha1, str):
+            fecha1 = datetime.strptime(fecha1, "%Y-%m-%d").date()
+        if isinstance(fecha2, str):
+            fecha2 = datetime.strptime(fecha2, "%Y-%m-%d").date()
+        for row in datos:
+            if row[3] == 1:#contar los de primer año
+                capro += 1
+                vapro[row[5]-1] += 1
+                vareasApro[row[7]-1] += 1
+            elif row[3] == 5:#contar los de 5to añp
+                caplaz += 1
+                vaplaz[row[5]-1] += 1
+                vareasApla[row[7]-1] += 1
+
+            if row[8]>=fecha1 and row[8] <= fecha2:#la fecha obtenidad tiene que estar en ese rango
+
+                anoBD = int(obtener_ano_de_fecha(row[8].strftime("%Y-%m-%d")))
+
+                if row[3] == 1:#contamos solo de primer año
+                    if row[5] == 1:
+                        c_infor[anoBD][0]+=1
+                    if row[5] == 2:
+                        c_civil[anoBD][0]+=1
+                    if row[5] == 3:
+                        c_minas[anoBD][0]+=1
+                    if row[5] == 4:
+                        c_elec[anoBD][0]+=1
+                    if row[5] == 5:
+                        c_mec[anoBD][0]+=1
+                    if row[5] == 6:
+                        c_agro[anoBD][0]+=1
+                    if row[5] == 7:
+                        c_lit[anoBD][0]+=1
+                    if row[5] == 8:
+                        c_der[anoBD][0]+=1
+                    if row[5] == 9:
+                        c_cie[anoBD][0]+=1
+                    if row[5] == 10:
+                        c_cont[anoBD][0]+=1
+                    if row[5] == 11:
+                        c_odon[anoBD][0]+=1
+                    if row[5] == 12:
+                        c_lab[anoBD][0]+=1
+                    if row[5] == 13:
+                        c_enf[anoBD][0]+=1
+                    if row[5] == 14:
+                        c_med[anoBD][0]+=1
+                    if row[5] == 15:
+                        c_bio[anoBD][0]+=1
+                    if row[5] == 16:
+                        c_cso[anoBD][0]+=1
+                    if row[5] == 17:
+                        c_quim[anoBD][0]+=1
+
+                elif row[3] == 5 and row[1] == "aprobado":#contamos solo de 5to año y aprobados
+                    if row[5] == 1:
+                        c_inforr[anoBD][0]+=1
+                    if row[5] == 2:
+                        c_civilr[anoBD][0]+=1
+                    if row[5] == 3:
+                        c_minasr[anoBD][0]+=1
+                    if row[5] == 4:
+                        c_elecr[anoBD][0]+=1
+                    if row[5] == 5:
+                        c_mecr[anoBD][0]+=1
+                    if row[5] == 6:
+                        c_agror[anoBD][0]+=1
+                    if row[5] == 7:
+                        c_litr[anoBD][0]+=1
+                    if row[5] == 8:
+                        c_derr[anoBD][0]+=1
+                    if row[5] == 9:
+                        c_cier[anoBD][0]+=1
+                    if row[5] == 10:
+                        c_contr[anoBD][0]+=1
+                    if row[5] == 11:
+                        c_odonr[anoBD][0]+=1
+                    if row[5] == 12:
+                        c_labr[anoBD][0]+=1
+                    if row[5] == 13:
+                        c_enfr[anoBD][0]+=1
+                    if row[5] == 14:
+                        c_medr[anoBD][0]+=1
+                    if row[5] == 15:
+                        c_bior[anoBD][0]+=1
+                    if row[5] == 16:
+                        c_csor[anoBD][0]+=1
+                    if row[5] == 17:
+                        c_quimr[anoBD][0]+=1
+
+        mensaje = "La cantidad de estudiantes que concluyeron sus estudios en relacion a 1er año"
+        mensaje += " por áreas y carreras, detallamos en los siguientes cuadros"
+        html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
+        # Crear el gráfico de torta
+        html += "<div class='row bg-warning'style = 'border: 1px solid black;'>"
+        html += "<h5 align='center'>Total</h5>"
+        html += "<div class='col-lg-12'>"
+        html += "<div class='panel panel-default text-center bg-light' style = 'border: 1px solid black;'>"
+        html += "<div class='panel-heading'>"
+        html += "</div>"
+        html += "<div class='panel-body'>"
+        html += "<center><h6>Los estudiantes de 1er año son "+str(capro)+"</h6></center>"
+        html += "<center><h6>y estudiantes de 5to año que conluyeron sus estudios son "+str(caplaz)+"</h6></center>"
+        html += menCOncluyeron(capro,caplaz)
+        html += "</div>"
+        html += "</div>"
+        html += "</div>"
+        html += "</div>"
+        html += "<br>"
+        #crear para areas
+        html += "<div class='row bg-warning'style = 'border: 1px solid black;'>"
+        html += "<h4 align='center'>Areas</h4>"
+        print("areas son ",len(areasU), areasU[1])
+        for i in range(len(areasU)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
+            html += "<div class='col-lg-4'>"
+            html += "<div class='panel panel-default text-center' style = 'background-color:RGBA(255, 250, 0, 0.5);border: 1px solid black;'>"
+            html += "<div class='panel-heading'>"
+            html += areasU[i]
+            html += "</div>"
+            html += "<div class='panel-body'>"
+            html += "<center><h6>Los estudiantes de 1er año son "+str(vareasApro[i])+"</h6></center>"
+            html += "<center><h6>y estudiantes de 5to año que conluyeron sus estudios son "+str(vareasApla[i])+"</h6></center>"
+            html += menCOncluyeron(vareasApro[i],vareasApla[i])
+            html += "</div>"
+            html += "</div>"
+            html += "</div>"
+        html += "</div>"
+        html += "<br>"
+        h = 1
+
+        for i in range(17):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
+            html += "<div class='row bg-warning'>"
+            html += "<h5 align = 'center'>Carrera</h5>"
+            html += "<h6 align = 'center'>"+ac[i]+"</h6>"
+            html += "<div class='col-lg-12 p-4' style = 'background-color:RGBA(255, 250, 0, 0.5)'>"
+            html += "<div class='panel panel-default text-center'>"
+            html += "<div class='panel-heading'>"
+            html += "</div>"
+            html += "<div class='panel-body'>"
+            html += "<center><h6>Los estudiantes de 1er año son "+str(vapro[i])+"</h6></center>"
+            html += "<center><h6>y estudiantes de 5to año que conluyeron sus estudios son "+str(vaplaz[i])+"</h6></center>"
+            html += menCOncluyeron(vapro[i],vaplaz[i])
+            html += "</div>"
+            html += "</div>"
+            html += "</div>"
+            html += "</div>"
+            html += "<div class='row'>"
+            k = 0
+            for anio in range(a1, a2 + 1):#recorremos las fechas
+                html += "<h6 align='center'>Año "+str(anio)+"</h6>"
+                for j in range(1):#recorremos todos los cursos aprobados por año
+                    html += "<div class='col-lg-12' style = 'background-color:RGBA(0, 255, 250, 0.3);border: 1px solid black;'>"
+                    html += "<div class='panel panel-default text-center'>"
+                    html += "<div class='panel-heading'>"
+
+                    html += "</div>"
+                    html += "<div class='panel-body'>"
+                    if h == 1:
+                        html += "<h6>Los estudiantes de 1er año son " + str(c_infor[anio][j]) + "</h6>"
+                        html +="<h6>y estudiantes de 5to año que conluyeron sus estudios son " + str(c_inforr[anio][j]) + "</h6>"  # Valores para cada sección de la torta
+                        html += menCOncluyeron(c_infor[anio][j],c_inforr[anio][j])
+                    if h == 2:
+                        html += "<h6>Los estudiantes de 1er año son " + str(c_civil[anio][j]) + "</h6>"
+                        html +="<h6>y estudiantes de 5to año que conluyeron sus estudios son " + str(c_civilr[anio][j]) + "</h6>"  # Valores para cada sección de la torta
+                        html += menCOncluyeron(c_civil[anio][j],c_civilr[anio][j])
+                    if h == 3:
+                        html += "<h6>Los estudiantes de 1er año son " + str(c_minas[anio][j]) + "</h6>"
+                        html +="<h6>y estudiantes de 5to año que conluyeron sus estudios son " + str(c_minasr[anio][j]) + "</h6>"  # Valores para cada sección de la torta
+                        html += menCOncluyeron(c_minas[anio][j],c_minasr[anio][j])
+                    if h == 4:
+                        html += "<h6>Los estudiantes de 1er año son " + str(c_elec[anio][j]) + "</h6>"
+                        html +="<h6>y estudiantes de 5to año que conluyeron sus estudios son " + str(c_elecr[anio][j]) + "</h6>"  # Valores para cada sección de la torta
+                        html += menCOncluyeron(c_elec[anio][j],c_elecr[anio][j])
+                    if h == 5:
+                        html += "<h6>Los estudiantes de 1er año son " + str(c_mec[anio][j]) + "</h6>"
+                        html +="<h6>y estudiantes de 5to año que conluyeron sus estudios son " + str(c_mecr[anio][j]) + "</h6>"  # Valores para cada sección de la torta
+                        html += menCOncluyeron(c_mec[anio][j],c_mecr[anio][j])
+                    if h == 6:
+                        html += "<h6>Los estudiantes de 1er año son " + str(c_agro[anio][j]) + "</h6>"
+                        html +="<h6>y estudiantes de 5to año que conluyeron sus estudios son " + str(c_agror[anio][j]) + "</h6>"  # Valores para cada sección de la torta
+                        html += menCOncluyeron(c_agro[anio][j],c_agror[anio][j])
+                    if h == 7:
+                        html += "<h6>Los estudiantes de 1er año son " + str(c_lit[anio][j]) + "</h6>"
+                        html +="<h6>y estudiantes de 5to año que conluyeron sus estudios son " + str(c_litr[anio][j]) + "</h6>"  # Valores para cada sección de la torta
+                        html += menCOncluyeron(c_lit[anio][j],c_litr[anio][j])
+                    if h == 8:
+                        html += "<h6>Los estudiantes de 1er año son " + str(c_der[anio][j]) + "</h6>"
+                        html +="<h6>y estudiantes de 5to año que conluyeron sus estudios son " + str(c_derr[anio][j]) + "</h6>"  # Valores para cada sección de la torta
+                        html += menCOncluyeron(c_der[anio][j],c_derr[anio][j])
+                    if h == 9:
+                        html += "<h6>Los estudiantes de 1er año son " + str(c_cie[anio][j]) + "</h6>"
+                        html +="<h6>y estudiantes de 5to año que conluyeron sus estudios son " + str(c_cier[anio][j]) + "</h6>"  # Valores para cada sección de la torta
+                        html += menCOncluyeron(c_cie[anio][j],c_cier[anio][j])
+                    if h == 10:
+                        html += "<h6>Los estudiantes de 1er año son " + str(c_cont[anio][j]) + "</h6>"
+                        html +="<h6>y estudiantes de 5to año que conluyeron sus estudios son " + str(c_contr[anio][j]) + "</h6>"  # Valores para cada sección de la torta
+                        html += menCOncluyeron(c_cont[anio][j],c_contr[anio][j])
+                    if h == 11:
+                        html += "<h6>Los estudiantes de 1er año son " + str(c_odon[anio][j]) + "</h6>"
+                        html +="<h6>y estudiantes de 5to año que conluyeron sus estudios son " + str(c_odonr[anio][j]) + "</h6>"  # Valores para cada sección de la torta
+                        html += menCOncluyeron(c_odon[anio][j],c_odonr[anio][j])
+                    if h == 12:
+                        html += "<h6>Los estudiantes de 1er año son " + str(c_lab[anio][j]) + "</h6>"
+                        html +="<h6>y estudiantes de 5to año que conluyeron sus estudios son " + str(c_labr[anio][j]) + "</h6>"  # Valores para cada sección de la torta
+                        html += menCOncluyeron(c_lab[anio][j],c_labr[anio][j])
+                    if h == 13:
+                        html += "<h6>Los estudiantes de 1er año son " + str(c_enf[anio][j]) + "</h6>"
+                        html +="<h6>y estudiantes de 5to año que conluyeron sus estudios son " + str(c_enfr[anio][j]) + "</h6>"  # Valores para cada sección de la torta
+                        html += menCOncluyeron(c_enf[anio][j],c_enfr[anio][j])
+                    if h == 14:
+                        html += "<h6>Los estudiantes de 1er año son " + str(c_med[anio][j]) + "</h6>"
+                        html +="<h6>y estudiantes de 5to año que conluyeron sus estudios son " + str(c_medr[anio][j]) + "</h6>"  # Valores para cada sección de la torta
+                        html += menCOncluyeron(c_med[anio][j],c_medr[anio][j])
+                    if h == 15:
+                        html += "<h6>Los estudiantes de 1er año son " + str(c_bio[anio][j]) + "</h6>"
+                        html +="<h6>y estudiantes de 5to año que conluyeron sus estudios son " + str(c_bior[anio][j]) + "</h6>"  # Valores para cada sección de la torta
+                        html += menCOncluyeron(c_bio[anio][j],c_bior[anio][j])
+                    if h == 16:
+                        html += "<h6>Los estudiantes de 1er año son " + str(c_cso[anio][j]) + "</h6>"
+                        html +="<h6>y estudiantes de 5to año que conluyeron sus estudios son " + str(c_csor[anio][j]) + "</h6>"  # Valores para cada sección de la torta
+                        html += menCOncluyeron(c_cso[anio][j],c_csor[anio][j])
+                    if h == 17:
+                        html += "<h6>Los estudiantes de 1er año son " + str(c_quim[anio][j]) + "</h6>"
+                        html +="<h6>y estudiantes de 5to año que conluyeron sus estudios son " + str(c_quimr[anio][j]) + "</h6>"  # Valores para cada sección de la torta
+                        html += menCOncluyeron(c_quim[anio][j],c_quimr[anio][j])
+                    html += "</div>"
+                    html += "</div>"
+                    html += "</div>"
+                k = k + 1
+            h = h + 1
+            html += "</div>"
+            html += "<br>"
+    html += "</container>"
+
     return html
+
+def menCOncluyeron(a,b):
+    if a == b:
+        return "<h6>la relación es pareja</h6>"
+    elif a > b:
+        return "<h6>hay menos estudiantes que concluyen sus estudios con relación a 1er año</h6>"
+    elif a < b:
+        return "<h6>existe mas estudiantes que concluyen sus estudios con relación a 1er año</h6>"
+
 
 
 
