@@ -44,3 +44,11 @@ for anio in range(inicio_anio, fin_anio + 1):
     array_personalizado[anio] = [5, 0, 0, 0, 0, 0]
 
 print(array_personalizado[2015][0])
+arr = {}
+for car in range(17):
+    ##enviamos el id de la carrera y el plan de estudio
+    arr[car] = {}
+    for anio in range(5):
+        arr[car][anio] = [5,7]
+
+print(arr[1][2][1])

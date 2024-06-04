@@ -17,7 +17,8 @@ sentencias = [
     "informacion estudiantes carrera unsxx universidad nacional siglo xx",
     "informacion estudiante carrera unsxx universidad nacional siglo xx",
     "informacion estudiantes unsxx universidad nacional siglo xx",
-    "informacion carreras area tecnologia salud social unsxx universidad nacional siglo xx",
+    "informacion carreras area areas tecnologia salud social unsxx universidad nacional siglo xx",
+    "cuales carreras area areas tecnologia salud social unsxx universidad nacional siglo xx",
     "informacion estudiantes area tecnologia salud social unsxx universidad nacional siglo xx",
     "informacion calificacion estudiante carrera unxx universidad nacional siglo xx",
     "estadistica estudiantes area areas carreras tecnologia salud social unsxx universidad nacional siglo xx",
@@ -28,7 +29,12 @@ sentencias = [
     "cuales materias estudiante unsxx universidad nacional siglo xx",
     "estadistica estudiantes desertores area areas carreras tecnologia salud social unsxx universidad nacional siglo xx",
     "estadistica estudiantes abandonaron dejaron estudios area areas carreras tecnologia salud social unsxx universidad nacional siglo xx",
-    "estadistica estudiantes concluyeron estudios area areas carreras tecnologia salud social unsxx universidad nacional siglo xx",
+    "estadistica estudiantes concluyeron estudioss areas carreras tecnologia salud social unsxx universidad nacional siglo xx",
+    "estadistica estudiantes desertores asignaturas especificas areas carreras tecnologia salud social unsxx universidad nacional siglo xx",
+    "cuales cantidad de estudiantes que dejaron asignaturas areas  carreras tecnologia salud social unsxx universidad nacional siglo xx",
+    "cuales cantidad de estudiantes que abandonaron asignaturas areas  carreras tecnologia salud social unsxx universidad nacional siglo xx",
+    "cuales cantidad de estudiantes que dejaron materias areas  carreras tecnologia salud social unsxx universidad nacional siglo xx",
+    "cuales cantidad de estudiantes que abandonaron materias areas  carreras tecnologia salud social unsxx universidad nacional siglo xx",
 
 ]
 # Definir la lista de pares
@@ -39,6 +45,7 @@ respuesta =[
 'total_de_estudiantes_carrera',
 'total_de_estudiantes_carrera',
 'estudiantes_de_unsxx',
+"seleccionar_carreras_area",
 "seleccionar_carreras_area",
 "estudiante_por_area",
 "seleccionar_asignatura_estudiante",
@@ -51,6 +58,11 @@ respuesta =[
 "seleccionar_estudiantes_desertores",
 "seleccionar_estudiantes_desertores",
 "diferencia_entre_primero_quinto",
+"asignaturas_desercion",
+"asignaturas_desercion",
+"asignaturas_desercion",
+"asignaturas_desercion",
+"asignaturas_desercion",
 ]
 consultas_sql = {
 "ver_carreras":"select *from carrera",
@@ -67,6 +79,7 @@ consultas_sql = {
 "total_de_estudiantes_estadisticas":"select * from estudiante_perdio",
 "seleccionar_estudiantes_desertores":"select * from estudiante_perdio",
 "diferencia_entre_primero_quinto":"select *from estudiante_perdio",
+"asignaturas_desercion":"select *from cursa_asignatura",
 }
 #e.estado = 'desactivo' or e.cod_area = 3 and e.sexo = 'femenino' or  e.sexo = 'masculino';"
 consultas_aux= {"activo_es" :" e.estado = 'activo'",
@@ -1127,11 +1140,13 @@ def buscar(texto):
             response = sql + response
             vec1.append(response)
         return vec1
+    if response == "asignaturas_desercion":
+        response = "asignaturas_desercion"
     else:
         vec1=[]
         vec1.append("argumentar_poco_mas")
         return vect1
-textoo = "informacion sobre la cantidad de estudiantes que terminaron sus estudios con relacion al primer año areas y carreras"
+textoo = "cuales es la cantidad de estudiantes que abandonaron sus asignaturas por areas y carreras"
 
 re = buscar(textoo)
 
