@@ -237,7 +237,7 @@ def seleccionarAreas():
         return "no"
 
 def seleccionarAsignatura(id_car,id_pe):
-    sql_consulta = "select *from asignatura where cod_carrera = "+id_car+" and cod_pe = "+id_pe#seleccionamos todos los estudiantes
+    sql_consulta = "select *from asignatura where cod_carrera = "+str(id_car)#seleccionamos todos los estudiantes
     conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
     # Crear un cursor para ejecutar consultas
     cursor = conn.cursor()
@@ -254,7 +254,7 @@ def seleccionarAsignatura(id_car,id_pe):
     else:
         return "no"
 def seleccionarAsignaturaAreas(id_car,id_pe):
-    sql_consulta = "select *from asignatura where cod_area = "+id_car+" and cod_pe = "+id_pe#seleccionamos todos los estudiantes
+    sql_consulta = "select *from asignatura where cod_area = "+str(id_car)#seleccionamos todos los estudiantes
     conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
     # Crear un cursor para ejecutar consultas
     cursor = conn.cursor()
@@ -290,6 +290,29 @@ def nombre_asignatura(id):
         conn.close()
         # Si se encuentra el estudiante, obtener sus datos
         nombres = estudiante[2]
+        return nombres
+    else:
+        # Si no hay resultados, devolver un mensaje indicando que no se encontró el estudiante
+        return "no"
+
+def nombre_carrera(id):
+
+    # Consulta SQL para seleccionar un estudiante por su ID
+    sql_consulta = "SELECT * FROM carrera WHERE cod_carrera = %s"
+    conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+    # Crear un cursor para ejecutar consultas
+    cursor = conn.cursor()
+    # Ejecutar la consulta SQL con el ID proporcionado como parámetro
+    cursor.execute(sql_consulta, (id))
+    # Verificar si hay algún resultado antes de obtenerlos
+    if cursor.rowcount > 0:
+        # Si hay resultados, obtener los datos de la consulta
+        estudiante = cursor.fetchone()
+        # Cerrar el cursor y la conexión
+        cursor.close()
+        conn.close()
+        # Si se encuentra el estudiante, obtener sus datos
+        nombres = estudiante[1]
         return nombres
     else:
         # Si no hay resultados, devolver un mensaje indicando que no se encontró el estudiante

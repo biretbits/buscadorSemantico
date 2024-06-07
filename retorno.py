@@ -1,7 +1,7 @@
 from flask import jsonify
 from sql import nombre_carrera_retor,grado_Estudiante,obtener_nombre,nombre_materia,obtener_datos_de_curso
 from sql import seleccionarAreas,seleccionar_carrera,seleccionarAsignaturaAreas,seleccionarAsignatura
-from sql import nombre_asignatura
+from sql import nombre_asignatura,nombre_carrera
 from comprobar import formatear_fecha_solo_ano,obtener_ano_de_fecha
 from datetime import datetime
 ac = {
@@ -1487,354 +1487,676 @@ def  retornar_valores(datos,ress):
         a2 = int(obtener_ano_de_fecha(fecha2))
         for ar in range(3):
             are = seleccionarAsignaturaAreas((ar+1),1)
-            vareasT[ar] = {}
-            vareasTr[ar]={}
-            varearS[ar]={}
-            vareasSr[ar]={}
-            vareasSo[ar]={}
-            vareasSor[ar]={}
-            for as in are:
-                if as[10] == 1:
-                    vareasT[ar][as[0]]=[0,as[10],as[0]]
-                    vareasTr[ar][as[0]]=[0,as[10],as[0]]
-                if as[10] == 2:
-                    vareasS[ar][as[0]]=[0,as[10],as[0]]
-                    vareasSr[ar][as[0]]=[0,as[10],as[0]]
-                if as[10] == 3:
-                    vareasSo[ar][as[0]]=[0,as[10],as[0]]
-                    vareasSor[ar][as[0]]=[0,as[10],as[0]]
+            vareasT[ar+1] = {}
+            vareasTr[ar+1]={}
+            vareasS[ar+1]={}
+            vareasSr[ar+1]={}
+            vareasSo[ar+1]={}
+            vareasSor[ar+1]={}
+            if are != "no":
+                for arr in are:
+                    if arr[10] == 1:
+                        vareasT[ar+1][arr[0]]=[0,arr[8],arr[0],arr[10]]
+                        vareasTr[ar+1][arr[0]]=[0,arr[8],arr[0],arr[10]]
+                    elif arr[10] == 2:
+                        vareasS[ar+1][arr[0]]=[0,arr[8],arr[0],arr[10]]
+                        vareasSr[ar+1][arr[0]]=[0,arr[8],arr[0],arr[10]]
+                    elif arr[10] == 3:
+                        vareasSo[ar+1][arr[0]]=[0,arr[8],arr[0],arr[10]]
+                        vareasSor[ar+1][arr[0]]=[0,arr[8],arr[0],arr[10]]
+
         for car in range(17):
             asig = seleccionarAsignatura((car+1),1)##enviamos el id de la carrera y el plan de estudio
-            for anio in range(a1, a2 + (1)):
-                c_infor[anio] = {}
-                c_civil[anio] = {}
-                c_minas[anio] = {}
-                c_elec[anio] = {}
-                c_mec[anio] = {}
-                c_agro[anio] = {}
-                c_lit[anio] = {}
-                c_der[anio] = {}
-                c_cie[anio] = {}
-                c_cont[anio] = {}
-                c_odon[anio] = {}
-                c_lab[anio] = {}
-                c_enf[anio] = {}
-                c_med[anio] = {}
-                c_bio[anio] = {}
-                c_cso[anio] = {}
-                c_quim[anio] = {}
-                for as in asig:
-                    if as[8] == 1:#carrera 1 informatica
-                    #año id de asignatura  = contar id grado id asignatura
-                        c_infor[anio][as[0]] = [0,as[9],as[0]]
-                        c_inforr[anio][as[0]] = [0,as[9],as[0]]
-                    if as[8] == 2:
-                        c_civil[anio][as[0]] = [0,as[9],as[0]]
-                        c_civilr[anio][as[0]] = [0,as[9],as[0]]
-                    if as[8] == 3
-                        c_minas[anio][as[0]] = [0,as[9],as[0]]
-                        c_minasr[anio][as[0]] = [0,as[9],as[0]]
-                    if as[8] == 4:
-                        c_elec[anio][as[0]] = [0,as[9],as[0]]
-                        c_elecr[anio][as[0]] = [0,as[9],as[0]]
-                    if as[8] == 5:
-                        c_mec[anio][as[0]] = [0,as[9],as[0]]
-                        c_mecr[anio][as[0]] = [0,as[9],as[0]]
-                    if as[8] == 6:
-                        c_agro[anio][as[0]] = [0,as[9],as[0]]
-                        c_agror[anio][as[0]] = [0,as[9],as[0]]
-                    if as[8] == 7:
-                        c_lit[anio][as[0]] = [0,as[9],as[0]]
-                        c_litr[anio][as[0]] = [0,as[9],as[0]]
-                    if as[8] == 8:
-                        c_der[anio][as[0]] = [0,as[9],as[0]]
-                        c_derr[anio][as[0]] = [0,as[9],as[0]]
-                    if as[8] == 9:
-                        c_cie[anio][as[0]] = [0,as[9],as[0]]
-                        c_cier[anio][as[0]] = [0,as[9],as[0]]
-                    if as[8] == 10:
-                        c_cont[anio][as[0]] = [0,as[9],as[0]]
-                        c_contr[anio][as[0]] = [0,as[9],as[0]]
-                    if as[8] == 11:
-                        c_odon[anio][as[0]] = [0,as[9],as[0]]
-                        c_odonr[anio][as[0]] = [0,as[9],as[0]]
-                    if as[8] == 12:
-                        c_lab[anio][as[0]] = [0,as[9],as[0]]
-                        c_labr[anio][as[0]] = [0,as[9],as[0]]
-                    if as[8] == 13:
-                        c_enf[anio][as[0]] = [0,as[9],as[0]]
-                        c_enfr[anio][as[0]] = [0,as[9],as[0]]
-                    if as[8] == 14:
-                        c_med[anio][as[0]] = [0,as[9],as[0]]
-                        c_medr[anio][as[0]] = [0,as[9],as[0]]
-                    if as[8] == 15:
-                        c_bio[anio][as[0]] = [0,as[9],as[0]]
-                        c_bior[anio][as[0]] = [0,as[9],as[0]]
-                    if as[8] == 16:
-                        c_cso[anio][as[0]] = [0,as[9],as[0]]
-                        c_csor[anio][as[0]] = [0,as[9],as[0]]
-                    if as[8] == 17:
-                        c_quim[anio][as[0]] = [0,as[9],as[0]]
-                        c_quimr[anio][as[0]] = [0,as[9],as[0]]
+            if asig != "no":
+                for anio in range(a1, a2 + (1)):
+                    c_infor[anio] = {}
+                    c_civil[anio] = {}
+                    c_minas[anio] = {}
+                    c_elec[anio] = {}
+                    c_mec[anio] = {}
+                    c_agro[anio] = {}
+                    c_lit[anio] = {}
+                    c_der[anio] = {}
+                    c_cie[anio] = {}
+                    c_cont[anio] = {}
+                    c_odon[anio] = {}
+                    c_lab[anio] = {}
+                    c_enf[anio] = {}
+                    c_med[anio] = {}
+                    c_bio[anio] = {}
+                    c_cso[anio] = {}
+                    c_quim[anio] = {}
+                    c_inforr[anio] = {}
+                    c_civilr[anio] = {}
+                    c_minasr[anio] = {}
+                    c_elecr[anio] = {}
+                    c_mecr[anio] = {}
+                    c_agror[anio] = {}
+                    c_litr[anio] = {}
+                    c_derr[anio] = {}
+                    c_cier[anio] = {}
+                    c_contr[anio] = {}
+                    c_odonr[anio] = {}
+                    c_labr[anio] = {}
+                    c_enfr[anio] = {}
+                    c_medr[anio] = {}
+                    c_bior[anio] = {}
+                    c_csor[anio] = {}
+                    c_quimr[anio] = {}
+                    for arr in asig:
+                        if arr[8] == 1:#carrera 1 informatica
+                        #año id de asignatura  = contar id grado id asignatura
+                            c_infor[anio][arr[0]] = [0,arr[9],arr[0]]
+                            c_inforr[anio][arr[0]] = [0,arr[9],arr[0]]
+                        elif arr[8] == 2:
+                            c_civil[anio][arr[0]] = [0,arr[9],arr[0]]
+                            c_civilr[anio][arr[0]] = [0,arr[9],arr[0]]
+                        elif arr[8] == 3:
+                            c_minas[anio][arr[0]] = [0,arr[9],arr[0]]
+                            c_minasr[anio][arr[0]] = [0,arr[9],arr[0]]
+                        elif arr[8] == 4:
+                            c_elec[anio][arr[0]] = [0,arr[9],arr[0]]
+                            c_elecr[anio][arr[0]] = [0,arr[9],arr[0]]
+                        elif arr[8] == 5:
+                            c_mec[anio][arr[0]] = [0,arr[9],arr[0]]
+                            c_mecr[anio][arr[0]] = [0,arr[9],arr[0]]
+                        elif arr[8] == 6:
+                            c_agro[anio][arr[0]] = [0,arr[9],arr[0]]
+                            c_agror[anio][arr[0]] = [0,arr[9],arr[0]]
+                        elif arr[8] == 7:
+                            c_lit[anio][arr[0]] = [0,arr[9],arr[0]]
+                            c_litr[anio][arr[0]] = [0,arr[9],arr[0]]
+                        elif arr[8] == 8:
+                            c_der[anio][arr[0]] = [0,arr[9],arr[0]]
+                            c_derr[anio][arr[0]] = [0,arr[9],arr[0]]
+                        elif arr[8] == 9:
+                            c_cie[anio][arr[0]] = [0,arr[9],arr[0]]
+                            c_cier[anio][arr[0]] = [0,arr[9],arr[0]]
+                        elif arr[8] == 10:
+                            c_cont[anio][arr[0]] = [0,arr[9],arr[0]]
+                            c_contr[anio][arr[0]] = [0,arr[9],arr[0]]
+                        elif arr[8] == 11:
+                            c_odon[anio][arr[0]] = [0,arr[9],arr[0]]
+                            c_odonr[anio][arr[0]] = [0,arr[9],arr[0]]
+                        elif arr[8] == 12:
+                            c_lab[anio][arr[0]] = [0,arr[9],arr[0]]
+                            c_labr[anio][arr[0]] = [0,arr[9],arr[0]]
+                        elif arr[8] == 13:
+                            c_enf[anio][arr[0]] = [0,arr[9],arr[0]]
+                            c_enfr[anio][arr[0]] = [0,arr[9],arr[0]]
+                        elif arr[8] == 14:
+                            c_med[anio][arr[0]] = [0,arr[9],arr[0]]
+                            c_medr[anio][arr[0]] = [0,arr[9],arr[0]]
+                        elif arr[8] == 15:
+                            c_bio[anio][arr[0]] = [0,arr[9],arr[0]]
+                            c_bior[anio][arr[0]] = [0,arr[9],arr[0]]
+                        elif arr[8] == 16:
+                            c_cso[anio][arr[0]] = [0,arr[9],arr[0]]
+                            c_csor[anio][arr[0]] = [0,arr[9],arr[0]]
+                        elif arr[8] == 17:
+                            c_quim[anio][arr[0]] = [0,arr[9],arr[0]]
+                            c_quimr[anio][arr[0]] = [0,arr[9],arr[0]]
 
-       #carreras_a= [carreraa[0] for carreraa in ro]#aqui tengo todas las carreras pero sus id
-       curso ={0:'1er año',1:"2do año",2:"3er año",3:'4to año',4:'5to año'}
-       guardar = []
-       guardar1 = []
-       if isinstance(fecha1, str):
-           fecha1 = datetime.strptime(fecha1, "%Y-%m-%d").date()
-       if isinstance(fecha2, str):
-           fecha2 = datetime.strptime(fecha2, "%Y-%m-%d").date()
-       for row in datos:
-           if row[14]>=fecha1 and row[14] <= fecha2:
-               if row[3] == 'activo':#contar los de primer año
-                   if as[0] == 1:
-                       vareasT[row[10]][as[0]][0]+=1
-                   if as[0] == 2:
-                       vareasS[row[10]][as[0]][0]+=1
-                   if as[0] == 3:
-                       vareasSo[row[10]][as[0]][0]+=1
-               elif row[3] == 'desactivo':#contar los de 5to añp
-                   if as[0] == 1:
-                       vareasT[row[10]][as[0]][0]+=1
-                   if as[0] == 2:
-                       vareasS[row[10]][as[0]][0]+=1
-                   if as[0] == 3:
-                       vareasSo[row[10]][as[0]][0]+=1
-               anoBD = int(obtener_ano_de_fecha(row[14].strftime("%Y-%m-%d")))
+       #carrerarr_a= [carreraa[0] for carreraa in ro]#aqui tengo todas las carreras pero sus id
+        cursoss ={0:'1er año',1:"2do año",2:"3er año",3:'4to año',4:'5to año'}
+        guardar = []
+        guardar1 = []
+        if isinstance(fecha1, str):
+            fecha1 = datetime.strptime(fecha1, "%Y-%m-%d").date()
+        if isinstance(fecha2, str):
+            fecha2 = datetime.strptime(fecha2, "%Y-%m-%d").date()
+        for row in datos:#recorremos los datos obtenidos de la base de datos
+            if row[14]>=fecha1 and row[14] <= fecha2:
+                if row[3] == 'desactivo':#contar los de primer año
+                    if row[12] == 1:
+                        vareasT[row[12]][row[8]][0]+=1
+                    elif row[12] == 2:
+                        vareasS[row[12]][row[8]][0]+=1
+                    elif row[12] == 3:
+                        vareasSo[row[12]][row[8]][0]+=1
+                elif row[3] == 'activo':#contar los de 5to añp
+                    if row[12] == 1:
+                        vareasTr[row[12]][row[8]][0]+=1
+                    elif row[12] == 2:
+                        vareasSr[row[12]][row[8]][0]+=1
+                    elif row[12] == 3:
+                        vareasSor[row[12]][row[8]][0]+=1
 
-               if row[3] == 'activo':#contamos solo de primer año
-                   if row[10] == 1:
-                       c_infor[anoBD][row[8]][0]+=1
-                   if row[10] == 2:
-                       c_civil[anoBD][row[8]][0]+=1
-                   if row[10] == 3:
-                       c_minas[anoBD][row[8]][0]+=1
-                   if row[10] == 4:
-                       c_elec[anoBD][row[8]][0]+=1
-                   if row[10] == 5:
-                       c_mec[anoBD][row[8]][0]+=1
-                   if row[10] == 6:
-                       c_agro[anoBD][row[8]][0]+=1
-                   if row[10] == 7:
-                       c_lit[anoBD][row[8]][0]+=1
-                   if row[10] == 8:
-                       c_der[anoBD][row[8]][0]+=1
-                   if row[10] == 9:
-                       c_cie[anoBD][row[8]][0]+=1
-                   if row[10] == 10:
-                       c_cont[anoBD][row[8]][0]+=1
-                   if row[10] == 11:
-                       c_odon[anoBD][row[8]][0]+=1
-                   if row[10] == 12:
-                       c_lab[anoBD][row[8]][0]+=1
-                   if row[10] == 13:
-                       c_enf[anoBD][row[8]][0]+=1
-                   if row[10] == 14:
-                       c_med[anoBD][row[8]][0]+=1
-                   if row[10] == 15:
-                       c_bio[anoBD][row[8]][0]+=1
-                   if row[10] == 16:
-                       c_cso[anoBD][row[8]][0]+=1
-                   if row[10] == 17:
-                       c_quim[anoBD][row[8]][0]+=1
+                anoBD = int(obtener_ano_de_fecha(row[14].strftime("%Y-%m-%d")))
 
-               elif row[3] == 'desactivo':#contamos solo de 5to año y aprobados
-                   if row[10] == 1:
-                       c_inforr[anoBD][row[8]][0]+=1
-                   if row[10] == 2:
-                       c_civilr[anoBD][row[8]][0]+=1
-                   if row[10] == 3:
-                       c_minasr[anoBD][row[8]][0]+=1
-                   if row[10] == 4:
-                       c_elecr[anoBD][row[8]][0]+=1
-                   if row[10] == 5:
-                       c_mecr[anoBD][row[8]][0]+=1
-                   if row[10] == 6:
-                       c_agror[anoBD][row[8]][0]+=1
-                   if row[10] == 7:
-                       c_litr[anoBD][row[8]][0]+=1
-                   if row[10] == 8:
-                       c_derr[anoBD][row[8]][0]+=1
-                   if row[10] == 9:
-                       c_cier[anoBD][row[8]][0]+=1
-                   if row[10] == 10:
-                       c_contr[anoBD][row[8]][0]+=1
-                   if row[10] == 11:
-                       c_odonr[anoBD][row[8]][0]+=1
-                   if row[10] == 12:
-                       c_labr[anoBD][row[8]][0]+=1
-                   if row[10] == 13:
-                       c_enfr[anoBD][row[8]][0]+=1
-                   if row[10] == 14:
-                       c_medr[anoBD][row[8]][0]+=1
-                   if row[10] == 15:
-                       c_bior[anoBD][row[8]][0]+=1
-                   if row[10] == 16:
-                       c_csor[anoBD][row[8]][0]+=1
-                   if row[10] == 17:
-                       c_quimr[anoBD][row[8]][0]+=1
+                if row[3] == 'desactivo':#contamos solo de primer año
+                    if row[10] == 1:
+                        c_infor[anoBD][row[8]][0]+=1
+                    elif row[10] == 2:
+                        c_civil[anoBD][row[8]][0]+=1
+                    elif row[10] == 3:
+                        c_minas[anoBD][row[8]][0]+=1
+                    elif row[10] == 4:
+                        c_elec[anoBD][row[8]][0]+=1
+                    elif row[10] == 5:
+                        c_mec[anoBD][row[8]][0]+=1
+                    elif row[10] == 6:
+                        c_agro[anoBD][row[8]][0]+=1
+                    elif row[10] == 7:
+                        c_lit[anoBD][row[8]][0]+=1
+                    elif row[10] == 8:
+                        c_der[anoBD][row[8]][0]+=1
+                    elif row[10] == 9:
+                        c_cie[anoBD][row[8]][0]+=1
+                    elif row[10] == 10:
+                        c_cont[anoBD][row[8]][0]+=1
+                    elif row[10] == 11:
+                        c_odon[anoBD][row[8]][0]+=1
+                    elif row[10] == 12:
+                        c_lab[anoBD][row[8]][0]+=1
+                    elif row[10] == 13:
+                        c_enf[anoBD][row[8]][0]+=1
+                    elif row[10] == 14:
+                        c_med[anoBD][row[8]][0]+=1
+                    elif row[10] == 15:
+                        c_bio[anoBD][row[8]][0]+=1
+                    elif row[10] == 16:
+                        c_cso[anoBD][row[8]][0]+=1
+                    elif row[10] == 17:
+                        c_quim[anoBD][row[8]][0]+=1
 
-       mensaje = "Las asignaturas que tienen mas estudiantes desertores"
-       mensaje += " por áreas y carreras, detallamos en los siguientes cuadros"
-       html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
-       # Crear el gráfico de torta
+                elif row[3] == 'activo':#contamos solo de 5to año y aprobados
+                    if row[10] == 1:
+                        c_inforr[anoBD][row[8]][0]+=1
+                    elif row[10] == 2:
+                        c_civilr[anoBD][row[8]][0]+=1
+                    elif row[10] == 3:
+                        c_minasr[anoBD][row[8]][0]+=1
+                    elif row[10] == 4:
+                        c_elecr[anoBD][row[8]][0]+=1
+                    elif row[10] == 5:
+                        c_mecr[anoBD][row[8]][0]+=1
+                    elif row[10] == 6:
+                        c_agror[anoBD][row[8]][0]+=1
+                    elif row[10] == 7:
+                        c_litr[anoBD][row[8]][0]+=1
+                    elif row[10] == 8:
+                        c_derr[anoBD][row[8]][0]+=1
+                    elif row[10] == 9:
+                        c_cier[anoBD][row[8]][0]+=1
+                    elif row[10] == 10:
+                        c_contr[anoBD][row[8]][0]+=1
+                    elif row[10] == 11:
+                        c_odonr[anoBD][row[8]][0]+=1
+                    elif row[10] == 12:
+                        c_labr[anoBD][row[8]][0]+=1
+                    elif row[10] == 13:
+                        c_enfr[anoBD][row[8]][0]+=1
+                    elif row[10] == 14:
+                        c_medr[anoBD][row[8]][0]+=1
+                    elif row[10] == 15:
+                        c_bior[anoBD][row[8]][0]+=1
+                    elif row[10] == 16:
+                        c_csor[anoBD][row[8]][0]+=1
+                    elif row[10] == 17:
+                        c_quimr[anoBD][row[8]][0]+=1
 
-       #crear para areas
-       html += "<div class='row bg-warning'style = 'border: 1px solid black;'>"
-       html += "<h4 align='center'>Areas</h4>"
-       k1 = 1
-       for i in range(len(areasU)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
-           html += "<div class='col-lg-4'>"
-           html += "<div class='panel panel-default text-center bg-info' style = 'border: 1px solid black;'>"
-           html += "<div class='panel-heading'>"
-           html += areasU[i]
-           html += "</div>"
-           html += "<div class='panel-body'>"
-           html += "<table class='table table-striped'>"
-           html += "<thead>"
-           html += "<tr>"
-           html += "<th>Nro</th>"
-           html += "<th>Asignatura</th>"
-           html += "<th>Deserciones</th>"
-           html += "<th>Carrera</th>"
-           html += "</tr>"
-           html += "</thead>"
-           html += "<tbody>"
-           are = seleccionarAsignaturaAreas((i+1),1)#seleccionamos las asingturas con el cod de area
-           for j in are:
-               if vareasT[i][j][0] > 0:
-                   html += "<tr><td>"+str(nombre_asignatura(vareasT[i][j][2]))+"</td>"
-                   html += "<td>"+str((vareasT[i][j][0]))+"</td>"
-                   html += "<td>"+str(nombre_carrera(vareasT[i][j][1]))+"</td></tr>"
-               #html += menCOncluyeron(vareasApro[i],vareasApla[i])
-           html += "<tbody>"
-           html += "</table>"
-           html += "</div>"
-           html += "</div>"
-           html += "</div>"
-       html += "</div>"
-       html += "<br>"
-       h = 1
+        mensaje = "Las asignaturas que tienen mas estudiantes desertores"
+        mensaje += " por áreas y carreras, detallamos en los siguientes cuadros"
+        html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
+        # Crear el gráfico de torta
 
-       for i in range(17):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
-           asig = seleccionarAsignatura((i+1),1)#seleccionamos las asiganturas con el cod id
-           html += "<div class='row'>"#abrimos una fila
-           for anio in range(a1, a2 + 1):#recorremos las fechas
-               html += "<h6 align='center'>Año "+str(anio)+"</h6>"
-               for g in range(5):#recorremos los cursos
-                   html += "<div class='col-lg-12' style = 'background-color:RGBA(0, 255, 250, 0.3);border: 1px solid black;'>"
-                   html += "<div class='panel panel-default text-center'>"
-                   html += "<div class='panel-heading'>"
-                   html += curso[g]#imprimimos el curso
-                   html += "</div>"
-                   html += "<div class='panel-body'>"
-                   html += "<table class='table table-striped'>"
-                   html += "<thead>"
-                   html += "<tr>"
-                   html += "<th>Nro</th>"
-                   html += "<th>Asignatura</th>"
-                   html += "<th>Deserciones</th>"
-                   html += "</tr>"
-                   html += "</thead>"
-                   html += "<tbody>"
-                   for j in asig:#recorremos las asignaturas
+        #crear para areas
+        html += "<div class='row bg-warning'style = 'border: 1px solid black;'>"
+        html += "<h4 align='center'>Areas</h4>"
+        k1 = 1
+        for i in range(3):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
 
-                       if h == 1: #si carrera es igual a 1 ingresa
-                            if (g+1) == c_infor[anio][j][1]:#si el curso es igual a primero
-                                if c_infor[anio][j][0] > 0:
-                                    html += "<tr><td>"+str(nombre_asignatura(c_infor[anio][j][1]))+"</td>"
-                                    html += "<td>"+str((c_infor[anio][j][0]))+"</td></tr>"
-                       if h == 2:
-                          if (g+1) == c_infor[anio][j][1]:#si el curso es igual a primero
-                              if c_infor[anio][j][0] > 0:
-                                  html += "<tr><td>"+str(nombre_asignatura(c_civil[anio][j][1]))+"</td>"
-                                  html += "<td>"+str((c_civil[anio][j][0]))+"</td></tr>"
-                       if h == 3:
-                           if (g+1) == c_infor[anio][j][1]:#si el curso es igual a primero
-                               if c_infor[anio][j][0] > 0:
-                                   html += "<tr><td>"+str(nombre_asignatura(c_minas[anio][j][1]))+"</td>"
-                                   html += "<td>"+str((c_minas[anio][j][0]))+"</td></tr>"
-                       if h == 4:
-                           if (g+1) == c_infor[anio][j][1]:#si el curso es igual a primero
-                               if c_infor[anio][j][0] > 0:
-                                   html += "<tr><td>"+str(nombre_asignatura(c_elec[anio][j][1]))+"</td>"
-                                   html += "<td>"+str((c_elec[anio][j][0]))+"</td></tr>"
-                       if h == 5:
-                           if (g+1) == c_infor[anio][j][1]:#si el curso es igual a primero
-                               if c_infor[anio][j][0] > 0:
-                                   html += "<tr><td>"+str(nombre_asignatura(c_mec[anio][j][1]))+"</td>"
-                                   html += "<td>"+str((c_mec[anio][j][0]))+"</td></tr>"
-                       if h == 6:
-                           if (g+1) == c_infor[anio][j][1]:#si el curso es igual a primero
-                               if c_infor[anio][j][0] > 0:
-                                   html += "<tr><td>"+str(nombre_asignatura(c_agro[anio][j][1]))+"</td>"
-                                   html += "<td>"+str((c_agro[anio][j][0]))+"</td></tr>"
-                       if h == 7:
-                           if (g+1) == c_infor[anio][j][1]:#si el curso es igual a primero
-                               if c_infor[anio][j][0] > 0:
-                                   html += "<tr><td>"+str(nombre_asignatura(c_lit[anio][j][1]))+"</td>"
-                                   html += "<td>"+str((c_lit[anio][j][0]))+"</td></tr>"
-                       if h == 8:
-                           if (g+1) == c_infor[anio][j][1]:#si el curso es igual a primero
-                               if c_infor[anio][j][0] > 0:
-                                   html += "<tr><td>"+str(nombre_asignatura(c_der[anio][j][1]))+"</td>"
-                                   html += "<td>"+str((c_der[anio][j][0]))+"</td></tr>"
-                       if h == 9:
-                           if (g+1) == c_infor[anio][j][1]:#si el curso es igual a primero
-                               if c_infor[anio][j][0] > 0:
-                                   html += "<tr><td>"+str(nombre_asignatura(c_cie[anio][j][1]))+"</td>"
-                                   html += "<td>"+str((c_cie[anio][j][0]))+"</td></tr>"
-                       if h == 10:
-                           if (g+1) == c_infor[anio][j][1]:#si el curso es igual a primero
-                               if c_infor[anio][j][0] > 0:
-                                   html += "<tr><td>"+str(nombre_asignatura(c_cont[anio][j][1]))+"</td>"
-                                   html += "<td>"+str((c_cont[anio][j][0]))+"</td></tr>"
-                       if h == 11:
-                           if (g+1) == c_infor[anio][j][1]:#si el curso es igual a primero
-                               if c_infor[anio][j][0] > 0:
-                                   html += "<tr><td>"+str(nombre_asignatura(c_odon[anio][j][1]))+"</td>"
-                                   html += "<td>"+str((c_odon[anio][j][0]))+"</td></tr>"
-                       if h == 12:
-                           if (g+1) == c_infor[anio][j][1]:#si el curso es igual a primero
-                               if c_infor[anio][j][0] > 0:
-                                   html += "<tr><td>"+str(nombre_asignatura(c_lab[anio][j][1]))+"</td>"
-                                   html += "<td>"+str((c_lab[anio][j][0]))+"</td></tr>"
-                       if h == 13:
-                           if (g+1) == c_infor[anio][j][1]:#si el curso es igual a primero
-                               if c_infor[anio][j][0] > 0:
-                                   html += "<tr><td>"+str(nombre_asignatura(c_enf[anio][j][1]))+"</td>"
-                                   html += "<td>"+str((c_enf[anio][j][0]))+"</td></tr>"
-                       if h == 14:
-                           if (g+1) == c_infor[anio][j][1]:#si el curso es igual a primero
-                               if c_infor[anio][j][0] > 0:
-                                   html += "<tr><td>"+str(nombre_asignatura(c_med[anio][j][1]))+"</td>"
-                                   html += "<td>"+str((c_med[anio][j][0]))+"</td></tr>"
-                       if h == 15:
-                           if (g+1) == c_infor[anio][j][1]:#si el curso es igual a primero
-                               if c_infor[anio][j][0] > 0:
-                                   html += "<tr><td>"+str(nombre_asignatura(c_bio[anio][j][1]))+"</td>"
-                                   html += "<td>"+str((c_bio[anio][j][0]))+"</td></tr>"
-                       if h == 16:
-                           if (g+1) == c_infor[anio][j][1]:#si el curso es igual a primero
-                               if c_infor[anio][j][0] > 0:
-                                   html += "<tr><td>"+str(nombre_asignatura(c_cso[anio][j][1]))+"</td>"
-                                   html += "<td>"+str((c_cso[anio][j][0]))+"</td></tr>"
-                       if h == 17:
-                           if (g+1) == c_infor[anio][j][1]:#si el curso es igual a primero
-                               if c_infor[anio][j][0] > 0:
-                                   html += "<tr><td>"+str(nombre_asignatura(c_quim[anio][j][1]))+"</td>"
-                                   html += "<td>"+str((c_quim[anio][j][0]))+"</td></tr>"
-                              #html += menCOncluyeron(vareasApro[i],vareasApla[i])
-                   html += "<tbody>"
-                   html += "</table>"
-                   html += "</div>"
-                   html += "</div>"
-                   html += "</div>"
+            are = seleccionarAsignaturaAreas((i+1),1)#seleccionamos las asingturas con el cod de area
+            print(are," no se que me retornara")
+            if are != "no":
+                html += "<div class='col-lg-4'>"
+                html += "<div class='panel panel-default text-center bg-info' style = 'border: 1px solid black;'>"
+                html += "<div class='panel-heading'>"
+                html += areasU[i]
+                html += "</div>"
+                html += "<div class='panel-body'>"
+                html += "<table class='table table-striped' style='font-size: smaller;'>"
+                html += "<thead>"
+                html += "<tr>"
+                html += "<th>Asignatura</th>"
+                html += "<th>Deserciones</th>"
+                html += "<th>Carrera</th>"
+                html += "</tr>"
+                html += "</thead>"
+                html += "<tbody>"
+                for asi in are:
+                    if vareasT[i+1][asi[0]][3] == (i+1):
+                        if vareasT[i+1][asi[0]][0] > 0:
+                            html += "<tr><td>"+str(nombre_asignatura(vareasT[i+1][asi[0]][2]))+"</td>"
+                            html += "<td>"+str((vareasT[i+1][asi[0]][0]))+"</td>"
+                            html += "<td>"+str(nombre_carrera_retor(vareasT[i+1][asi[0]][1]))+"</td></tr>"
+                            #html += "<td>"+str(nombre_carrera(vareasT[i+1][asi[0]].get(1)))+"</td></tr>"
+                    elif vareasS[i+1][asi[0]][3] == (i+1):
+                        if vareasS[i+1][asi[0]][0] > 0:
+                            html += "<tr><td>"+str(nombre_asignatura(vareasS[i+1][asi[0]][2]))+"</td>"
+                            html += "<td>"+str((vareasS[i+1][asi[0]][0]))+"</td>"
+                            html += "<td>"+str(nombre_carrera_retor(vareasT[i+1][asi[0]][1]))+"</td></tr>"
+                            #html += "<td>"+str(nombre_carrera(vareasS[i+1][asi[0]][1]))+"</td></tr>"
+                    elif vareasSo[i+1][asi[0]][3] == (i+1):
+                        if vareasSo[i+1][asi[0]][0] > 0:
+                            html += "<tr><td>"+str(nombre_asignatura(vareasSo[i+1][asi[0]][2]))+"</td>"
+                            html += "<td>"+str((vareasSo[i+1][asi[0]][0]))+"</td>"
+                            html += "<td>"+str(nombre_carrera_retor(vareasT[i+1][asi[0]][1]))+"</td></tr>"
 
-           h = h + 1
-           html += "</div>"
-           html += "<br>"
+                            #html += "<td>"+str(nombre_carrera(vareasSo[i+1][asi[0]][1]))+"</td></tr>"
+                   #html += menCOncluyeron(vareasApro[i],vareasApla[i])
+                html += "<tbody>"
+                html += "</table>"
+                html += "</div>"
+                html += "</div>"
+                html += "</div>"
+            else:
+                html += "<div class='col-lg-4' style = 'background-color:khaki;border: 1px solid black;'>"
+                html += "<div class='panel panel-default text-center'>"
+                html += "<div class='panel-heading'>"
+                html+="<h6>No se encontro información</h6>"
+                html += "</div>"
+                html += "</div>"
+                html += "</div>"
+        html += "</div>"
+        html += "<br>"
+        h = 1
+        colorr ={0:'beige',1:'Gainsboro',2:'Khaki',3:'Lavender',4:'LightYellow'}
+        for i in range(17):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
+            asig = seleccionarAsignatura((i+1),1)#seleccionamos las asiganturas con el cod id
+            html+="<h5 align='center'>Carrera "+nombre_carrera_retor(i+1)+"</h5>"
+            if asig != "no":
+                html += "<div class='row'>"#abrimos una fila
+                for anio in range(a1, a2 + 1):#recorremos las fechas
+                    html += "<h6 align='center'>Año "+str(anio)+"</h6>"
+                    for g in range(5):#recorremos los cursos
+                        html += "<div class='col-lg-3' style = 'background-color:"+str(colorr[g])+";border: 1px solid black;'>"
+                        html += "<div class='panel panel-default text-center'>"
+                        html += "<div class='panel-heading'>"
+                        html += cursoss[g]#imprimimos el curso
+                        html += "</div>"
+                        html += "<div class='panel-body'>"
+                        html += "<table class='table table-striped' style='font-size: smaller;'>"
+                        html += "<thead>"
+                        html += "<tr>"
+                        html += "<th>Asignatura</th>"
+                        html += "<th>Deserciones</th>"
+                        html += "</tr>"
+                        html += "</thead>"
+                        html += "<tbody>"
+                        for asi in asig:#recorremos las asignaturas
+
+                            if h == 1: #si carrera es igual a 1 ingresa
+                                if (g+1) == c_infor[anio][asi[0]][1]:#si el curso es igual a primero
+                                    if c_infor[anio][asi[0]][0] > 0:
+                                        html += "<tr><td>"+str(nombre_asignatura(c_infor[anio][asi[0]][2]))+"</td>"
+                                        html += "<td>"+str((c_infor[anio][asi[0]][0]))+"</td></tr>"
+                            if h == 2:
+                                if (g+1) == c_civil[anio][asi[0]][1]:#si el curso es igual a primero
+                                    if c_civil[anio][asi[0]][0] > 0:
+                                        html += "<tr><td>"+str(nombre_asignatura(c_civil[anio][asi[0]][2]))+"</td>"
+                                        html += "<td>"+str((c_civil[anio][asi[0]][0]))+"</td></tr>"
+                            if h == 3:
+                                if (g+1) == c_minas[anio][asi[0]][1]:#si el curso es igual a primero
+                                    if c_minas[anio][asi[0]][0] > 0:
+                                        html += "<tr><td>"+str(nombre_asignatura(c_minas[anio][asi[0]][2]))+"</td>"
+                                        html += "<td>"+str((c_minas[anio][asi[0]][0]))+"</td></tr>"
+                            if h == 4:
+                                if (g+1) == c_elec[anio][asi[0]][1]:#si el curso es igual a primero
+                                    if c_elec[anio][asi[0]][0] > 0:
+                                        html += "<tr><td>"+str(nombre_asignatura(c_elec[anio][asi[0]][2]))+"</td>"
+                                        html += "<td>"+str((c_elec[anio][asi[0]][0]))+"</td></tr>"
+                            if h == 5:
+                                if (g+1) == c_mec[anio][asi[0]][1]:#si el curso es igual a primero
+                                    if c_mec[anio][asi[0]][0] > 0:
+                                        html += "<tr><td>"+str(nombre_asignatura(c_mec[anio][asi[0]][2]))+"</td>"
+                                        html += "<td>"+str((c_mec[anio][asi[0]][0]))+"</td></tr>"
+                            if h == 6:
+                                if (g+1) == c_agro[anio][asi[0]][1]:#si el curso es igual a primero
+                                    if c_agro[anio][asi[0]][0] > 0:
+                                        html += "<tr><td>"+str(nombre_asignatura(c_agro[anio][asi[0]][2]))+"</td>"
+                                        html += "<td>"+str((c_agro[anio][asi[0]][0]))+"</td></tr>"
+                            if h == 7:
+                                if (g+1) == c_lit[anio][asi[0]][1]:#si el curso es igual a primero
+                                    if c_lit[anio][asi[0]][0] > 0:
+                                        html += "<tr><td>"+str(nombre_asignatura(c_lit[anio][asi[0]][2]))+"</td>"
+                                        html += "<td>"+str((c_lit[anio][asi[0]][0]))+"</td></tr>"
+                            if h == 8:
+                                if (g+1) == c_der[anio][asi[0]][1]:#si el curso es igual a primero
+                                    if c_der[anio][asi[0]][0] > 0:
+                                        html += "<tr><td>"+str(nombre_asignatura(c_der[anio][asi[0]][2]))+"</td>"
+                                        html += "<td>"+str((c_der[anio][asi[0]][0]))+"</td></tr>"
+                            if h == 9:
+                                if (g+1) == c_cie[anio][asi[0]][1]:#si el curso es igual a primero
+                                    if c_cie[anio][asi[0]][0] > 0:
+                                        html += "<tr><td>"+str(nombre_asignatura(c_cie[anio][asi[0]][2]))+"</td>"
+                                        html += "<td>"+str((c_cie[anio][asi[0]][0]))+"</td></tr>"
+                            if h == 10:
+                                if (g+1) == c_cont[anio][asi[0]][1]:#si el curso es igual a primero
+                                    if c_cont[anio][asi[0]][0] > 0:
+                                        html += "<tr><td>"+str(nombre_asignatura(c_cont[anio][asi[0]][2]))+"</td>"
+                                        html += "<td>"+str((c_cont[anio][asi[0]][0]))+"</td></tr>"
+                            if h == 11:
+                                if (g+1) == c_odon[anio][asi[0]][1]:#si el curso es igual a primero
+                                    if c_odon[anio][asi[0]][0] > 0:
+                                        html += "<tr><td>"+str(nombre_asignatura(c_odon[anio][asi[0]][2]))+"</td>"
+                                        html += "<td>"+str((c_odon[anio][asi[0]][0]))+"</td></tr>"
+                            if h == 12:
+                                if (g+1) == c_lab[anio][asi[0]][1]:#si el curso es igual a primero
+                                    if c_lab[anio][asi[0]][0] > 0:
+                                        html += "<tr><td>"+str(nombre_asignatura(c_lab[anio][asi[0]][2]))+"</td>"
+                                        html += "<td>"+str((c_lab[anio][asi[0]][0]))+"</td></tr>"
+                            if h == 13:
+                                if (g+1) == c_enf[anio][asi[0]][1]:#si el curso es igual a primero
+                                    if c_enf[anio][asi[0]][0] > 0:
+                                        html += "<tr><td>"+str(nombre_asignatura(c_enf[anio][asi[0]][2]))+"</td>"
+                                        html += "<td>"+str((c_enf[anio][asi[0]][0]))+"</td></tr>"
+                            if h == 14:
+                                if (g+1) == c_med[anio][asi[0]][1]:#si el curso es igual a primero
+                                    if c_med[anio][asi[0]][0] > 0:
+                                        html += "<tr><td>"+str(nombre_asignatura(c_med[anio][asi[0]][2]))+"</td>"
+                                        html += "<td>"+str((c_med[anio][asi[0]][0]))+"</td></tr>"
+                            if h == 15:
+                                if (g+1) == c_bio[anio][asi[0]][1]:#si el curso es igual a primero
+                                    if c_bio[anio][asi[0]][0] > 0:
+                                        html += "<tr><td>"+str(nombre_asignatura(c_bio[anio][asi[0]][2]))+"</td>"
+                                        html += "<td>"+str((c_bio[anio][asi[0]][0]))+"</td></tr>"
+                            if h == 16:
+                                if (g+1) == c_cso[anio][asi[0]][1]:#si el curso es igual a primero
+                                    if c_cso[anio][asi[0]][0] > 0:
+                                        html += "<tr><td>"+str(nombre_asignatura(c_cso[anio][asi[0]][2]))+"</td>"
+                                        html += "<td>"+str((c_cso[anio][asi[0]][0]))+"</td></tr>"
+
+                            if h == 17:
+                                if (g+1) == c_quim[anio][asi[0]][1]:#si el curso es igual a primero
+                                    if c_quim[anio][asi[0]][0] > 0:
+                                        html += "<tr><td>"+str(nombre_asignatura(c_quim[anio][asi[0]][2]))+"</td>"
+                                        html += "<td>"+str((c_quim[anio][asi[0]][0]))+"</td></tr>"
+                                  #html += menCOncluyeron(vareasApro[i],vareasApla[i])
+                        html += "<tbody>"
+                        html += "</table>"
+                        html += "</div>"
+                        html += "</div>"
+                        html += "</div>"
+
+                h = h + 1
+                html += "</div>"
+                html += "<br>"
+            else:
+                html += "<div class='col-lg-12' style = 'background-color:khaki;border: 1px solid black;'>"
+                html += "<div class='panel panel-default text-center'>"
+                html += "<div class='panel-heading'>"
+                html+="<h6>No se encontro información</h6>"
+                html += "</div>"
+                html += "</div>"
+                html += "</div>"
+    if accion1 == "clasificado_sexo":
+        fecha1 = ress[0]
+        fecha2 = ress[1]
+        if fecha1>fecha2:
+            aux = fecha1
+            fecha1 = fecha2
+            fecha2 = aux
+        vapro = [0] * 17
+        vaplaz = [0] * 17
+        vareas = {}
+        vareasr = {}
+        capro = 0
+        caplaz = 0
+        cdes = 0
+        cndes = 0
+        total = 0
+        ctec = 0
+        csal = 0
+        csoc = 0
+        a11 = int(obtener_ano_de_fecha(fecha1))
+        a22 = int(obtener_ano_de_fecha(fecha2))
+        a1 = int(obtener_ano_de_fecha(fecha1))
+        a2 = int(obtener_ano_de_fecha(fecha2))
+            ##enviamos el id de la carrera y el plan de estudio
+        for j in range(3):
+            vareas[j+1] = 0
+            vareasr[j+1] = 0
+        for anio in range(a1, a2 + (1)):
+            c_infor[anio] = 0
+            c_civil[anio] = 0
+            c_minas[anio] = 0
+            c_elec[anio] = 0
+            c_mec[anio] = 0
+            c_agro[anio] = 0
+            c_lit[anio] = 0
+            c_der[anio] = 0
+            c_cie[anio] = 0
+            c_cont[anio] = 0
+            c_odon[anio] = 0
+            c_lab[anio] = 0
+            c_enf[anio] = 0
+            c_med[anio] = 0
+            c_bio[anio] = 0
+            c_cso[anio] = 0
+            c_quim[anio] = 0
+            c_inforr[anio] = 0
+            c_civilr[anio] = 0
+            c_minasr[anio] = 0
+            c_elecr[anio] = 0
+            c_mecr[anio] = 0
+            c_agror[anio] = 0
+            c_litr[anio] = 0
+            c_derr[anio] = 0
+            c_cier[anio] = 0
+            c_contr[anio] = 0
+            c_odonr[anio] = 0
+            c_labr[anio] = 0
+            c_enfr[anio] = 0
+            c_medr[anio] = 0
+            c_bior[anio] = 0
+            c_csor[anio] = 0
+            c_quimr[anio] = 0
+
+       #carrerarr_a= [carreraa[0] for carreraa in ro]#aqui tengo todas las carreras pero sus id
+        cursoss ={0:'1er año',1:"2do año",2:"3er año",3:'4to año',4:'5to año'}
+        guardar = []
+        guardar1 = []
+        if isinstance(fecha1, str):
+            fecha1 = datetime.strptime(fecha1, "%Y-%m-%d").date()
+        if isinstance(fecha2, str):
+            fecha2 = datetime.strptime(fecha2, "%Y-%m-%d").date()
+        for row in datos:#recorremos los datos obtenidos de la base de datos
+            if row[15]>=fecha1 and row[15] <= fecha2:
+                if row[11] == 'masculino':#contar los de primer año
+                    vareas[row[12]]+=1
+                elif row[11] == 'femenino':#contar los de 5to añp
+                    vareasr[row[12]]+=1
+
+                anoBD = int(obtener_ano_de_fecha(row[15].strftime("%Y-%m-%d")))
+
+                if row[11] == 'masculino':#contamos solo de primer año
+                    if row[13] == 1:
+                        c_infor[anoBD]+=1
+                    elif row[13] == 2:
+                        c_civil[anoBD]+=1
+                    elif row[13] == 3:
+                        c_minas[anoBD]+=1
+                    elif row[13] == 4:
+                        c_elec[anoBD]+=1
+                    elif row[13] == 5:
+                        c_mec[anoBD]+=1
+                    elif row[13] == 6:
+                        c_agro[anoBD]+=1
+                    elif row[13] == 7:
+                        c_lit[anoBD]+=1
+                    elif row[13] == 8:
+                        c_der[anoBD]+=1
+                    elif row[13] == 9:
+                        c_cie[anoBD]+=1
+                    elif row[13] == 10:
+                        c_cont[anoBD]+=1
+                    elif row[13] == 11:
+                        c_odon[anoBD]+=1
+                    elif row[13] == 12:
+                        c_lab[anoBD]+=1
+                    elif row[13] == 13:
+                        c_enf[anoBD]+=1
+                    elif row[13] == 14:
+                        c_med[anoBD]+=1
+                    elif row[13] == 15:
+                        c_bio[anoBD]+=1
+                    elif row[13] == 16:
+                        c_cso[anoBD]+=1
+                    elif row[13] == 17:
+                        c_quim[anoBD]+=1
+
+                elif row[11] == 'femenino':#contamos solo de 5to año y aprobados
+                    if row[13] == 1:
+                        c_inforr[anoBD]+=1
+                    elif row[13] == 2:
+                        c_civilr[anoBD]+=1
+                    elif row[13] == 3:
+                        c_minasr[anoBD]+=1
+                    elif row[13] == 4:
+                        c_elecr[anoBD]+=1
+                    elif row[13] == 5:
+                        c_mecr[anoBD]+=1
+                    elif row[13] == 6:
+                        c_agror[anoBD]+=1
+                    elif row[13] == 7:
+                        c_litr[anoBD]+=1
+                    elif row[13] == 8:
+                        c_derr[anoBD]+=1
+                    elif row[13] == 9:
+                        c_cier[anoBD]+=1
+                    elif row[13] == 10:
+                        c_contr[anoBD]+=1
+                    elif row[13] == 11:
+                        c_odonr[anoBD]+=1
+                    elif row[13] == 12:
+                        c_labr[anoBD]+=1
+                    elif row[13] == 13:
+                        c_enfr[anoBD]+=1
+                    elif row[13] == 14:
+                        c_medr[anoBD]+=1
+                    elif row[13] == 15:
+                        c_bior[anoBD]+=1
+                    elif row[13] == 16:
+                        c_csor[anoBD]+=1
+                    elif row[13] == 17:
+                        c_quimr[anoBD]+=1
+
+        mensaje = "La cantidad de estudiantes clasificado por varones y mujeres"
+        mensaje += "detallamos en los siguientes cuadros por area y carreras"
+        html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
+        # Crear el gráfico de torta
+
+        #crear para areas
+        html += "<div class='row bg-warning'style = 'border: 1px solid black;'>"
+        html += "<h4 align='center'>Areas</h4>"
+        k1 = 1
+        for i in range(3):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
+            html += "<div class='col-lg-4'>"
+            html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+            html += "<div class='panel-heading'>"
+            html += areasU[i]
+            html += "</div>"
+            html += "<div class='panel-body'>"
+            html += "<table class='table table-striped' style='font-size: smaller;'>"
+            html += "<thead>"
+            html += "<tr>"
+            html += "<th>Varones</th>"
+            html += "<th>Mujeres</th>"
+            html += "</tr>"
+            html += "</thead>"
+            html += "<tbody>"
+            html += "<tr><td>"+str(vareas[i+1])+"</td>"
+            html += "<td>"+str(vareasr[i+1])+"</td></tr>"
+            html += "<tbody>"
+            html += "</table>"
+            html += "</div>"
+            html += "</div>"
+            html += "</div>"
+        html += "</div>"
+        html += "<br>"
+        h = 1
+        colorr ={0:'beige',1:'Gainsboro',2:'Khaki',3:'Lavender',4:'LightYellow'}
+        for i in range(17):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
+            html+="<h5 align='center'>Carrera "+nombre_carrera_retor(i+1)+"</h5>"#nombre de la carrera
+            html+="<div class='row'>"
+            for anio in range(a1, a2 + (1)):#recoremos los anos que pueden sere desde una año inicio a un año fin
+                html += "<div class='col-lg-3' style = 'background-color:khaki;border: 1px solid black;'>"
+                html += "<div class='panel panel-default text-center'>"
+                html += "<div class='panel-heading'>"
+                html += str(anio)
+                html += "</div>"
+                html += "<div class='panel-body'>"
+                html += "<table class='table table-striped' style='font-size: smaller;'>"
+                html += "<thead>"
+                html += "<tr>"
+                html += "<th>Varones</th>"
+                html += "<th>Mujeres</th>"
+                html += "</tr>"
+                html += "</thead>"
+                html += "<tbody>"
+                if h == 1: #si carrera es igual a 1 ingresa
+                    html += "<tr><td>"+str(c_infor[anio])+"</td>"
+                    html += "<td>"+str(c_inforr[anio])+"</td></tr>"
+                if h == 2:
+                    html += "<tr><td>"+str(c_civil[anio])+"</td>"
+                    html += "<td>"+str(c_civilr[anio])+"</td></tr>"
+                if h == 3:
+                    html += "<tr><td>"+str(c_minas[anio])+"</td>"
+                    html += "<td>"+str(c_minasr[anio])+"</td></tr>"
+                if h == 4:
+                    html += "<tr><td>"+str(c_elec[anio])+"</td>"
+                    html += "<td>"+str(c_elecr[anio])+"</td></tr>"
+                if h == 5:
+                    html += "<tr><td>"+str(c_mec[anio])+"</td>"
+                    html += "<td>"+str(c_mecr[anio])+"</td></tr>"
+                if h == 6:
+                    html += "<tr><td>"+str(c_agro[anio])+"</td>"
+                    html += "<td>"+str(c_agror[anio])+"</td></tr>"
+                if h == 7:
+                    html += "<tr><td>"+str(c_lit[anio])+"</td>"
+                    html += "<td>"+str(c_litr[anio])+"</td></tr>"
+                if h == 8:
+                    html += "<tr><td>"+str(c_der[anio])+"</td>"
+                    html += "<td>"+str(c_derr[anio])+"</td></tr>"
+                if h == 9:
+                    html += "<tr><td>"+str(c_cie[anio])+"</td>"
+                    html += "<td>"+str(c_cier[anio])+"</td></tr>"
+                if h == 10:
+                    html += "<tr><td>"+str(c_cont[anio])+"</td>"
+                    html += "<td>"+str(c_contr[anio])+"</td></tr>"
+                if h == 11:
+                    html += "<tr><td>"+str(c_odon[anio])+"</td>"
+                    html += "<td>"+str(c_odonr[anio])+"</td></tr>"
+                if h == 12:
+                    html += "<tr><td>"+str(c_lab[anio])+"</td>"
+                    html += "<td>"+str(c_labr[anio])+"</td></tr>"
+                if h == 13:
+                    html += "<tr><td>"+str(c_enf[anio])+"</td>"
+                    html += "<td>"+str(c_enfr[anio])+"</td></tr>"
+                if h == 14:
+                    html += "<tr><td>"+str(c_med[anio])+"</td>"
+                    html += "<td>"+str(c_medr[anio])+"</td></tr>"
+                if h == 15:
+                    html += "<tr><td>"+str(c_bio[anio])+"</td>"
+                    html += "<td>"+str(c_bior[anio])+"</td></tr>"
+                if h == 16:
+                    html += "<tr><td>"+str(c_cso[anio])+"</td>"
+                    html += "<td>"+str(c_csor[anio])+"</td></tr>"
+                if h == 17:
+                    html += "<tr><td>"+str(c_quim[anio])+"</td>"
+                    html += "<td>"+str(c_quimr[anio])+"</td></tr>"
+                                  #html += menCOncluyeron(vareasApro[i],vareasApla[i])
+                html += "<tbody>"
+                html += "</table>"
+                html += "</div>"
+                html += "</div>"
+                html += "</div>"
+            h = h + 1
+            html += "</div>"
+            html += "<br>"
+
 
     html += "</container>"
 
