@@ -23,6 +23,26 @@ ac = {
 15: "comunicacion social",
 16: "bioquimica"
 }
+colores1 = {
+    0: '#FFCDD2',  # Red
+    1: '#F8BBD0',  # Pink
+    2: '#E1BEE7',  # Purple
+    3: '#D1C4E9',  # Deep Purple
+    4: '#C5CAE9',  # Indigo
+    5: '#BBDEFB',  # Blue
+    6: '#B3E5FC',  # Light Blue
+    7: '#B2EBF2',  # Cyan
+    8: '#B2DFDB',  # Teal
+    9: '#C8E6C9',  # Green
+    10: '#DCEDC8', # Light Green
+    11: '#F0F4C3', # Lime
+    12: '#FFF9C4', # Yellow
+    13: '#FFECB3', # Amber
+    14: '#FFE0B2', # Orange
+    15: '#FFCCBC', # Deep Orange
+    16: '#D7CCC8'  # Brown
+}
+
 #en la base de datos las carreras comienza de 1
 #pero como los array comienzan en 0 por eso resto una posicion
 areasU = {
@@ -66,7 +86,7 @@ c_quimr = {}#contar estudiantes reprobados por carrera y cursos
 def  retornar_valores(datos,ress):
     accion1 = ress[-2]
     print("la accion es : ",accion1)
-    print(ress,"   trae los siguientes datos ")
+
     html = ""
     html += "<div class='container justify-content-center align-items-center' style='min-height: 100vh;'>"
     if accion1 == "ver_carreras":
@@ -112,8 +132,16 @@ def  retornar_valores(datos,ress):
     if accion1 == "total_de_estudiantes":
         for row in datos:
             html += "La universidad tiene un total de " + str(row[0]) + " Estudiantes"
-
     if accion1 == "total_de_estudiantes_carrera":
+        # Ahora puedes acceder y modificar la variable carreras del ámbito global
+        carreras12 = [0] * 17
+        for fila in datos:
+            carreras12[fila[13]-1]+=1
+        for i in range(17):
+            if carreras12[i] != 0:
+                html += "<div class='alert alert-secondary' role='alert'>La carrera de "+nombre_carrera_retor(i+1)+" tiene "+str(carreras12[i])+" estudiantes</div>"
+
+    if accion1 == "total_de_estudiantes_carrera3":
         if datos == "argumentar_poco_mas":
             html += "argumentar_poco_mas"
         else:
@@ -2157,7 +2185,168 @@ def  retornar_valores(datos,ress):
             html += "</div>"
             html += "<br>"
 
+    if accion1 == "transferencias_buscar":
+        total = len(datos)
+        fecha1 = ress[0]#obtenemos las fechas que llegan
+        fecha2 = ress[1]
+        if fecha1>fecha2:
+            aux = fecha1
+            fecha1 = fecha2
+            fecha2 = aux
+        vanio = {}
+        a11 = int(obtener_ano_de_fecha(fecha1))
+        a22 = int(obtener_ano_de_fecha(fecha2))
+        a1 = int(obtener_ano_de_fecha(fecha1))
+        a2 = int(obtener_ano_de_fecha(fecha2))
+        for anio in range(a1, a2 + (1)):
+            vanio[anio]=0
+        if isinstance(fecha1, str):
+            fecha1 = datetime.strptime(fecha1, "%Y-%m-%d").date()
+        if isinstance(fecha2, str):
+            fecha2 = datetime.strptime(fecha2, "%Y-%m-%d").date()
+        for row in datos:#recorremos los datos obtenidos de la base de datos
+            if row[4]>=fecha1 and row[4] <= fecha2:
+                anoBD = int(obtener_ano_de_fecha(row[4].strftime("%Y-%m-%d")))
+                vanio[anoBD] +=1
+        mensaje = "La cantidad de estudiantes que realizaron transferencias a otras universidades desde el año "+str(a1)+" al año "+str(a2)+" son "+str(total)
 
+        html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
+            # Crear el gráfico de torta
+
+            #crear para areas
+        html += "<div class='row'style = 'border: 1px solid white;background-color:black'>"
+        html += "<h6 align='center'style='color:white'>TRANSFERENCIAS POR AÑO</h6>"
+        k1 = 1
+        for anio in range(a1, a2 + (1)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
+            html += "<div class='col-lg-3'>"
+            html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+            html += "<div class='panel-heading'>"
+            html += str(anio)
+            html += "</div>"
+            html += "<div class='panel-body'>"
+            html += "El total de transferencias del año "+str(anio)+" es de"+str(vanio[anio])+" transferencias"
+            html += "</div>"
+            html += "</div>"
+            html += "</div>"
+        html += "</div>"
+        html += "<br><br>"
+    if accion1 == "concepto_transferencia":
+        total = len(datos)
+        fecha1 = ress[0]#obtenemos las fechas que llegan
+        fecha2 = ress[1]
+        if fecha1>fecha2:
+            aux = fecha1
+            fecha1 = fecha2
+            fecha2 = aux
+        vanio = {}
+        a11 = int(obtener_ano_de_fecha(fecha1))
+        a22 = int(obtener_ano_de_fecha(fecha2))
+        a1 = int(obtener_ano_de_fecha(fecha1))
+        a2 = int(obtener_ano_de_fecha(fecha2))
+        for anio in range(a1, a2 + (1)):
+            vanio[anio]=0
+        if isinstance(fecha1, str):
+            fecha1 = datetime.strptime(fecha1, "%Y-%m-%d").date()
+        if isinstance(fecha2, str):
+            fecha2 = datetime.strptime(fecha2, "%Y-%m-%d").date()
+        for row in datos:#recorremos los datos obtenidos de la base de datos
+            if row[4]>=fecha1 and row[4] <= fecha2:
+                anoBD = int(obtener_ano_de_fecha(row[4].strftime("%Y-%m-%d")))
+                vanio[anoBD] +=1
+        mensaje = "Los estudiante transferidos de otras Universidades desde el año "+str(a1)+" al año "+str(a2)+" son "+str(total)
+
+        html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
+        # Crear el gráfico de torta
+
+        #crear para areas
+        html += "<div class='row'style = 'border: 1px solid white;background-color:black'>"
+        html += "<h6 align='center'style='color:white'>TRANSFERENCIAS POR AÑO</h6>"
+        k1 = 1
+        for anio in range(a1, a2 + (1)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
+            html += "<div class='col-lg-3'>"
+            html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+            html += "<div class='panel-heading'>"
+            html += str(anio)
+            html += "</div>"
+            html += "<div class='panel-body'>"
+            html += "Transferidos el "+str(anio)+" es de "+str(vanio[anio])+" Estudiantes"
+            html += "</div>"
+            html += "</div>"
+            html += "</div>"
+        html += "</div>"
+        html += "<br><br>"
+    if accion1 == "mayor_inscritos":
+        total = len(datos)
+        fecha1 = ress[0]#obtenemos las fechas que llegan
+        fecha2 = ress[1]
+        if fecha1>fecha2:
+            aux = fecha1
+            fecha1 = fecha2
+            fecha2 = aux
+        vanio = {}
+        a11 = int(obtener_ano_de_fecha(fecha1))
+        a22 = int(obtener_ano_de_fecha(fecha2))
+        a1 = int(obtener_ano_de_fecha(fecha1))
+        a2 = int(obtener_ano_de_fecha(fecha2))
+        carreras = {}
+        for anio in range(a1, a2 + (1)):
+            vanio[anio]=[0,0,0]
+        for anio in range(a1, a2 + (1)):
+            carreras[anio] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+
+        if isinstance(fecha1, str):
+            fecha1 = datetime.strptime(fecha1, "%Y-%m-%d").date()
+        if isinstance(fecha2, str):
+            fecha2 = datetime.strptime(fecha2, "%Y-%m-%d").date()
+        for row in datos:#recorremos los datos obtenidos de la base de datos
+            if row[16]>=fecha1 and row[16] <= fecha2:
+                if row[14] == 1:
+                    anoBD = int(obtener_ano_de_fecha(row[16].strftime("%Y-%m-%d")))
+                    vanio[anoBD][row[12]-1]+=1#en cada año y area sumamos mas 1
+                    carreras[anoBD][row[13]-1]+=1
+
+        mensaje = "La información sobre en que areas y carreras existe mas inscritos lo detallamos en los siguientes cuadros"
+        html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
+        # Crear el gráfico de torta
+
+        #crear para areas
+        html += "<div class='row'style = 'border: 1px solid white;background-color:black'>"
+        html += "<h6 align='center'style='color:white'>Areas</h6>"
+        k1 = 1
+        areas ={0:"Técnologia",1:"Salud",2:"Sociales"}
+        for anio in range(a1, a2 + (1)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
+            html += "<h6 align='center'style='color:white'>"+str(anio)+"</h6>"
+            for ar in range(3):
+                html += "<div class='col-lg-4'>"
+                html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                html += "<div class='panel-heading'>"
+                html += areas[ar]
+                html += "</div>"
+                html += "<div class='panel-body'>"
+                html += "Los inscritos del area fueron "+str(vanio[anio][ar])+" Estudiantes"
+                html += "</div>"
+                html += "</div>"
+                html += "</div>"
+        html += "</div>"
+        html += "<br><br>"
+        html += "<div class='row'style = 'border: 1px solid white;background-color:black'>"
+        html += "<h6 align='center'style='color:white'>Carreras</h6>"
+
+        for anio in range(a1, a2 + (1)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
+            html += "<h6 align='center'style='color:white'>"+str(anio)+"</h6>"
+            for car in range(17):
+                html += "<div class='col-lg-4'>"
+                html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:"+colores1[car]+"'>"
+                html += "<div class='panel-heading'>"
+                html += nombre_carrera_retor(car+1)
+                html += "</div>"
+                html += "<div class='panel-body'>"
+                html += "Los inscritos en la carrera fueron "+str(carreras[anio][car])+" Estudiantes"
+                html += "</div>"
+                html += "</div>"
+                html += "</div>"
+        html += "</div>"
+        html += "<br><br>"
     html += "</container>"
 
     return html

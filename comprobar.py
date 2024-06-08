@@ -1,10 +1,9 @@
 import spacy
 import unicodedata
-import nltk
-from nltk.tokenize import word_tokenize
-from nltk import pos_tag
 import pymysql
 import re
+from sql import obtener_id_de_carrera
+
 # Cargar el modelo de lenguaje en español
 nlp = spacy.load("es_core_news_sm")
 
@@ -18,30 +17,31 @@ def obtener_carreras_nombre(texto):
     # Cargar el modelo pre-entrenado en español
     nlp = spacy.load("es_core_news_sm")
 
-    carreras_keywords = ["informatica",
+    carreras_keywords = {"informatica",
     "mecanica automotriz",
     "minas",
      "electromecanica",
      "mecanica",
-     "agronomia","enfermeria",
+     "agronomia",
+     "enfermeria",
      "bioquimica",
      "bio quimica",
      "electro mecanica",
      "civil","medicina",
      "minas topografia","derecho","contaduria","contaduria publica",
      "comunicacion social","ciencias de la educacion"
-     ,"laboratorio clinico","odontologia","odonto","infor"]
+     ,"laboratorio clinico","odontologia","odonto","infor"}
 
-    id_carrera = ["1", "5", "3", "4","5","6","13","17","17",
-     "4","2","14","3","8","10","10","16","9","12","11","11","1"]
     carreras_encontradas = []
     # Convertir el texto a minúsculas y eliminar tildes
     texto_normalizado = eliminar_tildes(texto.lower())
 
     # Buscar palabras clave asociadas con carreras universitarias en el texto
-    for car, id_keyword in zip(carreras_keywords, id_carrera):
+    for car in carreras_keywords:
         if car in texto_normalizado:
-            carreras_encontradas.append(id_keyword)
+            carreras_encontradas.append(obtener_id_de_carrera(car))
+
+    print(carreras_encontradas)
     return carreras_encontradas
 
 

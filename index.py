@@ -46,6 +46,7 @@ def respuesta():
         respuesta = buscar(busqueda)
         preg = respuesta[-1]
         sql_consulta = respuesta[-1]
+        print("sql ",sql_consulta)
         if preg != "argumentar_poco_mas":
             # Establecer la conexión a la base de datos
             conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
