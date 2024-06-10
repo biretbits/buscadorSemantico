@@ -4,6 +4,10 @@ from sql import seleccionarAreas,seleccionar_carrera,seleccionarAsignaturaAreas,
 from sql import nombre_asignatura,nombre_carrera
 from comprobar import formatear_fecha_solo_ano,obtener_ano_de_fecha
 from datetime import datetime
+
+
+
+
 ac = {
 0: "Ingenieria Informatica",
 1: "Ingenieria civil",
@@ -2304,10 +2308,27 @@ def  retornar_valores(datos,ress):
                     anoBD = int(obtener_ano_de_fecha(row[16].strftime("%Y-%m-%d")))
                     vanio[anoBD][row[12]-1]+=1#en cada año y area sumamos mas 1
                     carreras[anoBD][row[13]-1]+=1
-
+        
         mensaje = "La información sobre en que areas y carreras existe mas inscritos lo detallamos en los siguientes cuadros"
         html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
-        # Crear el gráfico de torta
+        html += "<button onclick='generar()'>Generar</button>"
+        html += "<script>"
+        html += "function generar(){"
+        html +="const formulario = document.createElement('form');"
+        html +="formulario.style.display = 'none';"
+        html +="formulario.method = 'POST';"
+        html +="formulario.action = '/generar_reporte';"
+        html +="const campoDatos = document.createElement('input');"
+        html +="campoDatos.type = 'hidden';"
+        html +="campoDatos.name = 'datos';"
+        html +="campoDatos.value = "+str(ress)+";"
+        html +="formulario.appendChild(campoDatos);"
+
+        html +="document.body.appendChild(formulario);"
+        html +="formulario.submit();"
+        html += "}"
+        html += "</script>"
+
 
         #crear para areas
         html += "<div class='row'style = 'border: 1px solid white;background-color:black'>"
@@ -2359,6 +2380,12 @@ def menCOncluyeron(a,b):
     elif a < b:
         return "<h6>existe mas estudiantes que concluyen sus estudios con relación a 1er año</h6>"
 
+def generar_reporte():
+    # Llamar al script de reporte.py
+    subprocess.call(["python", "reporte.py"])
+
+    # Abrir el archivo PDF resultante en el navegador
+    webbrowser.open("reporte.pdf")
 
 
 

@@ -11,31 +11,84 @@
       <link href="{{ url_for('static', filename='bootstrap-5.0.2/css/bootstrap.min.css') }}" type="text/css" rel="stylesheet">
       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     </head>
-    <body>
+    <body class="cc">
 
-    <div class="container border border-primary" style='background-color:azure'>
+      <nav class='navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow-sm'>
+        <div class='container'>
+          <a href='#' class='navbar-brand'><img src='imagenes/cds.ico' height='30' width='30' class='rounded-circle'></a>
+          <button class='navbar-toggler' type='button' data-bs-toggle='collapse' data-bs-target='#navbarNav' aria-controls='navbarNav' aria-expanded='false' aria-label='Toggle navigation'>
+            <span class='navbar-toggler-icon'></span>
+          </button>
+          <div class='collapse navbar-collapse' id='navbarNav'>
+            <ul class='navbar-nav me-auto mb-2 mb-lg-0'>
+                <li class='nav-item' title='Inicio'>
+                  <a class='nav-link btn btn-outline-warning' href='controlador/logeo.controlador.php?accion=ix'><img src='imagenes/house.ico'style='height: 25px;width: 25px;'></a>
+                </li>
 
-      <div class="container mt-5">
-        <div class="row">
-            <div class="col-md-6 offset-md-3">
-                <h1 class="text-center mb-4">Buscador semantico</h1>
-                <div class="mb-3" style="position: relative;">
-                    <textarea class="form-control mb-2" rows="2" id='buscar' name='buscar'></textarea>
-                    <button type="button" class="btn btn-sm" style="position: absolute; bottom: 2px; right: 2px;background-color:RGBA(200,200,210,0.8)" onclick="buscarDatos()" title='Buscar'>
-                      <img src="{{ url_for('static', filename='imagenes/buscar.png') }}" height="22px" width="22px"class="img-circle">
-                    </button>
-                </div>
+           </ul>
+            <ul class='navbar-nav ms-auto'>";
+              <li class='nav-item dropdown' title='Nombre Usuario'>
+                  <a class='nav-link dropdown-toggle btn btn-outline-success' href='#' id='navbarDropdown2' role='button' data-bs-toggle='dropdown' aria-expanded='false'>
+                        hola
+                  </a>
+                  <ul class='dropdown-menu' aria-labelledby='navbarDropdown2'>
+                    <li class='nav-item' title='Cerrar sesión' style='color:green'>
+                      <a class='nav-link text-info btn btn-outline-warning' href='#'>Editar</a>
+                    </li>
+                    <li><hr class='dropdown-divider'></li>
+                    <li class='nav-item' title='Cerrar sesión' style='color:green'>
+                      <a class='nav-link text-primary btn btn-outline-danger' href='controlador/logeo.controlador.php?accion=salir'><img src='imagenes/apagar.ico'style='height: 25px;width: 25px;'></a>
+                    </li>
+                  </ul>
+              </li>
+              </ul>
+              </div>
+          </div>
+      </nav>
+      <br>
+      <style>
+        /* Estilo para el textarea */
+        #buscar {
+          padding: 10px; /* Espacio interno dentro del textarea */
+          resize: none; /* Evitar que se pueda redimensionar */
+          background-color: LightCyan; /* Color de fondo */
+          border: 1px solid #ccc; /* Borde */
+          font-size: 16px; /* Tamaño de fuente */
+        }
+        .cc{
+          background: linear-gradient(to right, AntiqueWhite, PaleGoldenrod); /* Combina dos colores */
+        height: 100px; /* Altura del elemento */
+        }
+
+      </style>
+    <div class="container border-top border-end border-start border-primary"  class="bg-danger">
+      <div class="alert alert-warning">
+        <div class="container mt-5">
+          <div class="row">
+            <div class="alert alert-success">
+              <div class="col-md-6 offset-md-3">
+                  <h4 class="text-center mb-1 text-primary" style='font-style: italic;'>Buscador semantico</h4>
+                  <div class="mb-3" style="position: relative;">
+                      <textarea class="form-control mb-2 border-primary" rows="2" id='buscar' name='buscar'></textarea>
+                      <button type="button" class="btn btn-sm" style="position: absolute; bottom: 2px; right: 2px;background-color:RGBA(200,200,210,0.8)" onclick="buscarDatos()" title='Buscar'>
+                        <img src="{{ url_for('static', filename='imagenes/buscar.png') }}" height="22px" width="22px"class="img-circle">
+                      </button>
+                  </div>
+              </div>
             </div>
+          </div>
         </div>
-    </div>
+      </div>
 
-      <div class="border border-success">
+      <div class="border-success border-top border-end border-start">
         <br>
         <div class="respuesta" id='respuesta'>
 
         </div>
-        <center><canvas id='grafica'  width='250' height='250'></canvas></center>
+        <p></p>
+        <br><br>
       </div>
+      <br>
     </div>
 
     <script type="text/javascript">
@@ -67,6 +120,7 @@
 
 
 </script>
+
     <script src="{{ url_for('static', filename='bootstrap-5.0.2/js/bootstrap.min.js') }}" charset="utf-8"></script>
 
     </body>

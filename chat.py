@@ -45,9 +45,10 @@ sentencias = [
     "total de estudiantes vinieron concepto transferencia unsxx universidad nacional siglo xx",
     "cantidad estudiantes otras universidades concepto transferencia unsxx universidad nacional siglo xx",
     "numero estudiantes transferidos universidades unsxx universidad nacional siglo xx",
-    "cantidad estudiantes inscritos primeros niveles areas  carreras tecnologia salud social unsxx universidad nacional siglo xx"
-    "existe mas estudiantes inscritos primeros niveles areas carreras tecnologia salud social unsxx universidad nacional siglo xx",
-    "en que carreras y areas hay mas inscritos de estudiantes tecnologia salud social unsxx universidad nacional siglo xx",
+    "cantidad estudiantes inscritos primeros niveles areas  carreras  unsxx universidad nacional siglo xx"
+    "existe mas estudiantes inscritos primeros niveles areas carreras  unsxx universidad nacional siglo xx",
+    "en que carreras y areas hay mas inscritos de estudiantes  unsxx universidad nacional siglo xx",
+    "cual es la cantidad de estudiantes inscritos en las tres areas y carreras unsxx universidad nacional siglo xx"
 ]
 # Definir la lista de pares
 
@@ -85,6 +86,7 @@ respuesta =[
 "concepto_transferencia",
 "concepto_transferencia",
 "concepto_transferencia",
+"mayor_inscritos",
 "mayor_inscritos",
 "mayor_inscritos",
 "mayor_inscritos",

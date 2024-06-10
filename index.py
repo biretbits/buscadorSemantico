@@ -2,6 +2,10 @@ from flask import Flask,render_template,request
 from chat import buscar
 from retorno import retornar_valores
 import pymysql
+from flask import Flask, Response, request, send_file
+import io
+from weasyprint import HTML
+from reportes import generar_reporte_de_consulta
 app = Flask("mi proyecto nuevo")
 
 
@@ -71,7 +75,77 @@ def respuesta():
         # Si no es una solicitud POST, puedes manejarlo aquí
         return "Solicitud no válida"
 
+@app.route('/generar_reporte', methods=['POST'])
+def generar_reporte():
+    datos = request.form.get('datos')  # Obtener los datos del campo 'datos' del formulario POST
+    cor= datos.split(',')
+    accion = cor[-2]
+    sql_consulta = cor[-1]
+    # Generar el HTML del reporte con los datos recibidos
+    #html_content = generar_html_reporte(datos)
 
+    # Generar el PDF a partir del HTML
+    #
+
+    # Devolver el PDF como respuesta y abrirlo en el navegador
+    #return send_file(pdf_file,'reporte.pdf')
+    conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+    # Crear un cursor para ejecutar consultas
+    cursor = conn.cursor()
+    # Ejecutar la consulta SQL
+    cursor.execute(sql_consulta)
+    # Verifica si hay algún resultado antes de obtenerlos
+    if cursor.rowcount > 0:
+        # Si hay resultados, obtén los datos de la consulta
+        sql_consulta = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        html_retor=generar_reporte_de_consulta(sql_consulta,cor)
+        pdf_file = generar_pdf(html_retor)
+
+        return send_file(pdf_file,'reporte.pdf')
+
+def generar_pdf(html_content):
+    # Generar el PDF a partir del HTML utilizando WeasyPrint
+    pdf_bytes = io.BytesIO()
+    HTML(string=html_content).write_pdf(pdf_bytes)
+    pdf_bytes.seek(0)
+    return pdf_bytes
+def generar_html_reporte(datos):
+    # Aquí generas el contenido HTML del reporte utilizando los datos recibidos
+    # Por ejemplo:
+    car =[0,1,2,4,5,7,8,4,5,2]
+    html = ""
+    html+="<!DOCTYPE html>"
+    html+="<html>"
+    html+="<head>"
+    html +="""<style>
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            th, td {
+                border: 1px solid black;
+                padding: 8px;
+                text-align: left;
+            }
+        </style>"""
+    html+="</head>"
+    html+="<body>"
+
+    html+="<h2>Ejemplo de tabla con WeasyPrint</h2>"
+
+    html+="<table>"
+    for j in range(len(car)):
+        html+="<tr>"
+        html+="<th>"+str(car[j])+"</th>"
+        html+="</tr>"
+    html+="</table>"
+    html+="</body>"
+    html+="</html>"
+
+
+    return html
 
 if __name__ == '__main__':
     app.run(debug=True,port=5003)
