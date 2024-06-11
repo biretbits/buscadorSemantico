@@ -124,13 +124,16 @@ def generar_reporte_de_consulta(datos,ress):
 
         #crear para areas
 
-        html += "<div class='row'style = 'border: 1px solid white;background-color:black'>"
-        html += "<h6 class='centro'style='color:white'>Areas</h6><br><br>"
+        html += "<div class='row1'style = 'border: 1px solid white;background-color:black'>"
+        html += "<h6 class='centro'style='color:white'>Areas</h6>"
         k1 = 1
         areas ={0:"Técnologia",1:"Salud",2:"Sociales"}
         for anio in range(a1, a2 + (1)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
-            html += "<h6 class='centro'style='color:white;white-space: pre-line;'>"+str(anio)+"</h6>"
+            html += "<h6 class='centro'style='color:white'>"+str(anio)+"</h6>"
+            html += "<div class='row'>"
             for ar in range(3):
+                if ar%3 == 0 and ar != 0:
+                    html+="</div><div class='row'>"
                 html += "<div class='col'>"
                 html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
                 html += "<div class='panel-heading centro'>"
@@ -141,7 +144,9 @@ def generar_reporte_de_consulta(datos,ress):
                 html += "</div>"
                 html += "</div>"
                 html += "</div>"
+            html += "</div>"
         html += "</div>"
+
         html += "<br><br>"
         html += "<div class='row'style = 'border: 1px solid white;background-color:black'>"
         html += "<h6 class='centro'align='center'style='color:white'>Carreras</h6>"
@@ -166,9 +171,11 @@ def generar_reporte_de_consulta(datos,ress):
         html +=""".row {
             display: flex;
             flex-wrap: wrap;
-            with:100%
-
         }"""
+        html +=""".row1 {
+                with:100%
+
+            }"""
 
         html+=""".col {
             width: 33.33%;
@@ -181,5 +188,131 @@ def generar_reporte_de_consulta(datos,ress):
         html +=""".col-lg-4 {
             width: 33.33%;
         }"""
+    if accion == "modalidad_titulacion":
+        html+="<h4 class='centro'>MODALIDAD DE TITULACIONES</h4>"
+        carrera_hay = ress[0]
+        mensaje = ""
+        if carrera_hay == "si_car":
+            mensaje+="<h6>Las modalidades de titulación de la carrera o carreras son</h6>"
+        html+=mensaje
 
+        html+="<div class='row'>"
+        p = 0
+        for i in range(17):
+            html += "<div class='col-lg-4'>"
+            html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+            html += "<div class='panel-heading'>"
+            html += nombre_carrera_retor(i+1)
+            html += "</div>"
+            html += "<div class='panel-body'>"
+            html+= "<table class='table'>"
+            html+= "<thead>"
+            html+="<tr>"
+            html+="<td>Nro</td>"
+            html+="<td>Titulación</td>"
+            html+="</tr>"
+            html+="</thead>"
+            html+="<tbody>"
+            k = 1
+
+            for row in datos:
+                html+="<tr>"
+                if (i+1) == row[3] and row[2] != 2 and row[3] == 1:
+                    print(row[3]," esto es m ",(i+1))
+                    html+="<td>"+str(k)+"</td>"
+                    k=k+1
+                    html+="<td>"+row[1]+"</td>"
+                elif (i+1) ==row[3] and row[3] == 2:
+                    html+="<td>"+str(k)+"</td>"
+                    k=k+1
+                    html+="<td>"+row[1]+"</td>"
+                elif (i+1) ==row[3] and row[3] == 3:
+                    html+="<td>"+str(k)+"</td>"
+                    k=k+1
+                    html+="<td>"+row[1]+"</td>"
+                elif (i+1) ==row[3] and row[3] == 4:
+                    html+="<td>"+str(k)+"</td>"
+                    k=k+1
+                    html+="<td>"+row[1]+"</td>"
+                elif (i+1) ==row[3]and row[3] == 5:
+                    html+="<td>"+str(k)+"</td>"
+                    k=k+1
+                    html+="<td>"+row[1]+"</td>"
+                elif (i+1) ==row[3]and row[3] == 6:
+                    html+="<td>"+str(k)+"</td>"
+                    k=k+1
+                    html+="<td>"+row[1]+"</td>"
+                elif (i+1) ==row[3]and row[3] == 7:
+                    html+="<td>"+str(k)+"</td>"
+                    k=k+1
+                    html+="<td>"+row[1]+"</td>"
+                elif (i+1) ==row[3]and row[3] == 8:
+                    html+="<td>"+str(k)+"</td>"
+                    k=k+1
+                    html+="<td>"+row[1]+"</td>"
+                if (i+1) ==row[3]and row[3] == 9:
+                    html+="<td>"+str(k)+"</td>"
+                    k=k+1
+                    html+="<td>"+row[1]+"</td>"
+                elif (i+1) == row[3]and row[3] == 10:
+                    html+="<td>"+str(k)+"</td>"
+                    k=k+1
+                    html+="<td>"+row[1]+"</td>"
+                elif (i+1) == row[3]and row[3] == 11:
+                    html+="<td>"+str(k)+"</td>"
+                    k=k+1
+                    html+="<td>"+row[1]+"</td>"
+                if (i+1) == row[3]and row[3] == 12:
+                    html+="<td>"+str(k)+"</td>"
+                    k=k+1
+                    html+="<td>"+row[1]+"</td>"
+                elif (i+1) == row[3]and row[3] == 13:
+                    html+="<td>"+str(k)+"</td>"
+                    k=k+1
+                    html+="<td>"+row[1]+"</td>"
+                elif (i+1) == row[3]and row[3] == 14:
+                    html+="<td>"+str(k)+"</td>"
+                    k=k+1
+                    html+="<td>"+row[1]+"</td>"
+                elif (i+1) == row[3]and row[3] == 15:
+                    html+="<td>"+str(k)+"</td>"
+                    k=k+1
+                    html+="<td>"+row[1]+"</td>"
+                elif (i+1) == row[3]and row[3] == 16:
+                    html+="<td>"+str(k)+"</td>"
+                    k=k+1
+                    html+="<td>"+row[1]+"</td>"
+                elif (i+1) == row[3]and row[3] == 17:
+                    html+="<td>"+str(k)+"</td>"
+                    k=k+1
+                    html+="<td>"+row[1]+"</td>"
+                html+="</tr>"
+            html+="</tbody>"
+            html+= "</table>"
+            html += "</div>"
+            html += "</div>"
+            html += "</div>"
+        html+="</div>"
+        html +="<style>.centro{text-align:center}"
+
+        html +=""".row {
+                display: flex;
+                flex-wrap: wrap;
+            }"""
+        html +=""".row1 {
+                    with:100%
+
+                }"""
+
+        html+=""".col {
+                width: 33.33%;
+            }"""
+
+        html +=""".col-sm-6 {
+                width: 50%;
+            }"""
+
+        html +=""".col-lg-4 {
+                width: 33.33%;
+            }"""
     return html

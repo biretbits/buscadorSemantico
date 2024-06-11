@@ -1,7 +1,7 @@
 from flask import jsonify
 from sql import nombre_carrera_retor,grado_Estudiante,obtener_nombre,nombre_materia,obtener_datos_de_curso
 from sql import seleccionarAreas,seleccionar_carrera,seleccionarAsignaturaAreas,seleccionarAsignatura
-from sql import nombre_asignatura,nombre_carrera
+from sql import nombre_asignatura,nombre_carrera,consulta_Titulado
 from comprobar import formatear_fecha_solo_ano,obtener_ano_de_fecha
 from datetime import datetime
 
@@ -87,6 +87,45 @@ c_cso = {}#xontar estudiantes aprobados por carrera y curso
 c_csor = {}#contar estudiantes reprobados por carrera y cursos
 c_quim = {}#xontar estudiantes aprobados por carrera y curso
 c_quimr = {}#contar estudiantes reprobados por carrera y cursos
+
+c_infor1 = []#xontar estudiantes aprobados por carrera y curso
+c_inforr1 = []#contar estudiantes reprobados por carrera y cursos
+c_civil1 = []#xontar estudiantes aprobados por carrera y curso
+c_civilr1 = []#contar estudiantes reprobados por carrera y cursos
+c_minas1 = []#xontar estudiantes aprobados por carrera y curso
+c_minasr1 = []#contar estudiantes reprobados por carrera y cursos
+c_elec1 = []#xontar estudiantes aprobados por carrera y curso
+c_elecr1 = []#contar estudiantes reprobados por carrera y cursos
+c_mec1 = []#xontar estudiantes aprobados por carrera y curso
+c_mecr1 = []#contar estudiantes reprobados por carrera y cursos
+c_agro1 = []#xontar estudiantes aprobados por carrera y curso
+c_agror1 = []#contar estudiantes reprobados por carrera y cursos
+c_lit1 = []#xontar estudiantes aprobados por carrera y curso
+c_litr1 = []#contar estudiantes reprobados por carrera y cursos
+c_der1 = []#xontar estudiantes aprobados por carrera y curso
+c_derr1 = []#contar estudiantes reprobados por carrera y cursos
+c_cie1 = []#xontar estudiantes aprobados por carrera y curso
+c_cier1 = []#contar estudiantes reprobados por carrera y cursos
+c_cont1 = []#xontar estudiantes aprobados por carrera y curso
+c_contr1 = []#contar estudiantes reprobados por carrera y cursos
+c_odon1 = []#xontar estudiantes aprobados por carrera y curso
+c_odonr1 = []#contar estudiantes reprobados por carrera y cursos
+c_lab1 = []#xontar estudiantes aprobados por carrera y curso
+c_labr1 = []#contar estudiantes reprobados por carrera y cursos
+c_enf1 = []#xontar estudiantes aprobados por carrera y curso
+c_enfr1 = []#contar estudiantes reprobados por carrera y cursos
+c_med1 = []#xontar estudiantes aprobados por carrera y curso
+c_medr1 = []#contar estudiantes reprobados por carrera y cursos
+c_bio1 = []#xontar estudiantes aprobados por carrera y curso
+c_bior1 = []#contar estudiantes reprobados por carrera y cursos
+c_cso1 = []#xontar estudiantes aprobados por carrera y curso
+c_csor1 = []#contar estudiantes reprobados por carrera y cursos
+c_quim1 = []#xontar estudiantes aprobados por carrera y curso
+c_quimr1 = []#contar estudiantes reprobados por carrera y cursos
+
+#array de 9 departamentos
+departamento = ['oruro',"potosi","la paz","cochabamba","santa cruz","beni","tarija","chuquisaca","pando"]
+id_dep = [0,1,2,3,4,5,6,7,8]
 def  retornar_valores(datos,ress):
     accion1 = ress[-2]
     print("la accion es : ",accion1)
@@ -739,40 +778,60 @@ def  retornar_valores(datos,ress):
         mensaje = "La cantidad de Estudiantes reprobados y aprobados "
         mensaje += " es lo siguiente por área y carreras"
         html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
-        # Crear el gráfico de torta
-        html += "<div class='row'>"
-        html += "<h2>Total</h2>"
-        html += "<center><canvas id='grafica' width='250' height='250'></canvas></center>"
-        html += "</div>"
-        #crear para areas
+
         html += "<div class='row'>"
         html += "<h4 align='center'>Areas</h4>"
-        print("areas son ",len(areasU), areasU[1])
         for i in range(len(areasU)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
-            html += "<div class='col-lg-3'>"
+            html += "<div class='col-lg-4' style = 'background-color:khaki;border: 1px solid black;'>"
             html += "<div class='panel panel-default text-center'>"
             html += "<div class='panel-heading'>"
             html += areasU[i]
             html += "</div>"
             html += "<div class='panel-body'>"
-            html += "<center><canvas id='graficaa"+str(i)+"' width='250' height='250'></canvas></center>"
+            html +="<table class='table'>"
+            html+= "<thead>"
+            html+="<tr>"
+            html+="<td>Aprobados</td>"
+            html+="<td>Reprobados</td>"
+            html+="</tr>"
+            html+="</thead>"
+            html+="<tbody>"
+            html+="<tr>"
+            html+="<td>"+str(vareasApro[i])+"</td>"
+            html+="<td>"+str(vareasApla[i])+"</td>"
+            html+="</tr>"
+            html+="</tbody>"
+            html +="</table>"
             html += "</div>"
             html += "</div>"
             html += "</div>"
         html += "</div>"
 
-
+        h = 1
         for i in range(17):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
             html += "<div class='row'>"
             html += "<h4 align = 'center'>Carrera</h4>"
-            html += "<h5 align = 'center'>"+ac[i]+"</h5>"
-            html += "<div class='col-lg-3'>"
+            html += "<h5 align = 'center'>"+str(ac[i])+"</h5>"
+            html += "<div class='col-lg-12' style = 'background-color:khaki;border: 1px solid black;'>"
             html += "<div class='panel panel-default text-center'>"
             html += "<div class='panel-heading'>"
 
             html += "</div>"
             html += "<div class='panel-body'>"
-            html += "<center><canvas id='grafica"+str(i)+"' width='250' height='250'></canvas></center>"
+            html +="<table class='table'>"
+            html+= "<thead>"
+            html+="<tr>"
+            html+="<td>Aprobados</td>"
+            html+="<td>Reprobados</td>"
+            html+="</tr>"
+            html+="</thead>"
+            html+="<tbody>"
+            html+="<tr>"
+            html+="<td>"+str(vapro[i])+"</td>"
+            html+="<td>"+str(vaplaz[i])+"</td>"
+            html+="</tr>"
+            html+="</tbody>"
+            html +="</table>"
             html += "</div>"
             html += "</div>"
             html += "</div>"
@@ -780,149 +839,71 @@ def  retornar_valores(datos,ress):
             html += "<div class='row'>"
             k = 0
             for anio in range(a1, a2 + 1):#recorremos las fechas
-                html += "<h5 align='center'>Año "+str(anio)+"</h5>"
+                html += "<h6 align='center'>Año "+str(anio)+"</h6>"
                 for j in range(5):#recorremos todos los cursos aprobados por año
 
-                    html += "<div class='col-lg-3'>"
+                    html += "<div class='col-lg-3'style = 'background-color:khaki;border: 1px solid black;'>"
                     html += "<div class='panel panel-default text-center'>"
                     html += "<div class='panel-heading'>"
                     html += curso[j]
                     html += "</div>"
                     html += "<div class='panel-body'>"
-                    html += "<center><canvas id='graficaCurso"+str(i)+str(k)+str(j)+"' width='250' height='250'></canvas></center>"
+                    html +="<table class='table'>"
+                    html+= "<thead>"
+                    html+="<tr>"
+                    html+="<td>Aprobados</td>"
+                    html+="<td>Reprobados</td>"
+                    html+="</tr>"
+                    html+="</thead>"
+                    html+="<tbody>"
+                    html+="<tr>"
+                    if h == 1:
+                        html += "<td>" + str(c_infor[anio][j]) + "</td><td> " + str(c_inforr[anio][j]) + "</td>"  # Valores para cada sección de la torta
+                    if h == 2:
+                        html += "<td>" + str(c_civil[anio][j]) + "</td><td> " + str(c_civilr[anio][j]) + "</td>"  # Valores para cada sección de la torta
+                    if h == 3:
+                        html += "<td>" + str(c_minas[anio][j]) + "</td><td> " + str(c_minasr[anio][j]) + "</td>"  # Valores para cada sección de la torta
+                    if h == 4:
+                        html += "<td>" + str(c_elec[anio][j]) + "</td><td> " + str(c_elecr[anio][j]) + "</td>"  # Valores para cada sección de la torta
+                    if h == 5:
+                        html += "<td>" + str(c_mec[anio][j]) + "</td><td> " + str(c_mecr[anio][j]) + "</td>"  # Valores para cada sección de la torta
+                    if h == 6:
+                        html += "<td>" + str(c_agro[anio][j]) + "</td><td> " + str(c_agror[anio][j]) + "</td>"  # Valores para cada sección de la torta
+                    if h == 7:
+                        html += "<td>" + str(c_lit[anio][j]) + "</td><td> " + str(c_litr[anio][j]) + "</td>"  # Valores para cada sección de la torta
+                    if h == 8:
+                        html += "<td>" + str(c_der[anio][j]) + "</td><td> " + str(c_derr[anio][j]) + "</td>"  # Valores para cada sección de la torta
+                    if h == 9:
+                        html += "<td>" + str(c_cie[anio][j]) + "</td><td> " + str(c_cier[anio][j]) + "</td>"  # Valores para cada sección de la torta
+                    if h == 10:
+                        html += "<td>" + str(c_cont[anio][j]) + "</td><td> " + str(c_contr[anio][j]) + "</td>"  # Valores para cada sección de la torta
+                    if h == 11:
+                        html += "<td>" + str(c_odon[anio][j]) + "</td><td> " + str(c_odonr[anio][j]) + "</td>"  # Valores para cada sección de la torta
+                    if h == 12:
+                        html += "<td>" + str(c_lab[anio][j]) + "</td><td> " + str(c_labr[anio][j]) + "</td>"  # Valores para cada sección de la torta
+                    if h == 13:
+                        html += "<td>" + str(c_enf[anio][j]) + "</td><td> " + str(c_enfr[anio][j]) + "</td>"  # Valores para cada sección de la torta
+                    if h == 14:
+                        html += "<td>" + str(c_med[anio][j]) + "</td><td> " + str(c_medr[anio][j]) + "</td>"  # Valores para cada sección de la torta
+                    if h == 15:
+                        html += "<td>" + str(c_bio[anio][j]) + "</td><td> " + str(c_bior[anio][j]) + "</td>"  # Valores para cada sección de la torta
+                    if h == 16:
+                        html += "<td>" + str(c_cso[anio][j]) + "</td><td> " + str(c_csor[anio][j]) + "</td>"  # Valores para cada sección de la torta
+                    if h == 17:
+                        html += "<td>" + str(c_quim[anio][j]) + "</td><td> " + str(c_quimr[anio][j]) + "</td>"  # es de la carrera de bioquimica
+
+                    html+="</tr>"
+                    html+="</tbody>"
+                    html +="</table>"
                     html += "</div>"
                     html += "</div>"
                     html += "</div>"
                 k = k + 1
+            h = h + 1
             html += "</div>"
 
         # Datos para el gráfico
-        html += "<script>"
-        html += "var data = {"
-        html += "'labels': ['Aprobado', 'Reprobado'],"
-        html += "'datasets': [{"
-        html += "'data': [" + str(capro) + ", " + str(caplaz) + "], "  # Valores para cada sección de la torta
-        html += "'backgroundColor': ['#FF6384', '#36A2EB'] "  # Colores para cada sección
-        html += "}]"
-        html += "};"
-        html += "var options = {"
-        html += "'responsive': true,"
-        html += "'maintainAspectRatio': false"
-        html += "};"
-        html+="var ctx = document.getElementById('grafica').getContext('2d');"
-        html+="var myPieChart = new Chart(ctx, {"
-        html+=" type: 'pie',"
-        html+=" data: data,"
-        html+=" options: options"
-        html+="});"
-        html += "</script>"
-        h = 1
-        for i in range(17):#creamos un grafico para cada canvas
-            html += "<script>"
-            html += "var data = {"
-            html += "'labels': ['Aprobado', 'Reprobado'],"
-            html += "'datasets': [{"
 
-            html += "'data': [" + str(vapro[i]) + ", " + str(vaplaz[i]) + "], "  # Valores para cada sección de la torta
-            html += "'backgroundColor': ['lime', 'orange'] "  # Colores para cada sección
-            html += "}]"
-            html += "};"
-            html += "var options = {"
-            html += "'responsive': true,"
-            html += "'maintainAspectRatio': false"
-            html += "};"
-
-            html+="var ctx = document.getElementById('grafica"+str(i)+"').getContext('2d');"
-            html+="var myPieChart = new Chart(ctx, {"
-            html+=" type: 'pie',"
-            html+=" data: data,"
-            html+=" options: options"
-            html+="});"
-            html += "</script>"
-            k = 0
-            html += "<script>"
-            for anio in range(a11, a22 + 1):#recorremos las fechas
-
-                for j in range(5):#recorremos todos los cursos aprobados por año
-                    html += "var data = {"
-                    html += "'labels': ['Aprobado', 'Reprobado'],"
-                    html += "'datasets': [{"
-
-                    if h == 1:
-                        html += "'data': [" + str(c_infor[anio][j]) + ", " + str(c_inforr[anio][j]) + "], "  # Valores para cada sección de la torta
-                    if h == 2:
-                        html += "'data': [" + str(c_civil[anio][j]) + ", " + str(c_civilr[anio][j]) + "], "  # Valores para cada sección de la torta
-                    if h == 3:
-                        html += "'data': [" + str(c_minas[anio][j]) + ", " + str(c_minasr[anio][j]) + "], "  # Valores para cada sección de la torta
-                    if h == 4:
-                        html += "'data': [" + str(c_elec[anio][j]) + ", " + str(c_elecr[anio][j]) + "], "  # Valores para cada sección de la torta
-                    if h == 5:
-                        html += "'data': [" + str(c_mec[anio][j]) + ", " + str(c_mecr[anio][j]) + "], "  # Valores para cada sección de la torta
-                    if h == 6:
-                        html += "'data': [" + str(c_agro[anio][j]) + ", " + str(c_agror[anio][j]) + "], "  # Valores para cada sección de la torta
-                    if h == 7:
-                        html += "'data': [" + str(c_lit[anio][j]) + ", " + str(c_litr[anio][j]) + "], "  # Valores para cada sección de la torta
-                    if h == 8:
-                        html += "'data': [" + str(c_der[anio][j]) + ", " + str(c_derr[anio][j]) + "], "  # Valores para cada sección de la torta
-                    if h == 9:
-                        html += "'data': [" + str(c_cie[anio][j]) + ", " + str(c_cier[anio][j]) + "], "  # Valores para cada sección de la torta
-                    if h == 10:
-                        html += "'data': [" + str(c_cont[anio][j]) + ", " + str(c_contr[anio][j]) + "], "  # Valores para cada sección de la torta
-                    if h == 11:
-                        html += "'data': [" + str(c_odon[anio][j]) + ", " + str(c_odonr[anio][j]) + "], "  # Valores para cada sección de la torta
-                    if h == 12:
-                        html += "'data': [" + str(c_lab[anio][j]) + ", " + str(c_labr[anio][j]) + "], "  # Valores para cada sección de la torta
-                    if h == 13:
-                        html += "'data': [" + str(c_enf[anio][j]) + ", " + str(c_enfr[anio][j]) + "], "  # Valores para cada sección de la torta
-                    if h == 14:
-                        html += "'data': [" + str(c_med[anio][j]) + ", " + str(c_medr[anio][j]) + "], "  # Valores para cada sección de la torta
-                    if h == 15:
-                        html += "'data': [" + str(c_bio[anio][j]) + ", " + str(c_bior[anio][j]) + "], "  # Valores para cada sección de la torta
-                    if h == 16:
-                        html += "'data': [" + str(c_cso[anio][j]) + ", " + str(c_csor[anio][j]) + "], "  # Valores para cada sección de la torta
-                    if h == 17:
-                        html += "'data': [" + str(c_quim[anio][j]) + ", " + str(c_quimr[anio][j]) + "], "  # es de la carrera de bioquimica
-
-                    html += "'backgroundColor': ['blue', 'red'] "  # Colores para cada sección
-                    html += "}]"
-                    html += "};"
-                    html += "var options = {"
-                    html += "'responsive': true,"
-                    html += "'maintainAspectRatio': false"
-                    html += "};"
-
-                    html+="var ctx = document.getElementById('graficaCurso"+str(i)+str(k)+str(j)+"').getContext('2d');"
-                    html+="var myPieChart = new Chart(ctx, {"
-                    html+=" type: 'pie',"
-                    html+=" data: data,"
-                    html+=" options: options"
-                    html+="});"
-                k = k + 1
-            h = h + 1
-            html += "</script>"
-        #para las areass
-        for i in range(len(areasU)):#creamos un grafico para cada canvas
-            html += "<script>"
-            html += "var data = {"
-            html += "'labels': ['Aprobado', 'Reprobado'],"
-            html += "'datasets': [{"
-
-            html += "'data': [" + str(vareasApro[i]) + ", " + str(vareasApla[i]) + "], "  # Valores para cada sección de la torta
-            html += "'backgroundColor': ['#FF6384', '#36A2EB'] "  # Colores para cada sección
-            html += "}]"
-            html += "};"
-            html += "var options = {"
-            html += "'responsive': true,"
-            html += "'maintainAspectRatio': false"
-            html += "};"
-
-            html+="var ctx = document.getElementById('graficaa"+str(i)+"').getContext('2d');"
-            html+="var myPieChart = new Chart(ctx, {"
-            html+=" type: 'pie',"
-            html+=" data: data,"
-            html+=" options: options"
-            html+="});"
-            html += "</script>"
     if accion1 == "seleccionar_estudiantes_desertores":
         fecha1 = ress[0]
         fecha2 = ress[1]
@@ -1639,14 +1620,14 @@ def  retornar_valores(datos,ress):
             fecha2 = datetime.strptime(fecha2, "%Y-%m-%d").date()
         for row in datos:#recorremos los datos obtenidos de la base de datos
             if row[14]>=fecha1 and row[14] <= fecha2:
-                if row[3] == 'desactivo':#contar los de primer año
+                if row[4] == 'si':#contar los de primer año
                     if row[12] == 1:
                         vareasT[row[12]][row[8]][0]+=1
                     elif row[12] == 2:
                         vareasS[row[12]][row[8]][0]+=1
                     elif row[12] == 3:
                         vareasSo[row[12]][row[8]][0]+=1
-                elif row[3] == 'activo':#contar los de 5to añp
+                elif row[4] == 'no':#contar los de 5to añp
                     if row[12] == 1:
                         vareasTr[row[12]][row[8]][0]+=1
                     elif row[12] == 2:
@@ -1656,7 +1637,7 @@ def  retornar_valores(datos,ress):
 
                 anoBD = int(obtener_ano_de_fecha(row[14].strftime("%Y-%m-%d")))
 
-                if row[3] == 'desactivo':#contamos solo de primer año
+                if row[4] == 'si':#si esta en el campo de desercion estonces ingresa
                     if row[10] == 1:
                         c_infor[anoBD][row[8]][0]+=1
                     elif row[10] == 2:
@@ -1692,7 +1673,7 @@ def  retornar_valores(datos,ress):
                     elif row[10] == 17:
                         c_quim[anoBD][row[8]][0]+=1
 
-                elif row[3] == 'activo':#contamos solo de 5to año y aprobados
+                elif row[4] == 'no':#contamos solo de 5to año y aprobados
                     if row[10] == 1:
                         c_inforr[anoBD][row[8]][0]+=1
                     elif row[10] == 2:
@@ -1740,7 +1721,7 @@ def  retornar_valores(datos,ress):
         for i in range(3):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
 
             are = seleccionarAsignaturaAreas((i+1),1)#seleccionamos las asingturas con el cod de area
-            print(are," no se que me retornara")
+
             if are != "no":
                 html += "<div class='col-lg-4'>"
                 html += "<div class='panel panel-default text-center bg-info' style = 'border: 1px solid black;'>"
@@ -1822,6 +1803,7 @@ def  retornar_valores(datos,ress):
                             if h == 1: #si carrera es igual a 1 ingresa
                                 if (g+1) == c_infor[anio][asi[0]][1]:#si el curso es igual a primero
                                     if c_infor[anio][asi[0]][0] > 0:
+                                        #print(c_infor[anio][asi[0]][0]," = ",c_infor[anio][asi[0]][1])
                                         html += "<tr><td>"+str(nombre_asignatura(c_infor[anio][asi[0]][2]))+"</td>"
                                         html += "<td>"+str((c_infor[anio][asi[0]][0]))+"</td></tr>"
                             if h == 2:
@@ -1995,13 +1977,13 @@ def  retornar_valores(datos,ress):
         if isinstance(fecha2, str):
             fecha2 = datetime.strptime(fecha2, "%Y-%m-%d").date()
         for row in datos:#recorremos los datos obtenidos de la base de datos
-            if row[15]>=fecha1 and row[15] <= fecha2:
+            if row[16]>=fecha1 and row[16] <= fecha2:
                 if row[11] == 'masculino':#contar los de primer año
                     vareas[row[12]]+=1
                 elif row[11] == 'femenino':#contar los de 5to añp
                     vareasr[row[12]]+=1
 
-                anoBD = int(obtener_ano_de_fecha(row[15].strftime("%Y-%m-%d")))
+                anoBD = int(obtener_ano_de_fecha(row[16].strftime("%Y-%m-%d")))
 
                 if row[11] == 'masculino':#contamos solo de primer año
                     if row[13] == 1:
@@ -2076,7 +2058,7 @@ def  retornar_valores(datos,ress):
                         c_quimr[anoBD]+=1
 
         mensaje = "La cantidad de estudiantes clasificado por varones y mujeres"
-        mensaje += "detallamos en los siguientes cuadros por area y carreras"
+        mensaje += " detallamos en los siguientes cuadros por area y carreras"
         html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
         # Crear el gráfico de torta
 
@@ -2308,7 +2290,7 @@ def  retornar_valores(datos,ress):
                     anoBD = int(obtener_ano_de_fecha(row[16].strftime("%Y-%m-%d")))
                     vanio[anoBD][row[12]-1]+=1#en cada año y area sumamos mas 1
                     carreras[anoBD][row[13]-1]+=1
-        
+
         mensaje = "La información sobre en que areas y carreras existe mas inscritos lo detallamos en los siguientes cuadros"
         html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
         html += "<button onclick='generar()'>Generar</button>"
@@ -2368,6 +2350,403 @@ def  retornar_valores(datos,ress):
                 html += "</div>"
         html += "</div>"
         html += "<br><br>"
+    if accion1 == "modalidad_titulacion":
+        carrera_hay = ress[0]
+        mensaje = ""
+        if carrera_hay == "si_car":
+            mensaje+="<h6>Las modalidades de titulación de la carrera o carreras son</h6>"
+        else:
+            mensaje+="<h6>MODALIDADES DE TITULACIÓN</h6>"
+        html+=mensaje
+        html += "<button onclick='generar()' class='btn btn-warning'>Reporte</button><br><br>"
+        html += "<script>"
+        html += "function generar(){"
+        html +="const formulario = document.createElement('form');"
+        html +="formulario.style.display = 'none';"
+        html +="formulario.method = 'POST';"
+        html +="formulario.action = '/generar_reporte';"
+        html +="const campoDatos = document.createElement('input');"
+        html +="campoDatos.type = 'hidden';"
+        html +="campoDatos.name = 'datos';"
+        html +="campoDatos.value = "+str(ress)+";"
+        html +="formulario.appendChild(campoDatos);"
+
+        html +="document.body.appendChild(formulario);"
+        html +="formulario.submit();"
+        html += "}"
+        html += "</script>"
+        html+="<div class='row'>"
+        for i in range(17):
+            html += "<div class='col-lg-4'>"
+            html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+            html += "<div class='panel-heading'>"
+            html += nombre_carrera_retor(i+1)
+            html += "</div>"
+            html += "<div class='panel-body'>"
+            html+= "<table class='table'>"
+            html+= "<thead>"
+            html+="<tr>"
+            html+="<td>Nro</td>"
+            html+="<td>Titulación</td>"
+            html+="</tr>"
+            html+="</thead>"
+            html+="<tbody>"
+            k = 1
+            for row in datos:
+                html+="<tr>"
+
+                if (i+1) == row[3] and row[2] != 2 and row[3] == 1:
+                    print(row[3]," esto es m ",(i+1))
+                    html+="<td>"+str(k)+"</td>"
+                    k=k+1
+                    html+="<td>"+row[1]+"</td>"
+                elif (i+1) ==row[3] and row[3] == 2:
+                    html+="<td>"+str(k)+"</td>"
+                    k=k+1
+                    html+="<td>"+row[1]+"</td>"
+                elif (i+1) ==row[3] and row[3] == 3:
+                    html+="<td>"+str(k)+"</td>"
+                    k=k+1
+                    html+="<td>"+row[1]+"</td>"
+                elif (i+1) ==row[3] and row[3] == 4:
+                    html+="<td>"+str(k)+"</td>"
+                    k=k+1
+                    html+="<td>"+row[1]+"</td>"
+                elif (i+1) ==row[3]and row[3] == 5:
+                    html+="<td>"+str(k)+"</td>"
+                    k=k+1
+                    html+="<td>"+row[1]+"</td>"
+                elif (i+1) ==row[3]and row[3] == 6:
+                    html+="<td>"+str(k)+"</td>"
+                    k=k+1
+                    html+="<td>"+row[1]+"</td>"
+                elif (i+1) ==row[3]and row[3] == 7:
+                    html+="<td>"+str(k)+"</td>"
+                    k=k+1
+                    html+="<td>"+row[1]+"</td>"
+                elif (i+1) ==row[3]and row[3] == 8:
+                    html+="<td>"+str(k)+"</td>"
+                    k=k+1
+                    html+="<td>"+row[1]+"</td>"
+                if (i+1) ==row[3]and row[3] == 9:
+                    html+="<td>"+str(k)+"</td>"
+                    k=k+1
+                    html+="<td>"+row[1]+"</td>"
+                elif (i+1) == row[3]and row[3] == 10:
+                    html+="<td>"+str(k)+"</td>"
+                    k=k+1
+                    html+="<td>"+row[1]+"</td>"
+                elif (i+1) == row[3]and row[3] == 11:
+                    html+="<td>"+str(k)+"</td>"
+                    k=k+1
+                    html+="<td>"+row[1]+"</td>"
+                if (i+1) == row[3]and row[3] == 12:
+                    html+="<td>"+str(k)+"</td>"
+                    k=k+1
+                    html+="<td>"+row[1]+"</td>"
+                elif (i+1) == row[3]and row[3] == 13:
+                    html+="<td>"+str(k)+"</td>"
+                    k=k+1
+                    html+="<td>"+row[1]+"</td>"
+                elif (i+1) == row[3]and row[3] == 14:
+                    html+="<td>"+str(k)+"</td>"
+                    k=k+1
+                    html+="<td>"+row[1]+"</td>"
+                elif (i+1) == row[3]and row[3] == 15:
+                    html+="<td>"+str(k)+"</td>"
+                    k=k+1
+                    html+="<td>"+row[1]+"</td>"
+                elif (i+1) == row[3]and row[3] == 16:
+                    html+="<td>"+str(k)+"</td>"
+                    k=k+1
+                    html+="<td>"+row[1]+"</td>"
+                elif (i+1) == row[3]and row[3] == 17:
+                    html+="<td>"+str(k)+"</td>"
+                    k=k+1
+                    html+="<td>"+row[1]+"</td>"
+                html+="</tr>"
+            html+="</tbody>"
+            html+= "</table>"
+            html += "</div>"
+            html += "</div>"
+            html += "</div>"
+        html+="</div>"
+    if accion1 == "total_estudiante_desercion":
+        total = len(datos)
+        fecha1 = ress[0]#obtenemos las fechas que llegan
+        fecha2 = ress[1]
+        if fecha1>fecha2:
+            aux = fecha1
+            fecha1 = fecha2
+            fecha2 = aux
+        vareas = {}
+        vareasno = {}
+        a11 = int(obtener_ano_de_fecha(fecha1))
+        a22 = int(obtener_ano_de_fecha(fecha2))
+        a1 = int(obtener_ano_de_fecha(fecha1))
+        a2 = int(obtener_ano_de_fecha(fecha2))
+        carreras = {}
+        carrerasno = {}
+        for anio in range(a1, a2 + (1)):
+            vareas[anio]=[0,0,0]
+            vareasno[anio]=[0,0,0]
+        for anio in range(a1, a2 + (1)):
+            carreras[anio] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+            carrerasno[anio] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+        if isinstance(fecha1, str):
+            fecha1 = datetime.strptime(fecha1, "%Y-%m-%d").date()
+        if isinstance(fecha2, str):
+            fecha2 = datetime.strptime(fecha2, "%Y-%m-%d").date()
+        for row in datos:#recorremos los datos obtenidos de la base de datos
+            if row[8]>=fecha1 and row[8] <= fecha2:
+                if row[2] == "si":
+                    anoBD = int(obtener_ano_de_fecha(row[8].strftime("%Y-%m-%d")))
+                    vareas[anoBD][row[7]-1]+=1#en cada año y area sumamos mas 1
+                    carreras[anoBD][row[5]-1]+=1
+                elif row[2] == "no":
+                    anoBD = int(obtener_ano_de_fecha(row[8].strftime("%Y-%m-%d")))
+                    carrerasno[anoBD][row[5]-1]+=1
+                    vareasno[anoBD][row[5]-1]+=1
+        mensaje = "La información sobre desercion estudiantil en areas y carreras es lo siguiente"
+        html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
+        #crear para areas
+
+        html += "<h6 align='center'style='color:black'>Areas</h6>"
+        k1 = 1
+        html += "<div class='row'>"
+        areas ={0:"Técnologia",1:"Salud",2:"Sociales"}
+        for anio in range(a1, a2 + (1)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
+            html += "<h6 align='center'style='color:black'>"+str(anio)+"</h6>"
+            for ar in range(3):
+                html += "<div class='col-lg-4'>"
+                html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                html += "<div class='panel-heading'>"
+                html += areas[ar]
+                html += "</div>"
+                html += "<div class='panel-body'>"
+                html += "La deserción estudiantil es de "+str(vareas[anio][ar])+" Estudiantes"
+                html += "</div>"
+                html += "</div>"
+                html += "</div>"
+
+        html += "</div>"
+        html += "<h6 align='center'style='color:black'>Carreras</h6>"
+        for i in range(17):
+            k = 1
+            html+="<div class='row'>"
+            html += "<h6 align='center'style='color:black'>"+nombre_carrera_retor(i+1)+"</h6>"
+            for anio in range(a1, a2 + (1)):
+                html += "<div class='col-lg-4'>"
+                html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                html += "<div class='panel-heading'>"
+                html += str(anio)
+                html += "</div>"
+                html += "<div class='panel-body'>"
+                html += "La deserción estudiantil es de "+str(carreras[anio][i])+" Estudiantes"
+                html += "</div>"
+                html += "</div>"
+                html += "</div>"
+            html+="</div>"
+    if accion1 == "titulados_relacion":
+        total = len(datos)
+        fecha1 = ress[0]#obtenemos las fechas que llegan
+        fecha2 = ress[1]
+        consultaTitulado = ress[2]
+        titulados_re= consulta_Titulado(consultaTitulado)
+        if fecha1>fecha2:
+            aux = fecha1
+            fecha1 = fecha2
+            fecha2 = aux
+        vareas = {}
+        vareasTitu = {}
+        a11 = int(obtener_ano_de_fecha(fecha1))
+        a22 = int(obtener_ano_de_fecha(fecha2))
+        a1 = int(obtener_ano_de_fecha(fecha1))
+        a2 = int(obtener_ano_de_fecha(fecha2))
+        carreras = {}
+        carrerasTitu = {}
+        for anio in range(a1, a2 + (1)):
+            vareas[anio]=[0,0,0]
+            vareasTitu[anio]=[0,0,0]
+        for anio in range(a1, a2 + (1)):
+            carreras[anio] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+            carrerasTitu[anio] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+        if isinstance(fecha1, str):
+            fecha1 = datetime.strptime(fecha1, "%Y-%m-%d").date()
+        if isinstance(fecha2, str):
+            fecha2 = datetime.strptime(fecha2, "%Y-%m-%d").date()
+        for row in datos:#recorremos los datos obtenidos de la base de datos
+            if row[16]>=fecha1 and row[16] <= fecha2:
+                if row[14] ==1:
+                    anoBD = int(obtener_ano_de_fecha(row[16].strftime("%Y-%m-%d")))
+                    carreras[anoBD][row[13]-1]+=1
+                    vareas[anoBD][row[12]-1]+=1
+
+        for row in titulados_re:
+            if row[9]>=fecha1 and row[9] <= fecha2:
+                anoBD = int(obtener_ano_de_fecha(row[9].strftime("%Y-%m-%d")))
+                carrerasTitu[anoBD][row[7]-1]+=1
+                vareasTitu[anoBD][row[8]-1]+=1
+
+        mensaje = "En los siguientes cuadros detallamos los titulados con relacion a los primeros niveles"
+        html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
+        #crear para areas
+
+        html += "<h6 align='center'style='color:black'>Areas</h6>"
+        k1 = 1
+        html += "<div class='row'>"
+        areas ={0:"Técnologia",1:"Salud",2:"Sociales"}
+        for anio in range(a1, a2 + (1)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
+            html += "<h6 align='center'style='color:black'>"+str(anio)+"</h6>"
+            for ar in range(3):
+                html += "<div class='col-lg-4'>"
+                html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                html += "<div class='panel-heading'>"
+                html += areas[ar]
+                html += "</div>"
+                html += "<div class='panel-body'>"
+                html+= "<table class='table'>"
+                html+= "<thead>"
+                html+="<tr>"
+                html+="<td>1er año</td>"
+                html+="<td>Titulados</td>"
+                html+="</tr>"
+                html+="</thead>"
+                html+="<tbody>"
+                html+="<tr>"
+                html+="<td>"+str(vareas[anio][ar])+"</td>"
+                html+="<td>"+str(vareasTitu[anio][ar])+"</td>"
+                html+="</tr>"
+                html+="</tbody>"
+                html+= "</table>"
+                html += "</div>"
+                html += "</div>"
+                html += "</div>"
+
+        html += "</div>"
+        html += "<h6 align='center'style='color:black'>Carreras</h6>"
+        for i in range(17):
+            k = 1
+            html+="<div class='row'>"
+            html += "<h6 align='center'style='color:black'>"+nombre_carrera_retor(i+1)+"</h6>"
+            for anio in range(a1, a2 + (1)):
+                html += "<div class='col-lg-4'>"
+                html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                html += "<div class='panel-heading'>"
+                html += str(anio)
+                html += "</div>"
+                html += "<div class='panel-body'>"
+                html+= "<table class='table'>"
+                html+= "<thead>"
+                html+="<tr>"
+                html+="<td>1er año</td>"
+                html+="<td>Titulados</td>"
+                html+="</tr>"
+                html+="</thead>"
+                html+="<tbody>"
+                html+="<tr>"
+                html+="<td>"+str(carreras[anio][i])+"</td>"
+                html+="<td>"+str(carrerasTitu[anio][i])+"</td>"
+                html+="</tr>"
+                html+="</tbody>"
+                html+= "</table>"
+                html += "</div>"
+                html += "</div>"
+                html += "</div>"
+            html+="</div>"
+    if accion1 == "clasificacion_departamento":
+        total = len(datos)
+        fecha1 = ress[0]#obtenemos las fechas que llegan
+        fecha2 = ress[1]
+        if fecha1>fecha2:
+            aux = fecha1
+            fecha1 = fecha2
+            fecha2 = aux
+
+        region  = ['Occidente',"Central","Oriente"]
+        a11 = int(obtener_ano_de_fecha(fecha1))
+        a22 = int(obtener_ano_de_fecha(fecha2))
+        a1 = int(obtener_ano_de_fecha(fecha1))
+        a2 = int(obtener_ano_de_fecha(fecha2))
+        depar = {}
+        occidente = {}
+        for anio in range(a1, a2 + (1)):
+            occidente[anio]=[0,0,0]
+        for anio in range(a1, a2 + (1)):
+            depar[anio] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+        if isinstance(fecha1, str):
+            fecha1 = datetime.strptime(fecha1, "%Y-%m-%d").date()
+        if isinstance(fecha2, str):
+            fecha2 = datetime.strptime(fecha2, "%Y-%m-%d").date()
+        for row in datos:#recorremos los datos obtenidos de la base de datos
+            if row[16]>=fecha1 and row[16] <= fecha2:
+                anoBD = int(obtener_ano_de_fecha(row[16].strftime("%Y-%m-%d")))
+
+                if row[7].lower().strip() == 'oruro':
+                    depar[anoBD][0]+=1
+                elif row[7].lower().strip() == 'potosi':
+                    depar[anoBD][1]+=1
+                elif row[7].lower().strip() == 'la paz':
+                    depar[anoBD][2]+=1
+                elif row[7].lower().strip() == 'cochabamba':
+                    depar[anoBD][3]+=1
+                elif row[7].lower().strip() == 'santa cruz':
+                    depar[anoBD][4]+=1
+                elif row[7].lower().strip() == 'beni':
+                    depar[anoBD][5]+=1
+                elif row[7].lower().strip() == 'tarija':
+                    depar[anoBD][6]+=1
+                elif row[7].lower().strip() == 'chuquisaca':
+                    depar[anoBD][7]+=1
+                elif row[7].lower().strip() == 'pando':
+                    depar[anoBD][8]+=1
+
+                if row[10].lower().strip() == "occidente":
+                    occidente[anoBD][0]+=1
+                elif row[10].lower().strip() == "central":
+                    occidente[anoBD][1]+=1
+                elif row[10].lower().strip() == "oriente":
+                    occidente[anoBD][2]+=1
+
+        mensaje = "Detallaremos en los siguientes cuadros sobre estudiantes a que departamento y region pertencen"
+        html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
+            #crear para areas
+
+        html += "<h6 align='center'style='color:black'>Región</h6>"
+        k1 = 1
+        html += "<div class='row'>"
+        for anio in range(a1, a2 + (1)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
+            html += "<h6 align='center'style='color:black'>"+str(anio)+"</h6>"
+            for ar in range(3):
+                html += "<div class='col-lg-4'>"
+                html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                html += "<div class='panel-heading'>"
+                html += region[ar]
+                html += "</div>"
+                html += "<div class='panel-body'>"
+                html+="Se encontro "+str(occidente[anio][ar])+" estudiantes"
+                html += "</div>"
+                html += "</div>"
+                html += "</div>"
+
+        html += "</div><br>"
+        html += "<h6 align='center'style='color:black'>Departamento</h6>"
+        for i in range(9):
+            k = 1
+            html+="<div class='row'>"
+            html += "<h6 align='center'style='color:black'>"+departamento[i]+"</h6>"
+            for anio in range(a1, a2 + (1)):
+                html += "<div class='col-lg-4'>"
+                html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                html += "<div class='panel-heading'>"
+                html += str(anio)
+                html += "</div>"
+                html += "<div class='panel-body'>"
+                html+="Se encontro "+str(depar[anio][i])+" estudiantes"
+                html += "</div>"
+                html += "</div>"
+                html += "</div>"
+            html+="</div>"
     html += "</container>"
 
     return html

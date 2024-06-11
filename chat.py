@@ -12,49 +12,69 @@ from comprobar import obtener_ano_de_fecha
 # Cargar el modelo pre-entrenado
 model = SentenceTransformer('all-MiniLM-L6-v1')
 sentencias = [
-    "informacion carreras unsxx universidad nacional siglo xx",
-    "informacion catidad estudiantes unsxx universidad nacional siglo xx",
-    "informacion cantidad estudiantes carrera unsxx universidad nacional siglo xx",
-    "informacion total estudiante carrera unsxx universidad nacional siglo xx",
+    "informacion carreras",
+    "informacion catidad estudiantes",
+    "informacion cantidad estudiantes carrera",
+    "informacion total estudiante carrera",
+    "cantidad de estudiantes que tiene carrera",
     "informacion estudiantes unsxx universidad nacional siglo xx",
-    "informacion carreras area areas tecnologia salud social unsxx universidad nacional siglo xx",
-    "cuales carreras area areas tecnologia salud social unsxx universidad nacional siglo xx",
-    "informacion estudiantes area tecnologia salud social unsxx universidad nacional siglo xx",
-    "informacion calificacion estudiante carrera unxx universidad nacional siglo xx",
-    "estadistica estudiantes area areas carreras tecnologia salud social unsxx universidad nacional siglo xx",
-    "estadistica estudiantes aprobados area areas carreras tecnologia salud social unsxx universidad nacional siglo xx",
-    "estadistica estudiantes reprobados area areas carreras tecnologia salud social unsxx universidad nacional siglo xx",
-    "cuales carreras unsxx universidad nacional siglo xx",
-    "informacion carrera unsxx universidad nacional siglo xx",
-    "cuales materias estudiante unsxx universidad nacional siglo xx",
-    "estadistica estudiantes desertores area areas carreras tecnologia salud social unsxx universidad nacional siglo xx",
-    "estadistica estudiantes abandonaron dejaron estudios area areas carreras tecnologia salud social unsxx universidad nacional siglo xx",
-    "estadistica estudiantes concluyeron estudioss areas carreras tecnologia salud social unsxx universidad nacional siglo xx",
-    "estadistica estudiantes desertores asignaturas especificas areas carreras tecnologia salud social unsxx universidad nacional siglo xx",
-    "cuales cantidad de estudiantes que dejaron asignaturas areas  carreras tecnologia salud social unsxx universidad nacional siglo xx",
-    "cuales cantidad de estudiantes que abandonaron asignaturas areas  carreras tecnologia salud social unsxx universidad nacional siglo xx",
-    "cuales cantidad de estudiantes que dejaron materias areas  carreras tecnologia salud social unsxx universidad nacional siglo xx",
-    "cuales cantidad de estudiantes que abandonaron materias areas  carreras tecnologia salud social unsxx universidad nacional siglo xx",
-    "cual cantidad estudiantes sexo femenino masculino areas  carreras tecnologia salud social unsxx universidad nacional siglo xx",
-    "cual cantidad estudiantes clasificados varones mujeres areas  carreras tecnologia salud social unsxx universidad nacional siglo xx",
-    "poblacion estudiantil clasificado varones mujeres areas  carreras tecnologia salud social unsxx universidad nacional siglo xx"
-    "cantidad estudiantes realizan transferencias universidades unsxx universidad nacional siglo xx",
-    "total estudiantes realizan transferencias universidades sistema universitario unsxx universidad nacional siglo xx",
+    "informacion carreras area areas tecnologia salud social",
+    "cuales carreras area areas tecnologia salud social",
+    "informacion estudiantes area tecnologia salud social",
+    "informacion calificacion estudiante carrera",
+    "estadistica estudiantes aprobados area areas carreras tecnologia salud social",
+    "estadistica estudiantes aprobados area areas carreras tecnologia salud social",
+    "cantidad estudiantes reprobados area areas carreras tecnologia salud social",
+    "cuales carreras",
+    "informacion carrera",
+    "cuales materias estudiante",
+    "estadistica estudiantes desertores area areas carreras tecnologia salud social",
+    "estadistica estudiantes abandonaron dejaron estudios area areas carreras tecnologia salud social",
+    "estadistica estudiantes concluyeron estudios areas carreras tecnologia salud social",
+    "cual es la cantidad de estudiantes que concluyeron sus estudios en referencia",
+    "estadistica estudiantes desertores asignaturas especificas areas carreras tecnologia salud social",
+    "cuales cantidad de estudiantes que dejaron asignaturas areas  carreras tecnologia salud social",
+    "cuales cantidad de estudiantes que abandonaron asignaturas areas  carreras tecnologia salud social",
+    "cuales cantidad de estudiantes que dejaron materias areas  carreras tecnologia salud social",
+    "cuales cantidad de estudiantes que abandonaron materias areas  carreras tecnologia salud social",
+    "cual cantidad estudiantes sexo femenino masculino areas  carreras tecnologia salud social",
+    "cual cantidad estudiantes clasificados varones mujeres areas  carreras tecnologia salud social",
+    "poblacion estudiantil clasificado varones mujeres areas  carreras tecnologia salud social",
+    "cantidad estudiantes realizan transferencias universidades",
+    "total estudiantes realizan transferencias universidades sistema universitario",
     "cantidad estudiantes realizan transferencia universidades unsxx universidad nacional siglo xx",
-    "cantidad estudiantes provenientes universidades transferencias universidades unsxx universidad nacional siglo xx",
-    "total de estudiantes vinieron concepto transferencia unsxx universidad nacional siglo xx",
-    "cantidad estudiantes otras universidades concepto transferencia unsxx universidad nacional siglo xx",
-    "numero estudiantes transferidos universidades unsxx universidad nacional siglo xx",
-    "cantidad estudiantes inscritos primeros niveles areas  carreras  unsxx universidad nacional siglo xx"
-    "existe mas estudiantes inscritos primeros niveles areas carreras  unsxx universidad nacional siglo xx",
-    "en que carreras y areas hay mas inscritos de estudiantes  unsxx universidad nacional siglo xx",
-    "cual es la cantidad de estudiantes inscritos en las tres areas y carreras unsxx universidad nacional siglo xx"
+    "cantidad estudiantes provenientes universidades transferencias universidades",
+    "total de estudiantes vinieron concepto transferencia",
+    "cantidad estudiantes otras universidades concepto transferencia",
+    "numero estudiantes transferidos universidades",
+    "cantidad estudiantes inscritos primeros niveles areas  carreras ",
+    "existe mas estudiantes inscritos primeros niveles areas carreras ",
+    "en que carreras y areas hay mas inscritos de estudiantes ",
+    "cual es la cantidad de estudiantes inscritos en las tres areas y carreras",
+    "cantidad de estudiante aprobados por areas y carreras",
+    "quiero informacion de nuevos estudiantes inscritos por area y carreras",
+    "quiero que me brindes informacion sobre la modalidad de titulacion que tiene cada carrera",
+    "cuales son las modalidades de titulacion de la carrera",
+    "quiero informacion sobre las modalidades de titulacion que tiene la carrera",
+    "informacion de estudiantes tranferidos a otras universidades",
+    "cual es la cantidad de estudiantes varones y mujeres por areas y carreras",
+    "informacion sobre estudiantes que dejaron sus estudios",
+    "cual es la cantidad de estudiantes que desertaron",
+    "informacion sobre la desercion estudiantil",
+    "cual es la cantidad de estudiantes que abandonaron materias",
+    "quiero indice de estudiantes clasificados en masculino y femenino por areas y carreras",
+    "cual es la cantidad de estudiantes provenientes de otras universidades por concepto de transferencia",
+    "cual es la cantidad de estudiantes que realizan transferencias a otras universidades",
+    "indice de titulados en relacion al porcentaje de inscritos de los primeros niveles",
+    "cual es la cantidad de titulados con relacion a inscritos en primer año",
+    "los matriculados a que region del pais pertenecen clasificados por departamentos y regiones",
 ]
 # Definir la lista de pares
 
 respuesta =[
 'ver_carreras',
 'total_de_estudiantes',
+'total_de_estudiantes_carrera',
 'total_de_estudiantes_carrera',
 'total_de_estudiantes_carrera',
 'estudiantes_de_unsxx',
@@ -70,6 +90,7 @@ respuesta =[
 "seleccionar_asignatura_estudiante",
 "seleccionar_estudiantes_desertores",
 "seleccionar_estudiantes_desertores",
+"diferencia_entre_primero_quinto",
 "diferencia_entre_primero_quinto",
 "asignaturas_desercion",
 "asignaturas_desercion",
@@ -90,6 +111,23 @@ respuesta =[
 "mayor_inscritos",
 "mayor_inscritos",
 "mayor_inscritos",
+"total_de_estudiantes_estadisticas",
+"mayor_inscritos",
+"modalidad_titulacion",
+"modalidad_titulacion",
+"modalidad_titulacion",
+"transferencias_buscar",
+"clasificado_sexo",
+"total_estudiante_desercion",
+"total_estudiante_desercion",
+"total_estudiante_desercion",
+"asignaturas_desercion",
+"clasificado_sexo",
+"concepto_transferencia",
+"transferencias_buscar",
+"titulados_relacion",
+"titulados_relacion",
+"clasificacion_departamento",
 ]
 consultas_sql = {
 "ver_carreras":"select *from carrera",
@@ -111,6 +149,10 @@ consultas_sql = {
 "transferencias_buscar":"select *from transferencia",
 "concepto_transferencia":"select * from transferir ",
 "mayor_inscritos":"select * from estudiante",
+"modalidad_titulacion":"select *from modalidad_titulacion",
+"total_estudiante_desercion":"select *from estudiante_perdio",
+"titulados_relacion":"select *from estudiante",
+"clasificacion_departamento":"select * from estudiante",
 }
 #e.estado = 'desactivo' or e.cod_area = 3 and e.sexo = 'femenino' or  e.sexo = 'masculino';"
 consultas_aux= {"activo_es" :" e.estado = 'activo'",
@@ -1241,6 +1283,233 @@ def buscar(texto):
                 fecha2 = anio+"-12-30"
 
             nombre_posicion_sql = "mayor_inscritos"
+            sql = consultas_sql[nombre_posicion_sql]
+            si = "no"
+            if fecha2 == "" and fecha1 != "":
+                vec1.append(fecha1)
+                vec1.append(fecha1)
+            else:
+                vec1.append(fecha1)
+                vec1.append(fecha2)
+            for i in range(len(vec)):
+                if vec[i] == "si_fecha" and si == "no":
+                    if fecha1 != "":#si es diferente de vacio
+                        sql_aux = consultas_aux["fechai"]
+                        response+=" ( "+sql_aux.format(fecha1)
+                    if fecha2 != "":
+                        sql_aux = consultas_aux["fechaf"]
+                        response+=" and "+sql_aux.format(fecha2)+")"
+                    else:
+                        sql_aux = consultas_aux["fechaf"]
+                        response+=" and "+sql_aux.format(fecha1)+")"
+                    si = "si"
+                elif vec[i] == "si_fecha" and si == "si":
+                    if fecha1 != "":#si es diferente de vacio
+                        sql_aux = consultas_aux["fechai"]
+                        response+=" and ( "+sql_aux.format(fecha1)
+                    if fecha2 != "":
+                        sql_aux = consultas_aux["fechaf"]
+                        response+=" and "+sql_aux.format(fecha2)+")"
+                    else:
+                        sql_aux = consultas_aux["fechaf"]
+                        response+=" and "+sql_aux.format(fecha1)+")"
+                    si = "si"
+                vec[i] = "no"
+            if si == "no":#si se mantienen en no entonces aumentamos WHERE
+                response = response
+            else:
+                response=" where "+response
+            vec1.append(nombre_posicion_sql)
+            response = sql + response
+            vec1.append(response)
+        if response == "modalidad_titulacion":
+            vec = []
+            vec1 = []#iniciamos los vectores para alamacenar
+            response = "";
+            contar_parametros = 0
+            nombre_posicion_sql = "modalidad_titulacion"
+            sql = consultas_sql[nombre_posicion_sql]
+            carreras_encontradas = obtener_carreras_nombre(texto);#buscar carreras si en el texto hay alguna carrera
+            if carreras_encontradas:#si existe algun nombre de carrera ingresa
+                vec.append("si_car")#exite una carrera
+                contar_parametros+=1
+            else:
+                vec.append("no")
+            for i in range(len(vec)):
+                vec1.append(vec[i])
+            if contar_parametros>0:#si es mayor a cero hay nombre de carreras
+                si = "si"
+                for i in range(len(carreras_encontradas)):
+                    if si=="si":
+                        response = " where cod_carrera = "+str(carreras_encontradas[i])
+                        si = "no"
+                    elif si == "no":
+                        response+= " or cod_carrera="+str(carreras_encontradas[i])
+                response = sql+response
+                vec1.append(nombre_posicion_sql)
+                vec1.append(response)
+            else:#no hay carreras
+                #para contar si hay lo necesario para realizar la consulta sql
+                vec1.append(nombre_posicion_sql)
+                response = sql
+                vec1.append(response)
+        if response == "total_estudiante_desercion":
+            vec = []
+            vec1 = []#iniciamos los vectores para alamacenar
+            response = "";
+            #para contar si hay lo necesario para realizar la consulta sql
+            fecha = fechas(texto)
+            if len(fecha) >= 1:#si existe fechas
+                vec.append("si_fecha")
+                if len(fecha) == 1:
+                    fecha1 = fecha[0]
+                    fecha_formateada = fecha_actual.strftime("%Y-%m-%d")
+                    anio = obtener_ano_de_fecha(fecha_formateada)
+                    fecha2 = anio+"-12-30"
+                elif len(fecha)>1:
+                    fecha1 = fecha[0]
+                    fecha2 = fecha[1]
+            else:#no hay fechas
+                fecha_actual = datetime.now()
+                # Formatear la fecha como año, mes, día
+                fecha_formateada = fecha_actual.strftime("%Y-%m-%d")
+                anio = obtener_ano_de_fecha(fecha_formateada)
+                vec.append("si_fecha")
+                fecha1 = anio+"-01-01"
+                fecha2 = anio+"-12-30"
+
+            nombre_posicion_sql = "total_estudiante_desercion"
+            sql = consultas_sql[nombre_posicion_sql]
+            si = "no"
+            if fecha2 == "" and fecha1 != "":
+                vec1.append(fecha1)
+                vec1.append(fecha1)
+            else:
+                vec1.append(fecha1)
+                vec1.append(fecha2)
+            for i in range(len(vec)):
+                if vec[i] == "si_fecha" and si == "no":
+                    if fecha1 != "":#si es diferente de vacio
+                        sql_aux = consultas_aux["fechai"]
+                        response+=" ( "+sql_aux.format(fecha1)
+                    if fecha2 != "":
+                        sql_aux = consultas_aux["fechaf"]
+                        response+=" and "+sql_aux.format(fecha2)+")"
+                    else:
+                        sql_aux = consultas_aux["fechaf"]
+                        response+=" and "+sql_aux.format(fecha1)+")"
+                    si = "si"
+                elif vec[i] == "si_fecha" and si == "si":
+                    if fecha1 != "":#si es diferente de vacio
+                        sql_aux = consultas_aux["fechai"]
+                        response+=" and ( "+sql_aux.format(fecha1)
+                    if fecha2 != "":
+                        sql_aux = consultas_aux["fechaf"]
+                        response+=" and "+sql_aux.format(fecha2)+")"
+                    else:
+                        sql_aux = consultas_aux["fechaf"]
+                        response+=" and "+sql_aux.format(fecha1)+")"
+                    si = "si"
+                vec[i] = "no"
+            if si == "no":#si se mantienen en no entonces aumentamos WHERE
+                response = response
+            else:
+                response=" where "+response
+            vec1.append(nombre_posicion_sql)
+            response = sql + response
+            vec1.append(response)
+        if response == "titulados_relacion":
+            vec = []
+            vec1 = []#iniciamos los vectores para alamacenar
+            response = "";
+            #para contar si hay lo necesario para realizar la consulta sql
+            fecha = fechas(texto)
+            if len(fecha) >= 1:#si existe fechas
+                vec.append("si_fecha")
+                if len(fecha) == 1:
+                    fecha1 = fecha[0]
+                    fecha_formateada = fecha_actual.strftime("%Y-%m-%d")
+                    anio = obtener_ano_de_fecha(fecha_formateada)
+                    fecha2 = anio+"-12-30"
+                elif len(fecha)>1:
+                    fecha1 = fecha[0]
+                    fecha2 = fecha[1]
+            else:#no hay fechas
+                fecha_actual = datetime.now()
+                # Formatear la fecha como año, mes, día
+                fecha_formateada = fecha_actual.strftime("%Y-%m-%d")
+                anio = obtener_ano_de_fecha(fecha_formateada)
+                vec.append("si_fecha")
+                fecha1 = anio+"-01-01"
+                fecha2 = anio+"-12-30"
+
+            nombre_posicion_sql = "titulados_relacion"
+            sql = consultas_sql[nombre_posicion_sql]
+            si = "no"
+            if fecha2 == "" and fecha1 != "":
+                vec1.append(fecha1)
+                vec1.append(fecha1)
+            else:
+                vec1.append(fecha1)
+                vec1.append(fecha2)
+            for i in range(len(vec)):
+                if vec[i] == "si_fecha" and si == "no":
+                    if fecha1 != "":#si es diferente de vacio
+                        sql_aux = consultas_aux["fechai"]
+                        response+=" ( "+sql_aux.format(fecha1)
+                    if fecha2 != "":
+                        sql_aux = consultas_aux["fechaf"]
+                        response+=" and "+sql_aux.format(fecha2)+")"
+                    else:
+                        sql_aux = consultas_aux["fechaf"]
+                        response+=" and "+sql_aux.format(fecha1)+")"
+                    si = "si"
+                elif vec[i] == "si_fecha" and si == "si":
+                    if fecha1 != "":#si es diferente de vacio
+                        sql_aux = consultas_aux["fechai"]
+                        response+=" and ( "+sql_aux.format(fecha1)
+                    if fecha2 != "":
+                        sql_aux = consultas_aux["fechaf"]
+                        response+=" and "+sql_aux.format(fecha2)+")"
+                    else:
+                        sql_aux = consultas_aux["fechaf"]
+                        response+=" and "+sql_aux.format(fecha1)+")"
+                    si = "si"
+                vec[i] = "no"
+            if si == "no":#si se mantienen en no entonces aumentamos WHERE
+                response = response
+            else:
+                response=" where "+response
+            vec1.append("select *from titulado "+response)
+            vec1.append(nombre_posicion_sql)
+            response = sql + response
+            vec1.append(response)
+        if response == "clasificacion_departamento":
+            vec = []
+            vec1 = []#iniciamos los vectores para alamacenar
+            response = "";
+            #para contar si hay lo necesario para realizar la consulta sql
+            fecha = fechas(texto)
+            if len(fecha) >= 1:#si existe fechas
+                vec.append("si_fecha")
+                if len(fecha) == 1:
+                    fecha1 = fecha[0]
+                    fecha_formateada = fecha_actual.strftime("%Y-%m-%d")
+                    anio = obtener_ano_de_fecha(fecha_formateada)
+                    fecha2 = anio+"-12-30"
+                elif len(fecha)>1:
+                    fecha1 = fecha[0]
+                    fecha2 = fecha[1]
+            else:#no hay fechas
+                fecha_actual = datetime.now()
+                # Formatear la fecha como año, mes, día
+                fecha_formateada = fecha_actual.strftime("%Y-%m-%d")
+                anio = obtener_ano_de_fecha(fecha_formateada)
+                vec.append("si_fecha")
+                fecha1 = anio+"-01-01"
+                fecha2 = anio+"-12-30"
+
+            nombre_posicion_sql = "clasificacion_departamento"
             sql = consultas_sql[nombre_posicion_sql]
             si = "no"
             if fecha2 == "" and fecha1 != "":

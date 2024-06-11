@@ -342,3 +342,19 @@ def obtener_id_de_carrera(nombre):
         else:
             # Si no hay resultados, devolver un mensaje indicando que no se encontró el estudiante
             return "no"
+
+def consulta_Titulado(sql):
+    conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+    # Crear un cursor para ejecutar consultas
+    cursor = conn.cursor()
+    # Ejecutar la consulta SQL
+    cursor.execute(sql)
+    # Verifica si hay algún resultado antes de obtenerlos
+    if cursor.rowcount > 0:
+        # Si hay resultados, obtén los datos de la consulta
+        sql_consulta = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        return sql_consulta
+    else:
+        return "no"

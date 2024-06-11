@@ -225,6 +225,8 @@ cod_mt int,
 cod_pe int,
 cod_carrera int,
 cod_area int,
+fecha date,
+hora time,
 estado char(15),
 primary key(cod_titu,cod_def,cod_es,cod_mt,cod_pe ,cod_carrera),
 foreign key(cod_def,cod_es,cod_mt,cod_pe ,cod_carrera)references defensa(cod_def,cod_es,cod_mt,cod_pe ,cod_carrera)on delete restrict on update restrict
@@ -298,185 +300,185 @@ insert into carrera(nombre_carrera,direccion_carrera,cod_area,estado)values('bio
 
 
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,grado,estado,fecha)values(
-'Carlos','Villca','Calani','si',78451256,'Bolivia','Oruro','eduardo avaroa','Challapata','Challapata','masculino',1,1,1,'activo','2024-02-03');
+'Carlos','Villca','Calani','si',78451256,'Bolivia','Oruro','eduardo avaroa','Challapata','Occidente','masculino',1,1,1,'activo','2024-02-03');
 
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Roberto carlos','titi','Huanca','si',7991256,'Bolivia','potosi','bustillos','Llallagua','llallagua','masculino',1,1,1,'activo','2024-02-03');
+'Roberto carlos','titi','Huanca','si',7991256,'Bolivia','potosi','bustillos','Llallagua','Occidente','masculino',1,1,1,'activo','2024-02-03');
 
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Geraldine','Condori','Calani','si',73737421,'Bolivia','Potosi','bustillos','Uncia','Uncia','femenino',1,1,1,'activo','2024-02-03');
+'Geraldine','Condori','Calani','si',73737421,'Bolivia','Potosi','bustillos','Uncia','Occidente','femenino',1,1,1,'activo','2024-02-03');
 
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Rosmeri','Villcaes','chura','si',73457812,'Bolivia','Oruro','pagador','Huari','Huari','femenino',1,1,1,'activo','2024-02-03');
+'Rosmeri','Villcaes','chura','si',73457812,'Bolivia','Oruro','pagador','Huari','Occidente','femenino',1,1,1,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Hilarion','callahuara','ayaviri','si',7995656,'Bolivia','Potosi','bustillos','Caripuyo','Caripuyo','masculino',1,1,1,'activo','2024-02-03');
+'Hilarion','callahuara','ayaviri','si',7995656,'Bolivia','Potosi','bustillos','Caripuyo','Occidente','masculino',1,1,1,'activo','2024-02-03');
 
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Josefina','sola','villca','si',73454512,'Bolivia','Cochabamba','independencia','toro toro','Toro toro','femenino',1,1,1,'activo','2024-02-03');
+'Josefina','sola','villca','si',73454512,'Bolivia','Cochabamba','independencia','toro toro','Central','femenino',1,1,1,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Elizabet','manriques','Calani','si',79794545,'Bolivia','Oruro','eduardo avaroa','Challapata','Challapata','femenino',1,1,1,'activo','2024-02-03');
+'Elizabet','manriques','Calani','si',79794545,'Bolivia','Oruro','eduardo avaroa','Challapata','Occidente','femenino',1,1,1,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Martha','Carrion','Jancoña','si',71457812,'Bolivia','Oruro','Cercado','sica sica','sica sica','femenino',1,1,1,'activo','2024-02-03');
+'Martha','Carrion','Jancoña','si',71457812,'Bolivia','Oruro','Cercado','sica sica','Occidente','femenino',1,1,1,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Fabian','sierra','acarapi','si',75457812,'Bolivia','potosi','bustillos','Caripuyo','Caripuyo','masculino',1,1,1,'activo','2024-02-03');
+'Fabian','sierra','acarapi','si',75457812,'Bolivia','potosi','bustillos','Caripuyo','Occidente','masculino',1,1,1,'activo','2024-02-03');
 
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Mario','DIaz','negrete','si',7754216,'Bolivia','Oruro','eduardo avaroa','Challapata','Challapata','masculino',1,1,1,'activo','2024-02-03');
+'Mario','DIaz','negrete','si',7754216,'Bolivia','Oruro','eduardo avaroa','Challapata','Occidente','masculino',1,1,1,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'ROmane','DIaz','negrete','si',7754216,'Bolivia','Oruro','eduardo avaroa','Challapata','Challapata','femenino',1,1,1,'activo','2024-02-03');
+'ROmane','DIaz','negrete','si',7754216,'Bolivia','Oruro','eduardo avaroa','Challapata','Occidente','femenino',1,1,1,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Carla','negrete','negrete','si',7554216,'Bolivia','Oruro','eduardo avaroa','Quillacas','Quillacas','femenino',1,1,1,'activo','2024-02-03');
+'Carla','negrete','negrete','si',7554216,'Bolivia','Oruro','eduardo avaroa','Quillacas','Occidente','femenino',1,1,1,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'israel','jani jani','negrete','si',7754555,'Bolivia','Cochabamba','cercado','vinto','vinto','masculino',1,1,1,'activo','2024-02-03');
+'israel','jani jani','negrete','si',7754555,'Bolivia','Cochabamba','cercado','vinto','Central','masculino',1,1,1,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Jhofan','Angulo','marizel','si',9854216,'Bolivia','Oruro','Poopo','Poopo','Poopo','masculino',1,1,1,'activo','2024-02-03');
+'Jhofan','Angulo','marizel','si',9854216,'Bolivia','Oruro','Poopo','Poopo','Occidente','masculino',1,1,1,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Rosemari','DIaz','Huanca','si',789854216,'Bolivia','Oruro','eduardo avaroa','Challapata','Challapata','masculino',1,1,1,'activo','2024-02-03');
+'Rosemari','DIaz','Huanca','si',789854216,'Bolivia','Oruro','eduardo avaroa','Challapata','Occidente','masculino',1,1,1,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Juan jose','nina','gomez','si',7777755,'Bolivia','Santa cruz','lagunillas','puerto quijaro','puerto quijaro','masculino',1,2,1,'activo','2024-02-03');
+'Juan jose','nina','gomez','si',7777755,'Bolivia','Santa cruz','lagunillas','puerto quijaro','Oriente','masculino',1,2,1,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Rosmeri','Calani','Huanca','si',78784512,'Bolivia','Oruro','eduardo avaroa','Challapata','Challapata','masculino',1,3,1,'activo','2024-02-03');
+'Rosmeri','Calani','Huanca','si',78784512,'Bolivia','Oruro','eduardo avaroa','Challapata','Occidente','masculino',1,3,1,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Roger','Gomes','titi','si',789854,'Bolivia','Oruro','eduardo avaroa','Challapata','Challapata','masculino',1,4,1,'activo','2024-02-03');
+'Roger','Gomes','titi','si',789854,'Bolivia','Oruro','eduardo avaroa','Challapata','Occidente','masculino',1,4,1,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'JUlian','DIaz','Nina','si',7854216,'Bolivia','Oruro','eduardo avaroa','Qaqachaca','Qaqachaca','masculino',1,5,1,'activo','2024-02-03');
+'JUlian','DIaz','Nina','si',7854216,'Bolivia','Oruro','eduardo avaroa','Qaqachaca','Occidente','masculino',1,5,1,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'estefania','lila','mamani','si',7956216,'Bolivia','potosi','bustillos','uncia','uncias','masculino',1,6,1,'activo','2024-02-03');
+'estefania','lila','mamani','si',7956216,'Bolivia','potosi','bustillos','uncia','Occidente','masculino',1,6,1,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Rosaura','Nina','Nina','si',7945122,'Bolivia','la paz','Murillo','viacha','viacha','femenino',2,7,1,'activo','2024-02-03');
+'Rosaura','Nina','Nina','si',7945122,'Bolivia','la paz','Murillo','viacha','Occidente','femenino',2,7,1,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Ronal','Coyo','camino','si',789854216,'Bolivia','La paz','Murillo','viacha','viacha','masculino',1,8,1,'activo','2024-02-03');
+'Ronal','Coyo','camino','si',789854216,'Bolivia','La paz','Murillo','viacha','Occidente','masculino',1,8,1,'activo','2024-02-03');
 
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'JUana','Coyo','nina','si',7898516,'Bolivia','La paz','Murillo','viacha','viacha','femenino',1,1,1,'desactivo','2024-02-03');
+'JUana','Coyo','nina','si',7898516,'Bolivia','La paz','Murillo','viacha','Occidente','femenino',1,1,1,'desactivo','2024-02-03');
 
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Roberto','Carlos','mamani','si',788516,'Bolivia','La paz','Murillo','viacha','viacha','masculino',1,1,1,'desactivo','2024-02-03');
+'Roberto','Carlos','mamani','si',788516,'Bolivia','La paz','Murillo','viacha','Occidente','masculino',1,1,1,'desactivo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Gladis','titi','villca','si',7956451,'Bolivia','Oruro','Pagador','san pedro de condo','san pedro de condo','femenino',1,1,1,'desactivo','2024-02-03');
+'Gladis','titi','villca','si',7956451,'Bolivia','Oruro','Pagador','san pedro de condo','Occidente','femenino',1,1,1,'desactivo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Nicolas','Huanca','romane','si',7895555,'Bolivia','La paz','Murillo','viacha','viacha','masculino',1,1,1,'desactivo','2024-02-03');
+'Nicolas','Huanca','romane','si',7895555,'Bolivia','La paz','Murillo','viacha','Occidente','masculino',1,1,1,'desactivo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Roman','zeballos','nina','si',7728516,'Bolivia','Potosi','bustillos','llallagua','chiroya','masculino',1,1,1,'desactivo','2024-02-03');
+'Roman','zeballos','nina','si',7728516,'Bolivia','Potosi','bustillos','llallagua','Occidente','masculino',1,1,1,'desactivo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'juan javier','lipiri','mitma','si',7978975,'Bolivia','Oruro','eduardo avaroa','Challapata','churacani','masculino',1,1,2,'desactivo','2024-02-04');
+'juan javier','lipiri','mitma','si',7978975,'Bolivia','Oruro','eduardo avaroa','Challapata','Occidente','masculino',1,1,2,'desactivo','2024-02-04');
 
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Juan','Garcia','Perez','si',774512,'Bolivia','Oruro','Poopo','Poopo','Poopo','masculino',1,1,2,'activo','2024-02-03');
+'Juan','Garcia','Perez','si',774512,'Bolivia','Oruro','Poopo','Poopo','Occidente','masculino',1,1,2,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'maria','Martines','Lopez','si',7784512,'Bolivia','santa cruz','porongo','porongo','porongo','femenino',1,1,2,'activo','2024-02-03');
+'maria','Martines','Lopez','si',7784512,'Bolivia','santa cruz','porongo','porongo','Occidente','femenino',1,1,2,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'pedro','lopez','gonzales','si',7974512,'Bolivia','Cochabamba','quillacollo','quillacollo','quillacollo','masculino',1,1,2'activo','2024-02-03');
+'pedro','lopez','gonzales','si',7974512,'Bolivia','Cochabamba','quillacollo','quillacollo','Occidente','masculino',1,1,2'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Ana','Gonsales','Martines','si',7574512,'Bolivia','Oruro','Poopo','Poopo','Poopo','femenino',1,1,2,'activo','2024-02-03');
+'Ana','Gonsales','Martines','si',7574512,'Bolivia','Oruro','Poopo','Poopo','Occidente','femenino',1,1,2,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Luis','rodriguez','fernandez','si',74174512,'Bolivia','Oruro','Poopo','Poopo','Poopo','masculino',1,1,2,'activo','2024-02-03');
+'Luis','rodriguez','fernandez','si',74174512,'Bolivia','Oruro','Poopo','Poopo','Occidente','masculino',1,1,2,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Laura','fernandez','Perez','si',5674512,'Bolivia','Oruro','Poopo','Poopo','Poopo','masculino',1,1,2,'activo','2024-02-03');
+'Laura','fernandez','Perez','si',5674512,'Bolivia','Oruro','Poopo','Poopo','Occidente','masculino',1,1,2,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Carlos','Perez','sanchez','si',5374512,'Bolivia','Oruro','Pagador','pagador','huari','masculino',1,1,2,'activo','2024-02-03');
+'Carlos','Perez','sanchez','si',5374512,'Bolivia','Oruro','Pagador','pagador','Occidente','masculino',1,1,2,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Marta','sanchez','sanchez','si',75774512,'Bolivia','La paz','Aroma','Poopo','Poopo','femenino',1,1,2,'activo','2024-02-03');
+'Marta','sanchez','sanchez','si',75774512,'Bolivia','La paz','Aroma','Poopo','Occidente','femenino',1,1,2,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'jose','Gonsales','rodriguez','si',74274512,'Bolivia','Potosi','bustillos','llallagua','llallagua','masculino',1,1,2,'activo','2024-02-03');
+'jose','Gonsales','rodriguez','si',74274512,'Bolivia','Potosi','bustillos','llallagua','Occidente','masculino',1,1,2,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'isabel','Martines','perez','si',54274512,'Bolivia','Potosi','bustillos','llallagua','llallagua','femenino',1,1,2,'activo','2024-02-03');
+'isabel','Martines','perez','si',54274512,'Bolivia','Potosi','bustillos','llallagua','Occidente','femenino',1,1,2,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'francisco','lopez','Garcia','si',56274512,'Bolivia','Potosi','bustillos','llallagua','llallagua','femenino',1,1,2,'activo','2024-02-03');
+'francisco','lopez','Garcia','si',56274512,'Bolivia','Potosi','bustillos','llallagua','Occidente','femenino',1,1,2,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Lucia','perez','Martines','si',42274512,'Bolivia','Potosi','bustillos','llallagua','llallagua','femenino',1,1,2,'activo','2024-02-03');
+'Lucia','perez','Martines','si',42274512,'Bolivia','Potosi','bustillos','llallagua','Occidente','femenino',1,1,2,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Miguel','rodriguez','rodriguez','si',52274512,'Bolivia','Potosi','bustillos','llallagua','llallagua','masculino',1,1,2,'activo','2024-02-03');
+'Miguel','rodriguez','rodriguez','si',52274512,'Bolivia','Potosi','bustillos','llallagua','Occidente','masculino',1,1,2,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Elena','sanchez','fernandez','si',12274512,'Bolivia','Potosi','bustillos','llallagua','llallagua','femenino',1,1,2,'activo','2024-02-03');
+'Elena','sanchez','fernandez','si',12274512,'Bolivia','Potosi','bustillos','llallagua','Occidente','femenino',1,1,2,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Antonio','Garcia','perez','si',51274512,'Bolivia','Potosi','bustillos','llallagua','llallagua','masculino',1,1,2,'activo','2024-02-03');
+'Antonio','Garcia','perez','si',51274512,'Bolivia','Potosi','bustillos','llallagua','Occidente','masculino',1,1,2,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Carmen','fernandez','Gonsales','si',77274512,'Bolivia','Potosi','bustillos','llallagua','llallagua','femenino',1,1,2,'activo','2024-02-03');
+'Carmen','fernandez','Gonsales','si',77274512,'Bolivia','Potosi','bustillos','llallagua','Occidente','femenino',1,1,2,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Manuel','Martines','lopez','si',8974512,'Bolivia','Potosi','bustillos','llallagua','llallagua','masculino',1,1,2,'activo','2024-02-03');
+'Manuel','Martines','lopez','si',8974512,'Bolivia','Potosi','bustillos','llallagua','Occidente','masculino',1,1,2,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Alicia','lopez','perez','si',84274512,'Bolivia','Potosi','bustillos','llallagua','llallagua','femenino',1,1,2,'activo','2024-02-03');
+'Alicia','lopez','perez','si',84274512,'Bolivia','Potosi','bustillos','llallagua','Occidente','femenino',1,1,2,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'DIego','perez','sanchez','si',774512,'Bolivia','Potosi','bustillos','llallagua','llallagua','masculino',1,1,3,'activo','2024-02-03');
+'DIego','perez','sanchez','si',774512,'Bolivia','Potosi','bustillos','llallagua','Occidente','masculino',1,1,3,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Rosa','sanchez','Martines','si',274512,'Bolivia','Potosi','bustillos','llallagua','llallagua','femenino',1,1,3,'activo','2024-02-03');
+'Rosa','sanchez','Martines','si',274512,'Bolivia','Potosi','bustillos','llallagua','Occidente','femenino',1,1,3,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Daniel','Gonsales','rodriguez','si',74274512,'Bolivia','Potosi','bustillos','llallagua','llallagua','masculino',1,1,3,'activo','2024-02-03');
+'Daniel','Gonsales','rodriguez','si',74274512,'Bolivia','Potosi','bustillos','llallagua','Occidente','masculino',1,1,3,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,estado,fecha)values(
-'Andrea','rodriguez','perez','si',74274512,'Bolivia','Potosi','bustillos','llallagua','llallagua','femenino',1,1,3,'activo','2024-02-03');
+'Andrea','rodriguez','perez','si',74274512,'Bolivia','Potosi','bustillos','llallagua','Occidente','femenino',1,1,3,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Javier','Martines','sanchez','si',774512,'Bolivia','Potosi','bustillos','llallagua','llallagua','masculino',1,1,3,'activo','2024-02-03');
+'Javier','Martines','sanchez','si',774512,'Bolivia','Potosi','bustillos','llallagua','Occidente','masculino',1,1,3,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Sara','lopez','gonzales','si',54274512,'Bolivia','Potosi','bustillos','llallagua','llallagua','femenino',1,1,3,'activo','2024-02-03');
+'Sara','lopez','gonzales','si',54274512,'Bolivia','Potosi','bustillos','llallagua','Occidente','femenino',1,1,3,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Angel','perez','rodriguez','si',774512,'Bolivia','Potosi','bustillos','llallagua','llallagua','masculino',1,1,3,'activo','2024-02-03');
+'Angel','perez','rodriguez','si',774512,'Bolivia','Potosi','bustillos','llallagua','Occidente','masculino',1,1,3,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Patricia','garcia','lopez','si',744512,'Bolivia','Potosi','bustillos','llallagua','llallagua','femenino',1,1,3,'activo','2024-02-03');
+'Patricia','garcia','lopez','si',744512,'Bolivia','Potosi','bustillos','llallagua','Occidente','femenino',1,1,3,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'david','fernandez','garcia','si',7274512,'Bolivia','Potosi','bustillos','llallagua','llallagua','masculino',1,1,3,'activo','2024-02-03');
+'david','fernandez','garcia','si',7274512,'Bolivia','Potosi','bustillos','llallagua','Occidente','masculino',1,1,3,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Paula','Martines','perez','si',79274512,'Bolivia','Potosi','bustillos','llallagua','llallagua','femenino',1,1,3,'activo','2024-02-03');
+'Paula','Martines','perez','si',79274512,'Bolivia','Potosi','bustillos','llallagua','Occidente','femenino',1,1,3,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Pablo','Gonsales','sanchez','si',55274512,'Bolivia','Potosi','bustillos','llallagua','llallagua','masculino',1,1,3,'activo','2024-02-03');
+'Pablo','Gonsales','sanchez','si',55274512,'Bolivia','Potosi','bustillos','llallagua','Occidente','masculino',1,1,3,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Eva','rodrigues','Martines','si',7400512,'Bolivia','Potosi','bustillos','llallagua','llallagua','femenino',1,1,3,'activo','2024-02-03');
+'Eva','rodrigues','Martines','si',7400512,'Bolivia','Potosi','bustillos','llallagua','Occidente','femenino',1,1,3,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Jorge','lia','rodriguez','si',742102,'Bolivia','Potosi','bustillos','llallagua','llallagua','masculino',1,1,3,'activo','2024-02-03');
+'Jorge','lia','rodriguez','si',742102,'Bolivia','Potosi','bustillos','llallagua','Occidente','masculino',1,1,3,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Clara','sanchez','peres','si',4274512,'Bolivia','Potosi','bustillos','llallagua','llallagua','femenino',1,1,3,'activo','2024-02-03');
+'Clara','sanchez','peres','si',4274512,'Bolivia','Potosi','bustillos','llallagua','Occidente','femenino',1,1,3,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'JUan carlos','lopez','peres','si',74274512,'Bolivia','Potosi','bustillos','llallagua','llallagua','masculino',1,1,4,'activo','2024-02-03');
+'JUan carlos','lopez','peres','si',74274512,'Bolivia','Potosi','bustillos','llallagua','Occidente','masculino',1,1,4,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Elena','garcia','rodriguez','si',74274512,'Bolivia','Potosi','bustillos','llallagua','llallagua','femenino',1,1,4,'activo','2024-02-03');
+'Elena','garcia','rodriguez','si',74274512,'Bolivia','Potosi','bustillos','llallagua','Occidente','femenino',1,1,4,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Alejandro','Martines','lopez','si',744512,'Bolivia','Potosi','bustillos','llallagua','llallagua','masculino',1,1,4,'activo','2024-02-03');
+'Alejandro','Martines','lopez','si',744512,'Bolivia','Potosi','bustillos','llallagua','Occidente','masculino',1,1,4,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Laura','villca','ayaviri','si',9974512,'Bolivia','Potosi','bustillos','llallagua','llallagua','femenino',1,1,4,'activo','2024-02-03');
+'Laura','villca','ayaviri','si',9974512,'Bolivia','Potosi','bustillos','llallagua','Occidente','femenino',1,1,4,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Victor hugo','canaviri','sola','si',74274512,'Bolivia','Potosi','bustillos','llallagua','llallagua','masculino',1,1,4,'activo','2024-02-03');
+'Victor hugo','canaviri','sola','si',74274512,'Bolivia','Potosi','bustillos','llallagua','Occidente','masculino',1,1,4,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Ana','ayaviri','villcaes','si',724512,'Bolivia','Potosi','bustillos','llallagua','llallagua','femenino',1,1,4,'activo','2024-02-03');
+'Ana','ayaviri','villcaes','si',724512,'Bolivia','Potosi','bustillos','llallagua','Occidente','femenino',1,1,4,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Raul','fernandez','garcia','si',74274512,'Bolivia','Potosi','bustillos','llallagua','llallagua','masculino',1,1,4,'activo','2024-02-03');
+'Raul','fernandez','garcia','si',74274512,'Bolivia','Potosi','bustillos','llallagua','Occidente','masculino',1,1,4,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Maria','Jose','peres','si',274512,'Bolivia','Oruro','cercado','oruro','oruro','femenino',1,1,4,'activo','2024-02-03');
+'Maria','Jose','peres','si',274512,'Bolivia','Oruro','cercado','huanuni','Occidente','femenino',1,1,4,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'sergio','peres','aguero','si',6274512,'Bolivia','Oruro','cercado','oruro','oruro','masculino',1,1,4,'activo','2024-02-03');
+'sergio','peres','aguero','si',6274512,'Bolivia','Oruro','cercado','huanuni','Occidente','masculino',1,1,4,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Julia','canaviri','paredes','si',5274512,'Bolivia','Oruro','cercado','oruro','oruro','femenino',1,1,4,'activo','2024-02-03');
+'Julia','canaviri','paredes','si',5274512,'Bolivia','Oruro','cercado','oruro','Occidente','femenino',1,1,4,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Lucia','rodrigues','mirana','si',55274512,'Bolivia','Oruro','cercado','oruro','oruro','femenino',1,1,4,'activo','2024-02-03');
+'Lucia','rodrigues','mirana','si',55274512,'Bolivia','Oruro','cercado','oruro','Occidente','femenino',1,1,4,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Gabriela','canaviri','coyo','si',78274512,'Bolivia','Oruro','cercado','oruro','oruro','femenino',1,1,4,'activo','2024-02-03');
+'Gabriela','canaviri','coyo','si',78274512,'Bolivia','Oruro','cercado','oruro','Occidente','femenino',1,1,4,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'tomas','miranda','torrico','si',2777512,'Bolivia','Oruro','cercado','oruro','oruro','masculino',1,1,4,'activo','2024-02-03');
+'tomas','miranda','torrico','si',2777512,'Bolivia','Oruro','cercado','oruro','Occidente','masculino',1,1,4,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Marina','gutierres','paredes','si',98274512,'Bolivia','Oruro','cercado','oruro','oruro','femenino',1,1,5,'activo','2024-02-03');
+'Marina','gutierres','paredes','si',98274512,'Bolivia','Oruro','cercado','oruro','Occidente','femenino',1,1,5,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Adrian','callahuara','peres','si',8274512,'Bolivia','Oruro','cercado','oruro','oruro','masculino',1,1,5,'activo','2024-02-03');
+'Adrian','callahuara','peres','si',8274512,'Bolivia','Oruro','cercado','oruro','Occidente','masculino',1,1,5,'activo','2024-02-03');
 
 
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Irene','garcia','coco','si',78274512,'Bolivia','Oruro','cercado','oruro','oruro','femenino',1,1,5,'activo','2024-02-03');
+'Irene','garcia','coco','si',78274512,'Bolivia','Oruro','cercado','oruro','Occidente','femenino',1,1,5,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Carina','mamani','rodrigues','si',3874512,'Bolivia','Potosi','bustillos','Caripuyo','Caripuyo','femenino',1,1,5,'activo','2024-02-03');
+'Carina','mamani','rodrigues','si',3874512,'Bolivia','Potosi','bustillos','Caripuyo','Occidente','femenino',1,1,5,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Claudia','nina','rodrigues','si',3874512,'Bolivia','Potosi','bustillos','Caripuyo','Caripuyo','femenino',1,1,5,'activo','2024-02-03');
+'Claudia','nina','rodrigues','si',3874512,'Bolivia','Potosi','bustillos','Caripuyo','Occidente','femenino',1,1,5,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,estado,fecha)values(
-'fabiola','lia','lopez','si',38747512,'Bolivia','Potosi','bustillos','Caripuyo','Caripuyo','femenino',1,1,5,'activo','2024-02-03');
+'fabiola','lia','lopez','si',38747512,'Bolivia','Potosi','bustillos','Caripuyo','Occidente','femenino',1,1,5,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Carina','mamani','rodrigues','si',3874512,'Bolivia','Potosi','bustillos','Caripuyo','Caripuyo','femenino',1,1,5,'activo','2024-02-03');
+'Carina','mamani','rodrigues','si',3874512,'Bolivia','Potosi','bustillos','Caripuyo','Occidente','femenino',1,1,5,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Pablo','rodrigues','pacheco','si',3874512,'Bolivia','Potosi','bustillos','uncia','uncia','masculino',1,1,5,'activo','2024-02-03');
+'Pablo','rodrigues','pacheco','si',3874512,'Bolivia','Potosi','bustillos','uncia','Occidente','masculino',1,1,5,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Andrea','lopes','lopes','si',73874512,'Bolivia','Potosi','bustillos','uncia','uncia','femenino',1,1,5,'activo','2024-02-03');
+'Andrea','lopes','lopes','si',73874512,'Bolivia','Potosi','bustillos','uncia','Occidente','femenino',1,1,5,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Alejandra','jani jani','pacheco','si',3874512,'Bolivia','Potosi','bustillos','uncia','uncia','femenino',1,1,5,'activo','2024-02-03');
+'Alejandra','jani jani','pacheco','si',3874512,'Bolivia','Potosi','bustillos','uncia','Occidente','femenino',1,1,5,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'Luz clara','jorge','michaga','si',73874512,'Bolivia','Potosi','bustillos','uncia','uncia','femenino',1,1,5,'activo','2024-02-03');
+'Luz clara','jorge','michaga','si',73874512,'Bolivia','Potosi','bustillos','uncia','Occidente','femenino',1,1,5,'activo','2024-02-03');
 insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha)values(
-'gonsalo','lipiri','condori','si',43874512,'Bolivia','Potosi','bustillos','uncia','uncia','masculino',1,1,5,'activo','2024-02-03');
+'gonsalo','lipiri','condori','si',43874512,'Bolivia','Potosi','bustillos','uncia','Occidente','masculino',1,1,5,'activo','2024-02-03');
 
 
 
@@ -2112,14 +2114,14 @@ insert into defensa(estado_def,fecha,hora,cod_es,cod_mt,cod_pe,cod_carrera,cod_a
 'habilitado','2024-02-01','10:00:00',67,18,2,1,1,'activo');
 
 
-insert into titulado(estado_titu,nota_titu,cod_def,cod_es,cod_mt,cod_pe,cod_carrera,cod_area,estado)values(
-'aprobado',65,1,61,21,2,1,1,'activo');
-insert into titulado(estado_titu,nota_titu,cod_def,cod_es,cod_mt,cod_pe,cod_carrera,cod_area,estado)values(
-'en proceso',0,2,63,21,2,1,1,'activo');
-insert into titulado(estado_titu,nota_titu,cod_def,cod_es,cod_mt,cod_pe,cod_carrera,cod_area,estado)values(
-'aprobado',80,3,65,18,2,1,1,'activo');
-insert into titulado(estado_titu,nota_titu,cod_def,cod_es,cod_mt,cod_pe,cod_carrera,cod_area,estado)values(
-'reprobado',50,4,67,18,2,1,1,'activo');
+insert into titulado(estado_titu,nota_titu,cod_def,cod_es,cod_mt,cod_pe,cod_carrera,cod_area,fecha,hora,estado)values(
+'aprobado',65,1,61,21,2,1,1,'2024-01-02','10:00:00','activo');
+insert into titulado(estado_titu,nota_titu,cod_def,cod_es,cod_mt,cod_pe,cod_carrera,cod_area,fecha,hora,estado)values(
+'en proceso',0,2,63,21,2,1,1,'2022-01-02','10:00:00','activo');
+insert into titulado(estado_titu,nota_titu,cod_def,cod_es,cod_mt,cod_pe,cod_carrera,cod_area,fecha,hora,estado)values(
+'aprobado',80,3,65,18,2,1,1,'2023-01-02','10:00:00','activo');
+insert into titulado(estado_titu,nota_titu,cod_def,cod_es,cod_mt,cod_pe,cod_carrera,cod_area,fecha,hora,estado)values(
+'reprobado',50,4,67,18,2,1,1,'2024-01-02','10:00:00','activo');
 
 
 
