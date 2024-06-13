@@ -15,14 +15,14 @@
 
       <nav class='navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow-sm'>
         <div class='container'>
-          <a href='#' class='navbar-brand'><img src='imagenes/cds.ico' height='30' width='30' class='rounded-circle'></a>
+          <a href='#' class='navbar-brand'><img src='../static/imagenes/unsxx.png' height='30' width='30' class='rounded-circle'></a>
           <button class='navbar-toggler' type='button' data-bs-toggle='collapse' data-bs-target='#navbarNav' aria-controls='navbarNav' aria-expanded='false' aria-label='Toggle navigation'>
             <span class='navbar-toggler-icon'></span>
           </button>
           <div class='collapse navbar-collapse' id='navbarNav'>
             <ul class='navbar-nav me-auto mb-2 mb-lg-0'>
                 <li class='nav-item' title='Inicio'>
-                  <a class='nav-link btn btn-outline-warning' href='controlador/logeo.controlador.php?accion=ix'><img src='imagenes/house.ico'style='height: 25px;width: 25px;'></a>
+                  <a class='nav-link btn btn-outline-warning' href='controlador/logeo.controlador.php?accion=ix'>Ini</a>
                 </li>
 
            </ul>
@@ -59,37 +59,65 @@
           background: linear-gradient(to right, AntiqueWhite, PaleGoldenrod); /* Combina dos colores */
         height: 100px; /* Altura del elemento */
         }
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+
+        .body1 {
+          position: relative;
+          height: 170vh; /* 100% del viewport height */
+          }
+
+      .body1::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-image: url('../static/imagenes/unsxx.png'); /* Reemplaza 'ruta/de/tu/imagen.jpg' con la ruta de tu imagen */
+          background-size: 500px 700px; /* Ajusta la imagen al tamaño del contenedor */
+          background-position: center; /* Centra la imagen */
+          opacity: 0.1; /* Opacidad del 50% */
+          z-index: -1; /* Coloca el pseudo-elemento detrás del contenido */
+           background-repeat: no-repeat;
+      }
 
       </style>
-    <div class="container border-top border-end border-start border-primary"  class="bg-danger">
-      <div class="alert alert-warning">
-        <div class="container mt-5">
-          <div class="row">
-            <div class="alert alert-success">
-              <div class="col-md-6 offset-md-3">
-                  <h4 class="text-center mb-1 text-primary" style='font-style: italic;'>Buscador semantico</h4>
-                  <div class="mb-3" style="position: relative;">
-                      <textarea class="form-control mb-2 border-primary" rows="2" id='buscar' name='buscar'></textarea>
-                      <button type="button" class="btn btn-sm" style="position: absolute; bottom: 2px; right: 2px;background-color:RGBA(200,200,210,0.8)" onclick="buscarDatos()" title='Buscar'>
-                        <img src="{{ url_for('static', filename='imagenes/buscar.png') }}" height="22px" width="22px"class="img-circle">
-                      </button>
-                  </div>
+    <div class="body1">
+      <div class="container border-top border-end border-start border-primary"  class="bg-danger">
+        <div class="alert alert-warning">
+          <div class="container mt-5">
+            <div class="row">
+              <div class="alert alert-success">
+                <div class="col-md-6 offset-md-3">
+                    <h4 class="text-center mb-1 text-primary" style='font-style: italic;'>Buscador semantico</h4>
+                    <div class="mb-3" style="position: relative;">
+                        <textarea class="form-control mb-2 border-primary" rows="2" id='buscar' name='buscar'></textarea>
+                        <button type="button" class="btn btn-sm" style="position: absolute; bottom: 2px; right: 2px;background-color:RGBA(200,200,210,0.8)" onclick="buscarDatos()" title='Buscar'>
+                          <img src="{{ url_for('static', filename='imagenes/buscar.png') }}" height="22px" width="22px"class="img-circle">
+                        </button>
+                    </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="border-success border-top border-end border-start">
-        <br>
-        <div class="respuesta" id='respuesta'>
+        <div class="border-success border-top border-end border-start">
+          <br>
+          <div class="respuesta" id='respuesta' style='background-color:rgba(255,255,255,0.4)'>
 
+          </div>
+          <p></p>
+          <br><br>
         </div>
-        <p></p>
-        <br><br>
+        <br>
       </div>
-      <br>
     </div>
+
 
     <script type="text/javascript">
     function buscarDatos(){

@@ -409,3 +409,13 @@ def obtener_ano_de_fecha(fecha):
         partes = fecha.split('.')
     # Reordenar los componentes para el formato deseado (año, mes, día)
     return partes[0]
+
+def obtener_areas_id(texto):
+    texto = texto.lower()
+    areas = ['tecnologia','técnologia',"Tecnologia","salud","Salud","social","sociales"]
+    id_areas = [1,1,1,2,2,3,3]
+    new_areas = []
+    for are, id in zip(areas, id_areas):
+        if are in texto:
+            new_areas.append(id)
+    return new_areas

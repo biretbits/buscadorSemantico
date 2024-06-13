@@ -3,7 +3,7 @@ import pymysql
 from comprobar import obtener_carreras_nombre,detectar_numeros_delimiter,contiene_palabras_activas,contiene_palabras_desactivas,contiene_palabras_sexo_varon,contiene_palabras_sexo_mujer
 from comprobar import palabras_departamento,palabras_provincia,encontrar_nombre,encontrar_apellido,obtener_area,palabra_desercion
 from comprobar import palabra_aplazaron,palabra_aprobados,palabra_curso,obtener_que_curso_quiere
-from comprobar import palabra_nota,fechas,obtener_ano
+from comprobar import palabra_nota,fechas,obtener_ano,obtener_areas_id
 from sql import seleccionar_estudiante1
 from sentence_transformers import SentenceTransformer, util
 import numpy as np
@@ -68,6 +68,12 @@ sentencias = [
     "indice de titulados en relacion al porcentaje de inscritos de los primeros niveles",
     "cual es la cantidad de titulados con relacion a inscritos en primer año",
     "los matriculados a que region del pais pertenecen clasificados por departamentos y regiones",
+    "cuales son las carreras de la universidad",
+    "cual es la cantidad de estudiantes aprobados y reprobados",
+    "quiero informacion sobre el plan de estudio de la carrera de",
+    "quiero informacion sobre el plan de estudio del area de tecnologia, salud y sociales",
+    "cuales son los planes de estudio en las areas y carreras",
+    "cuales son los plane de estudio",
 ]
 # Definir la lista de pares
 
@@ -128,6 +134,12 @@ respuesta =[
 "titulados_relacion",
 "titulados_relacion",
 "clasificacion_departamento",
+'ver_carreras',
+"total_de_estudiantes_estadisticas",
+"plan_de_estudio",
+"plan_de_estudio",
+"plan_de_estudio",
+"plan_de_estudio",
 ]
 consultas_sql = {
 "ver_carreras":"select *from carrera",
@@ -153,6 +165,7 @@ consultas_sql = {
 "total_estudiante_desercion":"select *from estudiante_perdio",
 "titulados_relacion":"select *from estudiante",
 "clasificacion_departamento":"select * from estudiante",
+"plan_de_estudio":"select *from plan_de_estudio",
 }
 #e.estado = 'desactivo' or e.cod_area = 3 and e.sexo = 'femenino' or  e.sexo = 'masculino';"
 consultas_aux= {"activo_es" :" e.estado = 'activo'",
@@ -1549,6 +1562,64 @@ def buscar(texto):
             vec1.append(nombre_posicion_sql)
             response = sql + response
             vec1.append(response)
+        if response == "plan_de_estudio":
+            areas = obtener_areas_id(texto)
+            vec = []
+            vec1 = []
+            response = ""
+            contar_parametros = 0
+            nombre_posicion_sql="plan_de_estudio"
+            if areas:
+                vec.append("si_ar")
+                contar_parametros+=1
+            else:
+                vec.append("no")
+            if contar_parametros>0:#existe un nombre de area entonces solo buscar en los areas o en el area
+                si = "no"
+                idd = ""
+                for i in range(len(areas)):#recorremos las areas solicitadas
+                    idd+=str(areas[i])+","
+                    if si == "no":
+                        response += " where cod_area = "+str(areas[i])
+                        si = "si"
+                    elif si == "si":
+                        response += " or cod_area="+str(areas[i])
+                sql = consultas_sql[nombre_posicion_sql] #obtenemos la consulta y lo concatenamos
+                vec.append(idd)
+                for i in range(len(vec)):
+                    vec1.append(vec[i])
+                vec1.append(nombre_posicion_sql)
+                vec1.append(sql+response)
+            else:
+                carreras_encontradas = obtener_carreras_nombre(texto);#buscar carreras si en el texto hay alguna carrera
+                if carreras_encontradas:#si existe algun nombre de carrera ingresa
+                    vec.append("si_car")#exite una carrera
+                    contar_parametros+=1
+                else:
+                    vec.append("no")
+
+                if contar_parametros>0:#existe carreras
+                    si = "no"
+                    idd = ""
+                    for i in range(len(carreras_encontradas)):
+                        idd+=str(carreras_encontradas[i])+","
+                        if si == "no":
+                            response += " where cod_carrera = "+str(carreras_encontradas[i])
+                            si = "si"
+                        elif si == "si":
+                            response += " or cod_carrera="+str(carreras_encontradas[i])
+                    sql = consultas_sql[nombre_posicion_sql] #obtenemos la consulta y lo concatenamos
+                    vec.append(idd)
+                    for i in range(len(vec)):
+                        vec1.append(vec[i])
+                    vec1.append(nombre_posicion_sql)
+                    vec1.append(sql+response)
+                else:
+                    sql = consultas_sql[nombre_posicion_sql] #obtenemos la consulta y lo concatenamos
+                    vec1.append("no")
+                    vec1.append("no")    
+                    vec1.append(nombre_posicion_sql)
+                    vec1.append(sql)
         return vec1
     else:
         vec1=[]

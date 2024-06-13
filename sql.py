@@ -358,3 +358,65 @@ def consulta_Titulado(sql):
         return sql_consulta
     else:
         return "no"
+
+
+def seleccionarcarrera_id(id):
+
+        # Consulta SQL para seleccionar un estudiante por su ID
+        sql_consulta = "SELECT * FROM carrera WHERE cod_area = %s"
+        conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+        # Crear un cursor para ejecutar consultas
+        cursor = conn.cursor()
+        # Ejecutar la consulta SQL con el ID proporcionado como parámetro
+        cursor.execute(sql_consulta, (id))
+        # Verificar si hay algún resultado antes de obtenerlos
+        if cursor.rowcount > 0:
+            # Si hay resultados, obtener los datos de la consulta
+            estudiante = cursor.fetchall()
+            # Cerrar el cursor y la conexión
+            cursor.close()
+            conn.close()
+            return estudiante
+        else:
+            # Si no hay resultados, devolver un mensaje indicando que no se encontró el estudiante
+            return "no"
+
+def modalidad_titulacion_id(id):
+    if id == 1:
+        sql_consulta = "SELECT * FROM modalidad_titulacion WHERE cod_carrera = %s and cod_pe = 2"
+    else:
+        sql_consulta = "SELECT * FROM modalidad_titulacion WHERE cod_carrera = %s"
+    #es Informatica# Consulta SQL para seleccionar un estudiante por su ID
+    conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+    # Crear un cursor para ejecutar consultas
+    cursor = conn.cursor()
+    # Ejecutar la consulta SQL con el ID proporcionado como parámetro
+    cursor.execute(sql_consulta, (id))
+    # Verificar si hay algún resultado antes de obtenerlos
+    if cursor.rowcount > 0:
+        # Si hay resultados, obtener los datos de la consulta
+        estudiante = cursor.fetchall()
+        # Cerrar el cursor y la conexión
+        cursor.close()
+        conn.close()
+        return estudiante
+    else:
+        # Si no hay resultados, devolver un mensaje indicando que no se encontró el estudiante
+        return "no"
+def seleccionarAsignatura_por_id(id_car):
+    sql_consulta = "select *from asignatura where cod_carrera = "+str(id_car)#seleccionamos todos los estudiantes
+    conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+    # Crear un cursor para ejecutar consultas
+    cursor = conn.cursor()
+    # Ejecutar la consulta SQL
+    cursor.execute(sql_consulta)
+    # Verifica si hay algún resultado antes de obtenerlos
+    if cursor.rowcount > 0:
+        # Si hay resultados, obtén los datos de la consulta
+        sql_consulta = cursor.fetchall()
+        cursor.close()
+        conn.close()
+
+        return sql_consulta
+    else:
+        return "no"

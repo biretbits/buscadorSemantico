@@ -1,7 +1,8 @@
 from flask import jsonify
 from sql import nombre_carrera_retor,grado_Estudiante,obtener_nombre,nombre_materia,obtener_datos_de_curso
 from sql import seleccionarAreas,seleccionar_carrera,seleccionarAsignaturaAreas,seleccionarAsignatura
-from sql import nombre_asignatura,nombre_carrera,consulta_Titulado
+from sql import nombre_asignatura,nombre_carrera,consulta_Titulado,seleccionarcarrera_id
+from sql import modalidad_titulacion_id,seleccionarAsignatura_por_id
 from comprobar import formatear_fecha_solo_ano,obtener_ano_de_fecha
 from datetime import datetime
 
@@ -50,9 +51,9 @@ colores1 = {
 #en la base de datos las carreras comienza de 1
 #pero como los array comienzan en 0 por eso resto una posicion
 areasU = {
-0:'Tecnologia',1:"Salud",2:"Sociales"
+0:'Técnologia',1:"Salud",2:"Sociales"
 }
-
+cursoss ={0:'1er año',1:"2do año",2:"3er año",3:'4to año',4:'5to año'}
 c_infor = {}#xontar estudiantes aprobados por carrera y curso
 c_inforr = {}#contar estudiantes reprobados por carrera y cursos
 c_civil = {}#xontar estudiantes aprobados por carrera y curso
@@ -2747,9 +2748,259 @@ def  retornar_valores(datos,ress):
                 html += "</div>"
                 html += "</div>"
             html+="</div>"
+    if accion1 == "plan_de_estudio":
+        si_are = ress[0]
+        curs ={0:'1er año',1:"2do año",2:"3er año",3:'4to año',4:'5to año'}
+        if si_are != "no":#si es diferente de no existe una area o areas
+            areas_id = ress[1]#obtenemos los id de areas quue llegan
+            s_dupli = eliminar_dobles(areas_id)#si hay doble veces repetido el id lo eliminamos a 1
+            print(s_dupli," esta bien o no ")
+            for i in s_dupli:#recorremos todo los id de areas
+                index = int(i) - 1#obtenemos el id
+                index1 = int(i)
+                html += "<br><h5 align='center'>Area " + str(areasU[index])+"</h5><br>"
+                print("index   ",index1)
+                carreras = seleccionarcarrera_id(index1)#buscamos con el id todas las carreras relacionadas con el area
+                if carreras != "no":#si es diferente de no entonces ingresamos
+                    for car in carreras:#recorremos todas las carreras encontradas
+                        html+="<h6 align='center'>Carrera "+nombre_carrera_retor(car[0])+" plan de estudio</h6>"#impirmimos el nombre de la carrera
+                        asig=seleccionarAsignatura_por_id(car[0])#seleccionamos las asignaturas
+                        mt = modalidad_titulacion_id(car[0])#seleccinamos la modalidad de titulacion
+                        if asig != "no":
+                            html+="<div class='row'>"
+                            for k in range(5):
+                                html += "<div class='col-lg-6'>"
+                                html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                                html += "<div class='panel-heading'>"
+                                html += (curs[k])
+                                html += "</div>"
+                                html += "<div class='panel-body'>"
+                                html+= "<table class='table' style='font-size: 12px'>"
+                                html+= "<thead>"
+                                html+="<tr>"
+                                html+="<td>N°</td>"
+                                html+="<td>Sigla</td>"
+                                html+="<td>Asignatura</td>"
+                                html+="</tr>"
+                                html+="</thead>"
+                                html+="<tbody>"
+                                p = 1
+                                for asigg in asig:
+                                    html+="<tr>"
+                                    if (k+1) == asigg[9]:#si el curso de asignatura es igual a k entonces
+                                        html+="<td>"+str(p)+"</td>"
+                                        p = p + 1
+                                        html+="<td>"+str(asigg[1])+"</td>"
+                                        html+="<td>"+str(asigg[2])+"</td>"
+                                    html+="</tr>"
+                                html+="</tbody>"
+                                html+= "</table>"
+                                html += "</div>"
+                                html += "</div>"
+                                html += "</div>"
+                            html+="<h5 align='center'>Modalidades de titulación<h5>"
+                            html+="</div>"
+                            html+="<div class='row'>"
+                            j = 1
+                        if mt != "no":
+                            html += "<div class='col-lg-12'>"
+                            html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                            html += "<div class='panel-heading'>"
+                            html += "</div>"
+                            html += "<div class='panel-body'>"
+                            html+= "<table class='table' style='font-size:12px'>"
+                            html+= "<thead>"
+                            html+="<tr>"
+                            html+="<td>N°</td>"
+                            html+="<td>Modalidad</td>"
+                            html+="</tr>"
+                            html+="</thead>"
+                            html+="<tbody>"
+                            for moda in mt:
+                                html+="<tr>"
+                                html+="<td>"+str(j)+"</td>"
+                                j = j + 1
+                                html+="<td>"+str(moda[1])+"</td>"
+                                html+="</tr>"
+                            html+="</tbody>"
+                            html+= "</table>"
+                            html += "</div>"
+                            html += "</div>"
+                            html += "</div>"
+                            html+="</div>"
+                        else:
+                            html+="<h6 align='center'>No se encontro resultados<h6>"
+                else:
+                    html+="<h6 align='center'>No se encontro resultados<h6>"
+        si_car = ress[1]#como no existe alguna area entonces buscaos carreras
+        if si_car != "no":#si carrera es diferente de no entonces existe carrera
+            car_id = ress[2]#obtenemos los id de areas quue llegan
+            s_dupli = eliminar_dobles(car_id)#si hay doble veces repetido el id lo eliminamos a 1
+            print(s_dupli," esta bien o no ")
+            for i in s_dupli:#recorremos todo los id de areas
+                index = int(i) - 1#obtenemos el id
+                index1 = int(i)
+                html+="<br><h6 align='center'>Carrera "+nombre_carrera_retor(index1)+" plan de estudio</h6><br>"#impirmimos el nombre de la carrera
+                asig=seleccionarAsignatura_por_id(index1)#seleccionamos las asignaturas
+                mt = modalidad_titulacion_id(index1)#seleccinamos la modalidad de titulacion
+                if asig != "no":
+                    html+="<div class='row'>"
+                    for k in range(5):
+                        html += "<div class='col-lg-6'>"
+                        html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                        html += "<div class='panel-heading'>"
+                        html += (curs[k])
+                        html += "</div>"
+                        html += "<div class='panel-body'>"
+                        html+= "<table class='table' style='font-size: 12px'>"
+                        html+= "<thead>"
+                        html+="<tr>"
+                        html+="<td>N°</td>"
+                        html+="<td>Sigla</td>"
+                        html+="<td>Asignatura</td>"
+                        html+="</tr>"
+                        html+="</thead>"
+                        html+="<tbody>"
+                        p = 1
+                        for asigg in asig:
+                            html+="<tr>"
+                            if (k+1) == asigg[9]:#si el curso de asignatura es igual a k entonces
+                                html+="<td>"+str(p)+"</td>"
+                                p = p + 1
+                                html+="<td>"+str(asigg[1])+"</td>"
+                                html+="<td>"+str(asigg[2])+"</td>"
+                            html+="</tr>"
+                        html+="</tbody>"
+                        html+= "</table>"
+                        html += "</div>"
+                        html += "</div>"
+                        html += "</div>"
+                    html+="<h5 align='center'>Modalidades de titulación<h5>"
+                    html+="</div>"
+                    html+="<div class='row'>"
+                    j = 1
+                else:
+                    html+="<h6 align='center'>No se encontro resultados<h6>"
+                if mt != "no":
+                    html += "<div class='col-lg-12'>"
+                    html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                    html += "<div class='panel-heading'>"
+                    html += "</div>"
+                    html += "<div class='panel-body'>"
+                    html+= "<table class='table' style='font-size:12px'>"
+                    html+= "<thead>"
+                    html+="<tr>"
+                    html+="<td>N°</td>"
+                    html+="<td>Modalidad</td>"
+                    html+="</tr>"
+                    html+="</thead>"
+                    html+="<tbody>"
+                    for moda in mt:
+                        html+="<tr>"
+                        html+="<td>"+str(j)+"</td>"
+                        j = j + 1
+                        html+="<td>"+str(moda[1])+"</td>"
+                        html+="</tr>"
+                    html+="</tbody>"
+                    html+= "</table>"
+                    html += "</div>"
+                    html += "</div>"
+                    html += "</div>"
+                    html+="</div>"
+                else:
+                    html+="<h6 align='center'>No se encontro resultados<h6>"
+
+        else:#no hay ni carrera ni area pero si existe plan de estudio
+            areasR = [1,2,3]
+            for i in areasR:#recorremos todo los id de areas
+                index = (i) - 1#obtenemos el id
+                index1 = (i)
+                html += "<br><h5 align='center'>Area " + str(areasU[index])+"</h5><br>"
+                print("index   ",index1)
+                carreras = seleccionarcarrera_id(index1)#buscamos con el id todas las carreras relacionadas con el area
+                if carreras != "no":#si es diferente de no entonces ingresamos
+                    for car in carreras:#recorremos todas las carreras encontradas
+                        html+="<h6 align='center'>Carrera "+nombre_carrera_retor(car[0])+" plan de estudio</h6>"#impirmimos el nombre de la carrera
+                        asig=seleccionarAsignatura_por_id(car[0])#seleccionamos las asignaturas
+                        mt = modalidad_titulacion_id(car[0])#seleccinamos la modalidad de titulacion
+                        if asig != "no":
+                            html+="<div class='row'>"
+                            for k in range(5):
+                                html += "<div class='col-lg-6'>"
+                                html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                                html += "<div class='panel-heading'>"
+                                html += (curs[k])
+                                html += "</div>"
+                                html += "<div class='panel-body'>"
+                                html+= "<table class='table' style='font-size: 12px'>"
+                                html+= "<thead>"
+                                html+="<tr>"
+                                html+="<td>N°</td>"
+                                html+="<td>Sigla</td>"
+                                html+="<td>Asignatura</td>"
+                                html+="</tr>"
+                                html+="</thead>"
+                                html+="<tbody>"
+                                p = 1
+                                for asigg in asig:
+                                    html+="<tr>"
+                                    if (k+1) == asigg[9]:#si el curso de asignatura es igual a k entonces
+                                        html+="<td>"+str(p)+"</td>"
+                                        p = p + 1
+                                        html+="<td>"+str(asigg[1])+"</td>"
+                                        html+="<td>"+str(asigg[2])+"</td>"
+                                    html+="</tr>"
+                                html+="</tbody>"
+                                html+= "</table>"
+                                html += "</div>"
+                                html += "</div>"
+                                html += "</div>"
+                            html+="<h5 align='center'>Modalidades de titulación<h5>"
+                            html+="</div>"
+                            html+="<div class='row'>"
+                            j = 1
+                        if mt != "no":
+                            html += "<div class='col-lg-12'>"
+                            html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                            html += "<div class='panel-heading'>"
+                            html += "</div>"
+                            html += "<div class='panel-body'>"
+                            html+= "<table class='table' style='font-size:12px'>"
+                            html+= "<thead>"
+                            html+="<tr>"
+                            html+="<td>N°</td>"
+                            html+="<td>Modalidad</td>"
+                            html+="</tr>"
+                            html+="</thead>"
+                            html+="<tbody>"
+                            for moda in mt:
+                                html+="<tr>"
+                                html+="<td>"+str(j)+"</td>"
+                                j = j + 1
+                                html+="<td>"+str(moda[1])+"</td>"
+                                html+="</tr>"
+                            html+="</tbody>"
+                            html+= "</table>"
+                            html += "</div>"
+                            html += "</div>"
+                            html += "</div>"
+                            html+="</div>"
+                        else:
+                            html+="<h6 align='center'>No se encontro resultados<h6>"
+                else:
+                    html+="<h6 align='center'>No se encontro resultados<h6>"
     html += "</container>"
 
     return html
+def eliminar_dobles(cadena):
+    lista = cadena.split(",")
+    # Convertir la lista en un conjunto para eliminar duplicados
+    conjunto = set(lista)
+    # Convertir el conjunto de nuevo en una lista
+    lista_sin_duplicados = list(conjunto)
+    lista_sin_vacios = [elemento for elemento in lista_sin_duplicados if elemento != '']
+    return lista_sin_vacios
+
 
 def menCOncluyeron(a,b):
     if a == b:
