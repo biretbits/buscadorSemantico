@@ -80,6 +80,10 @@ sentencias = [
     "cual es la cantidad de estudiantes provenientes de otras universidades",
     "cual es la cantidad de inscritos en materias por areas y carreras",
     "estadistica a nivel general de inscritos en materias",
+    "estadistica de inscripcion de materias del area tecnologia, salud y social desde",
+    "estadistica a nivel general de inscritos en materias de la carrera de",
+    "cual es la cantidad de inscritos en materias de la carrera de",
+    "informacion de inscritos en materias de la carrera de",
 ]
 # Definir la lista de pares
 
@@ -150,6 +154,10 @@ respuesta =[
 "diferencia_entre_primero_quinto",
 "asignaturas_desercion",
 "concepto_transferencia",#estudiantes que estan en la universidad por transferencia
+"materias_inscritos",
+"materias_inscritos",
+"materias_inscritos",
+"materias_inscritos",
 "materias_inscritos",
 "materias_inscritos",
 ]

@@ -3118,7 +3118,8 @@ def  retornar_valores(datos,ress):
             fecha2 = datetime.strptime(fecha2, "%Y-%m-%d").date()
         print(fecha1," ee121dddd    ",fecha2)
         for row in datos:#recorremos los datos obtenidos de la base de datos
-            if row[14]>=fecha1 and row[14] <= fecha2:
+
+            if not isinstance(row[14], type(None)) and row[14]>=fecha1 and row[14] <= fecha2:
                 anoBD = int(obtener_ano_de_fecha(row[14].strftime("%Y-%m-%d")))
 
                 if row[10] == 1:
@@ -3164,7 +3165,6 @@ def  retornar_valores(datos,ress):
                 index = int(i) - 1#obtenemos el id
                 index1 = int(i)
                 html += "<h5 align='center'>Area " + str(areasU[index])+"</h5>"
-                print("index   ",index1)
                 carreras = seleccionarcarrera_id(index1)#buscamos con el id todas las carreras relacionadas con el area
                 if carreras != "no":#si es diferente de no entonces ingresamos
                     for car in carreras:#recorremos todas las carreras encontradas
@@ -3181,7 +3181,9 @@ def  retornar_valores(datos,ress):
                                     html += "<div class='panel-heading'>"
                                     cur = g+1
                                     print(cur," = ",car[0])
-                                    html += curs[g]+" tiene "+str((contar_total_estudiante_curso(cur,car[0],fecha11,fecha22)))+" estudiantes"
+                                    fech1 = str(anio)+"-01-01"
+                                    fech2 = str(anio)+"-12-30"
+                                    html += curs[g]+" tiene "+str((contar_total_estudiante_curso(cur,car[0],fech1,fech2)))+" estudiantes"
                                     html += "</div>"
                                     html += "<div class='panel-body'>"
                                     html+= "<table class='table' style='font-size:12px'>"
@@ -3269,6 +3271,235 @@ def  retornar_valores(datos,ress):
                                     html += "</div>"
                                     html += "</div>"
                             html+="</div>"
+                        else:
+                            html+="<h6 align='center'>No se encontro información</h6>"
+                else:
+                    html+="<h6 align='center'>No se encontro información</h6>"
+        si_car = ress[1]
+        if si_car != "no":
+            car_id = ress[2]#obtenemos los id de areas quue llegan
+            s_dupli = eliminar_dobles(car_id)#si hay doble veces repetido el id lo eliminamos a 1
+            print(s_dupli," esta bien o no ")
+            for i in s_dupli:#recorremos todo los id de carreras
+                index = int(i) - 1#obtenemos el id
+                index1 = int(i)
+                html+="<br><h6 align='center'>Carrera "+nombre_carrera_retor(index1)+"</h6><br>"#impirmimos el nombre de la carrera
+                materias=seleccionarAsignatura_por_id(index1)#seleccionamos las asignaturas
+                if materias != "no":
+                    html+="<div class='row'>"
+                    for anio in range(a1, a2 + (1)):
+                        html += "<h6 align='center'>" + str(anio)+"</h6>"
+                        for g in range(5):
+                            html += "<div class='col-lg-4'>"
+                            html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                            html += "<div class='panel-heading'>"
+                            cur = g+1
+                            fech1 = str(anio)+"-01-01"
+                            fech2 = str(anio)+"-12-30"
+                            html += curs[g]+" tiene "+str((contar_total_estudiante_curso(cur,index1,fech1,fech2)))+" estudiantes"
+                            html += "</div>"
+                            html += "<div class='panel-body'>"
+                            html+= "<table class='table' style='font-size:12px'>"
+                            html+= "<thead>"
+                            html+="<tr>"
+                            html+="<td>Asignatura</td>"
+                            html+="<td>Inscritos</td>"
+                            html+="</tr>"
+                            html+="</thead>"
+                            html+="<tbody>"
+                            k = 1
+                            for mat in materias:
+                                if index1 == 1:#si carrera es igual a 1 es informatica
+                                    if (g+1) == c_infor[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                        html+="<tr><td>"+nombre_asignatura(c_infor[anio][mat[0]][2])+"</td>"
+                                        html+="<td>"+str(c_infor[anio][mat[0]][0])+"</td></tr>"
+                                elif index1 == 2:
+                                    if (g+1) == c_civil[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                        html+="<tr><td>"+nombre_asignatura(c_civil[anio][mat[0]][2])+"</td>"
+                                        html+="<td>"+str(c_civil[anio][mat[0]][0])+"</td></tr>"
+                                elif index1 == 3:
+                                    if (g+1) == c_minas[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                        html+="<tr><td>"+nombre_asignatura(c_minas[anio][mat[0]][2])+"</td>"
+                                        html+="<td>"+str(c_minas[anio][mat[0]][0])+"</td></tr>"
+                                elif index1 == 4:
+                                    if (g+1) == c_elec[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                        html+="<tr><td>"+nombre_asignatura(c_elec[anio][mat[0]][2])+"</td>"
+                                        html+="<td>"+str(c_elec[anio][mat[0]][0])+"</td></tr>"
+                                elif index1 == 5:
+                                    if (g+1) == c_mec[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                        html+="<tr><td>"+nombre_asignatura(c_mec[anio][mat[0]][2])+"</td>"
+                                        html+="<td>"+str(c_mec[anio][mat[0]][0])+"</td></tr>"
+                                elif index1 == 6:
+                                    if (g+1) == c_agro[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                        html+="<tr><td>"+nombre_asignatura(c_agro[anio][mat[0]][2])+"</td>"
+                                        html+="<td>"+str(c_agro[anio][mat[0]][0])+"</td></tr>"
+                                elif index1 == 7:
+                                    if (g+1) == c_lit[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                        html+="<tr><td>"+nombre_asignatura(c_lit[anio][mat[0]][2])+"</td>"
+                                        html+="<td>"+str(c_lit[anio][mat[0]][0])+"</td></tr>"
+                                elif index1 == 8:
+                                    if (g+1) == c_der[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                        html+="<tr><td>"+nombre_asignatura(c_der[anio][mat[0]][2])+"</td>"
+                                        html+="<td>"+str(c_der[anio][mat[0]][0])+"</td></tr>"
+                                elif index1 == 9:
+                                    if (g+1) == c_cie[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                        html+="<tr><td>"+nombre_asignatura(c_cie[anio][mat[0]][2])+"</td>"
+                                        html+="<td>"+str(c_cie[anio][mat[0]][0])+"</td></tr>"
+                                elif index1 == 10:
+                                    if (g+1) == c_cont[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                        html+="<tr><td>"+nombre_asignatura(c_cont[anio][mat[0]][2])+"</td>"
+                                        html+="<td>"+str(c_cont[anio][mat[0]][0])+"</td></tr>"
+                                elif index1 == 11:
+                                    if (g+1) == c_odon[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                        html+="<tr><td>"+nombre_asignatura(c_odon[anio][mat[0]][2])+"</td>"
+                                        html+="<td>"+str(c_odon[anio][mat[0]][0])+"</td></tr>"
+                                elif index1 == 12:
+                                    if (g+1) == c_lab[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                        html+="<tr><td>"+nombre_asignatura(c_lab[anio][mat[0]][2])+"</td>"
+                                        html+="<td>"+str(c_lab[anio][mat[0]][0])+"</td></tr>"
+                                elif index1 == 13:
+                                    if (g+1) == c_enf[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                        html+="<tr><td>"+nombre_asignatura(c_enf[anio][mat[0]][2])+"</td>"
+                                        html+="<td>"+str(c_enf[anio][mat[0]][0])+"</td></tr>"
+                                elif index1 == 14:
+                                    if (g+1) == c_med[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                        html+="<tr><td>"+nombre_asignatura(c_med[anio][mat[0]][2])+"</td>"
+                                        html+="<td>"+str(c_med[anio][mat[0]][0])+"</td></tr>"
+                                elif index1 == 15:
+                                    if (g+1) == c_bio[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                        html+="<tr><td>"+nombre_asignatura(c_bio[anio][mat[0]][2])+"</td>"
+                                        html+="<td>"+str(c_bio[anio][mat[0]][0])+"</td></tr>"
+                                elif index1 == 16:
+                                    if (g+1) == c_cso[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                        html+="<tr><td>"+nombre_asignatura(c_cso[anio][mat[0]][2])+"</td>"
+                                        html+="<td>"+str(c_cso[anio][mat[0]][0])+"</td></tr>"
+                                elif index1 == 17:
+                                    if (g+1) == c_quim[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                        html+="<tr><td>"+nombre_asignatura(c_quim[anio][mat[0]][2])+"</td>"
+                                        html+="<td>"+str(c_quim[anio][mat[0]][0])+"</td></tr>"
+
+                            html+="</tbody>"
+                            html+= "</table>"
+                            html += "</div>"
+                            html += "</div>"
+                            html += "</div>"
+                    html+="</div>"
+                else:
+                    html+="<h6 align='center'>No se encontro información</h6>"
+        else:#si es diferente de no existe una area o areas
+            areas =[1,2,3]
+            for i in areas:#recorremos todo los id de areas
+                index = int(i)-1#obtenemos el id
+                index1 = int(i)
+                html += "<h5 align='center'>Area " + str(areasU[index])+"</h5>"
+                carreras = seleccionarcarrera_id(index1)#buscamos con el id todas las carreras relacionadas con el area
+                if carreras != "no":#si es diferente de no entonces ingresamos
+                    for car in carreras:#recorremos todas las carreras encontradas
+                        html += "<h5 align='center'>Carrera " + str(car[1])+"</h5>"
+                        materias = seleccionarAsignatura_por_id(car[0])#seleccionar asiganturas carrera
+                        if materias != "no":
+                            html+="<div class='row'>"
+                            for anio in range(a1, a2 + (1)):
+                                html += "<h6 align='center'>" + str(anio)+"</h6>"
+
+                                for g in range(5):
+                                    html += "<div class='col-lg-4'>"
+                                    html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                                    html += "<div class='panel-heading'>"
+                                    cur = g+1
+                                    print(cur," = ",car[0])
+                                    fech1 = str(anio)+"-01-01"
+                                    fech2 = str(anio)+"-12-30"
+                                    html += curs[g]+" tiene "+str((contar_total_estudiante_curso(cur,car[0],fech1,fech2)))+" estudiantes"
+                                    html += "</div>"
+                                    html += "<div class='panel-body'>"
+                                    html+= "<table class='table' style='font-size:12px'>"
+                                    html+= "<thead>"
+                                    html+="<tr>"
+                                    html+="<td>Asignatura</td>"
+                                    html+="<td>Inscritos</td>"
+                                    html+="</tr>"
+                                    html+="</thead>"
+                                    html+="<tbody>"
+                                    k = 1
+                                    for mat in materias:
+                                        if car[0] == 1:#si carrera es igual a 1 es informatica
+                                            if (g+1) == c_infor[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                                html+="<tr><td>"+nombre_asignatura(c_infor[anio][mat[0]][2])+"</td>"
+                                                html+="<td>"+str(c_infor[anio][mat[0]][0])+"</td></tr>"
+                                        elif car[0] == 2:
+                                            if (g+1) == c_civil[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                                html+="<tr><td>"+nombre_asignatura(c_civil[anio][mat[0]][2])+"</td>"
+                                                html+="<td>"+str(c_civil[anio][mat[0]][0])+"</td></tr>"
+                                        elif car[0] == 3:
+                                            if (g+1) == c_minas[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                                html+="<tr><td>"+nombre_asignatura(c_minas[anio][mat[0]][2])+"</td>"
+                                                html+="<td>"+str(c_minas[anio][mat[0]][0])+"</td></tr>"
+                                        elif car[0] == 4:
+                                            if (g+1) == c_elec[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                                html+="<tr><td>"+nombre_asignatura(c_elec[anio][mat[0]][2])+"</td>"
+                                                html+="<td>"+str(c_elec[anio][mat[0]][0])+"</td></tr>"
+                                        elif car[0] == 5:
+                                            if (g+1) == c_mec[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                                html+="<tr><td>"+nombre_asignatura(c_mec[anio][mat[0]][2])+"</td>"
+                                                html+="<td>"+str(c_mec[anio][mat[0]][0])+"</td></tr>"
+                                        elif car[0] == 6:
+                                            if (g+1) == c_agro[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                                html+="<tr><td>"+nombre_asignatura(c_agro[anio][mat[0]][2])+"</td>"
+                                                html+="<td>"+str(c_agro[anio][mat[0]][0])+"</td></tr>"
+                                        elif car[0] == 7:
+                                            if (g+1) == c_lit[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                                html+="<tr><td>"+nombre_asignatura(c_lit[anio][mat[0]][2])+"</td>"
+                                                html+="<td>"+str(c_lit[anio][mat[0]][0])+"</td></tr>"
+                                        elif car[0] == 8:
+                                            if (g+1) == c_der[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                                html+="<tr><td>"+nombre_asignatura(c_der[anio][mat[0]][2])+"</td>"
+                                                html+="<td>"+str(c_der[anio][mat[0]][0])+"</td></tr>"
+                                        elif car[0] == 9:
+                                            if (g+1) == c_cie[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                                html+="<tr><td>"+nombre_asignatura(c_cie[anio][mat[0]][2])+"</td>"
+                                                html+="<td>"+str(c_cie[anio][mat[0]][0])+"</td></tr>"
+                                        elif car[0] == 10:
+                                            if (g+1) == c_cont[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                                html+="<tr><td>"+nombre_asignatura(c_cont[anio][mat[0]][2])+"</td>"
+                                                html+="<td>"+str(c_cont[anio][mat[0]][0])+"</td></tr>"
+                                        elif car[0] == 11:
+                                            if (g+1) == c_odon[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                                html+="<tr><td>"+nombre_asignatura(c_odon[anio][mat[0]][2])+"</td>"
+                                                html+="<td>"+str(c_odon[anio][mat[0]][0])+"</td></tr>"
+                                        elif car[0] == 12:
+                                            if (g+1) == c_lab[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                                html+="<tr><td>"+nombre_asignatura(c_lab[anio][mat[0]][2])+"</td>"
+                                                html+="<td>"+str(c_lab[anio][mat[0]][0])+"</td></tr>"
+                                        elif car[0] == 13:
+                                            if (g+1) == c_enf[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                                html+="<tr><td>"+nombre_asignatura(c_enf[anio][mat[0]][2])+"</td>"
+                                                html+="<td>"+str(c_enf[anio][mat[0]][0])+"</td></tr>"
+                                        elif car[0] == 14:
+                                            if (g+1) == c_med[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                                html+="<tr><td>"+nombre_asignatura(c_med[anio][mat[0]][2])+"</td>"
+                                                html+="<td>"+str(c_med[anio][mat[0]][0])+"</td></tr>"
+                                        elif car[0] == 15:
+                                            if (g+1) == c_bio[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                                html+="<tr><td>"+nombre_asignatura(c_bio[anio][mat[0]][2])+"</td>"
+                                                html+="<td>"+str(c_bio[anio][mat[0]][0])+"</td></tr>"
+                                        elif car[0] == 16:
+                                            if (g+1) == c_cso[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                                html+="<tr><td>"+nombre_asignatura(c_cso[anio][mat[0]][2])+"</td>"
+                                                html+="<td>"+str(c_cso[anio][mat[0]][0])+"</td></tr>"
+                                        elif car[0] == 17:
+                                            if (g+1) == c_quim[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                                html+="<tr><td>"+nombre_asignatura(c_quim[anio][mat[0]][2])+"</td>"
+                                                html+="<td>"+str(c_quim[anio][mat[0]][0])+"</td></tr>"
+
+                                    html+="</tbody>"
+                                    html+= "</table>"
+                                    html += "</div>"
+                                    html += "</div>"
+                                    html += "</div>"
+                            html+="</div>"
+                        else:
+                            html+="<h6 align='center'>No se encontro información</h6>"
                 else:
                     html+="<h6 align='center'>No se encontro información</h6>"
     html += "</container>"

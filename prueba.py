@@ -80,6 +80,10 @@ sentencias = [
     "cual es la cantidad de estudiantes provenientes de otras universidades",
     "cual es la cantidad de inscritos en materias por areas y carreras",
     "estadistica a nivel general de inscritos en materias",
+    "estadistica de inscripcion de materias del area tecnologia, salud y social desde",
+    "estadistica a nivel general de inscritos en materias de la carrera de",
+    "cual es la cantidad de inscritos en materias de la carrera de",
+    "informacion de inscritos en materias de la carrera de",
 ]
 # Definir la lista de pares
 
@@ -150,6 +154,10 @@ respuesta =[
 "diferencia_entre_primero_quinto",
 "asignaturas_desercion",
 "concepto_transferencia",#estudiantes que estan en la universidad por transferencia
+"materias_inscritos",
+"materias_inscritos",
+"materias_inscritos",
+"materias_inscritos",
 "materias_inscritos",
 "materias_inscritos",
 ]
@@ -1636,6 +1644,7 @@ def buscar(texto):
         if response == "materias_inscritos":
             areas = obtener_areas_id(texto)#obtenemos los id de la areas si es que quiere de alguna area
             vec = []
+            vec2 = []
             vec1 = []
             response = ""
             contar_parametros = 0
@@ -1643,7 +1652,7 @@ def buscar(texto):
             response2 = ""
             fecha = fechas(texto)#obtenemos las fechas
             if len(fecha) >= 1:#si existe fechas
-                vec.append("si_fecha")
+                vec2.append("si_fecha")
                 if len(fecha) == 1:
                     fecha1 = fecha[0]
                     fecha_formateada = fecha_actual.strftime("%Y-%m-%d")
@@ -1657,12 +1666,12 @@ def buscar(texto):
                 # Formatear la fecha como año, mes, día
                 fecha_formateada = fecha_actual.strftime("%Y-%m-%d")
                 anio = obtener_ano_de_fecha(fecha_formateada)
-                vec.append("si_fecha")
+                vec2.append("si_fecha")
                 fecha1 = anio+"-01-01"
                 fecha2 = anio+"-12-30"
             si = "no"
-            for i in range(len(vec)):
-                if vec[i] == "si_fecha" and si == "no":
+            for i in range(len(vec2)):
+                if vec2[i] == "si_fecha" and si == "no":
                     if fecha1 != "":#si es diferente de vacio
                         sql_aux = consultas_aux["fechai"]
                         response2+=" ( "+sql_aux.format(fecha1)
@@ -1673,7 +1682,7 @@ def buscar(texto):
                         sql_aux = consultas_aux["fechaf"]
                         response+=" and "+sql_aux.format(fecha1)+")"
                     si = "si"
-                elif vec[i] == "si_fecha" and si == "si":
+                elif vec2[i] == "si_fecha" and si == "si":
                     if fecha1 != "":#si es diferente de vacio
                         sql_aux = consultas_aux["fechai"]
                         response2+=" and ( "+sql_aux.format(fecha1)
@@ -1684,7 +1693,7 @@ def buscar(texto):
                         sql_aux = consultas_aux["fechaf"]
                         response2+=" and "+sql_aux.format(fecha1)+")"
                     si = "si"
-                vec[i] = "no"
+                vec2[i] = "no"
             if areas:
                 vec.append("si_ar")
                 contar_parametros+=1
@@ -1750,7 +1759,7 @@ def buscar(texto):
         vec1.append("argumentar_poco_mas")
         return vect1
 
-textoo = "estadistica a nivel general de inscritos en materias en area tecnologia"
+textoo = "estadistica de inscritos en materias de la carrera de informatica"
 
 re = buscar(textoo)
 
