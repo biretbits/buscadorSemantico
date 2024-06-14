@@ -50,6 +50,3 @@ python3 -m spacy download es_core_news_sm
 
 echo "instalando numpy"
 sudo pip install numpy
-
-echo "instalando sentence transformers"
-sudo pip install sentence-transformers
