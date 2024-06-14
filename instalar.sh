@@ -2,7 +2,7 @@
 
 # Función para mostrar mensajes de error y salir
 error_exit() {
-    echo "$1" 1>&2
+    echo "$1" >&2
     exit 1
 }
 
@@ -13,44 +13,49 @@ fi
 
 # Actualizar el sistema
 echo "Actualizando el sistema..."
-apt update || error_exit "Error al actualizar el sistema"
-apt upgrade -y || error_exit "Error al actualizar los paquetes"
+sudo apt update || error_exit "Error al actualizar el sistema"
+sudo apt upgrade -y || error_exit "Error al actualizar los paquetes"
 
 # Instalar dependencias
 echo "Instalando dependencias..."
 sudo apt install -y curl wget git || error_exit "Error al instalar dependencias"
 
-echo "Instalando git"
-sudo apt install git
+# Instalar git
+echo "Instalando git..."
+sudo apt install -y git || error_exit "Error al instalar git"
+
 # Verificar si python3 está instalado
-if command -v python3 &> /dev/null
-then
-    echo "python3 ya está instalado"
-else
-    echo "instalando python3"
+if ! command -v python3 &> /dev/null; then
+    echo "Instalando python3..."
     sudo apt install -y python3 || error_exit "Error al instalar python3"
+else
+    echo "python3 ya está instalado"
 fi
 
+# Instalar pip
+echo "Instalando pip..."
+sudo apt install -y python3-pip || error_exit "Error al instalar pip"
 
-echo "Instalando pip"
-sudo apt install python3-pip || error_exit "Error al instalar pip"
-
-echo "Instalando flask"
-pip3 install Flask || error_exit "Error al instalar flask"
+# Instalar Flask
+echo "Instalando Flask..."
+sudo pip3 install Flask || error_exit "Error al instalar Flask"
 
 # Instalar PyMySQL
 echo "Instalando PyMySQL..."
-pip3 install PyMySQL || error_exit "Error al instalar PyMySQL"
+sudo pip3 install PyMySQL || error_exit "Error al instalar PyMySQL"
 echo "Instalación completada con éxito"
 
-echo "instalando spacy"
-pip install spacy
+# Instalar spacy y descargar modelos
+echo "Instalando spacy y descargando modelos..."
+sudo pip install spacy || error_exit "Error al instalar spacy"
+python -m spacy download es_core_news_sm || error_exit "Error al descargar modelos de spacy"
 
-echo "descargando modelos"
-python -m spacy download es_core_news_sm
+# Instalar numpy
+echo "Instalando numpy..."
+sudo pip install numpy || error_exit "Error al instalar numpy"
 
-echo "instalando numpy"
-pip install numpy
+# Instalar sentence-transformers
+echo "Instalando sentence-transformers..."
+sudo pip install sentence-transformers || error_exit "Error al instalar sentence-transformers"
 
-echo "instalando sentence transformers"
-pip install sentence-transformers
+echo "Todo ha sido instalado correctamente"
