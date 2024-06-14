@@ -2388,3 +2388,10 @@ cod_es,cod_area,fecha)values('aprobado','no',5,1,69,1,'2023-02-03');
 instalar pip install datefinder
 pip install python-dotenv
 pip show sentence-transformers
+
+
+creando usuario 
+CREATE USER 'unsxx'@'localhost' IDENTIFIED BY '123';
+GRANT ALL PRIVILEGES ON academico.* TO 'unsxx'@'localhost';
+FLUSH PRIVILEGES;
+
