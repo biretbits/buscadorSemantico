@@ -13,27 +13,27 @@ fi
 
 # Actualizar el sistema
 echo "Actualizando el sistema..."
-apt-get update || error_exit "Error al actualizar el sistema"
-apt-get upgrade -y || error_exit "Error al actualizar los paquetes"
+apt update || error_exit "Error al actualizar el sistema"
+apt upgrade -y || error_exit "Error al actualizar los paquetes"
 
 # Instalar dependencias
 echo "Instalando dependencias..."
-apt-get install -y curl wget git || error_exit "Error al instalar dependencias"
+sudo apt install -y curl wget git || error_exit "Error al instalar dependencias"
 
 echo "Instalando git"
-apt-get install git
+sudo apt install git
 # Verificar si python3 está instalado
 if command -v python3 &> /dev/null
 then
     echo "python3 ya está instalado"
 else
     echo "instalando python3"
-    sudo apt-get install -y python3 || error_exit "Error al instalar python3"
+    sudo apt install -y python3 || error_exit "Error al instalar python3"
 fi
 
 
 echo "Instalando pip"
-sudo apt-get install python3-pip || error_exit "Error al instalar pip"
+sudo apt install python3-pip || error_exit "Error al instalar pip"
 
 echo "Instalando flask"
 pip3 install Flask || error_exit "Error al instalar flask"
