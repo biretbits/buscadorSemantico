@@ -420,3 +420,28 @@ def seleccionarAsignatura_por_id(id_car):
         return sql_consulta
     else:
         return "no"
+
+#44
+
+def contar_total_estudiante_curso(cod_grado,cod_carrera,fecha1,fecha2):
+
+    # Consulta SQL para seleccionar un estudiante por su ID
+    sql_consulta = "SELECT count(*) FROM estudiante WHERE cod_grado = "+str(cod_grado)+" and cod_carrera = "+str(cod_carrera)+" and (fecha >= '"+fecha1+"' and fecha <= '"+fecha2+"')"
+    conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+    # Crear un cursor para ejecutar consultas
+    cursor = conn.cursor()
+    # Ejecutar la consulta SQL con el ID proporcionado como parámetro
+    cursor.execute(sql_consulta)
+    # Verificar si hay algún resultado antes de obtenerlos
+    if cursor.rowcount > 0:
+        # Si hay resultados, obtener los datos de la consulta
+        estudiante = cursor.fetchone()
+        # Cerrar el cursor y la conexión
+        cursor.close()
+        conn.close()
+        # Si se encuentra el estudiante, obtener sus datos
+        nombres = estudiante
+        return nombres[0]
+    else:
+        # Si no hay resultados, devolver un mensaje indicando que no se encontró el estudiante
+        return 0

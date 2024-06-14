@@ -2,8 +2,8 @@ from flask import jsonify
 from sql import nombre_carrera_retor,grado_Estudiante,obtener_nombre,nombre_materia,obtener_datos_de_curso
 from sql import seleccionarAreas,seleccionar_carrera,seleccionarAsignaturaAreas,seleccionarAsignatura
 from sql import nombre_asignatura,nombre_carrera,consulta_Titulado,seleccionarcarrera_id
-from sql import modalidad_titulacion_id,seleccionarAsignatura_por_id
-from comprobar import formatear_fecha_solo_ano,obtener_ano_de_fecha
+from sql import modalidad_titulacion_id,seleccionarAsignatura_por_id,contar_total_estudiante_curso
+from comprobar import formatear_fecha_solo_ano,obtener_ano_de_fecha,fechas
 from datetime import datetime
 
 
@@ -2989,6 +2989,288 @@ def  retornar_valores(datos,ress):
                             html+="<h6 align='center'>No se encontro resultados<h6>"
                 else:
                     html+="<h6 align='center'>No se encontro resultados<h6>"
+    if accion1 == "materias_inscritos":
+        fecha1 = ress[-3]
+        fecha2 = ress[-4]
+        if fecha1>fecha2:
+            aux = fecha1
+            fecha1 = fecha2
+            fecha2 = aux
+        fecha11 = fecha1
+        fecha22 = fecha2
+        print(fecha1," ee    ",fecha2)
+        vapro = [0] * 17
+        vaplaz = [0] * 17
+        vareasT = {}
+        vareasTr = {}
+        vareasS = {}
+        vareasSr = {}
+        vareasSo = {}
+        vareasSor = {}
+        capro = 0
+        caplaz = 0
+        cdes = 0
+        cndes = 0
+        total = 0
+        ctec = 0
+        csal = 0
+        csoc = 0
+        a11 = int(obtener_ano_de_fecha(fecha1))
+        a22 = int(obtener_ano_de_fecha(fecha2))
+        a1 = int(obtener_ano_de_fecha(fecha1))
+        a2 = int(obtener_ano_de_fecha(fecha2))
+        for car in range(17):
+            asig = seleccionarAsignatura((car+1),1)##enviamos el id de la carrera y el plan de estudio
+            if asig != "no":
+                for anio in range(a1, a2 + (1)):
+                    c_infor[anio] = {}
+                    c_civil[anio] = {}
+                    c_minas[anio] = {}
+                    c_elec[anio] = {}
+                    c_mec[anio] = {}
+                    c_agro[anio] = {}
+                    c_lit[anio] = {}
+                    c_der[anio] = {}
+                    c_cie[anio] = {}
+                    c_cont[anio] = {}
+                    c_odon[anio] = {}
+                    c_lab[anio] = {}
+                    c_enf[anio] = {}
+                    c_med[anio] = {}
+                    c_bio[anio] = {}
+                    c_cso[anio] = {}
+                    c_quim[anio] = {}
+                    c_inforr[anio] = {}
+                    c_civilr[anio] = {}
+                    c_minasr[anio] = {}
+                    c_elecr[anio] = {}
+                    c_mecr[anio] = {}
+                    c_agror[anio] = {}
+                    c_litr[anio] = {}
+                    c_derr[anio] = {}
+                    c_cier[anio] = {}
+                    c_contr[anio] = {}
+                    c_odonr[anio] = {}
+                    c_labr[anio] = {}
+                    c_enfr[anio] = {}
+                    c_medr[anio] = {}
+                    c_bior[anio] = {}
+                    c_csor[anio] = {}
+                    c_quimr[anio] = {}
+                    for arr in asig:
+                        if arr[8] == 1:#carrera 1 informatica
+                        #año id de asignatura  = contar id grado id asignatura
+                            c_infor[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
+                            c_inforr[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
+                        elif arr[8] == 2:
+                            c_civil[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
+                            c_civilr[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
+                        elif arr[8] == 3:
+                            c_minas[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
+                            c_minasr[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
+                        elif arr[8] == 4:
+                            c_elec[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
+                            c_elecr[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
+                        elif arr[8] == 5:
+                            c_mec[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
+                            c_mecr[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
+                        elif arr[8] == 6:
+                            c_agro[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
+                            c_agror[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
+                        elif arr[8] == 7:
+                            c_lit[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
+                            c_litr[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
+                        elif arr[8] == 8:
+                            c_der[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
+                            c_derr[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
+                        elif arr[8] == 9:
+                            c_cie[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
+                            c_cier[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
+                        elif arr[8] == 10:
+                            c_cont[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
+                            c_contr[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
+                        elif arr[8] == 11:
+                            c_odon[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
+                            c_odonr[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
+                        elif arr[8] == 12:
+                            c_lab[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
+                            c_labr[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
+                        elif arr[8] == 13:
+                            c_enf[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
+                            c_enfr[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
+                        elif arr[8] == 14:
+                            c_med[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
+                            c_medr[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
+                        elif arr[8] == 15:
+                            c_bio[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
+                            c_bior[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
+                        elif arr[8] == 16:
+                            c_cso[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
+                            c_csor[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
+                        elif arr[8] == 17:
+                            c_quim[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
+                            c_quimr[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
+        guardar = []
+        guardar1 = []
+        if isinstance(fecha1, str):
+            fecha1 = datetime.strptime(fecha1, "%Y-%m-%d").date()
+        if isinstance(fecha2, str):
+            fecha2 = datetime.strptime(fecha2, "%Y-%m-%d").date()
+        print(fecha1," ee121dddd    ",fecha2)
+        for row in datos:#recorremos los datos obtenidos de la base de datos
+            if row[14]>=fecha1 and row[14] <= fecha2:
+                anoBD = int(obtener_ano_de_fecha(row[14].strftime("%Y-%m-%d")))
+
+                if row[10] == 1:
+                    c_infor[anoBD][row[8]][0]+=1
+                elif row[10] == 2:
+                    c_civil[anoBD][row[8]][0]+=1
+                elif row[10] == 3:
+                    c_minas[anoBD][row[8]][0]+=1
+                elif row[10] == 4:
+                    c_elec[anoBD][row[8]][0]+=1
+                elif row[10] == 5:
+                    c_mec[anoBD][row[8]][0]+=1
+                elif row[10] == 6:
+                    c_agro[anoBD][row[8]][0]+=1
+                elif row[10] == 7:
+                    c_lit[anoBD][row[8]][0]+=1
+                elif row[10] == 8:
+                    c_der[anoBD][row[8]][0]+=1
+                elif row[10] == 9:
+                    c_cie[anoBD][row[8]][0]+=1
+                elif row[10] == 10:
+                    c_cont[anoBD][row[8]][0]+=1
+                elif row[10] == 11:
+                    c_odon[anoBD][row[8]][0]+=1
+                elif row[10] == 12:
+                    c_lab[anoBD][row[8]][0]+=1
+                elif row[10] == 13:
+                    c_enf[anoBD][row[8]][0]+=1
+                elif row[10] == 14:
+                    c_med[anoBD][row[8]][0]+=1
+                elif row[10] == 15:
+                    c_bio[anoBD][row[8]][0]+=1
+                elif row[10] == 16:
+                    c_cso[anoBD][row[8]][0]+=1
+                elif row[10] == 17:
+                    c_quim[anoBD][row[8]][0]+=1
+        si_are = ress[0]
+        curs ={0:'1er año',1:"2do año",2:"3er año",3:'4to año',4:'5to año'}
+        if si_are != "no":#si es diferente de no existe una area o areas
+            areas_id = ress[1]#obtenemos los id de areas quue llegan
+            s_dupli = eliminar_dobles(areas_id)#si hay doble veces repetido el id lo eliminamos a 1
+            for i in s_dupli:#recorremos todo los id de areas
+                index = int(i) - 1#obtenemos el id
+                index1 = int(i)
+                html += "<h5 align='center'>Area " + str(areasU[index])+"</h5>"
+                print("index   ",index1)
+                carreras = seleccionarcarrera_id(index1)#buscamos con el id todas las carreras relacionadas con el area
+                if carreras != "no":#si es diferente de no entonces ingresamos
+                    for car in carreras:#recorremos todas las carreras encontradas
+                        html += "<h5 align='center'>Carrera " + str(car[1])+"</h5>"
+                        materias = seleccionarAsignatura_por_id(car[0])#seleccionar asiganturas carrera
+                        if materias != "no":
+                            html+="<div class='row'>"
+                            for anio in range(a1, a2 + (1)):
+                                html += "<h6 align='center'>" + str(anio)+"</h6>"
+
+                                for g in range(5):
+                                    html += "<div class='col-lg-4'>"
+                                    html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                                    html += "<div class='panel-heading'>"
+                                    cur = g+1
+                                    print(cur," = ",car[0])
+                                    html += curs[g]+" tiene "+str((contar_total_estudiante_curso(cur,car[0],fecha11,fecha22)))+" estudiantes"
+                                    html += "</div>"
+                                    html += "<div class='panel-body'>"
+                                    html+= "<table class='table' style='font-size:12px'>"
+                                    html+= "<thead>"
+                                    html+="<tr>"
+                                    html+="<td>Asignatura</td>"
+                                    html+="<td>Inscritos</td>"
+                                    html+="</tr>"
+                                    html+="</thead>"
+                                    html+="<tbody>"
+                                    k = 1
+                                    for mat in materias:
+                                        if car[0] == 1:#si carrera es igual a 1 es informatica
+                                            if (g+1) == c_infor[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                                html+="<tr><td>"+nombre_asignatura(c_infor[anio][mat[0]][2])+"</td>"
+                                                html+="<td>"+str(c_infor[anio][mat[0]][0])+"</td></tr>"
+                                        elif car[0] == 2:
+                                            if (g+1) == c_civil[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                                html+="<tr><td>"+nombre_asignatura(c_civil[anio][mat[0]][2])+"</td>"
+                                                html+="<td>"+str(c_civil[anio][mat[0]][0])+"</td></tr>"
+                                        elif car[0] == 3:
+                                            if (g+1) == c_minas[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                                html+="<tr><td>"+nombre_asignatura(c_minas[anio][mat[0]][2])+"</td>"
+                                                html+="<td>"+str(c_minas[anio][mat[0]][0])+"</td></tr>"
+                                        elif car[0] == 4:
+                                            if (g+1) == c_elec[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                                html+="<tr><td>"+nombre_asignatura(c_elec[anio][mat[0]][2])+"</td>"
+                                                html+="<td>"+str(c_elec[anio][mat[0]][0])+"</td></tr>"
+                                        elif car[0] == 5:
+                                            if (g+1) == c_mec[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                                html+="<tr><td>"+nombre_asignatura(c_mec[anio][mat[0]][2])+"</td>"
+                                                html+="<td>"+str(c_mec[anio][mat[0]][0])+"</td></tr>"
+                                        elif car[0] == 6:
+                                            if (g+1) == c_agro[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                                html+="<tr><td>"+nombre_asignatura(c_agro[anio][mat[0]][2])+"</td>"
+                                                html+="<td>"+str(c_agro[anio][mat[0]][0])+"</td></tr>"
+                                        elif car[0] == 7:
+                                            if (g+1) == c_lit[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                                html+="<tr><td>"+nombre_asignatura(c_lit[anio][mat[0]][2])+"</td>"
+                                                html+="<td>"+str(c_lit[anio][mat[0]][0])+"</td></tr>"
+                                        elif car[0] == 8:
+                                            if (g+1) == c_der[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                                html+="<tr><td>"+nombre_asignatura(c_der[anio][mat[0]][2])+"</td>"
+                                                html+="<td>"+str(c_der[anio][mat[0]][0])+"</td></tr>"
+                                        elif car[0] == 9:
+                                            if (g+1) == c_cie[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                                html+="<tr><td>"+nombre_asignatura(c_cie[anio][mat[0]][2])+"</td>"
+                                                html+="<td>"+str(c_cie[anio][mat[0]][0])+"</td></tr>"
+                                        elif car[0] == 10:
+                                            if (g+1) == c_cont[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                                html+="<tr><td>"+nombre_asignatura(c_cont[anio][mat[0]][2])+"</td>"
+                                                html+="<td>"+str(c_cont[anio][mat[0]][0])+"</td></tr>"
+                                        elif car[0] == 11:
+                                            if (g+1) == c_odon[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                                html+="<tr><td>"+nombre_asignatura(c_odon[anio][mat[0]][2])+"</td>"
+                                                html+="<td>"+str(c_odon[anio][mat[0]][0])+"</td></tr>"
+                                        elif car[0] == 12:
+                                            if (g+1) == c_lab[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                                html+="<tr><td>"+nombre_asignatura(c_lab[anio][mat[0]][2])+"</td>"
+                                                html+="<td>"+str(c_lab[anio][mat[0]][0])+"</td></tr>"
+                                        elif car[0] == 13:
+                                            if (g+1) == c_enf[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                                html+="<tr><td>"+nombre_asignatura(c_enf[anio][mat[0]][2])+"</td>"
+                                                html+="<td>"+str(c_enf[anio][mat[0]][0])+"</td></tr>"
+                                        elif car[0] == 14:
+                                            if (g+1) == c_med[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                                html+="<tr><td>"+nombre_asignatura(c_med[anio][mat[0]][2])+"</td>"
+                                                html+="<td>"+str(c_med[anio][mat[0]][0])+"</td></tr>"
+                                        elif car[0] == 15:
+                                            if (g+1) == c_bio[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                                html+="<tr><td>"+nombre_asignatura(c_bio[anio][mat[0]][2])+"</td>"
+                                                html+="<td>"+str(c_bio[anio][mat[0]][0])+"</td></tr>"
+                                        elif car[0] == 16:
+                                            if (g+1) == c_cso[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                                html+="<tr><td>"+nombre_asignatura(c_cso[anio][mat[0]][2])+"</td>"
+                                                html+="<td>"+str(c_cso[anio][mat[0]][0])+"</td></tr>"
+                                        elif car[0] == 17:
+                                            if (g+1) == c_quim[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                                html+="<tr><td>"+nombre_asignatura(c_quim[anio][mat[0]][2])+"</td>"
+                                                html+="<td>"+str(c_quim[anio][mat[0]][0])+"</td></tr>"
+
+                                    html+="</tbody>"
+                                    html+= "</table>"
+                                    html += "</div>"
+                                    html += "</div>"
+                                    html += "</div>"
+                            html+="</div>"
+                else:
+                    html+="<h6 align='center'>No se encontro información</h6>"
     html += "</container>"
 
     return html
