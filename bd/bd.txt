@@ -1,3 +1,13 @@
+create table usuario(
+cod_usuario int not null auto_increment primary key,
+usuario char(45),
+nombre char(45),
+ap char(45),
+am char(45),
+telefono int,
+gmail  char(50),
+contrasena char(200)
+);
 
 create table area(
 cod_area int not null primary key auto_increment,
@@ -2385,13 +2395,14 @@ insert into estudiante_perdio(estado_ano,abandono,cod_grado,cod_carrera,
 cod_es,cod_area,fecha)values('aprobado','no',5,1,69,1,'2023-02-03');
 
 
+insert into usuario(usuario,nombre,ap,am,telefono,gmail,contrasena)values('carlos','carlos','mamani','nina',67212345,'carlos123456@gmail.com','123');
+
 instalar pip install datefinder
 pip install python-dotenv
 pip show sentence-transformers
 
 
-creando usuario 
+creando usuario
 CREATE USER 'unsxx'@'localhost' IDENTIFIED BY '123';
 GRANT ALL PRIVILEGES ON academico.* TO 'unsxx'@'localhost';
 FLUSH PRIVILEGES;
-

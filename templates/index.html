@@ -12,39 +12,7 @@
       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     </head>
     <body class="cc">
-
-      <nav class='navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow-sm'>
-        <div class='container'>
-          <a href='#' class='navbar-brand'><img src='../static/imagenes/unsxx.png' height='30' width='30' class='rounded-circle'></a>
-          <button class='navbar-toggler' type='button' data-bs-toggle='collapse' data-bs-target='#navbarNav' aria-controls='navbarNav' aria-expanded='false' aria-label='Toggle navigation'>
-            <span class='navbar-toggler-icon'></span>
-          </button>
-          <div class='collapse navbar-collapse' id='navbarNav'>
-            <ul class='navbar-nav me-auto mb-2 mb-lg-0'>
-                <li class='nav-item' title='Inicio'>
-                  <a class='nav-link btn btn-outline-warning' href='controlador/logeo.controlador.php?accion=ix'>Ini</a>
-                </li>
-
-           </ul>
-            <ul class='navbar-nav ms-auto'>";
-              <li class='nav-item dropdown' title='Nombre Usuario'>
-                  <a class='nav-link dropdown-toggle btn btn-outline-success' href='#' id='navbarDropdown2' role='button' data-bs-toggle='dropdown' aria-expanded='false'>
-                        hola
-                  </a>
-                  <ul class='dropdown-menu' aria-labelledby='navbarDropdown2'>
-                    <li class='nav-item' title='Cerrar sesión' style='color:green'>
-                      <a class='nav-link text-info btn btn-outline-warning' href='#'>Editar</a>
-                    </li>
-                    <li><hr class='dropdown-divider'></li>
-                    <li class='nav-item' title='Cerrar sesión' style='color:green'>
-                      <a class='nav-link text-primary btn btn-outline-danger' href='controlador/logeo.controlador.php?accion=salir'><img src='imagenes/apagar.ico'style='height: 25px;width: 25px;'></a>
-                    </li>
-                  </ul>
-              </li>
-              </ul>
-              </div>
-          </div>
-      </nav>
+      {% include 'menu.html' %}
       <br>
       <style>
         /* Estilo para el textarea */
@@ -87,6 +55,7 @@
 
       </style>
     <div class="body1">
+      {% if usuario %}
       <div class="container border-top border-end border-start border-primary"  class="bg-danger">
         <div class="alert alert-warning">
           <div class="container mt-5">
@@ -105,7 +74,23 @@
             </div>
           </div>
         </div>
+      {% else %}
+      <div class="container mt-5">
+        <div class="row justify-content-center">
+         <div class="col-md-6 text-center">
+        <img src="{{ url_for('static', filename='imagenes/unsxx.png') }}" class="img-fluid img-circle mb-3" alt="Logo UN Siglo XX">
+        </div>
+      </div>
+      <div class="alert alert-primary" role="alert">
+        <p class="fw-bold">MISIÓN</p>
+        La Universidad Nacional “Siglo XX” es una institución de educación superior, de concepción revolucionaria, en aplicación de un proceso curricular único que contiene teoría, investigación, extensión y formación política sindical, para contribuir con la formación de profesionales orgánicos e idóneos que intervienen en la solución de problemas y necesidades del pueblo boliviano.
+      </div>
 
+      <div class="alert alert-secondary mt-3" role="alert">
+        <p class="fw-bold">VISIÓN</p>
+      La Universidad Nacional “Siglo XX” es una institución de educación superior de naturaleza obrera e intercultural, científica y revolucionaria de excelencia académica; con profesionales orgánicos constructores de un nuevo orden político, ideológico, económico, social y cultural en el Estado Plurinacional de Bolivia.</div>
+    </div>
+      {% endif %}
         <div class="border-success border-top border-end border-start">
           <br>
           <div class="respuesta" id='respuesta' style='background-color:rgba(255,255,255,0.4)'>

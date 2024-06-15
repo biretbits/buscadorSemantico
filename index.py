@@ -1,12 +1,15 @@
-from flask import Flask,render_template,request
+from flask import Flask,render_template,request,session
 from chat import buscar
 from retorno import retornar_valores
+from flask_session import Session
 import pymysql
 from flask import Flask, Response, request, send_file
 import io
 from weasyprint import HTML
 from reportes import generar_reporte_de_consulta
 app = Flask("mi proyecto nuevo")
+app.config['SESSION_TYPE'] = 'filesystem'
+app.config['SECRET_KEY'] = 'supersecretkey'  # Clave secreta para firmar cookies de sesión
 
 
 '''
@@ -40,7 +43,42 @@ if __name__ == '__main__':
 @app.route("/")
 
 def principala():
-    return render_template("index.html")
+    #return render_template("index.html")
+    # Verificar si existe la sesión de usuario
+    if 'usuario' in session:
+        # Renderizar el menú para usuario autenticado
+        return render_template('index.html', usuario=session['usuario'])
+    # Si no existe la sesión de usuario, renderizar un menú básico
+    return render_template('index.html', usuario=None)
+@app.route("/login")
+
+def login():
+    return render_template('login.html')
+
+@app.route("/cerrar")
+def cerrar():
+    session.clear()
+    return render_template('index.html')
+
+@app.route("/validando",methods = ['POST'])
+def validar():
+    if request.method == 'POST':
+        usuario = request.form.get('usuario')
+        password = request.form.get('password')
+        conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+        cursor = conn.cursor()
+        # Consulta para verificar si el usuario existe
+        consulta = "SELECT * FROM usuario WHERE usuario = %s AND contrasena = %s"
+        cursor.execute(consulta, (usuario, password))
+        usuariod = cursor.fetchone()
+
+        if usuariod:
+            session['usuario'] = usuariod[2]+" "+usuariod[3]
+            return "si"
+            # Aquí podrías devolver algún indicador de éxito o permitir el acceso
+        else:
+            return "no"
+                # Aquí podrías devolver algún indicador de error o denegar el acceso
 
 @app.route("/respuesta",methods = ['POST'])
 def respuesta():
@@ -146,6 +184,8 @@ def generar_html_reporte(datos):
 
 
     return html
+
+
 
 if __name__ == '__main__':
     app.run(debug=True,port=5003)

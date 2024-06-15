@@ -36,6 +36,7 @@ sudo pip3 install Flask || error_exit "Error al instalar flask"
 pip install weasyprint
 sudo apt update
 sudo apt install libpango1.0-0
+pip install flask-session
 
 # Instalar PyMySQL
 echo "Instalando PyMySQL..."
