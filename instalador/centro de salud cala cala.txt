@@ -1,0 +1,44 @@
+create table centro_de_salud(
+    cod_cds int not null auto_increment primary key,
+    nombre_cds char(200),
+    direccion_cds char(200));
+
+
+    create table usuario(
+       cod_usuario int not null auto_increment,
+       usuario char(60)not null,
+       nombre_usuario char(60),
+       ap_usuario char(60),
+       am_usuario char(60),
+       telefono_usuario int,
+       direccion_usuario char(200),
+       profesion_usuario char(60),
+       especialidad_usuario char(60),
+       tipo_usuario char(60),
+       contrasena_usuario char(250),
+       cod_cds int,
+       primary key(cod_usuario,cod_cds),
+       foreign key(cod_cds)references centro_de_salud(cod_cds)on delete restrict on update restrict);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+insert into centro_de_salud(nombre_cds,direccion_cds)values('Centro de Salud Cala Cala','Zona este calle beni');
+
+insert into usuario(usuario,nombre_usuario,ap_usuario,am_usuario,telefono_usuario,direccion_usuario,profesion_usuario,
+especialidad_usuario,tipo_usuario,contrasena_usuario,cod_cds)values('admin','juan','huanca','nina',67457812,'Calle la paz',
+'Ingeniero informatico','computacion','admin','$2y$10$HcDmz5/npUWmiwxbW0QK8.fp2fvu0xcbAU8McwvvJDRBf29TvuroS',1);
+
+insert into usuario(usuario,nombre_usuario,ap_usuario,am_usuario,telefono_usuario,direccion_usuario,profesion_usuario,
+especialidad_usuario,tipo_usuario,contrasena_usuario,cod_cds)values('Medico','Roman','Condori','Villca',67255623,'Calle la oruro',
+'Licenciado en medicina','Pediatra','Medico','$2y$10$Uo.szMVEPkBINp.2FrLnk.M0NjZRqCQRZw6PohOy9RRp2YvQc8rfS',1);
