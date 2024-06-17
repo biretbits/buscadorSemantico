@@ -445,3 +445,44 @@ def contar_total_estudiante_curso(cod_grado,cod_carrera,fecha1,fecha2):
     else:
         # Si no hay resultados, devolver un mensaje indicando que no se encontró el estudiante
         return 0
+
+
+#seleccionar las consultas y embedding
+def seleccionar_consultasEmbeddings():
+    sql_consulta = "select *from embeddings where cod_respuesta is not null or cod_respuesta != ''"#seleccionamos todos los estudiantes
+    conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+    # Crear un cursor para ejecutar consultas
+    cursor = conn.cursor()
+    # Ejecutar la consulta SQL
+    cursor.execute(sql_consulta)
+    # Verifica si hay algún resultado antes de obtenerlos
+    if cursor.rowcount > 0:
+        # Si hay resultados, obtén los datos de la consulta
+        sql_consulta = cursor.fetchall()
+        cursor.close()
+        conn.close()
+
+        return sql_consulta
+    else:
+        return "no"
+
+
+def seleccionar_respuesta_y_consulta(id):
+    # Consulta SQL para seleccionar un estudiante por su ID
+    sql_consulta = "SELECT * from respuesta WHERE cod_respuesta = "+str(id)
+    conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+    # Crear un cursor para ejecutar consultas
+    cursor = conn.cursor()
+    # Ejecutar la consulta SQL con el ID proporcionado como parámetro
+    cursor.execute(sql_consulta)
+    # Verificar si hay algún resultado antes de obtenerlos
+    if cursor.rowcount > 0:
+        # Si hay resultados, obtener los datos de la consulta
+        estudiante = cursor.fetchone()
+        # Cerrar el cursor y la conexión
+        cursor.close()
+        conn.close()
+        return estudiante
+    else:
+        # Si no hay resultados, devolver un mensaje indicando que no se encontró el estudiante
+        return "no"

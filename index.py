@@ -1,12 +1,15 @@
 from flask import Flask,render_template,request,session
+from flask import Flask, Response, request, send_file
 from chat import buscar
 from retorno import retornar_valores
 from flask_session import Session
 import pymysql
-from flask import Flask, Response, request, send_file
+
 import io
 from weasyprint import HTML
 from reportes import generar_reporte_de_consulta
+from sentence_transformers import SentenceTransformer, util
+import numpy as np
 app = Flask("mi proyecto nuevo")
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SECRET_KEY'] = 'supersecretkey'  # Clave secreta para firmar cookies de sesión
@@ -39,6 +42,7 @@ if __name__ == '__main__':
     app.run(debug=True)
 
 '''
+model = SentenceTransformer('all-MiniLM-L6-v1')
 
 @app.route("/")
 
@@ -59,6 +63,50 @@ def login():
 def cerrar():
     session.clear()
     return render_template('index.html')
+
+@app.route("/preg")
+def preguntasREg():
+    conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+    cursor = conn.cursor()
+    # Consulta para verificar si el usuario existe
+    consulta = "SELECT * FROM respuesta"
+    cursor.execute(consulta)
+    sql_consulta = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return render_template('registrarPreguntas.html',consulta = sql_consulta)
+
+@app.route("/regPreg",methods = ['POST'])
+def RegistrarPreguntas():
+
+    if request.method == 'POST':
+        # Obtener los datos enviados mediante Ajax
+        pregunta_nuevo = request.form.get('pregunta_nuevo')
+        posible_respuesta = int(request.form.get('posible_respuesta'))
+
+        # Calcular el embedding del texto
+        texto_embedding = model.encode(pregunta_nuevo)
+
+        # Convertir el embedding a bytes
+        embedding_bytes = texto_embedding.tobytes()
+
+        # Conectar a la base de datos
+        conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+
+        try:
+            with conn.cursor() as cursor:
+                # Consulta parametrizada para insertar datos
+                sql_insert = "INSERT INTO embeddings (texto, embedding, cod_respuesta) VALUES (%s, %s, %s)"
+                cursor.execute(sql_insert, (pregunta_nuevo, embedding_bytes, posible_respuesta))
+
+            # Confirmar la transacción
+            conn.commit()
+
+        finally:
+            # Cerrar la conexión siempre, incluso si ocurre una excepción
+            conn.close()
+
+        return 'correcto'
 
 @app.route("/validando",methods = ['POST'])
 def validar():

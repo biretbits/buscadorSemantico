@@ -270,12 +270,19 @@ cod_grado)on delete restrict on update restrict
 
 
 
+create table respuesta(
+  cod_respuesta int not null auto_increment primary key,
+  resp TEXT,
+  consulta TEXT,
+  descripcion TEXT
+);
 CREATE TABLE embeddings (
     id INT AUTO_INCREMENT PRIMARY KEY,
     texto TEXT,
-    embedding LONGBLOB
+    embedding LONGBLOB,
+    cod_respuesta int,
+    foreign key(cod_respuesta)references respuesta(cod_respuesta)on delete restrict on update restrict
 );
-
 
 
 
@@ -2396,6 +2403,32 @@ cod_es,cod_area,fecha)values('aprobado','no',5,1,69,1,'2023-02-03');
 
 
 insert into usuario(usuario,nombre,ap,am,telefono,gmail,contrasena)values('carlos','carlos','mamani','nina',67212345,'carlos123456@gmail.com','123');
+
+
+
+insert into respuesta(resp,consulta,descripcion)values('ver_carreras','select *from carrera','Permite visulizar todas las carreras');
+insert into respuesta(resp,consulta,descripcion)values('total_de_estudiantes','SELECT COUNT(*) FROM estudiante','cuenta todos los estudiantes');
+insert into respuesta(resp,consulta,descripcion)values('total_de_estudiantes_carrera','select *from estudiante','cuenta todos los estudiantes de una carrera');
+insert into respuesta(resp,consulta,descripcion)values('seleccionar_carreras_area','select *from carrera','selecciona todas las carreras de un area');
+insert into respuesta(resp,consulta,descripcion)values('seleccionar_asignatura_estudiante','select *from cursa_asignatura','selecciona todas las asignturas de un estudiante');
+insert into respuesta(resp,consulta,descripcion)values('total_de_estudiantes_estadisticas','select * from estudiante_perdio','obtiene el total de estudiantes aprobados y reprobados por areas y carreras, pero tambien busca solo por carreras y areas');
+insert into respuesta(resp,consulta,descripcion)values('seleccionar_estudiantes_desertores','select * from estudiante_perdio','Obtiene todos los estudiantes desertores por areas y carreras, pero tambien buscar por solo carreras o areas');
+insert into respuesta(resp,consulta,descripcion)values('diferencia_entre_primero_quinto','select *from estudiante_perdio','obtiene La cantidad de estudiantes que concluyeron sus estudios en relacion a 1er año');
+insert into respuesta(resp,consulta,descripcion)values('asignaturas_desercion','select *from cursa_asignatura','Busca la informacion de estudiantes que desertaron en materias por areas y carreras, tambien solo en carreras y areas');
+insert into respuesta(resp,consulta,descripcion)values('clasificado_sexo','select *from estudiante','Obtiene informacion de estudiantes varones y mujeres por areas  y carreras, tambien por solo carrera o areas');
+insert into respuesta(resp,consulta,descripcion)values('transferencias_buscar','select *from transferencia','cuenta el total de transferencias por areas y carreras, como tambien por solo carrera y areas');
+insert into respuesta(resp,consulta,descripcion)values('concepto_transferencia','select * from transferir','cuenta el total de estudiantes transferidos por areas y carreras, o solo por carreras o areas');
+insert into respuesta(resp,consulta,descripcion)values('mayor_inscritos','select * from estudiante','muestra informacion de cuantos inscriptos hay en una carrera o area o todos');
+insert into respuesta(resp,consulta,descripcion)values('modalidad_titulacion','select *from modalidad_titulacion','permite visualizar las modalidades de titulacion que tiene una carrera o areas o todo');
+insert into respuesta(resp,consulta,descripcion)values('total_estudiante_desercion','select *from estudiante_perdio','muestra informacion de cuantos estudiantes dejaron la carrera por areas y carreras');
+insert into respuesta(resp,consulta,descripcion)values('titulados_relacion','select *from estudiante','permite visualizar cuantos titulados hay con relacion a 1er año en una carrera o area o todos');
+insert into respuesta(resp,consulta,descripcion)values('clasificacion_departamento','select * from estudiante','permite ver a todos los estudiantes por regiones y departamentos por carreas o areas o todos');
+insert into respuesta(resp,consulta,descripcion)values('plan_de_estudio','select *from plan_de_estudio','muestra cual es el plan de estudio de una carrera o area o todos');
+insert into respuesta(resp,consulta,descripcion)values('materias_inscritos','select *from cursa_asignatura','muestra cuantos inscritos hay en una materia de una carrera o area o todos');
+
+
+
+
 
 instalar pip install datefinder
 pip install python-dotenv

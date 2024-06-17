@@ -9,6 +9,11 @@
         <li class='nav-item' title='Inicio'>
           <a class='nav-link btn btn-outline-warning' href='/'>Inicio</a>
         </li>
+        {% if usuario %}
+          <li class='nav-item' title='Registro'>
+            <a class='nav-link btn btn-outline-warning' href='/preg'>Registro Preguntas</a>
+          </li>
+        {% endif %}
       </ul>
       <ul class='navbar-nav ms-auto'>
         {% if usuario %}

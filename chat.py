@@ -4,14 +4,14 @@ from comprobar import obtener_carreras_nombre,detectar_numeros_delimiter,contien
 from comprobar import palabras_departamento,palabras_provincia,encontrar_nombre,encontrar_apellido,obtener_area,palabra_desercion
 from comprobar import palabra_aplazaron,palabra_aprobados,palabra_curso,obtener_que_curso_quiere
 from comprobar import palabra_nota,fechas,obtener_ano,obtener_areas_id
-from sql import seleccionar_estudiante1
+from sql import seleccionar_estudiante1,seleccionar_consultasEmbeddings,seleccionar_respuesta_y_consulta
 from sentence_transformers import SentenceTransformer, util
 import numpy as np
 from datetime import datetime
 from comprobar import obtener_ano_de_fecha
 # Cargar el modelo pre-entrenado
 model = SentenceTransformer('all-MiniLM-L6-v1')
-sentencias = [
+"""sentencias = [
     "informacion carreras",
     "informacion catidad estudiantes",
     "informacion cantidad estudiantes carrera",
@@ -84,9 +84,9 @@ sentencias = [
     "estadistica a nivel general de inscritos en materias de la carrera de",
     "cual es la cantidad de inscritos en materias de la carrera de",
     "informacion de inscritos en materias de la carrera de",
-]
+]"""
 # Definir la lista de pares
-
+"""
 respuesta =[
 'ver_carreras',
 'total_de_estudiantes',
@@ -160,7 +160,8 @@ respuesta =[
 "materias_inscritos",
 "materias_inscritos",
 "materias_inscritos",
-]
+]"""
+"""
 consultas_sql = {
 "ver_carreras":"select *from carrera",
 "ver_por_nombre_estudiante":" select e.nombre_es,e.ap_es,e.am_es,e.ci,e.pais_es,e.departamento,e.provincia,e.ciudad,e.region,e.sexo,c.nombre_carrera from carrera as c inner join estudiante as e on c.cod_carrera = e.cod_carrera where e.nombre_es like '%{}%' ",
@@ -187,7 +188,7 @@ consultas_sql = {
 "clasificacion_departamento":"select * from estudiante",
 "plan_de_estudio":"select *from plan_de_estudio",
 "materias_inscritos":"select *from cursa_asignatura",
-}
+}"""
 #e.estado = 'desactivo' or e.cod_area = 3 and e.sexo = 'femenino' or  e.sexo = 'masculino';"
 consultas_aux= {"activo_es" :" e.estado = 'activo'",
 "desactivo_es":" e.estado = 'desactivo'",
@@ -282,21 +283,31 @@ def buscar(texto):
     # Inicializar lista para almacenar los resultados de la similitud del coseno
     coseno_salida = []
     # Calcular la similitud coseno entre la consulta y todas las oraciones
-    for s in sentencias:
-        sentencia_embedding = obtener_embedding(s)
-        coseno_similar = util.cos_sim(texto_embedding, sentencia_embedding)
-        coseno_salida.append(coseno_similar.item())
+    resp = seleccionar_consultasEmbeddings()#seleccionamos las consultas que tienen una respuesta
+    max = 0
+    id_respuesta = 0
+    for s in resp:#recorremos las posibles preguntas como del usuario
+        embedding_bd = np.frombuffer(s[2], dtype=np.float32)#obtenemos su embedding de cada consulta
+        coseno_similar = util.cos_sim(texto_embedding, embedding_bd)#calculamos el coseno de similitud
+        coseno_max= coseno_similar.item()
+        print(coseno_max," coseno maximoooooo")
+        #coseno_salida.append(coseno_similar.item())
+        if coseno_max > max:#calculamos el maximo item
+            max = coseno_max
+            id_respuesta = s[3]#cuardamos la posible respuesta
+    print(id_respuesta," cod_respuestad  ")
+    consultas_sql={}#creamos un array tipo diccionario
+    if id_respuesta > 0:#si es mayor a cero existe un id
+        respuesta_bd = seleccionar_respuesta_y_consulta(id_respuesta)
+        if respuesta_bd != "no":
+            response = respuesta_bd[1]#obtenemos la respuesta que puede ser ver_carreras u otros
+            consultas_sql[response] = respuesta_bd[2]#y obtenemos la consulta sql y le ponemos como posicion la respuesta
 
     # Ordenar las oraciones según la similitud
     #resultados = zip(range(len(cosine_scores)), cosine_scores)
     #sorted_results = sorted(resultados, key=lambda x: x[1], reverse=True)
     #resultado_tensor = sorted_results[0][1]
-    print(coseno_salida)
-    posicionMax = maximo(coseno_salida)
-    print(posicionMax,"   el maximo indice es")
-    response = respuesta[posicionMax]
-    print(response, "la respuesta es ")
-    nombre_posicion_sql = ""
+    print(response)
     if response:
         vec1=[]
         if response == "ver_carreras":
