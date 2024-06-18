@@ -2407,9 +2407,8 @@ insert into usuario(usuario,nombre,ap,am,telefono,gmail,contrasena)values('carlo
 
 
 insert into respuesta(resp,consulta,descripcion)values('ver_carreras','select *from carrera','Permite visulizar todas las carreras');
-insert into respuesta(resp,consulta,descripcion)values('total_de_estudiantes','SELECT COUNT(*) FROM estudiante','cuenta todos los estudiantes');
+insert into respuesta(resp,consulta,descripcion)values('total_de_estudiantes','select * from estudiante','cuenta todos los estudiantes');
 insert into respuesta(resp,consulta,descripcion)values('total_de_estudiantes_carrera','select *from estudiante','cuenta todos los estudiantes de una carrera');
-insert into respuesta(resp,consulta,descripcion)values('seleccionar_carreras_area','select *from carrera','selecciona todas las carreras de un area');
 insert into respuesta(resp,consulta,descripcion)values('seleccionar_asignatura_estudiante','select *from cursa_asignatura','selecciona todas las asignturas de un estudiante');
 insert into respuesta(resp,consulta,descripcion)values('total_de_estudiantes_estadisticas','select * from estudiante_perdio','obtiene el total de estudiantes aprobados y reprobados por areas y carreras, pero tambien busca solo por carreras y areas');
 insert into respuesta(resp,consulta,descripcion)values('seleccionar_estudiantes_desertores','select * from estudiante_perdio','Obtiene todos los estudiantes desertores por areas y carreras, pero tambien buscar por solo carreras o areas');

@@ -1,7 +1,7 @@
 from flask import jsonify
 from sql import nombre_carrera_retor,grado_Estudiante,obtener_nombre,nombre_materia,obtener_datos_de_curso
 from sql import seleccionarAreas,seleccionar_carrera,seleccionarAsignaturaAreas,seleccionarAsignatura
-from sql import nombre_asignatura,nombre_carrera,consulta_Titulado,seleccionarcarrera_id
+from sql import nombre_asignatura,nombre_carrera,consulta_Titulado,seleccionarcarrera_id,nombre_area_id
 from sql import modalidad_titulacion_id,seleccionarAsignatura_por_id,contar_total_estudiante_curso
 from comprobar import formatear_fecha_solo_ano,obtener_ano_de_fecha,fechas
 from datetime import datetime
@@ -134,9 +134,75 @@ def  retornar_valores(datos,ress):
     html = ""
     html += "<div class='container justify-content-center align-items-center' style='min-height: 100vh;'>"
     if accion1 == "ver_carreras":
-        if ress[0] != 'no':
+        si_car_n = ress[0]
+        id_car = ress[1]#id de carreras
+        si_ar = ress[2]
+        id_ar = ress[3]
+        si_car = ress[4]
+        if si_car_n == "si_car_n":#existe una carrera
+            html += "Informacion de las siguientes carreras es lo siguiente: "
+            html += "<h5>Tabla de carreras de la UNSXX</h5>"
+            s_dupli = eliminar_dobles(id_car)#si hay doble veces repetido el id lo eliminamos a 1
+            for i in s_dupli:#recorremos todo los id de carreras
+                index = int(i) - 1#obtenemos el id
+                index1 = int(i)
+                html += "<h5 align='center'>Carrera de "+str(nombre_carrera_retor(index1))+"<h5>"
+                html += "<table class='table table-striped'>"
+                html += "<thead>"
+                html += "<tr>"
+                html += "<th>Nro</th>"
+                html += "<th>Carrera</th>"
+                html += "<th>Direccion</th>"
+                html += "</tr>"
+                html += "</thead>"
+                html += "<tbody>"
+                k = 1
+                for row in datos:
+                    if row[0] == index1:
+                        html += "<tr>"
+                        html += "<td>" + str(k) + "</td>"
+                        html += "<td>" + row[1] + "</td>"
+                        html += "<td>" + row[2] + "</td>"
+                        html += "</tr>"
+                        k = k + 1
+                html += "</tbody>"
+                html += "</table>"
+        elif si_ar == 'si_ar':
             html += "Las carreras de la universidad son las siguientes: "
-            html += "<h2>Tabla de carreras de la UNSXX</h2>"
+            html += "<h5>Tabla de carreras de la UNSXX</h5>"
+            s_dupli = eliminar_dobles(id_ar)#si hay doble veces repetido el id lo eliminamos a 1
+            for i in s_dupli:#recorremos todo los id de areas
+                index = int(i) - 1#obtenemos el id
+                index1 = int(i)
+                html += "<h5 align='center'>Area "+str(nombre_area_id(index1))+"<h5>"
+                carreras = seleccionarcarrera_id(index1)#buscamos con el id todas las carreras relacionadas con el area
+                if carreras != "no":#si es diferente de no entonces ingresamos
+                    html += "<table class='table table-striped'>"
+                    html += "<thead>"
+                    html += "<tr>"
+                    html += "<th>Nro</th>"
+                    html += "<th>Carrera</th>"
+                    html += "<th>Direccion</th>"
+                    html += "</tr>"
+                    html += "</thead>"
+                    html += "<tbody>"
+                    k = 1
+                    for car in carreras:
+                        for row in datos:
+                            if row[0] == car[0]:
+                                html += "<tr>"
+                                html += "<td>" + str(k) + "</td>"
+                                html += "<td>" + row[1] + "</td>"
+                                html += "<td>" + row[2] + "</td>"
+                                html += "</tr>"
+                                k = k + 1
+                    html += "</tbody>"
+                    html += "</table>"
+                else:
+                    html+="<h6 align='center'>No se encontro información</h6>"
+        elif si_car == "si_car":
+            html += "Las carreras de la universidad son las siguientes: "
+            html += "<h5>Tabla de carreras de la UNSXX</h5>"
             html += "<table class='table table-striped'>"
             html += "<thead>"
             html += "<tr>"
@@ -146,44 +212,56 @@ def  retornar_valores(datos,ress):
             html += "</tr>"
             html += "</thead>"
             html += "<tbody>"
-            contar = 0
             k = 1
             for row in datos:
-                if row[1] == "":
-                    html += "Lo siento, no tengo una respuesta para esa pregunta o puede argumentar un poco mas."
-                else:
-                    html += "<tr>"
-                    html += "<td>" + str(k) + "</td>"
-                    html += "<td>" + row[1] + "</td>"
-                    html += "<td>" + row[2] + "</td>"
-                    html += "</tr>"
-                    contar += 1
-                    k = k + 1
+                html += "<tr>"
+                html += "<td>" + str(k) + "</td>"
+                html += "<td>" + row[1] + "</td>"
+                html += "<td>" + row[2] + "</td>"
+                html += "</tr>"
+                k = k + 1
             html += "</tbody>"
             html += "</table>"
-            html += "Se tiene " + str(contar) + " carreras activas"
-        elif ress[3] != 'no':
-            for row in datos:
-                html += "La carrera de " + row[1] + " se encuentra en " + row[2]
-
-    if accion1 == "ver_carreras_nombre":
-        for row in datos:
-            if row[1] == "":
-                html += "Lo siento, no tengo una respuesta para esa pregunta o puede argumentar un poco mas."
-            else:
-                html += "La carrera de " + row[1] + " se encuentra en la dirección " + row[2] + " "
 
     if accion1 == "total_de_estudiantes":
-        for row in datos:
-            html += "La universidad tiene un total de " + str(row[0]) + " Estudiantes"
-    if accion1 == "total_de_estudiantes_carrera":
-        # Ahora puedes acceder y modificar la variable carreras del ámbito global
-        carreras12 = [0] * 17
-        for fila in datos:
-            carreras12[fila[13]-1]+=1
-        for i in range(17):
-            if carreras12[i] != 0:
-                html += "<div class='alert alert-secondary' role='alert'>La carrera de "+nombre_carrera_retor(i+1)+" tiene "+str(carreras12[i])+" estudiantes</div>"
+        si_car_n = ress[0]
+        id_car = ress[1]#id de carreras
+        si_ar = ress[2]
+        id_ar = ress[3]
+        si_total = ress[4]
+        if si_car_n == "si_car_n":
+            s_dupli = eliminar_dobles(id_car)#si hay doble veces repetido el id lo eliminamos a 1
+            for i in s_dupli:#recorremos todo los id de carreras
+                index = int(i) - 1#obtenemos el id
+                index1 = int(i)
+                html += "<h5 align='center'>Carrera de "+str(nombre_carrera_retor(index1))+"<h5>"
+                contar = 0
+                for row in datos:
+                    if row[13] == index1:
+                        contar+=1
+                html += "Se encontro un total de " + str(contar) + " Estudiantes"
+        if si_ar == "si_ar":
+            s_dupli = eliminar_dobles(id_ar)#si hay doble veces repetido el id lo eliminamos a 1
+            for i in s_dupli:#recorremos todo los id areas
+                index = int(i) - 1#obtenemos el id
+                index1 = int(i)
+                html += "<h5 align='center'>Area "+str(nombre_area_id(index1))+"<h5>"
+                carreras = seleccionarcarrera_id(index1)#buscamos con el id todas las carreras relacionadas con el area
+                if carreras != "no":#si es diferente de no entonces ingresamos
+                    contar = 0
+                    for car in carreras:
+                        for row in datos:
+                            if row[13] == car[0]:
+                                contar+=1
+                    html += "Se encontro un total de " + str(contar) + " Estudiantes"
+                else:
+                    html+="<h6>No se encontro información</h6>"
+        if si_total == "si_total":
+            contar = 0
+            for row in datos:
+                contar+=1
+            html += "La universidad tiene un total de " + str(contar) + " Estudiantes"
+
 
     if accion1 == "total_de_estudiantes_carrera3":
         if datos == "argumentar_poco_mas":
@@ -363,75 +441,6 @@ def  retornar_valores(datos,ress):
                     html += "</tr>"
                 contar += 1
                 k += 1
-            html += "</tbody>"
-            html += "</table>"
-
-    if accion1 == "estudiantes_de_unsxx":
-        total = len(datos)
-        me = ""
-        if me == "argumentar_poco_mas":
-            html += "<div class='alert alert-secondary' role='alert'>Le pido que argumente un poco mas</div>"
-        else:
-            si_activo = ress[0]
-            si_desactivo = ress[1]
-            si_m = ress[2]
-            si_f = ress[3]
-            si_dep = ress[5]
-            si_prov = ress[4]
-            si_nom = "no"
-            si_apell = "no"
-            k = 0
-            for row in datos:
-                dep = row[7]
-                provi = row[8]
-                nom = row[1]
-                ap = row[2]
-                am = row[3]
-                k = k +1
-                if k == 1:
-                    break
-
-            si = "no"
-            mensaje = "Los estudiantes"
-            retu = verificarUNSXX(si_activo, si_desactivo, si_m, si_f, si_dep, si_prov, si_nom, si_apell, dep, provi, nom, ap, am, si)
-
-            html += "<div class='alert alert-secondary' role='alert'>" + mensaje + " " + retu + " son " + str(total) + "</div>"
-            html += "<div class='alert alert-secondary' role='alert'>Detallamos en la siguiente tabla</div>"
-
-            html += "<h2>Tabla de estudiantes</h2>"
-            html += "<table class='table table-striped'>"
-            html += "<thead>"
-            html += "<tr>"
-            html += "<th>Nro</th>"
-            html += "<th>Nombre</th>"
-            html += "<th>Apellido Paterno</th>"
-            html += "<th>Apellido Materno</th>"
-            html += "<th>Cédula de Identidad</th>"
-            html += "<th>País</th>"
-            html += "<th>Departamento</th>"
-            html += "<th>Provincia</th>"
-            html += "<th>Región</th>"
-            html += "<th>Sexo</th>"
-            html += "</tr>"
-            html += "</thead>"
-            html += "<tbody>"
-            contar = 0
-            k = 1
-            for row in datos:
-                html += "<tr>"
-                html += "<td>" + str(k) + "</td>"
-                html += "<td>" + row[1] + "</td>"
-                html += "<td>" + row[2] + "</td>"
-                html += "<td>" + row[3] + "</td>"
-                html += "<td>" + str(row[5]) + "</td>"
-                html += "<td>" + row[6] + "</td>"
-                html += "<td>" + row[7] + "</td>"
-                html += "<td>" + row[8] + "</td>"
-                html += "<td>" + row[10] + "</td>"
-                html += "<td>" + row[11] + "</td>"
-                html += "</tr>"
-                contar += 1
-                k = k + 1
             html += "</tbody>"
             html += "</table>"
 

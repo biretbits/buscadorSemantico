@@ -10,6 +10,7 @@ from weasyprint import HTML
 from reportes import generar_reporte_de_consulta
 from sentence_transformers import SentenceTransformer, util
 import numpy as np
+from unidecode import unidecode
 app = Flask("mi proyecto nuevo")
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SECRET_KEY'] = 'supersecretkey'  # Clave secreta para firmar cookies de sesión
@@ -74,8 +75,41 @@ def preguntasREg():
     sql_consulta = cursor.fetchall()
     cursor.close()
     conn.close()
-    return render_template('registrarPreguntas.html',consulta = sql_consulta)
+    if 'usuario' in session:
+        return render_template('registrarPreguntas.html',consulta = sql_consulta,usuario=session['usuario'])
+    return render_template('registrarPreguntas.html',consulta = sql_consulta,usuario=None)
 
+@app.route("/resp")
+def RespuestaREg():
+    if 'usuario' in session:
+        return render_template('registrarRespuesta.html',usuario=session['usuario'])
+    return render_template('registrarRespuesta.html',usuario=None)
+
+
+@app.route("/regResp",methods = ['POST'])
+def registrarRespuesta():
+
+    if request.method == 'POST':
+        # Obtener los datos enviados mediante Ajax
+        posible_respuesta = request.form.get('posible_respuesta')
+        consulta = request.form.get('consulta')
+        descripcion = request.form.get('descripcion')
+        conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+
+        try:
+            with conn.cursor() as cursor:
+                # Consulta parametrizada para insertar datos
+                sql_insert = "INSERT INTO respuesta (resp, consulta, descripcion) VALUES (%s, %s, %s)"
+                cursor.execute(sql_insert, (posible_respuesta, consulta, descripcion))
+
+            # Confirmar la transacción
+            conn.commit()
+
+        finally:
+            # Cerrar la conexión siempre, incluso si ocurre una excepción
+            conn.close()
+
+        return 'correcto'
 @app.route("/regPreg",methods = ['POST'])
 def RegistrarPreguntas():
 
@@ -83,7 +117,7 @@ def RegistrarPreguntas():
         # Obtener los datos enviados mediante Ajax
         pregunta_nuevo = request.form.get('pregunta_nuevo')
         posible_respuesta = int(request.form.get('posible_respuesta'))
-
+        pregunta_nuevo = unidecode(pregunta_nuevo.lower())
         # Calcular el embedding del texto
         texto_embedding = model.encode(pregunta_nuevo)
 

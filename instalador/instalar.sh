@@ -37,6 +37,7 @@ pip install weasyprint
 sudo apt update
 sudo apt install libpango1.0-0
 pip install flask-session
+pip install unidecode
 
 # Instalar PyMySQL
 echo "Instalando PyMySQL..."

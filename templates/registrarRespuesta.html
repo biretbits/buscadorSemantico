@@ -19,24 +19,20 @@
               <div id="error">
 
               </div>
-              <h3 class="card-title text-center mb-4">Registro de preguntas de usuario</h3>
+              <h4 class="card-title text-center mb-4">Registro de respuesta</h4>
 
-              <form method="POST" action="{{ url_for('login') }}">
+              <form method="POST">
                 <div class="mb-3">
-                  <label for="pregunta_nuevo" class="form-label">Posible pregunta</label>
-                  <textarea name="name"class="form-control" id='pregunta_nuevo' name='pregunta_nuevo'rows="8" cols="80"></textarea>
+                  <label for="posible_respuesta" class="form-label">Posible respuesta a una pregunta</label>
+                  <input type="text" class="form-control" id="posible_respuesta" name="posible_respuesta" required placeholder="ponga su respuesta de esta forma ver_carreras">
                 </div>
                 <div class="mb-3">
-                  <label for="posible_respuesta">Respuesta</label>
-                  <select name="categorias" id='posible_respuesta' class="form-control">
-                    <option value="">Seleccione tipo de respuesta</option>
-                      {% for categoria in consulta %}
-                          <option value="{{ categoria[0] }}" title="{{ categoria[3] }}">
-                              <abbr title="{{ categoria[1] }}">{{ categoria[1] }}</abbr>
-                          </option>
-                      {% endfor %}
-                  </select>
-
+                  <label for="consulta">Consulta sql</label>
+                  <textarea name="name" class="form-control" rows="5" cols="80" placeholder="Registre su consulta sql de esta forma select *from estudiante" id='consulta'></textarea>
+                </div>
+                <div class="mb-3">
+                  <label for="descripcion">descripción</label>
+                  <textarea name="name" class="form-control" rows="5" cols="80" placeholder="ponga una descripcion de la posible respuesta" id='descripcion'></textarea>
                 </div>
                 <div class="d-grid gap-2">
                   <button type="button" class="btn btn-primary btn-block" onclick="registrar()">Registrar</button>
@@ -57,27 +53,32 @@
 
     <script type="text/javascript">
     function registrar(){
-
-      var pregunta_nuevo = document.getElementById("pregunta_nuevo").value;
       var posible_respuesta = document.getElementById("posible_respuesta").value;
+      var consulta = document.getElementById("consulta").value;
+      var descripcion = document.getElementById("descripcion").value;
+      var re = verificar_si_tiene_espacios(posible_respuesta);
+      if(re == "tiene_espacios"){
+        $('#error').html("<div class='alert alert-danger'>Formato de posible respuesta erronea, utilice para unir la barra baja _</div>");
+        return;
+      }
       var datos=new  FormData();
-      datos.append("pregunta_nuevo",pregunta_nuevo);
       datos.append("posible_respuesta",posible_respuesta);
-      if(posible_respuesta == '' || pregunta_nuevo == ''){
+      datos.append("consulta",consulta);
+      datos.append("descripcion",descripcion);
+      if(posible_respuesta == '' || consulta == '' || descripcion == ''){
         $('#error').html("<div class='alert alert-danger'>Algun campo sin datos o sin seleccionar</div>");
         return;
       }
-      //alert(pregunta_nuevo+"   "+posible_respuesta);
       $.ajax({
         type: "POST", //type of submit
         cache: false, //important or else you might get wrong data returned to you
-        url: "/regPreg", //destination
+        url: "/regResp", //destination
         datatype: "html", //expected data format from process.php
         data: datos, //target your form's data and serialize for a POST
         contentType:false,
         processData:false,
         success: function(data){
-        //  alert(data);
+          //alert(data);
           console.log(data);
           if(data == "correcto"){
             redireccionar();
@@ -91,8 +92,18 @@
 
 function redireccionar(){
   // Redireccionar a una URL específica
-  window.location.href = "/preg";
+  window.location.href = "/resp";
 }
 
+function verificar_si_tiene_espacios(texto) {
+  // Utilizamos una expresión regular que busca espacios
+  let tieneEspacios = /[ ]/g.test(texto);
+  
+  if (tieneEspacios) {
+    return "tiene_espacios";
+  } else {
+    return "no_tiene_espacios";
+  }
+}
 </script>
 <script src="{{ url_for('static', filename='bootstrap-5.0.2/js/bootstrap.min.js') }}" charset="utf-8"></script>

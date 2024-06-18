@@ -7,17 +7,10 @@ from sql import obtener_id_de_carrera
 # Cargar el modelo de lenguaje en español
 nlp = spacy.load("es_core_news_sm")
 
-def eliminar_tildes(texto):
-    # Utilizamos la libreria unicodedata para eliminar las tildes
-    texto_nfd = unicodedata.normalize('NFD', texto)
-    texto_sin_tildes = ''.join(c for c in texto_nfd if not unicodedata.combining(c))
-    return texto_sin_tildes
-
 def obtener_carreras_nombre(texto):
     # Cargar el modelo pre-entrenado en español
-    nlp = spacy.load("es_core_news_sm")
 
-    carreras_keywords = {"informatica",
+    carreras_keywords = ["informatica",
     "mecanica automotriz",
     "minas",
      "electromecanica",
@@ -30,23 +23,20 @@ def obtener_carreras_nombre(texto):
      "civil","medicina",
      "minas topografia","derecho","contaduria","contaduria publica",
      "comunicacion social","ciencias de la educacion"
-     ,"laboratorio clinico","odontologia","odonto","infor"}
+     ,"laboratorio clinico","odontologia","odonto","infor"]
 
     carreras_encontradas = []
     # Convertir el texto a minúsculas y eliminar tildes
-    texto_normalizado = eliminar_tildes(texto.lower())
-
+    salida = nlp(texto)
     # Buscar palabras clave asociadas con carreras universitarias en el texto
-    for car in carreras_keywords:
-        if car in texto_normalizado:
-            carreras_encontradas.append(obtener_id_de_carrera(car))
+    for pal in salida:
+        if pal.text in carreras_keywords:
+            carreras_encontradas.append(obtener_id_de_carrera(pal.text))
 
-    print(carreras_encontradas)
     return carreras_encontradas
 
 
 def detectar_numeros_delimiter(texto):
-    texto = texto.lower();
     # Tokenizar el texto en palabras
     tokens = word_tokenize(texto)
 
@@ -60,7 +50,6 @@ def detectar_numeros_delimiter(texto):
 
 # Funcion para procesar un texto y verificar si contiene palabras activas
 def contiene_palabras_activas(texto):
-    texto = texto.lower();
     # array de palabras activas
     palabras_activas = ["activa", "activo", "activos", "activas","habilitado","habilitados"]
     # Procesar el texto con spaCy
@@ -74,7 +63,6 @@ def contiene_palabras_activas(texto):
 
 # Funcion para procesar un texto y verificar si contiene palabras desactivas
 def contiene_palabras_desactivas(texto):
-    texto = texto.lower();
     # Array de palabras activas
     palabras_desactivas = ["desactiva", "desactivo", "desactivos", "desactivas","desahabilitado","desahabilitados"]
     # Procesar el texto con spaCy
@@ -88,7 +76,6 @@ def contiene_palabras_desactivas(texto):
 
 # Funcion para procesar un texto y verificar si contiene palabras desactivas
 def contiene_palabras_sexo_varon(texto):
-    texto = texto.lower();
     # Array de palabras activas
     palabras_desactivas = ["masculino", "hombre", "varon", "machos","varones","masculinos","hombres","macho","m"]
     # Procesar el texto con spaCy
@@ -102,7 +89,6 @@ def contiene_palabras_sexo_varon(texto):
 
 # Funcion para procesar un texto y verificar si contiene palabras desactivas
 def contiene_palabras_sexo_mujer(texto):
-    texto = texto.lower();
     # Array de palabras activas
     palabras_desactivas = ["mujer","mujeres","femenino","femeninos","señorita","señoritas","hembra","hembras","f"]
     # Procesar el texto con spaCy
@@ -116,17 +102,16 @@ def contiene_palabras_sexo_mujer(texto):
 
 
 def palabras_departamento(texto):
-    texto = texto.lower()
-    texto = eliminar_tildes(texto)
     # Lista de nombres de departamentos que pueden consistir en múltiples tokens
 
     # Array de palabras activas
     departamentos = ["la paz", "santa cruz","oruro", "pando", "potosi", "sucre", "cochabamba", "chuquisaca", "tarija"]
     # Procesar el texto con spaCy
+    doc2 = nlp(texto)
     # Si ninguna secuencia forma un nombre de departamento múltiple, buscar si hay nombres de departamento únicos
-    for token in departamentos:
-        if token in texto:
-            return token  # Devuelve el departamento encontrado
+    for token in doc2:
+        if token.text in departamentos:
+            return token.text  # Devuelve el departamento encontrado
     return "no"
 
 
@@ -148,8 +133,6 @@ def palabras_provincia(texto):
             "ñuflo de chavez","aniceto arce", "burdett o connor","burdett oconnor","eustaquio mendez", "gran chaco",
              "jose maria aviles",
                                "o connor","sanchez de ocaña", "tomas barron"]
-    texto = texto.lower()
-    texto = eliminar_tildes(texto)
     # Procesar el texto con spaCy
     doc4 = nlp(texto)
     # Obtener todas las secuencias de tokens en el texto
@@ -204,8 +187,6 @@ vec_nombre = ["aaron","abdon","abel","abelardo","abrahan","absalon","acacio","ad
 "raul","pablo","yanine","susan","nicol","pamela","ilda","hilda","shirley","ana","maicol","ivana","adriana"
 ]
 def encontrar_nombre(texto):
-    texto = texto.lower()
-    texto = eliminar_tildes(texto)
     # Procesar el texto con spaCy
     doc5 = nlp(texto)
     for token in doc5:
@@ -226,14 +207,12 @@ vec_apellidos = ["aguilar","alonso","alvarez","arias","benitez","blanco","blesa"
 "victorio","choque","huayllani","adam","tola","sola","acebedo","jani jani","janijani","salinas","luna","dias","diaz","jurado",
 "callahuara","lopes","lopez"]
 def encontrar_apellido(texto):
-    texto = texto.lower()
-    texto = eliminar_tildes(texto)
     apellidos_encontrados = []
-
+    doc2 = nlp(texto)
     # Verificar si algún apellido está presente en el texto
-    for token in vec_apellidos:
-        if token in texto:
-            apellidos_encontrados.append(token)
+    for token in doc2:
+        if token.text in vec_apellidos:
+            apellidos_encontrados.append(token.text)
 
     if apellidos_encontrados:
         return apellidos_encontrados
@@ -241,88 +220,74 @@ def encontrar_apellido(texto):
         return "no"
 
 def obtener_area(texto):
-    # Cargar el modelo pre-entrenado en español
-    nlp = spacy.load("es_core_news_sm")
-
+    doc2 = nlp(texto)
     area_keywords = ["tecnologia", "salud", "social"]
     indice_keywords = [1, 2, 3]
     area = []
 
-    # Convertir el texto a minúsculas y eliminar tildes
-    texto_normalizado = eliminar_tildes(texto.lower())
-
     # Procesar el texto con el modelo de SpaCy
     # Buscar palabras clave asociadas con áreas en el texto
-    for area_keyword, indice_keyword in zip(area_keywords, indice_keywords):
-        if area_keyword in texto_normalizado:
-            area.append(indice_keyword)
+    for token in doc2:
+        if token.text in area_keywords:
+            index = area_keywords.index(token.text)
+            id = indice_keywords[index]
+            area.append(id)
 
     return area
 
-def palabra_desercion(texto):
-    texto = texto.lower()
-    texto = eliminar_tildes(texto)  # Suponiendo que eliminar_tildes(texto) está definida
+def palabra_desercion(texto):  # Suponiendo que eliminar_tildes(texto) está definida
     des_keywords = ["desercion", "desertados", "abandonados", "abandono", "abandonaron", "desertaron", "retiraron", "retirados", "desertaron"
     ,"desertores"]
-    for palabra_clave in des_keywords:
-        if palabra_clave in texto:
+    doc2 = nlp(texto)
+    for palabra_clave in doc2:
+        if palabra_clave.text in des_keywords:
             return "si"
     return "no"
 
-def palabra_aplazaron(texto):
-    texto = texto.lower()
-    texto = eliminar_tildes(texto)  # Suponiendo que eliminar_tildes(texto) está definida
+def palabra_aplazaron(texto): # Suponiendo que eliminar_tildes(texto) está definida
     apla_keywords = ["aplazaron","aplasados","aplazados", "reprobados", "reprobaron","aplazar"]
-    for palabra_clave in apla_keywords:
-        print(palabra_clave)
-        if palabra_clave in texto:
-            print(palabra_clave)
+    doc2 = nlp(texto)
+    for palabra_clave in doc2:
+        if palabra_clave.text in apla_keywords:
+            print(palabra_clave.text)
             return "si"
     return "no"
-def palabra_aprobados(texto):
-    texto = texto.lower()
-    texto = eliminar_tildes(texto)  # Suponiendo que eliminar_tildes(texto) está definida
+def palabra_aprobados(texto): # Suponiendo que eliminar_tildes(texto) está definida
     apla_keywords = ["aprobados","aprobado"]
-    for palabra_clave in apla_keywords:
-        print(palabra_clave)
-        if palabra_clave in texto:
-            print(palabra_clave)
+    doc2 = nlp(texto)
+    for palabra_clave in doc2:
+        if palabra_clave.text in apla_keywords:
             return "si"
     return "no"
 
-def palabra_curso(texto):
-    texto = texto.lower()
-    texto = eliminar_tildes(texto)  # Suponiendo que eliminar_tildes(texto) está definida
+def palabra_curso(texto): # Suponiendo que eliminar_tildes(texto) está definida
     apla_keywords = ["curso","cursos","grado","grados"]
-    for palabra_clave in apla_keywords:
-        print(palabra_clave)
-        if palabra_clave in texto:
-            print(palabra_clave)
+    doc2 = nlp(texto)
+    for palabra_clave in doc2:
+        if palabra_clave.text in apla_keywords:
             return "si"
     return "no"
-def obtener_que_curso_quiere(texto):
-    texto = texto.lower()
-    texto = eliminar_tildes(texto)  # Suponiendo que eliminar_tildes(texto) está definida
+def obtener_que_curso_quiere(texto):# Suponiendo que eliminar_tildes(texto) está definida
     curso_keywords = ["1","1er año","1er","1ro","primero","primer","primer año","2","2do año","2do","segundo",
     "segundo año","3","3er","3er año","tercero","tercer año","tercer","4","4to","4to año","cuarto","cuarto año","5","5to",
     "5to año","quinto","quinto año"]
     id_curso = ["1","1","1","1","1","1","1","2","2","2","2","2","3","3","3","3","3","3",
     "4","4","4","4","4","5","5","5","5","5"]
     curso=[]
-    for curso_keyword, id_curso in zip(curso_keywords, id_curso):
-        if curso_keyword in texto:
-            curso.append(id_curso)
+    doc2 = nlp(texto)
+    for token in doc2:
+        if token.text in curso_keywords:
+            index = curso_keywords.index(token.text)
+            id = id_curso[index]
+            curso.append(id)
     return curso
 
 
-def palabra_nota(texto):
-    texto = texto.lower()
-    texto = eliminar_tildes(texto)  # Suponiendo que eliminar_tildes(texto) está definida
+def palabra_nota(texto): # Suponiendo que eliminar_tildes(texto) está definida
     apla_keywords = ["calificacion","nota","calificaciones","notas"]
-    for palabra_clave in apla_keywords:
-        print(palabra_clave)
-        if palabra_clave in texto:
-            print(palabra_clave)
+    doc2 = nlp(texto)
+    for palabra_clave in doc2:
+        if palabra_clave.text in apla_keywords:
             return "si"
     return "no"
 
@@ -410,12 +375,23 @@ def obtener_ano_de_fecha(fecha):
     # Reordenar los componentes para el formato deseado (año, mes, día)
     return partes[0]
 
+
 def obtener_areas_id(texto):
-    texto = texto.lower()
-    areas = ['tecnologia','técnologia',"Tecnologia","salud","Salud","social","sociales"]
-    id_areas = [1,1,1,2,2,3,3]
+    # Definir áreas y sus IDs correspondientes
+    areas = ['tecnologia', 'técnologia', "tecnologia", "salud", "salud", "social", "sociales"]
+    id_areas = [1, 1, 1, 2, 2, 3, 3]
+    # Cargar el modelo de spaCy (asegúrate de tenerlo instalado y cargado adecuadamente)
+    nlp = spacy.load("es_core_news_sm")
+    # Procesar el texto con el modelo de spaCy
+    doc = nlp(texto)
+    # Lista para almacenar los IDs de las áreas encontradas en el texto
     new_areas = []
-    for are, id in zip(areas, id_areas):
-        if are in texto:
-            new_areas.append(id)
+    # Iterar sobre cada token en el documento procesado por spaCy
+    for token in doc:
+        # Verificar si el texto del token está presente en la lista de áreas
+        if token.text in areas:
+            # Obtener el índice correspondiente en 'areas' y agregar el ID correspondiente
+            index = areas.index(token.text)
+            new_areas.append(id_areas[index])
+
     return new_areas
