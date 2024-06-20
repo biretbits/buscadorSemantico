@@ -2,7 +2,7 @@ from flask import jsonify
 from sql import nombre_carrera_retor,grado_Estudiante,obtener_nombre,nombre_materia,obtener_datos_de_curso
 from sql import seleccionarAreas,seleccionar_carrera,seleccionarAsignaturaAreas,seleccionarAsignatura
 from sql import nombre_asignatura,nombre_carrera,consulta_Titulado,seleccionarcarrera_id,nombre_area_id
-from sql import modalidad_titulacion_id,seleccionarAsignatura_por_id,contar_total_estudiante_curso
+from sql import modalidad_titulacion_id,seleccionarAsignatura_por_id,contar_total_estudiante_curso,seleccionarCarrerasTodo
 from comprobar import formatear_fecha_solo_ano,obtener_ano_de_fecha,fechas
 from datetime import datetime
 
@@ -906,12 +906,14 @@ def  retornar_valores(datos,ress):
             for i in s_dupli:#recorremos todo los id de areas
                 index = int(i) - 1#obtenemos el id
                 index1 = int(i)
-                html += "<h5 align='center'>Area "+str(nombre_area_id(index1))+"<h5>"
+                html += "<h6 align='center'>Area "+str(nombre_area_id(index1))+"<h6>"
+                html += "<div class='row'>"
                 for anio in range(a1, a2 + 1):
-                    html += "<div class='row'>"
+
                     html += "<div class='col-lg-4' style = 'background-color:khaki;border: 1px solid black;'>"
                     html += "<div class='panel panel-default text-center'>"
                     html += "<div class='panel-heading'>"
+                    html += "Año "+str(anio)
                     html += "</div>"
                     html += "<div class='panel-body'>"
                     html +="<table class='table'>"
@@ -931,7 +933,7 @@ def  retornar_valores(datos,ress):
                     html += "</div>"
                     html += "</div>"
                     html += "</div>"
-                    html += "</div>"
+                html += "</div>"
         else:
             mensaje = "La cantidad de Estudiantes reprobados y aprobados "
             mensaje += " es lo siguiente por área y carreras"
@@ -2463,98 +2465,269 @@ def  retornar_valores(datos,ress):
 
     if accion1 == "transferencias_buscar":
         total = len(datos)
-        fecha1 = ress[0]#obtenemos las fechas que llegan
-        fecha2 = ress[1]
+        si_car_n = ress[0]
+        id_car   = ress[1]
+        si_ar = ress[2]
+        id_ar  = ress[3]
+        si_total = ress[4]
+        fecha1 = ress[5]
+        fecha2 = ress[6]
         if fecha1>fecha2:
             aux = fecha1
             fecha1 = fecha2
             fecha2 = aux
         vanio = {}
+        vcaranio={}
         a11 = int(obtener_ano_de_fecha(fecha1))
         a22 = int(obtener_ano_de_fecha(fecha2))
         a1 = int(obtener_ano_de_fecha(fecha1))
         a2 = int(obtener_ano_de_fecha(fecha2))
         for anio in range(a1, a2 + (1)):
-            vanio[anio]=0
+            vanio[anio] = [0]*3
+            vcaranio[anio] = [0]*17
         if isinstance(fecha1, str):
             fecha1 = datetime.strptime(fecha1, "%Y-%m-%d").date()
         if isinstance(fecha2, str):
             fecha2 = datetime.strptime(fecha2, "%Y-%m-%d").date()
         for row in datos:#recorremos los datos obtenidos de la base de datos
-            if row[4]>=fecha1 and row[4] <= fecha2:
+            if not isinstance(row[4], type(None)) and row[4]>=fecha1 and row[4] <= fecha2:
                 anoBD = int(obtener_ano_de_fecha(row[4].strftime("%Y-%m-%d")))
-                vanio[anoBD] +=1
-        mensaje = "La cantidad de estudiantes que realizaron transferencias a otras universidades desde el año "+str(a1)+" al año "+str(a2)+" son "+str(total)
+                vanio[anoBD][row[6]-1] +=1
+                vcaranio[anoBD][row[7]-1] +=1
+        if si_car_n == "si_car_n":#esta buscando carreras
+            s_dupli = eliminar_dobles(id_car)#si hay doble veces repetido el id lo eliminamos a 1
+            if len(s_dupli)==1:
+                mensaje = "La cantidad de estudiantes que realizaron transferencias a otras universidades desde el año "+str(a1)+" al año "+str(a2)+" son "+str(total)+" de la siguiente carrera"
+            else:
+                mensaje = "La cantidad de estudiantes que realizaron transferencias a otras universidades desde el año "+str(a1)+" al año "+str(a2)+" son "+str(total)+" de las siguientes carreras"
 
-        html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
-            # Crear el gráfico de torta
+            html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
+            for i in s_dupli:#recorremos todo los id carreras puede ser 12,1,9
+                index = int(i) - 1#obtenemos el id
+                index1 = int(i)
+                html += "<h5 align = 'center'>Carrera</h5>"
+                html += "<h5 align = 'center'>"+str(nombre_carrera_retor(index1))+"</h5>"
+                html += "<div class='row'style = 'border: 1px solid black;'>"
+                for anio in range(a1, a2 + (1)):
+                    html += "<div class='col-lg-3'>"
+                    html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                    html += "<div class='panel-heading'>"
+                    html += str(anio)
+                    html += "</div>"
+                    html += "<div class='panel-body'>"
+                    html += "Se tiene "+str(vcaranio[anio][index])+" Estudiantes transferidos"
+                    html += "</div>"
+                    html += "</div>"
+                    html += "</div>"
+                html += "</div>"
+        elif si_ar == "si_ar":
 
-            #crear para areas
-        html += "<div class='row'style = 'border: 1px solid white;background-color:black'>"
-        html += "<h6 align='center'style='color:white'>TRANSFERENCIAS POR AÑO</h6>"
-        k1 = 1
-        for anio in range(a1, a2 + (1)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
-            html += "<div class='col-lg-3'>"
-            html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
-            html += "<div class='panel-heading'>"
-            html += str(anio)
-            html += "</div>"
-            html += "<div class='panel-body'>"
-            html += "El total de transferencias del año "+str(anio)+" es de"+str(vanio[anio])+" transferencias"
-            html += "</div>"
-            html += "</div>"
-            html += "</div>"
-        html += "</div>"
-        html += "<br><br>"
+            s_dupli = eliminar_dobles(id_ar)#si hay doble veces repetido el id lo eliminamos a 1
+            if len(s_dupli)==1:
+                mensaje = "La cantidad de estudiantes que realizaron transferencias a otras universidades desde el año "+str(a1)+" al año "+str(a2)+" son "+str(total)+" de la siguiente area"
+            else:
+                mensaje = "La cantidad de estudiantes que realizaron transferencias a otras universidades desde el año "+str(a1)+" al año "+str(a2)+" son "+str(total)+" de las siguientes areas"
+            html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
+            print(s_dupli,"vector ")
+            for i in s_dupli:#recorremos todo los id de areas
+                index = int(i) - 1#obtenemos el id
+                index1 = int(i)
+                #seleccionamos las asingturas con el cod de area
+                html += "<h6 align='center'>Area "+nombre_area_id(index1)+"</h6>"
+                html += "<div class='row'style = 'border: 1px solid black;'>"
+                for anio in range(a1, a2 + (1)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
+                    html += "<div class='col-lg-3'>"
+                    html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                    html += "<div class='panel-heading'>"
+                    html += str(anio)
+                    html += "</div>"
+                    html += "<div class='panel-body'>"
+                    html += "Se tiene "+str(vanio[anio][index])+" Estudiantes transfereridos"
+                    html += "</div>"
+                    html += "</div>"
+                    html += "</div>"
+                html += "</div>"
+        else:
+            mensaje = "La cantidad de estudiantes que realizaron transferencias a otras universidades desde el año "+str(a1)+" al año "+str(a2)+" son "+str(total)
+            html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
+                # Crear el gráfico de torta
+
+                #crear para areas
+
+            html += "<h6 align='center'>TRANSFERENCIAS POR AÑO</h6>"
+            k1 = 1
+            areas = seleccionarAreas()
+
+            for ar in areas:
+                html += "<h6 align='center'>Area "+nombre_area_id(ar[0])+"</h6>"
+                html += "<div class='row'style = 'border: 1px solid black;'>"
+                for anio in range(a1, a2 + (1)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
+                    html += "<div class='col-lg-3'>"
+                    html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                    html += "<div class='panel-heading'>"
+                    html += str(anio)
+                    html += "</div>"
+                    html += "<div class='panel-body'>"
+                    html += "Se tiene "+str(vanio[anio][ar[0]-1])+" Estudiantes transferidos"
+                    html += "</div>"
+                    html += "</div>"
+                    html += "</div>"
+                html += "</div>"
+                html += "<br><br>"
+            html += "<h6 align='center'>CARRERAS</h6>"
+            carreras = seleccionarCarrerasTodo()
+            for car in carreras:
+                html += "<h6 align='center'>Carrera "+nombre_carrera_retor(car[0])+"</h6>"
+                html += "<div class='row'style = 'border: 1px solid black;'>"
+                for anio in range(a1, a2 + (1)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
+                    html += "<div class='col-lg-3'>"
+                    html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                    html += "<div class='panel-heading'>"
+                    html += str(anio)
+                    html += "</div>"
+                    html += "<div class='panel-body'>"
+                    html += "Se tiene "+str(vcaranio[anio][car[0]-1])+" Estudiantes transferidos"
+                    html += "</div>"
+                    html += "</div>"
+                    html += "</div>"
+                html += "</div>"
+                html += "<br><br>"
     if accion1 == "concepto_transferencia":
         total = len(datos)
-        fecha1 = ress[0]#obtenemos las fechas que llegan
-        fecha2 = ress[1]
+        si_car_n = ress[0]
+        id_car   = ress[1]
+        si_ar = ress[2]
+        id_ar  = ress[3]
+        si_total = ress[4]
+        fecha1 = ress[5]
+        fecha2 = ress[6]
         if fecha1>fecha2:
             aux = fecha1
             fecha1 = fecha2
             fecha2 = aux
         vanio = {}
+        vcaranio = {}
         a11 = int(obtener_ano_de_fecha(fecha1))
         a22 = int(obtener_ano_de_fecha(fecha2))
         a1 = int(obtener_ano_de_fecha(fecha1))
         a2 = int(obtener_ano_de_fecha(fecha2))
         for anio in range(a1, a2 + (1)):
-            vanio[anio]=0
+            vanio[anio]=[0]*3
+            vcaranio[anio]=[0]*17
         if isinstance(fecha1, str):
             fecha1 = datetime.strptime(fecha1, "%Y-%m-%d").date()
         if isinstance(fecha2, str):
             fecha2 = datetime.strptime(fecha2, "%Y-%m-%d").date()
         for row in datos:#recorremos los datos obtenidos de la base de datos
-            if row[4]>=fecha1 and row[4] <= fecha2:
+            if not isinstance(row[4], type(None)) and row[4]>=fecha1 and row[4] <= fecha2:
                 anoBD = int(obtener_ano_de_fecha(row[4].strftime("%Y-%m-%d")))
-                vanio[anoBD] +=1
-        mensaje = "Los estudiante transferidos de otras Universidades desde el año "+str(a1)+" al año "+str(a2)+" son "+str(total)
+                vanio[anoBD][row[14]-1] +=1
+                vcaranio[anoBD][row[12]-1] +=1
+        if si_car_n == "si_car_n":#esta buscando carreras
+            s_dupli = eliminar_dobles(id_car)#si hay doble veces repetido el id lo eliminamos a 1
+            if len(s_dupli)==1:
+                mensaje = "Los estudiantes transferidos de otras universidades desde el año "+str(a1)+" al año "+str(a2)+" son "+str(total)+" en total de la siguiente carrera"
+            else:
+                mensaje = "Los estudiantes transferidos de otras universidades desde el año "+str(a1)+" al año "+str(a2)+" son "+str(total)+" en total de las siguientes carreras"
 
-        html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
-        # Crear el gráfico de torta
+            html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
+            for i in s_dupli:#recorremos todo los id carreras puede ser 12,1,9
+                index = int(i) - 1#obtenemos el id
+                index1 = int(i)
+                html += "<h5 align = 'center'>Carrera</h5>"
+                html += "<h5 align = 'center'>"+str(nombre_carrera_retor(index1))+"</h5>"
+                html += "<div class='row'style = 'border: 1px solid black;'>"
+                for anio in range(a1, a2 + (1)):
+                    html += "<div class='col-lg-3'>"
+                    html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                    html += "<div class='panel-heading'>"
+                    html += str(anio)
+                    html += "</div>"
+                    html += "<div class='panel-body'>"
+                    html += "Los transferidos fueron "+str(vcaranio[anio][index])+" Estudiantes"
+                    html += "</div>"
+                    html += "</div>"
+                    html += "</div>"
+                html += "</div>"
+        elif si_ar == "si_ar":
 
-        #crear para areas
-        html += "<div class='row'style = 'border: 1px solid white;background-color:black'>"
-        html += "<h6 align='center'style='color:white'>TRANSFERENCIAS POR AÑO</h6>"
-        k1 = 1
-        for anio in range(a1, a2 + (1)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
-            html += "<div class='col-lg-3'>"
-            html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
-            html += "<div class='panel-heading'>"
-            html += str(anio)
-            html += "</div>"
-            html += "<div class='panel-body'>"
-            html += "Transferidos el "+str(anio)+" es de "+str(vanio[anio])+" Estudiantes"
-            html += "</div>"
-            html += "</div>"
-            html += "</div>"
-        html += "</div>"
-        html += "<br><br>"
+            s_dupli = eliminar_dobles(id_ar)#si hay doble veces repetido el id lo eliminamos a 1
+            if len(s_dupli)==1:
+                mensaje = "Los estudiantes transferidos de otras universidades desde el año "+str(a1)+" al año "+str(a2)+" son "+str(total)+" en total en la siguiente area"
+            else:
+                mensaje = "Los estudiantes transferidos de otras universidades desde el año "+str(a1)+" al año "+str(a2)+" son "+str(total)+" en total de las siguientes areas"
+            html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
+            print(s_dupli,"vector ")
+            for i in s_dupli:#recorremos todo los id de areas
+                index = int(i) - 1#obtenemos el id
+                index1 = int(i)
+                #seleccionamos las asingturas con el cod de area
+                html += "<h6 align='center'>Area "+nombre_area_id(index1)+"</h6>"
+                html += "<div class='row'style = 'border: 1px solid black;'>"
+                for anio in range(a1, a2 + (1)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
+                    html += "<div class='col-lg-3'>"
+                    html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                    html += "<div class='panel-heading'>"
+                    html += str(anio)
+                    html += "</div>"
+                    html += "<div class='panel-body'>"
+                    html += "Los transferidos fueron "+str(vanio[anio][index])+" Estudiantes"
+                    html += "</div>"
+                    html += "</div>"
+                    html += "</div>"
+                html += "</div>"
+        else:
+            mensaje = "Los estudiante transferidos de otras Universidades desde el año "+str(a1)+" al año "+str(a2)
+            html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
+            # Crear el gráfico de torta
+            #crear para areas
+            html += "<h6 align='center'>TRANSFERENCIAS POR AÑO</h6>"
+            html += "<h6 align='center'>AREAS</h6>"
+            k1 = 1
+            areas = seleccionarAreas()
+            for ar in areas:#recorremos todo los id de areas
+                #seleccionamos las asingturas con el cod de area
+                html += "<h6 align='center'>Area "+nombre_area_id(ar[0])+"</h6>"
+                html += "<div class='row'style = 'border: 1px solid black;'>"
+                for anio in range(a1, a2 + (1)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
+                    html += "<div class='col-lg-3'>"
+                    html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                    html += "<div class='panel-heading'>"
+                    html += str(anio)
+                    html += "</div>"
+                    html += "<div class='panel-body'>"
+                    html += "Los transferidos fueron "+str(vanio[anio][ar[0]-1])+" Estudiantes"
+                    html += "</div>"
+                    html += "</div>"
+                    html += "</div>"
+                html += "</div>"
+            carreras = seleccionarCarrerasTodo()
+            html += "<h6 align='center'>CARRERAS</h6>"
+            for car in carreras:
+                html += "<h6 align='center'>Carrera "+nombre_carrera_retor(car[0])+"</h6>"
+                html += "<div class='row'style = 'border: 1px solid black;'>"
+                for anio in range(a1, a2 + (1)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
+                    html += "<div class='col-lg-3'>"
+                    html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                    html += "<div class='panel-heading'>"
+                    html += str(anio)
+                    html += "</div>"
+                    html += "<div class='panel-body'>"
+                    html += "Los transferidos fueron "+str(vcaranio[anio][car[0]-1])+" Estudiantes"
+                    html += "</div>"
+                    html += "</div>"
+                    html += "</div>"
+                html += "</div>"
+            html += "<br><br>"
     if accion1 == "mayor_inscritos":
         total = len(datos)
-        fecha1 = ress[0]#obtenemos las fechas que llegan
-        fecha2 = ress[1]
+        si_car_n = ress[0]
+        id_car   = ress[1]
+        si_ar = ress[2]
+        id_ar  = ress[3]
+        si_total = ress[4]
+        fecha1 = ress[5]
+        fecha2 = ress[6]
         if fecha1>fecha2:
             aux = fecha1
             fecha1 = fecha2
@@ -2566,205 +2739,313 @@ def  retornar_valores(datos,ress):
         a2 = int(obtener_ano_de_fecha(fecha2))
         carreras = {}
         for anio in range(a1, a2 + (1)):
-            vanio[anio]=[0,0,0]
-        for anio in range(a1, a2 + (1)):
-            carreras[anio] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+            vanio[anio]=[0]*3
+            carreras[anio] = [0]*17
 
         if isinstance(fecha1, str):
             fecha1 = datetime.strptime(fecha1, "%Y-%m-%d").date()
         if isinstance(fecha2, str):
             fecha2 = datetime.strptime(fecha2, "%Y-%m-%d").date()
         for row in datos:#recorremos los datos obtenidos de la base de datos
-            if row[16]>=fecha1 and row[16] <= fecha2:
+            if not isinstance(row[16], type(None)) and row[16]>=fecha1 and row[16] <= fecha2:
                 if row[14] == 1:
                     anoBD = int(obtener_ano_de_fecha(row[16].strftime("%Y-%m-%d")))
                     vanio[anoBD][row[12]-1]+=1#en cada año y area sumamos mas 1
                     carreras[anoBD][row[13]-1]+=1
+        if si_car_n == "si_car_n":#esta buscando carreras
+            s_dupli = eliminar_dobles(id_car)#si hay doble veces repetido el id lo eliminamos a 1
+            if len(s_dupli)==1:
+                mensaje = "La información sobre cuantos inscritos tiene la carrera se mostrara en los siguientes cuadros"
+            else:
+                mensaje = "La información sobre cuantos inscritos tiene la carreras se mostrara en los siguientes cuadros"
 
-        mensaje = "La información sobre en que areas y carreras existe mas inscritos lo detallamos en los siguientes cuadros"
-        html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
-        html += "<button onclick='generar()'>Generar</button>"
-        html += "<script>"
-        html += "function generar(){"
-        html +="const formulario = document.createElement('form');"
-        html +="formulario.style.display = 'none';"
-        html +="formulario.method = 'POST';"
-        html +="formulario.action = '/generar_reporte';"
-        html +="const campoDatos = document.createElement('input');"
-        html +="campoDatos.type = 'hidden';"
-        html +="campoDatos.name = 'datos';"
-        html +="campoDatos.value = "+str(ress)+";"
-        html +="formulario.appendChild(campoDatos);"
+            html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
+            for i in s_dupli:#recorremos todo los id carreras puede ser 12,1,9
+                index = int(i) - 1#obtenemos el id
+                index1 = int(i)
+                html += "<h5 align = 'center'>Carrera</h5>"
+                html += "<h5 align = 'center'>"+str(nombre_carrera_retor(index1))+"</h5>"
+                html += "<div class = 'row'>"
+                for anio in range(a1, a2 + (1)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
+                    html += "<div class='col-lg-4'>"
+                    html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                    html += "<div class='panel-heading'>"
+                    html += "Año "+str(anio)
+                    html += "</div>"
+                    html += "<div class='panel-body'>"
+                    html += "Los inscritos fueron "+str(carreras[anio][index])+" Estudiantes"
+                    html += "</div>"
+                    html += "</div>"
+                    html += "</div>"
+                html += "</div>"
+        elif si_ar == "si_ar":
 
-        html +="document.body.appendChild(formulario);"
-        html +="formulario.submit();"
-        html += "}"
-        html += "</script>"
+            s_dupli = eliminar_dobles(id_ar)#si hay doble veces repetido el id lo eliminamos a 1
+            if len(s_dupli)==1:
+                mensaje = "La información sobre cuantos inscritos tiene el area se mostrara en los siguientes cuadros"
+            else:
+                mensaje = "La información sobre cuantos inscritos tiene las areas se mostrara en los siguientes cuadros"
 
+            html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
+            print(s_dupli,"vector ")
+            for i in s_dupli:#recorremos todo los id de areas
+                index = int(i) - 1#obtenemos el id
+                index1 = int(i)
+                #seleccionamos las asingturas con el cod de area
+                html += "<h6 align='center'>Area "+nombre_area_id(index1)+"</h6>"
+                html += "<div class='row'style = 'border: 1px solid black;'>"
+                html += "<div class = 'row'>"
+                for anio in range(a1, a2 + (1)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
+                    html += "<div class='col-lg-4'>"
+                    html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                    html += "<div class='panel-heading'>"
+                    html += "Año "+str(anio)
+                    html += "</div>"
+                    html += "<div class='panel-body'>"
+                    html += "Los inscritos fueron "+str(vanio[anio][index])+" Estudiantes"
+                    html += "</div>"
+                    html += "</div>"
+                    html += "</div>"
+                html += "</div>"
+        else:
 
-        #crear para areas
-        html += "<div class='row'style = 'border: 1px solid white;background-color:black'>"
-        html += "<h6 align='center'style='color:white'>Areas</h6>"
-        k1 = 1
-        areas ={0:"Técnologia",1:"Salud",2:"Sociales"}
-        for anio in range(a1, a2 + (1)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
-            html += "<h6 align='center'style='color:white'>"+str(anio)+"</h6>"
-            for ar in range(3):
+            mensaje = "La información cuantos inscritos existen por areas y carreras lo detallamos en los siguientes cuadros"
+            html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
+            html += "<button onclick='generar()'>Generar</button>"
+            html += "<script>"
+            html += "function generar(){"
+            html +="const formulario = document.createElement('form');"
+            html +="formulario.style.display = 'none';"
+            html +="formulario.method = 'POST';"
+            html +="formulario.action = '/generar_reporte';"
+            html +="const campoDatos = document.createElement('input');"
+            html +="campoDatos.type = 'hidden';"
+            html +="campoDatos.name = 'datos';"
+            html +="campoDatos.value = "+str(ress)+";"
+            html +="formulario.appendChild(campoDatos);"
+            html +="document.body.appendChild(formulario);"
+            html +="formulario.submit();"
+            html += "}"
+            html += "</script>"
+            #crear ara areas
+            html += "<h6 align='center'>Areas</h6>"
+            k1 = 1
+            areas = seleccionarAreas()
+            for ar in areas:#recorremos todo los id de areas
+                #seleccionamos las asingturas con el cod de area
+                html += "<h6 align='center'>Area "+nombre_area_id(ar[0])+"</h6>"
+                html += "<div class='row'style = 'border: 1px solid black;'>"
+                html += "<div class = 'row'>"
+                for anio in range(a1, a2 + (1)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
+                    html += "<div class='col-lg-4'>"
+                    html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                    html += "<div class='panel-heading'>"
+                    html += "Año "+str(anio)
+                    html += "</div>"
+                    html += "<div class='panel-body'>"
+                    html += "Los inscritos fueron "+str(vanio[anio][ar[0]-1])+" Estudiantes"
+                    html += "</div>"
+                    html += "</div>"
+                    html += "</div>"
+                html += "</div>"
+            html += "<br><br>"
+            carreras1 = seleccionarCarrerasTodo()
+            html += "<h6 align='center'>Carreras</h6>"
+            for car in carreras1:#recorremos todo los id carreras puede ser 12,1,9
+                html += "<h6 align = 'center'> Carrera "+str(nombre_carrera_retor(car[0]))+"</h6>"
+                html += "<div class = 'row'>"
+                for anio in range(a1, a2 + (1)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
+                    html += "<div class='col-lg-4'>"
+                    html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                    html += "<div class='panel-heading'>"
+                    html += "Año "+str(anio)
+                    html += "</div>"
+                    html += "<div class='panel-body'>"
+                    html += "Los inscritos fueron "+str(carreras[anio][car[0]-1])+" Estudiantes"
+                    html += "</div>"
+                    html += "</div>"
+                    html += "</div>"
+                html += "</div>"
+            html += "<br><br>"
+    if accion1 == "modalidad_titulacion":
+        si_car_n = ress[0]
+        id_car   = ress[1]
+        si_ar = ress[2]
+        id_ar  = ress[3]
+        si_total = ress[4]
+        vareas = ['']*3
+        vcarreras = ['']*17
+        for row in datos:
+            if row[2] != 2 and row[3] == 1:
+                vcarreras[row[3]-1]=vcarreras[row[3]-1]+"|"+str(row[1])
+            elif row[2] != 2:
+                vcarreras[row[3]-1]=vcarreras[row[3]-1]+"|"+str(row[1])
+
+        if si_car_n == "si_car_n":#esta buscando carreras
+            s_dupli = eliminar_dobles(id_car)#si hay doble veces repetido el id lo eliminamos a 1
+            if len(s_dupli)==1:
+                mensaje = "La modalidad de titulación de la carrera es"
+            else:
+                mensaje = "Las modalidades de titulación de las siguientes carreras son"
+            html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
+            html += "<div class='row'>"
+            for i in s_dupli:#recorremos todo los id carreras puede ser 12,1,9
+                index = int(i) - 1#obtenemos el id
+                index1 = int(i)
                 html += "<div class='col-lg-4'>"
                 html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
                 html += "<div class='panel-heading'>"
-                html += areas[ar]
+                html += "<h5 align = 'center'>Carrera "+str(nombre_carrera_retor(index1))+"</h5>"
                 html += "</div>"
                 html += "<div class='panel-body'>"
-                html += "Los inscritos del area fueron "+str(vanio[anio][ar])+" Estudiantes"
-                html += "</div>"
-                html += "</div>"
-                html += "</div>"
-        html += "</div>"
-        html += "<br><br>"
-        html += "<div class='row'style = 'border: 1px solid white;background-color:black'>"
-        html += "<h6 align='center'style='color:white'>Carreras</h6>"
-
-        for anio in range(a1, a2 + (1)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
-            html += "<h6 align='center'style='color:white'>"+str(anio)+"</h6>"
-            for car in range(17):
-                html += "<div class='col-lg-4'>"
-                html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:"+colores1[car]+"'>"
-                html += "<div class='panel-heading'>"
-                html += nombre_carrera_retor(car+1)
-                html += "</div>"
-                html += "<div class='panel-body'>"
-                html += "Los inscritos en la carrera fueron "+str(carreras[anio][car])+" Estudiantes"
-                html += "</div>"
-                html += "</div>"
-                html += "</div>"
-        html += "</div>"
-        html += "<br><br>"
-    if accion1 == "modalidad_titulacion":
-        carrera_hay = ress[0]
-        mensaje = ""
-        if carrera_hay == "si_car":
-            mensaje+="<h6>Las modalidades de titulación de la carrera o carreras son</h6>"
-        else:
-            mensaje+="<h6>MODALIDADES DE TITULACIÓN</h6>"
-        html+=mensaje
-        html += "<button onclick='generar()' class='btn btn-warning'>Reporte</button><br><br>"
-        html += "<script>"
-        html += "function generar(){"
-        html +="const formulario = document.createElement('form');"
-        html +="formulario.style.display = 'none';"
-        html +="formulario.method = 'POST';"
-        html +="formulario.action = '/generar_reporte';"
-        html +="const campoDatos = document.createElement('input');"
-        html +="campoDatos.type = 'hidden';"
-        html +="campoDatos.name = 'datos';"
-        html +="campoDatos.value = "+str(ress)+";"
-        html +="formulario.appendChild(campoDatos);"
-
-        html +="document.body.appendChild(formulario);"
-        html +="formulario.submit();"
-        html += "}"
-        html += "</script>"
-        html+="<div class='row'>"
-        for i in range(17):
-            html += "<div class='col-lg-4'>"
-            html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
-            html += "<div class='panel-heading'>"
-            html += nombre_carrera_retor(i+1)
-            html += "</div>"
-            html += "<div class='panel-body'>"
-            html+= "<table class='table'>"
-            html+= "<thead>"
-            html+="<tr>"
-            html+="<td>Nro</td>"
-            html+="<td>Titulación</td>"
-            html+="</tr>"
-            html+="</thead>"
-            html+="<tbody>"
-            k = 1
-            for row in datos:
+                html+= "<table class='table'>"
+                html+= "<thead>"
                 html+="<tr>"
-
-                if (i+1) == row[3] and row[2] != 2 and row[3] == 1:
-                    print(row[3]," esto es m ",(i+1))
-                    html+="<td>"+str(k)+"</td>"
-                    k=k+1
-                    html+="<td>"+row[1]+"</td>"
-                elif (i+1) ==row[3] and row[3] == 2:
-                    html+="<td>"+str(k)+"</td>"
-                    k=k+1
-                    html+="<td>"+row[1]+"</td>"
-                elif (i+1) ==row[3] and row[3] == 3:
-                    html+="<td>"+str(k)+"</td>"
-                    k=k+1
-                    html+="<td>"+row[1]+"</td>"
-                elif (i+1) ==row[3] and row[3] == 4:
-                    html+="<td>"+str(k)+"</td>"
-                    k=k+1
-                    html+="<td>"+row[1]+"</td>"
-                elif (i+1) ==row[3]and row[3] == 5:
-                    html+="<td>"+str(k)+"</td>"
-                    k=k+1
-                    html+="<td>"+row[1]+"</td>"
-                elif (i+1) ==row[3]and row[3] == 6:
-                    html+="<td>"+str(k)+"</td>"
-                    k=k+1
-                    html+="<td>"+row[1]+"</td>"
-                elif (i+1) ==row[3]and row[3] == 7:
-                    html+="<td>"+str(k)+"</td>"
-                    k=k+1
-                    html+="<td>"+row[1]+"</td>"
-                elif (i+1) ==row[3]and row[3] == 8:
-                    html+="<td>"+str(k)+"</td>"
-                    k=k+1
-                    html+="<td>"+row[1]+"</td>"
-                if (i+1) ==row[3]and row[3] == 9:
-                    html+="<td>"+str(k)+"</td>"
-                    k=k+1
-                    html+="<td>"+row[1]+"</td>"
-                elif (i+1) == row[3]and row[3] == 10:
-                    html+="<td>"+str(k)+"</td>"
-                    k=k+1
-                    html+="<td>"+row[1]+"</td>"
-                elif (i+1) == row[3]and row[3] == 11:
-                    html+="<td>"+str(k)+"</td>"
-                    k=k+1
-                    html+="<td>"+row[1]+"</td>"
-                if (i+1) == row[3]and row[3] == 12:
-                    html+="<td>"+str(k)+"</td>"
-                    k=k+1
-                    html+="<td>"+row[1]+"</td>"
-                elif (i+1) == row[3]and row[3] == 13:
-                    html+="<td>"+str(k)+"</td>"
-                    k=k+1
-                    html+="<td>"+row[1]+"</td>"
-                elif (i+1) == row[3]and row[3] == 14:
-                    html+="<td>"+str(k)+"</td>"
-                    k=k+1
-                    html+="<td>"+row[1]+"</td>"
-                elif (i+1) == row[3]and row[3] == 15:
-                    html+="<td>"+str(k)+"</td>"
-                    k=k+1
-                    html+="<td>"+row[1]+"</td>"
-                elif (i+1) == row[3]and row[3] == 16:
-                    html+="<td>"+str(k)+"</td>"
-                    k=k+1
-                    html+="<td>"+row[1]+"</td>"
-                elif (i+1) == row[3]and row[3] == 17:
-                    html+="<td>"+str(k)+"</td>"
-                    k=k+1
-                    html+="<td>"+row[1]+"</td>"
+                html+="<td>Nro</td>"
+                html+="<td>Titulación</td>"
                 html+="</tr>"
-            html+="</tbody>"
-            html+= "</table>"
-            html += "</div>"
-            html += "</div>"
-            html += "</div>"
-        html+="</div>"
+                html+="</thead>"
+                html+="<tbody>"
+                nombre_modalidad = separar_guiones(vcarreras[index])
+                k = 1
+                if not nombre_modalidad:
+                    html += "<tr>"
+                    html += "<td colspan='2' style='text-align:center;'>No se encontró información</td>"
+                    html += "</tr>"
+                else:
+                    for name in nombre_modalidad:
+                        html += "<tr>"
+                        html+="<td>"+str(k)+"</td>"
+                        k=k+1
+                        html+="<td>"+name+"</td>"
+                        html+="</tr>"
+                html+="</tbody>"
+                html+= "</table>"
+                html += "</div>"
+                html += "</div>"
+                html += "</div>"
+            html+="</div>"
+
+        elif si_ar == "si_ar":
+
+            s_dupli = eliminar_dobles(id_ar)#si hay doble veces repetido el id lo eliminamos a 1
+            if len(s_dupli)==1:
+                mensaje = "La modalidad de titulación del area son"
+            else:
+                mensaje = "Las modalidades de titulación de las siguientes areas son"
+            html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
+            print(s_dupli,"vector ")
+            for i in s_dupli:#recorremos todo los id de areas
+                index = int(i) - 1#obtenemos el id
+                index1 = int(i)
+                #seleccionamos las asingturas con el cod de area
+                html += "<h6 align='center'>Area "+nombre_area_id(index1)+"</h6>"
+                carreras = seleccionarcarrera_id(index1)
+                html += "<div class='row'>"
+                for car in carreras:
+                    html += "<div class='col-lg-4'>"
+                    html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                    html += "<div class='panel-heading'>"
+                    html += "<h6 align = 'center'>Carrera "+str(nombre_carrera_retor(car[0]))+"</h6>"
+                    html += "</div>"
+                    html += "<div class='panel-body'>"
+                    html+= "<table class='table'>"
+                    html+= "<thead>"
+                    html+="<tr>"
+                    html+="<td>Nro</td>"
+                    html+="<td>Titulación</td>"
+                    html+="</tr>"
+                    html+="</thead>"
+                    html+="<tbody>"
+                    nombre_modalidad = separar_guiones(vcarreras[car[0]-1])
+                    k = 1
+                    if not nombre_modalidad:
+                        html += "<tr>"
+                        html += "<td colspan='2' style='text-align:center;'>No se encontró información</td>"
+                        html += "</tr>"
+                    else:
+                        for name in nombre_modalidad:
+                            html += "<tr>"
+                            html+="<td>"+str(k)+"</td>"
+                            k=k+1
+                            html+="<td>"+name+"</td>"
+                            html+="</tr>"
+                    html+="</tbody>"
+                    html+= "</table>"
+                    html += "</div>"
+                    html += "</div>"
+                    html += "</div>"
+                html+="</div>"
+        else:
+            mensaje = ''
+            mensaje+="<h6>MODALIDADES DE TITULACIÓN</h6>"
+            html+=mensaje
+            html += "<button onclick='generar()' class='btn btn-warning'>Reporte</button><br><br>"
+            html += "<script>"
+            html += "function generar(){"
+            html +="const formulario = document.createElement('form');"
+            html +="formulario.style.display = 'none';"
+            html +="formulario.method = 'POST';"
+            html +="formulario.action = '/generar_reporte';"
+            html +="const campoDatos = document.createElement('input');"
+            html +="campoDatos.type = 'hidden';"
+            html +="campoDatos.name = 'datos';"
+            html +="campoDatos.value = "+str(ress)+";"
+            html +="formulario.appendChild(campoDatos);"
+
+            html +="document.body.appendChild(formulario);"
+            html +="formulario.submit();"
+            html += "}"
+            html += "</script>"
+            areas = seleccionarAreas()
+            for ar in areas:#recorremos todo los id de areas
+                html += "<h6 align='center'>Area "+nombre_area_id(ar[0])+"</h6>"
+                carreras = seleccionarcarrera_id(ar[0])
+                html+="<div class='row'>"
+                for car in carreras:
+                    html += "<div class='col-lg-4'>"
+                    html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                    html += "<div class='panel-heading'>"
+                    html += "<h6 align='center'>Carrera "+nombre_carrera_retor(car[0])+"</h6>"
+                    html += "</div>"
+                    html += "<div class='panel-body'>"
+                    html+= "<table class='table'>"
+                    html+= "<thead>"
+                    html+="<tr>"
+                    html+="<td>Nro</td>"
+                    html+="<td>Titulación</td>"
+                    html+="</tr>"
+                    html+="</thead>"
+                    html+="<tbody>"
+                    k = 1
+                    nombre_modalidad = separar_guiones(vcarreras[car[0]-1])
+                    print("modalida de titulacion  ",nombre_modalidad)
+                    if not nombre_modalidad:
+                        html += "<tr>"
+                        html += "<td colspan='2' style='text-align:center;'>No se encontró información</td>"
+                        html += "</tr>"
+                    else:
+                        for name in nombre_modalidad:
+                            html += "<tr>"
+                            html+="<td>"+str(k)+"</td>"
+                            k=k+1
+                            html+="<td>"+name+"</td>"
+                            html+="</tr>"
+                    html+="</tbody>"
+                    html+= "</table>"
+                    html += "</div>"
+                    html += "</div>"
+                    html += "</div>"
+                html+="</div><br>"
     if accion1 == "total_estudiante_desercion":
         total = len(datos)
-        fecha1 = ress[0]#obtenemos las fechas que llegan
-        fecha2 = ress[1]
+        si_car_n = ress[0]
+        id_car   = ress[1]
+        si_ar = ress[2]
+        id_ar  = ress[3]
+        si_total = ress[4]
+        fecha1 = ress[5]
+        fecha2 = ress[6]
         if fecha1>fecha2:
             aux = fecha1
             fecha1 = fecha2
@@ -2788,7 +3069,7 @@ def  retornar_valores(datos,ress):
         if isinstance(fecha2, str):
             fecha2 = datetime.strptime(fecha2, "%Y-%m-%d").date()
         for row in datos:#recorremos los datos obtenidos de la base de datos
-            if row[8]>=fecha1 and row[8] <= fecha2:
+            if not isinstance(row[8], type(None)) and row[8]>=fecha1 and row[8] <= fecha2:
                 if row[2] == "si":
                     anoBD = int(obtener_ano_de_fecha(row[8].strftime("%Y-%m-%d")))
                     vareas[anoBD][row[7]-1]+=1#en cada año y area sumamos mas 1
@@ -2797,51 +3078,115 @@ def  retornar_valores(datos,ress):
                     anoBD = int(obtener_ano_de_fecha(row[8].strftime("%Y-%m-%d")))
                     carrerasno[anoBD][row[5]-1]+=1
                     vareasno[anoBD][row[5]-1]+=1
-        mensaje = "La información sobre desercion estudiantil en areas y carreras es lo siguiente"
-        html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
-        #crear para areas
+        if si_car_n == "si_car_n":#esta buscando carreras
+            s_dupli = eliminar_dobles(id_car)#si hay doble veces repetido el id lo eliminamos a 1
+            if len(s_dupli)==1:
+                mensaje = "La información sobre desercion estudiantil de la carrera es"
+            else:
+                mensaje = "La información sobre desercion estudiantil de las carreras es"
 
-        html += "<h6 align='center'style='color:black'>Areas</h6>"
-        k1 = 1
-        html += "<div class='row'>"
-        areas ={0:"Técnologia",1:"Salud",2:"Sociales"}
-        for anio in range(a1, a2 + (1)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
-            html += "<h6 align='center'style='color:black'>"+str(anio)+"</h6>"
-            for ar in range(3):
-                html += "<div class='col-lg-4'>"
-                html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
-                html += "<div class='panel-heading'>"
-                html += areas[ar]
+            html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
+            for i in s_dupli:#recorremos todo los id carreras puede ser 12,1,9
+                index = int(i) - 1#obtenemos el id
+                index1 = int(i)
+                html += "<h5 align = 'center'>Carrera</h5>"
+                html += "<h5 align = 'center'>"+str(nombre_carrera_retor(index1))+"</h5>"
+                html += "<div class = 'row'>"
+                for anio in range(a1, a2 + (1)):
+                    html += "<div class='col-lg-4'>"
+                    html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                    html += "<div class='panel-heading'>"
+                    html += str(anio)
+                    html += "</div>"
+                    html += "<div class='panel-body'>"
+                    html += "La deserción estudiantil es de "+str(carreras[anio][index])+" Estudiantes"
+                    html += "</div>"
+                    html += "</div>"
+                    html += "</div>"
+                html+="</div>"
+        elif si_ar == "si_ar":
+            s_dupli = eliminar_dobles(id_ar)#si hay doble veces repetido el id lo eliminamos a 1
+            if len(s_dupli)==1:
+                mensaje = "La información sobre desercion estudiantil del area es"
+            else:
+                mensaje = "La información sobre desercion estudiantil de los areas son"
+
+            html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
+
+            for i in s_dupli:#recorremos todo los id de areas
+                index = int(i) - 1#obtenemos el id
+                index1 = int(i)
+                #seleccionamos las asingturas con el cod de area
+                html += "<h6 align='center'>Area "+nombre_area_id(index1)+"</h6>"
+                html += "<div class = 'row'>"
+                for anio in range(a1, a2 + (1)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
+                    html += "<div class='col-lg-4'>"
+                    html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                    html += "<div class='panel-heading'>"
+                    html += "<h6 align='center'style='color:black'>"+str(anio)+"</h6>"
+                    html += "</div>"
+                    html += "<div class='panel-body'>"
+                    html += "La deserción estudiantil es de "+str(vareas[anio][index])+" Estudiantes"
+                    html += "</div>"
+                    html += "</div>"
+                    html += "</div>"
                 html += "</div>"
-                html += "<div class='panel-body'>"
-                html += "La deserción estudiantil es de "+str(vareas[anio][ar])+" Estudiantes"
-                html += "</div>"
-                html += "</div>"
+        else:
+            mensaje = "La información sobre desercion estudiantil en areas y carreras es lo siguiente"
+            html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
+            #crear para areas
+
+            html += "<h6 align='center'style='color:black'>Areas</h6>"
+            k1 = 1
+
+            areas = seleccionarAreas()
+            for are in areas:#recorremos todo los id de areas
+                #seleccionamos las asingturas con el cod de area
+                html += "<h6 align='center'>Area "+nombre_area_id(are[0])+"</h6>"
+                html += "<div class = 'row'>"
+                for anio in range(a1, a2 + (1)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
+                    html += "<div class='col-lg-4'>"
+                    html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                    html += "<div class='panel-heading'>"
+                    html += "<h6 align='center'style='color:black'>"+str(anio)+"</h6>"
+                    html += "</div>"
+                    html += "<div class='panel-body'>"
+                    html += "La deserción estudiantil es de "+str(vareas[anio][are[0]-1])+" Estudiantes"
+                    html += "</div>"
+                    html += "</div>"
+                    html += "</div>"
                 html += "</div>"
 
-        html += "</div>"
-        html += "<h6 align='center'style='color:black'>Carreras</h6>"
-        for i in range(17):
-            k = 1
-            html+="<div class='row'>"
-            html += "<h6 align='center'style='color:black'>"+nombre_carrera_retor(i+1)+"</h6>"
-            for anio in range(a1, a2 + (1)):
-                html += "<div class='col-lg-4'>"
-                html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
-                html += "<div class='panel-heading'>"
-                html += str(anio)
-                html += "</div>"
-                html += "<div class='panel-body'>"
-                html += "La deserción estudiantil es de "+str(carreras[anio][i])+" Estudiantes"
-                html += "</div>"
-                html += "</div>"
-                html += "</div>"
-            html+="</div>"
+
+            html += "<h6 align='center'style='color:black'>Carreras</h6>"
+            carreras1 = seleccionarCarrerasTodo()
+            for car in carreras1:
+                k = 1
+                html += "<h6 align='center'style='color:black'>Carrera "+nombre_carrera_retor(car[0])+"</h6>"
+                html+="<div class='row'>"
+
+                for anio in range(a1, a2 + (1)):
+                    html += "<div class='col-lg-4'>"
+                    html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                    html += "<div class='panel-heading'>"
+                    html += str(anio)
+                    html += "</div>"
+                    html += "<div class='panel-body'>"
+                    html += "La deserción estudiantil es de "+str(carreras[anio][car[0]-1])+" Estudiantes"
+                    html += "</div>"
+                    html += "</div>"
+                    html += "</div>"
+                html+="</div>"
     if accion1 == "titulados_relacion":
         total = len(datos)
-        fecha1 = ress[0]#obtenemos las fechas que llegan
-        fecha2 = ress[1]
-        consultaTitulado = ress[2]
+        si_car_n = ress[0]
+        id_car   = ress[1]
+        si_ar = ress[2]
+        id_ar  = ress[3]
+        si_total = ress[4]
+        fecha1 = ress[5]
+        fecha2 = ress[6]
+        consultaTitulado = ress[7]
         titulados_re= consulta_Titulado(consultaTitulado)
         if fecha1>fecha2:
             aux = fecha1
@@ -2866,88 +3211,181 @@ def  retornar_valores(datos,ress):
         if isinstance(fecha2, str):
             fecha2 = datetime.strptime(fecha2, "%Y-%m-%d").date()
         for row in datos:#recorremos los datos obtenidos de la base de datos
-            if row[16]>=fecha1 and row[16] <= fecha2:
+            if not isinstance(row[16], type(None)) and row[16]>=fecha1 and row[16] <= fecha2:
                 if row[14] ==1:
                     anoBD = int(obtener_ano_de_fecha(row[16].strftime("%Y-%m-%d")))
                     carreras[anoBD][row[13]-1]+=1
                     vareas[anoBD][row[12]-1]+=1
 
         for row in titulados_re:
-            if row[9]>=fecha1 and row[9] <= fecha2:
+            if not isinstance(row[9], type(None)) and row[9]>=fecha1 and row[9] <= fecha2:
                 anoBD = int(obtener_ano_de_fecha(row[9].strftime("%Y-%m-%d")))
                 carrerasTitu[anoBD][row[7]-1]+=1
                 vareasTitu[anoBD][row[8]-1]+=1
 
-        mensaje = "En los siguientes cuadros detallamos los titulados con relacion a los primeros niveles"
-        html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
-        #crear para areas
+        if si_car_n == "si_car_n":#esta buscando carreras
+            s_dupli = eliminar_dobles(id_car)#si hay doble veces repetido el id lo eliminamos a 1
+            if len(s_dupli)==1:
+                mensaje = "En los siguientes cuadros detallamos los titulados con relación a los primeros niveles de la siguiente carrera"
+            else:
+                mensaje = "En los siguientes cuadros detallamos los titulados con relación a los primeros niveles de las siguientes carreras"
 
-        html += "<h6 align='center'style='color:black'>Areas</h6>"
-        k1 = 1
-        html += "<div class='row'>"
-        areas ={0:"Técnologia",1:"Salud",2:"Sociales"}
-        for anio in range(a1, a2 + (1)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
-            html += "<h6 align='center'style='color:black'>"+str(anio)+"</h6>"
-            for ar in range(3):
-                html += "<div class='col-lg-4'>"
-                html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
-                html += "<div class='panel-heading'>"
-                html += areas[ar]
-                html += "</div>"
-                html += "<div class='panel-body'>"
-                html+= "<table class='table'>"
-                html+= "<thead>"
-                html+="<tr>"
-                html+="<td>1er año</td>"
-                html+="<td>Titulados</td>"
-                html+="</tr>"
-                html+="</thead>"
-                html+="<tbody>"
-                html+="<tr>"
-                html+="<td>"+str(vareas[anio][ar])+"</td>"
-                html+="<td>"+str(vareasTitu[anio][ar])+"</td>"
-                html+="</tr>"
-                html+="</tbody>"
-                html+= "</table>"
-                html += "</div>"
-                html += "</div>"
+            html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
+            for i in s_dupli:#recorremos todo los id carreras puede ser 12,1,9
+                index = int(i) - 1#obtenemos el id
+                index1 = int(i)
+                html += "<h5 align = 'center'>Carrera</h5>"
+                html += "<h5 align = 'center'>"+str(nombre_carrera_retor(index1))+"</h5>"
+                html += "<div class = 'row'>"
+                for anio in range(a1, a2 + (1)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
+                    html += "<div class='col-lg-4'>"
+                    html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                    html += "<div class='panel-heading'>"
+                    html += "<h6 align='center'style='color:black'>"+str(anio)+"</h6>"
+                    html += "</div>"
+                    html += "<div class='panel-body'>"
+                    html+= "<table class='table'>"
+                    html+= "<thead>"
+                    html+="<tr>"
+                    html+="<td>1er año</td>"
+                    html+="<td>Titulados</td>"
+                    html+="</tr>"
+                    html+="</thead>"
+                    html+="<tbody>"
+                    html+="<tr>"
+                    html+="<td>"+str(carreras[anio][index])+"</td>"
+                    html+="<td>"+str(carrerasTitu[anio][index])+"</td>"
+                    html+="</tr>"
+                    html+="</tbody>"
+                    html+= "</table>"
+                    html += "</div>"
+                    html += "</div>"
+                    html += "</div>"
                 html += "</div>"
 
-        html += "</div>"
-        html += "<h6 align='center'style='color:black'>Carreras</h6>"
-        for i in range(17):
-            k = 1
-            html+="<div class='row'>"
-            html += "<h6 align='center'style='color:black'>"+nombre_carrera_retor(i+1)+"</h6>"
-            for anio in range(a1, a2 + (1)):
-                html += "<div class='col-lg-4'>"
-                html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
-                html += "<div class='panel-heading'>"
-                html += str(anio)
+        elif si_ar == "si_ar":
+
+            s_dupli = eliminar_dobles(id_ar)#si hay doble veces repetido el id lo eliminamos a 1
+            if len(s_dupli)==1:
+                mensaje = "En los siguientes cuadros detallamos los titulados con relación a los primeros niveles de la siguiente area"
+            else:
+                mensaje = "En los siguientes cuadros detallamos los titulados con relación a los primeros niveles de las siguientes areas"
+
+            html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
+
+            for i in s_dupli:#recorremos todo los id de areas
+                index = int(i) - 1#obtenemos el id
+                index1 = int(i)
+                #seleccionamos las asingturas con el cod de area
+                html += "<h6 align='center'>Area "+nombre_area_id(index1)+"</h6>"
+                html += "<div class = 'row'>"
+                for anio in range(a1, a2 + (1)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
+                    html += "<div class='col-lg-4'>"
+                    html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                    html += "<div class='panel-heading'>"
+                    html += "<h6 align='center'style='color:black'>"+str(anio)+"</h6>"
+                    html += "</div>"
+                    html += "<div class='panel-body'>"
+                    html+= "<table class='table'>"
+                    html+= "<thead>"
+                    html+="<tr>"
+                    html+="<td>1er año</td>"
+                    html+="<td>Titulados</td>"
+                    html+="</tr>"
+                    html+="</thead>"
+                    html+="<tbody>"
+                    html+="<tr>"
+                    html+="<td>"+str(vareas[anio][index])+"</td>"
+                    html+="<td>"+str(vareasTitu[anio][index])+"</td>"
+                    html+="</tr>"
+                    html+="</tbody>"
+                    html+= "</table>"
+                    html += "</div>"
+                    html += "</div>"
+                    html += "</div>"
                 html += "</div>"
-                html += "<div class='panel-body'>"
-                html+= "<table class='table'>"
-                html+= "<thead>"
-                html+="<tr>"
-                html+="<td>1er año</td>"
-                html+="<td>Titulados</td>"
-                html+="</tr>"
-                html+="</thead>"
-                html+="<tbody>"
-                html+="<tr>"
-                html+="<td>"+str(carreras[anio][i])+"</td>"
-                html+="<td>"+str(carrerasTitu[anio][i])+"</td>"
-                html+="</tr>"
-                html+="</tbody>"
-                html+= "</table>"
+        else:
+
+            mensaje = "En los siguientes cuadros detallamos los titulados con relacion a los primeros niveles"
+            html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
+            #crear para areas
+
+            html += "<h6 align='center'style='color:black'>Areas</h6>"
+            k1 = 1
+            html += "<div class='row'>"
+            areas = seleccionarAreas()
+            for are in areas:#recorremos todo los id de areas
+                #seleccionamos las asingturas con el cod de area
+                html += "<h6 align='center'>Area "+nombre_area_id(are[0])+"</h6>"
+                html += "<div class = 'row'>"
+                for anio in range(a1, a2 + (1)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
+                    html += "<div class='col-lg-4'>"
+                    html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                    html += "<div class='panel-heading'>"
+                    html += "<h6 align='center'style='color:black'>"+str(anio)+"</h6>"
+                    html += "</div>"
+                    html += "<div class='panel-body'>"
+                    html+= "<table class='table'>"
+                    html+= "<thead>"
+                    html+="<tr>"
+                    html+="<td>1er año</td>"
+                    html+="<td>Titulados</td>"
+                    html+="</tr>"
+                    html+="</thead>"
+                    html+="<tbody>"
+                    html+="<tr>"
+                    html+="<td>"+str(vareas[anio][are[0]-1])+"</td>"
+                    html+="<td>"+str(vareasTitu[anio][are[0]-1])+"</td>"
+                    html+="</tr>"
+                    html+="</tbody>"
+                    html+= "</table>"
+                    html += "</div>"
+                    html += "</div>"
+                    html += "</div>"
                 html += "</div>"
+            html += "<h6 align='center'style='color:black'>Carreras</h6>"
+            carreras1 = seleccionarCarrerasTodo()
+            for car in carreras1:#recorremos todo los id carreras puede ser 12,1,9
+                index = car[0] - 1#obtenemos el id
+                index1 = car[0]
+                html += "<h5 align = 'center'>Carrera</h5>"
+                html += "<h5 align = 'center'>"+str(nombre_carrera_retor(index1))+"</h5>"
+                html += "<div class = 'row'>"
+                for anio in range(a1, a2 + (1)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
+                    html += "<div class='col-lg-4'>"
+                    html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                    html += "<div class='panel-heading'>"
+                    html += "<h6 align='center'style='color:black'>"+str(anio)+"</h6>"
+                    html += "</div>"
+                    html += "<div class='panel-body'>"
+                    html+= "<table class='table'>"
+                    html+= "<thead>"
+                    html+="<tr>"
+                    html+="<td>1er año</td>"
+                    html+="<td>Titulados</td>"
+                    html+="</tr>"
+                    html+="</thead>"
+                    html+="<tbody>"
+                    html+="<tr>"
+                    html+="<td>"+str(carreras[anio][index])+"</td>"
+                    html+="<td>"+str(carrerasTitu[anio][index])+"</td>"
+                    html+="</tr>"
+                    html+="</tbody>"
+                    html+= "</table>"
+                    html += "</div>"
+                    html += "</div>"
+                    html += "</div>"
                 html += "</div>"
-                html += "</div>"
-            html+="</div>"
+
     if accion1 == "clasificacion_departamento":
         total = len(datos)
-        fecha1 = ress[0]#obtenemos las fechas que llegan
-        fecha2 = ress[1]
+        si_car_n = ress[0]
+        id_car   = ress[1]
+        si_ar = ress[2]
+        id_ar  = ress[3]
+        si_total = ress[4]
+        fecha1 = ress[5]
+        fecha2 = ress[6]
         if fecha1>fecha2:
             aux = fecha1
             fecha1 = fecha2
@@ -2960,83 +3398,279 @@ def  retornar_valores(datos,ress):
         a2 = int(obtener_ano_de_fecha(fecha2))
         depar = {}
         occidente = {}
+        cdepar = {}
+        coccidente = {}
         for anio in range(a1, a2 + (1)):
-            occidente[anio]=[0,0,0]
+            occidente[anio]={}
+            depar[anio] = {}
+            areas = seleccionarAreas()
+            for are in areas:
+                occidente[anio][are[0]] = [0]*3
+                depar[anio][are[0]] = [0]*9
         for anio in range(a1, a2 + (1)):
-            depar[anio] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+            cdepar[anio] = {}
+            coccidente[anio] = {}
+            carrer = seleccionarCarrerasTodo()
+            for car in carrer:
+                cdepar[anio][car[0]] = [0]*9
+                coccidente[anio][car[0]] = [0]*3
         if isinstance(fecha1, str):
             fecha1 = datetime.strptime(fecha1, "%Y-%m-%d").date()
         if isinstance(fecha2, str):
             fecha2 = datetime.strptime(fecha2, "%Y-%m-%d").date()
         for row in datos:#recorremos los datos obtenidos de la base de datos
-            if row[16]>=fecha1 and row[16] <= fecha2:
+            if not isinstance(row[16], type(None)) and row[16]>=fecha1 and row[16] <= fecha2:
                 anoBD = int(obtener_ano_de_fecha(row[16].strftime("%Y-%m-%d")))
-
                 if row[7].lower().strip() == 'oruro':
-                    depar[anoBD][0]+=1
+                    depar[anoBD][row[12]][0]+=1
+                    cdepar[anoBD][row[13]][0]+=1
                 elif row[7].lower().strip() == 'potosi':
-                    depar[anoBD][1]+=1
+                    depar[anoBD][row[12]][1]+=1
+                    cdepar[anoBD][row[13]][1]+=1
                 elif row[7].lower().strip() == 'la paz':
-                    depar[anoBD][2]+=1
+                    depar[anoBD][row[12]][2]+=1
+                    cdepar[anoBD][row[13]][2]+=1
                 elif row[7].lower().strip() == 'cochabamba':
-                    depar[anoBD][3]+=1
+                    depar[anoBD][row[12]][3]+=1
+                    cdepar[anoBD][row[13]][3]+=1
                 elif row[7].lower().strip() == 'santa cruz':
-                    depar[anoBD][4]+=1
+                    depar[anoBD][row[12]][4]+=1
+                    cdepar[anoBD][row[13]][4]+=1
                 elif row[7].lower().strip() == 'beni':
-                    depar[anoBD][5]+=1
+                    depar[anoBD][row[12]][5]+=1
+                    cdepar[anoBD][row[13]][5]+=1
                 elif row[7].lower().strip() == 'tarija':
-                    depar[anoBD][6]+=1
+                    depar[anoBD][row[12]][6]+=1
+                    cdepar[anoBD][row[13]][6]+=1
                 elif row[7].lower().strip() == 'chuquisaca':
-                    depar[anoBD][7]+=1
+                    depar[anoBD][row[12]][7]+=1
+                    cdepar[anoBD][row[13]][7]+=1
                 elif row[7].lower().strip() == 'pando':
-                    depar[anoBD][8]+=1
+                    depar[anoBD][row[12]][8]+=1
+                    cdepar[anoBD][row[13]][8]+=1
 
                 if row[10].lower().strip() == "occidente":
-                    occidente[anoBD][0]+=1
+                    occidente[anoBD][row[12]][0]+=1
+                    coccidente[anoBD][row[13]][0]+=1
                 elif row[10].lower().strip() == "central":
-                    occidente[anoBD][1]+=1
+                    occidente[anoBD][row[12]][1]+=1
+                    coccidente[anoBD][row[13]][1]+=1
                 elif row[10].lower().strip() == "oriente":
-                    occidente[anoBD][2]+=1
+                    occidente[anoBD][row[12]][2]+=1
+                    coccidente[anoBD][row[13]][2]+=1
+        if si_car_n == "si_car_n":#esta buscando carreras
+            s_dupli = eliminar_dobles(id_car)#si hay doble veces repetido el id lo eliminamos a 1
+            if len(s_dupli)==1:
+                mensaje = "La cantidad de estudiantes clasificados por departamentos y regiones de la carrera son"
+            else:
+                mensaje = "La cantidad de estudiantes clasificados por departamentos y regiones de las carreras son"
 
-        mensaje = "Detallaremos en los siguientes cuadros sobre estudiantes a que departamento y region pertencen"
-        html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
-            #crear para areas
+            html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
+            html += "<div class='alert alert-secondary'>Regiones</div>"
+            for i in s_dupli:#recorremos todo los id carreras puede ser 12,1,9
+                index = int(i) - 1#obtenemos el id
+                index1 = int(i)
+                html += "<h5 align = 'center'>Carrera</h5>"
+                html += "<h6 align = 'center'>"+str(nombre_carrera_retor(index1))+"</h6>"
+                html += "<div class = 'row'>"
+                for anio in range(a1, a2 + (1)):
+                    html += "<h6 align='center'style='color:black'>"+str(anio)+"</h6>"
+                    k = 0
+                    for reg in region:
+                        html += "<div class='col-lg-4'>"
+                        html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                        html += "<div class='panel-heading'>"
+                        html += reg
+                        html += "</div>"
+                        html += "<div class='panel-body'>"
+                        html+=""+str(coccidente[anio][index1][k])+" estudiantes"
+                        html += "</div>"
+                        html += "</div>"
+                        html += "</div>"
+                        k = k + 1
+                html += "</div><br>"
+            html += "<div class='alert alert-secondary'>Departamentos</div>"
+            for i in s_dupli:#recorremos todo los id carreras puede ser 12,1,9
+                index = int(i) - 1#obtenemos el id
+                index1 = int(i)
+                html += "<h5 align = 'center'>Carrera</h5>"
+                html += "<h6 align = 'center'>"+str(nombre_carrera_retor(index1))+"</h6>"
+                html += "<div class = 'row'>"
+                for anio in range(a1, a2 + (1)):
+                    html += "<h6 align='center'style='color:black'>"+str(anio)+"</h6>"
+                    k = 0
+                    for dep in departamento:
+                        html += "<div class='col-lg-4'>"
+                        html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                        html += "<div class='panel-heading'>"
+                        html += dep
+                        html += "</div>"
+                        html += "<div class='panel-body'>"
+                        html+=""+str(cdepar[anio][index1][k])+" estudiantes"
+                        html += "</div>"
+                        html += "</div>"
+                        html += "</div>"
+                        k = k + 1
+                html += "</div><br>"
+        elif si_ar == "si_ar":
+            s_dupli = eliminar_dobles(id_ar)#si hay doble veces repetido el id lo eliminamos a 1
+            if len(s_dupli)==1:
+                mensaje = "La cantidad de estudiantes clasificados por departamentos y regiones del area son"
+            else:
+                mensaje = "La cantidad de estudiantes clasificados por departamentos y regiones de los areas son"
 
-        html += "<h6 align='center'style='color:black'>Región</h6>"
-        k1 = 1
-        html += "<div class='row'>"
-        for anio in range(a1, a2 + (1)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
-            html += "<h6 align='center'style='color:black'>"+str(anio)+"</h6>"
-            for ar in range(3):
-                html += "<div class='col-lg-4'>"
-                html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
-                html += "<div class='panel-heading'>"
-                html += region[ar]
-                html += "</div>"
-                html += "<div class='panel-body'>"
-                html+="Se encontro "+str(occidente[anio][ar])+" estudiantes"
-                html += "</div>"
-                html += "</div>"
-                html += "</div>"
+            html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
+            html += "<div class='alert alert-secondary'>Regiones</div>"
+            for i in s_dupli:#recorremos todo los id de areas
+                index = int(i) - 1#obtenemos el id
+                index1 = int(i)
+                #seleccionamos las asingturas con el cod de area
+                html += "<h6 align='center'>Area "+nombre_area_id(index1)+"</h6>"
+                html += "<div class = 'row'>"
+                for anio in range(a1, a2 + (1)):
+                    html += "<h6 align='center'style='color:black'>"+str(anio)+"</h6>"
+                    k = 0
+                    for reg in region:
+                        html += "<div class='col-lg-4'>"
+                        html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                        html += "<div class='panel-heading'>"
+                        html += reg
+                        html += "</div>"
+                        html += "<div class='panel-body'>"
+                        html+=""+str(occidente[anio][index1][k])+" estudiantes"
+                        html += "</div>"
+                        html += "</div>"
+                        html += "</div>"
+                        k = k + 1
+                html += "</div><br>"
+            html += "<div class = 'alert alert-secondary'>Departamentos</div>"
+            for i in s_dupli:#recorremos todo los id de areas
+                index = int(i) - 1#obtenemos el id
+                index1 = int(i)
+                #seleccionamos las asingturas con el cod de area
+                html += "<h6 align='center'>Area "+nombre_area_id(index1)+"</h6>"
+                html += "<div class = 'row'>"
+                for anio in range(a1, a2 + (1)):
+                    html += "<h6 align='center'style='color:black'>"+str(anio)+"</h6>"
+                    k = 0
+                    for dep in departamento:
+                        html += "<div class='col-lg-4'>"
+                        html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                        html += "<div class='panel-heading'>"
+                        html += dep
+                        html += "</div>"
+                        html += "<div class='panel-body'>"
+                        html+=""+str(depar[anio][index1][k])+" estudiantes"
+                        html += "</div>"
+                        html += "</div>"
+                        html += "</div>"
+                        k = k + 1
+                html += "</div><br>"
+        else:
 
-        html += "</div><br>"
-        html += "<h6 align='center'style='color:black'>Departamento</h6>"
-        for i in range(9):
-            k = 1
-            html+="<div class='row'>"
-            html += "<h6 align='center'style='color:black'>"+departamento[i]+"</h6>"
-            for anio in range(a1, a2 + (1)):
-                html += "<div class='col-lg-4'>"
-                html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
-                html += "<div class='panel-heading'>"
-                html += str(anio)
-                html += "</div>"
-                html += "<div class='panel-body'>"
-                html+="Se encontro "+str(depar[anio][i])+" estudiantes"
-                html += "</div>"
-                html += "</div>"
-                html += "</div>"
-            html+="</div>"
+            mensaje = "Detallaremos en los siguientes cuadros sobre estudiantes a que departamento y region pertencen"
+            html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
+                #crear para areas
+            html += "<div align='center'class='alert alert-secondary'>Areas</div>"
+            html += "<div class='alert alert-secondary'>Regiones</div>"
+            areas = seleccionarAreas()
+            for are in areas:#recorremos todo los id de areas
+                index = are[0] - 1#obtenemos el id
+                index1 = are[0]
+                #seleccionamos las asingturas con el cod de area
+                html += "<h6 align='center'>Area "+nombre_area_id(index1)+"</h6>"
+                html += "<div class = 'row'>"
+                for anio in range(a1, a2 + (1)):
+                    html += "<h6 align='center'style='color:black'>"+str(anio)+"</h6>"
+                    k = 0
+                    for reg in region:
+                        html += "<div class='col-lg-4'>"
+                        html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                        html += "<div class='panel-heading'>"
+                        html += reg
+                        html += "</div>"
+                        html += "<div class='panel-body'>"
+                        html+=""+str(occidente[anio][index1][k])+" estudiantes"
+                        html += "</div>"
+                        html += "</div>"
+                        html += "</div>"
+                        k = k + 1
+                html += "</div><br>"
+            html += "<div align='center'class='alert alert-secondary'>Areas</div>"
+            html += "<div class='alert alert-secondary'>Departamentos</div>"
+            for are in areas:#recorremos todo los id de areas
+                index = are[0] - 1#obtenemos el id
+                index1 = are[0]
+                #seleccionamos las asingturas con el cod de area
+                html += "<h6 align='center'>Area "+nombre_area_id(index1)+"</h6>"
+                html += "<div class = 'row'>"
+                for anio in range(a1, a2 + (1)):
+                    html += "<h6 align='center'style='color:black'>"+str(anio)+"</h6>"
+                    k = 0
+                    for dep in departamento:
+                        html += "<div class='col-lg-4'>"
+                        html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                        html += "<div class='panel-heading'>"
+                        html += dep
+                        html += "</div>"
+                        html += "<div class='panel-body'>"
+                        html+=""+str(depar[anio][index1][k])+" estudiantes"
+                        html += "</div>"
+                        html += "</div>"
+                        html += "</div>"
+                        k = k + 1
+                html += "</div><br>"
+            html += "<div align='center'class='alert alert-secondary'>Carreras</div>"
+            html += "<div class='alert alert-secondary'>Regiones</div>"
+            carreras1 = seleccionarCarrerasTodo()
+            for car in carreras1:#recorremos todo los id carreras puede ser 12,1,9
+                index = car[0] - 1#obtenemos el id
+                index1 = car[0]
+                html += "<h5 align = 'center'>Carrera</h5>"
+                html += "<h6 align = 'center'>"+str(nombre_carrera_retor(index1))+"</h6>"
+                html += "<div class = 'row'>"
+                for anio in range(a1, a2 + (1)):
+                    html += "<h6 align='center'style='color:black'>"+str(anio)+"</h6>"
+                    k = 0
+                    for reg in region:
+                        html += "<div class='col-lg-4'>"
+                        html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                        html += "<div class='panel-heading'>"
+                        html += reg
+                        html += "</div>"
+                        html += "<div class='panel-body'>"
+                        html+=""+str(coccidente[anio][index1][k])+" estudiantes"
+                        html += "</div>"
+                        html += "</div>"
+                        html += "</div>"
+                        k = k + 1
+                html += "</div><br>"
+            html += "<div align='center'class='alert alert-secondary'>Carreras</div>"
+            html += "<div class='alert alert-secondary'>Departamentos</div>"
+            for car in carreras1:#recorremos todo los id carreras puede ser 12,1,9
+                index = car[0] - 1#obtenemos el id
+                index1 = car[0]
+                html += "<h5 align = 'center'>Carrera</h5>"
+                html += "<h6 align = 'center'>"+str(nombre_carrera_retor(index1))+"</h6>"
+                html += "<div class = 'row'>"
+                for anio in range(a1, a2 + (1)):
+                    html += "<h6 align='center'style='color:black'>"+str(anio)+"</h6>"
+                    k = 0
+                    for dep in departamento:
+                        html += "<div class='col-lg-4'>"
+                        html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                        html += "<div class='panel-heading'>"
+                        html += dep
+                        html += "</div>"
+                        html += "<div class='panel-body'>"
+                        html+=""+str(cdepar[anio][index1][k])+" estudiantes"
+                        html += "</div>"
+                        html += "</div>"
+                        html += "</div>"
+                        k = k + 1
+                html += "</div><br>"
+            html += "</div><br>"
+
     if accion1 == "plan_de_estudio":
         si_are = ress[0]
         curs ={0:'1er año',1:"2do año",2:"3er año",3:'4to año',4:'5to año'}
@@ -3279,8 +3913,14 @@ def  retornar_valores(datos,ress):
                 else:
                     html+="<h6 align='center'>No se encontro resultados<h6>"
     if accion1 == "materias_inscritos":
-        fecha1 = ress[-3]
-        fecha2 = ress[-4]
+
+        si_car_n = ress[0]
+        id_car   = ress[1]
+        si_ar = ress[2]
+        id_ar  = ress[3]
+        si_total = ress[4]
+        fecha1 = ress[5]
+        fecha2 = ress[6]
         if fecha1>fecha2:
             aux = fecha1
             fecha1 = fecha2
@@ -3447,9 +4087,9 @@ def  retornar_valores(datos,ress):
                     c_quim[anoBD][row[8]][0]+=1
         si_are = ress[0]
         curs ={0:'1er año',1:"2do año",2:"3er año",3:'4to año',4:'5to año'}
-        if si_are != "no":#si es diferente de no existe una area o areas
-            areas_id = ress[1]#obtenemos los id de areas quue llegan
-            s_dupli = eliminar_dobles(areas_id)#si hay doble veces repetido el id lo eliminamos a 1
+        if si_ar == "si_ar":#si es diferente de no existe una area o areas
+            #obtenemos los id de areas quue llegan
+            s_dupli = eliminar_dobles(id_ar)#si hay doble veces repetido el id lo eliminamos a 1
             for i in s_dupli:#recorremos todo los id de areas
                 index = int(i) - 1#obtenemos el id
                 index1 = int(i)
@@ -3457,9 +4097,10 @@ def  retornar_valores(datos,ress):
                 carreras = seleccionarcarrera_id(index1)#buscamos con el id todas las carreras relacionadas con el area
                 if carreras != "no":#si es diferente de no entonces ingresamos
                     for car in carreras:#recorremos todas las carreras encontradas
-                        html += "<h5 align='center'>Carrera " + str(car[1])+"</h5>"
+
                         materias = seleccionarAsignatura_por_id(car[0])#seleccionar asiganturas carrera
                         if materias != "no":
+                            html += "<h5 align='center'>Carrera " + str(car[1])+"</h5>"
                             html+="<div class='row'>"
                             for anio in range(a1, a2 + (1)):
                                 html += "<h6 align='center'>" + str(anio)+"</h6>"
@@ -3561,20 +4202,25 @@ def  retornar_valores(datos,ress):
                                     html += "</div>"
                             html+="</div>"
                         else:
-                            html+="<h6 align='center'>No se encontro información</h6>"
+                            html+="<br><h6 align='center'>Carrera "+str(car[1])+"</h6><br>"#impirmimos el nombre de la carrera
+
+                            html+="<div align='center' class='alert alert-secondary'>No se encontro información</div>"
+
                 else:
-                    html+="<h6 align='center'>No se encontro información</h6>"
-        si_car = ress[1]
-        if si_car != "no":
-            car_id = ress[2]#obtenemos los id de areas quue llegan
-            s_dupli = eliminar_dobles(car_id)#si hay doble veces repetido el id lo eliminamos a 1
+                    html+="<div align='center' class='alert alert-secondary'>No se encontro información</div>"
+
+
+        elif si_car_n == "si_car_n":
+
+            s_dupli = eliminar_dobles(id_car)#si hay doble veces repetido el id lo eliminamos a 1
             print(s_dupli," esta bien o no ")
             for i in s_dupli:#recorremos todo los id de carreras
                 index = int(i) - 1#obtenemos el id
                 index1 = int(i)
-                html+="<br><h6 align='center'>Carrera "+nombre_carrera_retor(index1)+"</h6><br>"#impirmimos el nombre de la carrera
                 materias=seleccionarAsignatura_por_id(index1)#seleccionamos las asignaturas
                 if materias != "no":
+                    html+="<br><h6 align='center'>Carrera "+nombre_carrera_retor(index1)+"</h6><br>"#impirmimos el nombre de la carrera
+
                     html+="<div class='row'>"
                     for anio in range(a1, a2 + (1)):
                         html += "<h6 align='center'>" + str(anio)+"</h6>"
@@ -3674,19 +4320,22 @@ def  retornar_valores(datos,ress):
                             html += "</div>"
                     html+="</div>"
                 else:
-                    html+="<h6 align='center'>No se encontro información</h6>"
+                    html+="<br><h6 align='center'>Carrera "+nombre_carrera_retor(index1)+"</h6><br>"#impirmimos el nombre de la carrera
+
+                    html+="<div align='center' class='alert alert-secondary'>No se encontro información</div>"
         else:#si es diferente de no existe una area o areas
-            areas =[1,2,3]
-            for i in areas:#recorremos todo los id de areas
-                index = int(i)-1#obtenemos el id
-                index1 = int(i)
-                html += "<h5 align='center'>Area " + str(areasU[index])+"</h5>"
+            areas = seleccionarAreas()
+            for are in areas:#recorremos todo los id de areas
+                index = are[0]-1#obtenemos el id
+                index1 = are[0]
+                html += "<h5 align='center'>Area " + str(nombre_area_id(index1))+"</h5>"
                 carreras = seleccionarcarrera_id(index1)#buscamos con el id todas las carreras relacionadas con el area
                 if carreras != "no":#si es diferente de no entonces ingresamos
                     for car in carreras:#recorremos todas las carreras encontradas
-                        html += "<h5 align='center'>Carrera " + str(car[1])+"</h5>"
+
                         materias = seleccionarAsignatura_por_id(car[0])#seleccionar asiganturas carrera
                         if materias != "no":
+                            html += "<h5 align='center'>Carrera " + str(car[1])+"</h5>"
                             html+="<div class='row'>"
                             for anio in range(a1, a2 + (1)):
                                 html += "<h6 align='center'>" + str(anio)+"</h6>"
@@ -3788,9 +4437,12 @@ def  retornar_valores(datos,ress):
                                     html += "</div>"
                             html+="</div>"
                         else:
-                            html+="<h6 align='center'>No se encontro información</h6>"
+                            html+="<br><h6 align='center'>Carrera "+str(car[1])+"</h6><br>"#impirmimos el nombre de la carrera
+                            html+="<div align='center' class='alert alert-secondary'>No se encontro información</div>"
+
                 else:
-                    html+="<h6 align='center'>No se encontro información</h6>"
+                    html+="<div align='center' class='alert alert-secondary'>No se encontro información</div>"
+
     html += "</container>"
 
     return html
@@ -3803,6 +4455,9 @@ def eliminar_dobles(cadena):
     lista_sin_vacios = [elemento for elemento in lista_sin_duplicados if elemento != '']
     return lista_sin_vacios
 
+def separar_guiones(cadena):
+    segmentos = [segmento for segmento in cadena.split('|') if segmento != '']
+    return segmentos
 
 def menCOncluyeron(a,b):
     if a == b:

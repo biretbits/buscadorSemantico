@@ -156,11 +156,13 @@ fecha_hora datetime,
 fecha date,
 cod_es int,
 cod_area int,
+cod_carrera int,
 estado char(20),
 primary key(cod_transferencia,cod_es),
 foreign key(cod_es)references estudiante(cod_es)on delete restrict on update restrict
 ,
-foreign key(cod_area)references area(cod_area)on delete restrict on update restrict
+foreign key(cod_area)references area(cod_area)on delete restrict on update restrict,
+foreign key(cod_carrera)references carrera(cod_carrera)on delete restrict on update restrict
 );
 
 create table dicta_asignatura(
@@ -500,18 +502,18 @@ insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departa
 
 
 
-insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,estado)values
-('si','UTO','2020-05-15 14:30:00','2020-05-15',28,1,'activo');
-insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,estado)values
-('si','Univeridad tecnica de Oruro','2015-05-15 13:30:00','2015-05-15',29,1,'activo');
-insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,estado)values
-('si','Univeridad tecnica de Oruro','2016-05-15 14:30:00','2016-05-15',32,1,'activo');
-insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,estado)values
-('si','UTO','2014-05-15 14:30:00','2014-05-15',33,1,'activo');
-insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,estado)values
-('si','UTO','2014-05-15 15:30:00','2014-05-15',34,1,'activo');
-insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,estado)values
-('si','Universidad tomas frias','2015-05-15 14:50:00','2022-05-15',35,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2020-05-15 14:30:00','2020-05-15',28,1,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Univeridad tecnica de Oruro','2015-05-15 13:30:00','2015-05-15',29,1,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Univeridad tecnica de Oruro','2016-05-15 14:30:00','2016-05-15',32,1,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2014-05-15 14:30:00','2014-05-15',33,1,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2014-05-15 15:30:00','2014-05-15',34,1,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Universidad tomas frias','2015-05-15 14:50:00','2022-05-15',35,1,1,'activo');
 
 
 insert into docente(nombre_docente,ap_docente,am_docente,ci_docente,profesion,telefono,pais,
