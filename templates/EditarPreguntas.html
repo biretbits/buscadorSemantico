@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Flask App</title>
+  <script src="{{ url_for('static', filename='jquery-3.5.1.min.js') }}" charset="utf-8"></script>
+
+  <link href="{{ url_for('static', filename='bootstrap-5.0.2/css/bootstrap.min.css') }}" type="text/css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script></head>
+<body class="cc">
+    {% include 'menu.html' %}
+    <br><br><br>
+    <div class="container mt-5">
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <div id="error">
+
+              </div>
+              <input type="hidden" name="" id='id' value="{{id}}">
+
+              <h3 class="card-title text-center mb-4">Actualizar preguntas de usuario</h3>
+
+              <form method="POST" action="{{ url_for('login') }}">
+                <div class="mb-3">
+                  <label for="pregunta_nuevo" class="form-label">Posible pregunta</label>
+                  <textarea name="name"class="form-control" id='pregunta_nuevo' name='pregunta_nuevo'rows="8" cols="80">{{ sql_co[1]}}</textarea>
+                </div>
+                <div class="mb-3">
+                  <label for="posible_respuesta">Respuesta</label>
+                  <select name="categorias" id='posible_respuesta' class="form-control">
+                    <option value="">Seleccione tipo de respuesta</option>
+                      {% for categoria in consulta %}
+                        {% if sql_co[3] == categoria[0] %}
+                          <option value="{{ categoria[0] }}" title="{{ categoria[3] }}" selected>
+                              <abbr title="{{ categoria[1] }}">{{ categoria[1] }}</abbr>
+                          </option>
+                        {% else %}
+                          <option value="{{ categoria[0] }}" title="{{ categoria[3] }}">
+                              <abbr title="{{ categoria[1] }}">{{ categoria[1] }}</abbr>
+                          </option>
+                        {% endif %}
+                      {% endfor %}
+                  </select>
+
+                </div>
+                <div class="d-grid gap-2">
+                  <button type="button" class="btn btn-primary btn-block" onclick="actualizar()">Actualizar</button>
+                </div>
+
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='respuesta'>
+
+      </div>
+    </div>
+
+</body>
+</html>
+
+    <script type="text/javascript">
+    function actualizar(){
+      var id = document.getElementById("id").value;
+      var pregunta_nuevo = document.getElementById("pregunta_nuevo").value;
+      var posible_respuesta = document.getElementById("posible_respuesta").value;
+      ///alert(44);
+      var datos=new  FormData();
+      datos.append("pregunta_nuevo",pregunta_nuevo);
+      datos.append("posible_respuesta",posible_respuesta);
+      datos.append("id",id);
+      if(posible_respuesta == '' || pregunta_nuevo == ''){
+        $('#error').html("<div class='alert alert-danger'>Algun campo sin datos o sin seleccionar</div>");
+        return;
+      }
+      ///alert(30);
+      //alert(pregunta_nuevo+"   "+posible_respuesta);
+      $.ajax({
+        type: "POST", //type of submit
+        cache: false, //important or else you might get wrong data returned to you
+        url: "/ActPreg", //destination
+        datatype: "html", //expected data format from process.php
+        data: datos, //target your form's data and serialize for a POST
+        contentType:false,
+        processData:false,
+        success: function(data){
+         //alert(data);
+          console.log(data);
+          if(data == "correcto"){
+            redireccionar1();
+          }else{
+            $('#error').html("<div class='alert alert-danger'>Ocurrio un problema al insertar los datos</div>");
+          }
+            //retorno1(data);
+        }
+      });
+    }
+
+function redireccionar1(){
+
+  window.location.href='/tpreg';
+}
+
+</script>
+<script src="{{ url_for('static', filename='bootstrap-5.0.2/js/bootstrap.min.js') }}" charset="utf-8"></script>

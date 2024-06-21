@@ -449,7 +449,7 @@ def contar_total_estudiante_curso(cod_grado,cod_carrera,fecha1,fecha2):
 
 #seleccionar las consultas y embedding
 def seleccionar_consultasEmbeddings():
-    sql_consulta = "select *from embeddings where cod_respuesta is not null or cod_respuesta != ''"#seleccionamos todos los estudiantes
+    sql_consulta = "select *from embeddings where cod_respuesta is not null or cod_respuesta != '' and estado='activo'"#seleccionamos todos los estudiantes
     conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
     # Crear un cursor para ejecutar consultas
     cursor = conn.cursor()

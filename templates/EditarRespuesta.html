@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Flask App</title>
+  <script src="{{ url_for('static', filename='jquery-3.5.1.min.js') }}" charset="utf-8"></script>
+
+  <link href="{{ url_for('static', filename='bootstrap-5.0.2/css/bootstrap.min.css') }}" type="text/css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script></head>
+<body class="cc">
+    {% include 'menu.html' %}
+    <br><br><br>
+    <div class="container mt-5">
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <div id="error">
+
+              </div>
+              <h4 class="card-title text-center mb-4">Actualizar respuesta</h4>
+              <input type="hidden" name="" id='id' value="{{ id }}">
+              <form method="POST">
+                <div class="mb-3">
+                  <label for="posible_respuesta" class="form-label">Posible respuesta a una pregunta</label>
+                  <input type="text" class="form-control" id="posible_respuesta" value='{{ sql_co[1] }}'name="posible_respuesta" required placeholder="ponga su respuesta de esta forma ver_carreras">
+                </div>
+                <div class="mb-3">
+                  <label for="consulta">Consulta sql</label>
+                  <textarea name="name" class="form-control" rows="5" cols="80" placeholder="Registre su consulta sql de esta forma select *from estudiante" id='consulta'>{{ sql_co[2] }}</textarea>
+                </div>
+                <div class="mb-3">
+                  <label for="descripcion">descripción</label>
+                  <textarea name="name" class="form-control" rows="5" cols="80"  placeholder="ponga una descripcion de la posible respuesta" id='descripcion'>{{ sql_co[3] }}</textarea>
+                </div>
+                <div class="d-grid gap-2">
+                  <button type="button" class="btn btn-primary btn-block" onclick="registrar()">Actualizar</button>
+                </div>
+
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='respuesta'>
+
+      </div>
+    </div>
+
+</body>
+</html>
+
+    <script type="text/javascript">
+    function registrar(){
+      var posible_respuesta = document.getElementById("posible_respuesta").value;
+      var consulta = document.getElementById("consulta").value;
+      var descripcion = document.getElementById("descripcion").value;
+      var id= document.getElementById("id").value;
+      var re = verificar_si_tiene_espacios(posible_respuesta);
+      if(re == "tiene_espacios"){
+        $('#error').html("<div class='alert alert-danger'>Formato de posible respuesta erronea, utilice para unir la barra baja _</div>");
+        return;
+      }
+      var datos=new  FormData();
+      datos.append("posible_respuesta",posible_respuesta);
+      datos.append("consulta",consulta);
+      datos.append("descripcion",descripcion);
+      datos.append("id",id);
+      if(posible_respuesta == '' || consulta == '' || descripcion == ''){
+        $('#error').html("<div class='alert alert-danger'>Algun campo sin datos o sin seleccionar</div>");
+        return;
+      }
+      $.ajax({
+        type: "POST", //type of submit
+        cache: false, //important or else you might get wrong data returned to you
+        url: "/ActResp", //destination
+        datatype: "html", //expected data format from process.php
+        data: datos, //target your form's data and serialize for a POST
+        contentType:false,
+        processData:false,
+        success: function(data){
+          //alert(data);
+          console.log(data);
+          if(data == "correcto"){
+            redireccionar();
+          }else{
+            $('#error').html("<div class='alert alert-danger'>Ocurrio un problema al insertar los datos</div>");
+          }
+            //retorno1(data);
+        }
+      });
+    }
+
+function redireccionar(){
+  // Redireccionar a una URL específica
+  window.location.href = "/tresp";
+}
+
+function verificar_si_tiene_espacios(texto) {
+  // Utilizamos una expresión regular que busca espacios
+  let tieneEspacios = /[ ]/g.test(texto);
+
+  if (tieneEspacios) {
+    return "tiene_espacios";
+  } else {
+    return "no_tiene_espacios";
+  }
+}
+</script>
+<script src="{{ url_for('static', filename='bootstrap-5.0.2/js/bootstrap.min.js') }}" charset="utf-8"></script>

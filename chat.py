@@ -252,7 +252,7 @@ def obtener_embedding(texto):
 
     cursor = conn.cursor()
     # Consulta SQL para obtener el embedding
-    sql_consulta = "SELECT embedding FROM embeddings WHERE texto = %s"
+    sql_consulta = "SELECT embedding FROM embeddings WHERE texto = %s and estado='activo'"
     # Ejecutar la consulta SQL
     cursor.execute(sql_consulta, (texto))
 

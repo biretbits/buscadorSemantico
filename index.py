@@ -11,6 +11,7 @@ from reportes import generar_reporte_de_consulta
 from sentence_transformers import SentenceTransformer, util
 import numpy as np
 from unidecode import unidecode
+from math import ceil
 app = Flask("mi proyecto nuevo")
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SECRET_KEY'] = 'supersecretkey'  # Clave secreta para firmar cookies de sesión
@@ -55,6 +56,8 @@ def principala():
         return render_template('index.html', usuario=session['usuario'])
     # Si no existe la sesión de usuario, renderizar un menú básico
     return render_template('index.html', usuario=None)
+#permite visualizar tabla de respuesta_bd
+
 @app.route("/login")
 
 def login():
@@ -266,9 +269,590 @@ def generar_html_reporte(datos):
 
 
     return html
+#visulaizar tabla de respuesta del usuario
+
+@app.route("/tpreg")
+def tablaPregunta():
+    #return render_template("index.html")
+    # Verificar si existe la sesión de usuario
+    conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+    cursor = conn.cursor()
+    listarDeCuanto = 5
+    pagina = 1
+    # Consulta para verificar si el usuario existe
+    consulta_s = "SELECT COUNT(*) FROM respuesta AS r INNER JOIN embeddings AS e ON r.cod_respuesta = e.cod_respuesta WHERE e.cod_respuesta IS NOT NULL"
+    cursor.execute(consulta_s)
+    num_filas_total = cursor.fetchone()[0]
+    TotalPaginas = ceil(num_filas_total / listarDeCuanto)
+    inicioList = (pagina - 1) * listarDeCuanto
+    consulta = "SELECT * FROM respuesta AS r INNER JOIN embeddings AS e ON r.cod_respuesta = e.cod_respuesta WHERE e.cod_respuesta IS NOT NULL LIMIT %s, %s"
+    cursor.execute(consulta, (inicioList, listarDeCuanto))
+    sql_consulta = cursor.fetchall()
+    consulta_res = "SELECT * FROM respuesta"
+    cursor.execute(consulta_res)
+    con_res = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    adjacents = 1
+    anterior = "Anterior"
+    siguiente = "Siguiente"
+    start = max(pagina - adjacents, 1)
+    end = min(pagina + adjacents + 1, TotalPaginas + 1)
+    if 'usuario' in session:
+        # Renderizar el menú para usuario autenticado
+        return render_template('tablaPreguntas.html', usuario=session['usuario'], consulta =sql_consulta, TotalPaginas=TotalPaginas,pagina=pagina,listarDeCuanto=listarDeCuanto
+        , start=start,
+        end=end,
+        anterior=anterior,
+        siguiente=siguiente,
+        adjacents=adjacents,
+        con_res=con_res,
+        num_filas_total=num_filas_total)
+    # Si no existe la sesión de usuario, renderizar un menú básico
+    return render_template('tablaPreguntas.html', usuario=None)
 
 
+@app.route('/tpre', methods=['POST'])
+def tablaPreguntas2():
+    if request.method == 'POST':
+        # Obtener los datos enviados mediante Ajax
+        pagina = int(request.form.get('pagina'))
+        listarDeCuanto = int(request.form.get('listarDeCuanto'))
+        buscar = request.form.get('buscar')
+        tipo_respuesta = request.form.get('tipo_respuesta')
+        sql1 = "SELECT COUNT(*) FROM respuesta AS r INNER JOIN embeddings AS e ON r.cod_respuesta = e.cod_respuesta WHERE e.cod_respuesta IS NOT NULL"
+        sql = "SELECT * FROM respuesta AS r INNER JOIN embeddings AS e ON r.cod_respuesta = e.cod_respuesta WHERE e.cod_respuesta IS NOT NULL"
+        if buscar != '':
+            sql+=" and lower(e.texto) like '%"+buscar+"%' "
+            sql1+=" and lower(e.texto) like '%"+buscar+"%' "
+        if tipo_respuesta != '':
+            sql+=" and e.cod_respuesta = "+(tipo_respuesta)
+            sql1+=" and e.cod_respuesta = "+(tipo_respuesta)
 
+        #return render_template("index.html")
+        # Verificar si existe la sesión de usuario
+        conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+        cursor = conn.cursor()
+        cursor.execute(sql1)
+        num_filas_total = cursor.fetchone()[0]
+        TotalPaginas = ceil(num_filas_total / listarDeCuanto)
+        inicioList = (pagina - 1) * listarDeCuanto
+        sql+= " LIMIT "+str(inicioList)+" ,"+str(listarDeCuanto)+""
+        cursor.execute(sql)
+        sql_consulta = cursor.fetchall()
+        consulta_res = "SELECT * FROM respuesta"
+        cursor.execute(consulta_res)
+        con_res = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        adjacents = 1
+        anterior = "Anterior"
+        siguiente = "Siguiente"
+        start = max(pagina - adjacents, 1)
+        end = min(pagina + adjacents + 1, TotalPaginas + 1)
+        html = ''
+        html += '''
+<div class='table-responsive'>
+    <table class='table table-bordered table-hover'>
+        <thead class='thead-dark'>
+            <tr>
+                <th>Texto Pregunta</th>
+                <th>Respuesta</th>
+                <th>descripcion Respuesta</th>
+                <th>Acción</th>
+
+            </tr>
+        </thead>
+        <tbody>'''
+        for row in sql_consulta:
+            html+="<tr>"
+            html+="<td>"+str(row[5])+"</td>"
+            html+="<td>"+str(row[1])+"</td>"
+            html+="<td>"+str(row[3])+"</td>"
+            html+="<td>"
+            html+="<div class='btn-group' role='group' aria-label='Basic mixed styles example'>"
+            html+="<button type='button' class='btn btn-info' title='Editar' onclick='editar("+str(row[4])+")'>Editar</button>"
+            if row[8] == 'activo':
+                html += "<button type='button' class='btn btn-danger' title='Desactivar' onclick=\"accionBtnActivar('activo'," + str(row[4]) + ")\">Desactivar</button>"
+            else:
+                html += "<button type='button' class='btn btn-success' title='Activar' onclick=\"accionBtnActivar('desactivo'," + str(row[4]) + ")\">Activar</button>"
+
+            html+="</div>"
+            html+="</td>"
+
+        html+='''</tbody>
+    </table>
+</div>
+
+<div class='row'>
+    <div class='col'>
+        <div class='d-flex flex-wrap flex-sm-row justify-content-between'>
+            <ul class='pagination'>'''
+        html+="<li class='page-item active'>Página "+str(pagina)+" de "+str(TotalPaginas)+" de "+str(num_filas_total)+" registros</li>"
+        html+="</ul>"
+
+        html+="<ul class='pagination d-flex flex-wrap'>"
+
+        if pagina != 1:
+            html+="<li class='page-item'><a class='page-link' onclick='buscarpor(1)'>"+anterior+"</a></li>"
+        else:
+            html+="<li class='page-item'><span class='page-link text-muted'>"+anterior+"</span></li>"
+
+
+        if pagina > (adjacents + 1):
+            html+="<li class='page-item'><a class='page-link' onclick='buscarpor(1)'>1</a></li>"
+
+        if pagina > (adjacents + 2):
+            html+="<li class='page-item'><span class='page-link'>...</span></li>"
+        for i in range(start, end):
+            if i == pagina:
+                html+="<li class='page-item active'><span class='page-link'>"+str(i)+"</span></li>"
+            else:
+                html+="<li class='page-item'><a class='page-link' onclick='buscarpor("+str(i)+")'>"+str(i)+"</a></li>"
+
+        if pagina < (TotalPaginas - adjacents - 1):
+            html+="<li class='page-item'><span class='page-link'>...</span></li>"
+
+        if pagina < (TotalPaginas - adjacents):
+            html+="<li class='page-item'><a class='page-link' onclick='buscarpor("+str(TotalPaginas)+")'>"+str(TotalPaginas)+"</a></li>"
+
+        if pagina < TotalPaginas:
+            html+="<li class='page-item'><a class='page-link' onclick='buscarpor("+str(pagina+1)+")'>"+siguiente+"</a></li>"
+        else:
+            html+="<li class='page-item'><span class='page-link text-muted'>"+siguiente+"</span></li>"
+
+        html+='''</ul>
+        </div>
+    </div>
+'''
+
+    return html
+@app.route("/Efpreg", methods=['POST'])
+def formulariopreguntasREg():
+    if request.method == 'POST':
+        id = request.form.get('id')
+        listarDeCuanto = request.form.get('listarDeCuanto')
+        buscar = request.form.get('buscar')
+        tipo_respuesta = request.form.get('tipo_respuesta')
+        pagina = request.form.get('pagina')
+        conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+        cursor = conn.cursor()
+        # Consulta para verificar si el usuario existe
+        consulta = "SELECT * FROM respuesta"
+        cursor.execute(consulta)
+        sql_consulta = cursor.fetchall()
+        cons = "select * from embeddings where id = "+id
+        cursor.execute(cons)
+        sql_co = cursor.fetchone()
+        cursor.close()
+        conn.close()
+        if 'usuario' in session:
+            return render_template('EditarPreguntas.html',consulta = sql_consulta,usuario=session['usuario'],
+            id=id,
+            listarDeCuanto=listarDeCuanto,
+            buscar=buscar,
+            tipo_respuesta=tipo_respuesta,
+            pagina=pagina,
+            sql_co=sql_co)
+        return render_template('EditarPreguntas.html',consulta = sql_consulta,usuario=None)
+
+
+@app.route("/ActPreg",methods = ['POST'])
+def ActualizarPreguntas():
+
+    if request.method == 'POST':
+        # Obtener los datos enviados mediante Ajax
+        pregunta_nuevo = request.form.get('pregunta_nuevo')
+        posible_respuesta = int(request.form.get('posible_respuesta'))
+        id = int(request.form.get('id'))
+        pregunta_nuevo = unidecode(pregunta_nuevo.lower())
+        # Calcular el embedding del texto
+        texto_embedding = model.encode(pregunta_nuevo)
+
+        # Convertir el embedding a bytes
+        embedding_bytes = texto_embedding.tobytes()
+
+        # Conectar a la base de datos
+        conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+
+        try:
+            with conn.cursor() as cursor:
+                # Consulta parametrizada para insertar datos
+                sql_insert = "update embeddings set texto=%s, embedding=%s,cod_respuesta=%s where id="+str(id)
+                cursor.execute(sql_insert, (pregunta_nuevo, embedding_bytes, posible_respuesta))
+
+            # Confirmar la transacción
+            conn.commit()
+
+        finally:
+            # Cerrar la conexión siempre, incluso si ocurre una excepción
+            conn.close()
+
+        return 'correcto'
+
+
+@app.route("/Delpreg",methods = ['POST'])
+def EliminarPreguntas():
+
+    if request.method == 'POST':
+        # Obtener los datos enviados mediante Ajax
+        accion = request.form.get('accion')
+        id = int(request.form.get('id'))
+        conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+
+        try:
+            with conn.cursor() as cursor:
+                # Consulta parametrizada para insertar datos
+                if accion == 'activo':
+                    sql_insert = "update embeddings set estado = 'desactivo' where id="+str(id)
+                else:
+                    sql_insert = "update embeddings set estado = 'activo' where id="+str(id)
+
+                cursor.execute(sql_insert)
+
+            # Confirmar la transacción
+            conn.commit()
+
+        finally:
+            # Cerrar la conexión siempre, incluso si ocurre una excepción
+            conn.close()
+
+        return 'correcto'
+@app.route("/Tapreg", methods=['POST'])
+def TablaPreguntadespuesDeActualizar():
+    if request.method == 'POST':
+        # Obtener los datos enviados mediante Ajax
+        pagina = int(request.form.get('pagina'))
+        listarDeCuanto = int(request.form.get('listarDeCuanto'))
+        buscar = request.form.get('buscar')
+        tipo_respuesta = request.form.get('tipo_respuesta')
+        sql1 = "SELECT COUNT(*) FROM respuesta AS r INNER JOIN embeddings AS e ON r.cod_respuesta = e.cod_respuesta WHERE e.cod_respuesta IS NOT NULL"
+        sql = "SELECT * FROM respuesta AS r INNER JOIN embeddings AS e ON r.cod_respuesta = e.cod_respuesta WHERE e.cod_respuesta IS NOT NULL"
+        if buscar != '':
+            sql+=" and lower(e.texto) like '%"+buscar+"%' "
+            sql1+=" and lower(e.texto) like '%"+buscar+"%' "
+        if tipo_respuesta != '':
+            sql+=" and e.cod_respuesta = "+(tipo_respuesta)
+            sql1+=" and e.cod_respuesta = "+(tipo_respuesta)
+
+        #return render_template("index.html")
+        # Verificar si existe la sesión de usuario
+        conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+        cursor = conn.cursor()
+        cursor.execute(sql1)
+        num_filas_total = cursor.fetchone()[0]
+        TotalPaginas = ceil(num_filas_total / listarDeCuanto)
+        inicioList = (pagina - 1) * listarDeCuanto
+        sql+= " LIMIT "+str(inicioList)+" ,"+str(listarDeCuanto)+""
+        cursor.execute(sql)
+        sql_consulta = cursor.fetchall()
+        consulta_res = "SELECT * FROM respuesta"
+        cursor.execute(consulta_res)
+        con_res = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        adjacents = 1
+        anterior = "Anterior"
+        siguiente = "Siguiente"
+        start = max(pagina - adjacents, 1)
+        end = min(pagina + adjacents + 1, TotalPaginas + 1)
+        if 'usuario' in session:
+            # Renderizar el menú para usuario autenticado
+            return render_template('tablaPreguntas.html', usuario=session['usuario'], consulta =sql_consulta, TotalPaginas=TotalPaginas,pagina=pagina,listarDeCuanto=listarDeCuanto
+            , start=start,
+            end=end,
+            anterior=anterior,
+            siguiente=siguiente,
+            adjacents=adjacents,
+            con_res=con_res,
+            num_filas_total=num_filas_total)
+        # Si no existe la sesión de usuario, renderizar un menú básico
+        return render_template('tablaPreguntas.html', usuario=None)
+
+#tabla de respuestas visualizar
+
+@app.route("/tresp")
+def tablaRespuesta():
+    #return render_template("index.html")
+    # Verificar si existe la sesión de usuario
+    conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+    cursor = conn.cursor()
+    listarDeCuanto = 5
+    pagina = 1
+    # Consulta para verificar si el usuario existe
+    consulta_s = "SELECT COUNT(*) FROM respuesta"
+    cursor.execute(consulta_s)
+    num_filas_total = cursor.fetchone()[0]
+    TotalPaginas = ceil(num_filas_total / listarDeCuanto)
+    inicioList = (pagina - 1) * listarDeCuanto
+    consulta = "SELECT * FROM respuesta LIMIT %s, %s"
+    cursor.execute(consulta, (inicioList, listarDeCuanto))
+    sql_consulta = cursor.fetchall()
+    consulta_res = "SELECT * FROM respuesta"
+    cursor.execute(consulta_res)
+    con_res = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    adjacents = 1
+    anterior = "Anterior"
+    siguiente = "Siguiente"
+    start = max(pagina - adjacents, 1)
+    end = min(pagina + adjacents + 1, TotalPaginas + 1)
+    if 'usuario' in session:
+        # Renderizar el menú para usuario autenticado
+        return render_template('tablaRespuesta.html', usuario=session['usuario'], consulta =sql_consulta, TotalPaginas=TotalPaginas,pagina=pagina,listarDeCuanto=listarDeCuanto
+        , start=start,
+        end=end,
+        anterior=anterior,
+        siguiente=siguiente,
+        adjacents=adjacents,
+        con_res=con_res,
+        num_filas_total=num_filas_total)
+    # Si no existe la sesión de usuario, renderizar un menú básico
+    return render_template('tablaRespuesta.html', usuario=None)
+
+
+@app.route('/trespues', methods=['POST'])
+def tablaRespuesta2():
+    if request.method == 'POST':
+        # Obtener los datos enviados mediante Ajax
+        pagina = int(request.form.get('pagina'))
+        listarDeCuanto = int(request.form.get('listarDeCuanto'))
+        #buscar = request.form.get('buscar')
+        respuesta = request.form.get('respuesta')
+
+        sql1 = "SELECT COUNT(*) FROM respuesta "
+        sql = "SELECT * FROM respuesta"
+        if respuesta != '':
+            sql+=" where resp = '"+respuesta+"' "
+            sql1+=" where resp = '"+respuesta+"' "
+        #return render_template("index.html")
+        # Verificar si existe la sesión de usuario
+        conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+        cursor = conn.cursor()
+        cursor.execute(sql1)
+        num_filas_total = cursor.fetchone()[0]
+        TotalPaginas = ceil(num_filas_total / listarDeCuanto)
+        inicioList = (pagina - 1) * listarDeCuanto
+        sql+= " LIMIT "+str(inicioList)+" ,"+str(listarDeCuanto)+""
+        cursor.execute(sql)
+        sql_consulta = cursor.fetchall()
+        consulta_res = "SELECT * FROM respuesta"
+        cursor.execute(consulta_res)
+        con_res = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        adjacents = 1
+        anterior = "Anterior"
+        siguiente = "Siguiente"
+        start = max(pagina - adjacents, 1)
+        end = min(pagina + adjacents + 1, TotalPaginas + 1)
+        html = ''
+
+        html += '''
+<div class='table-responsive'>
+    <table class='table table-bordered table-hover'>
+        <thead class='thead-dark'>
+            <tr>
+                <th>Respuesta</th>
+                <th>Consulta</th>
+                <th>descripcion Respuesta</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>'''
+        for row in sql_consulta:
+            html+="<tr>"
+            html+="<td>"+str(row[1])+"</td>"
+            html+="<td>"+str(row[2])+"</td>"
+            html+="<td>"+str(row[3])+"</td>"
+            html+="<td>"
+            html+="<div class='btn-group' role='group' aria-label='Basic mixed styles example'>"
+            html+="<button type='button' class='btn btn-info' title='Editar' onclick='editar("+str(row[0])+")'>Editar</button>"
+            if row[4] == 'activo':
+                html += "<button type='button' class='btn btn-danger' title='Desactivar' onclick=\"accionBtnActivar('activo'," + str(row[0]) + ")\">Desactivar</button>"
+            else:
+                html += "<button type='button' class='btn btn-success' title='Activar' onclick=\"accionBtnActivar('desactivo'," + str(row[0]) + ")\">Activar</button>"
+
+            html+="</div>"
+            html+="</td>"
+
+        html+='''</tbody>
+    </table>
+</div>
+
+<div class='row'>
+    <div class='col'>
+        <div class='d-flex flex-wrap flex-sm-row justify-content-between'>
+            <ul class='pagination'>'''
+        html+="<li class='page-item active'>Página "+str(pagina)+" de "+str(TotalPaginas)+" de "+str(num_filas_total)+" registros</li>"
+        html+="</ul>"
+
+        html+="<ul class='pagination d-flex flex-wrap'>"
+
+        if pagina != 1:
+            html+="<li class='page-item'><a class='page-link' onclick='buscarporRES(1)'>"+anterior+"</a></li>"
+        else:
+            html+="<li class='page-item'><span class='page-link text-muted'>"+anterior+"</span></li>"
+
+
+        if pagina > (adjacents + 1):
+            html+="<li class='page-item'><a class='page-link' onclick='buscarporRES(1)'>1</a></li>"
+
+        if pagina > (adjacents + 2):
+            html+="<li class='page-item'><span class='page-link'>...</span></li>"
+        for i in range(start, end):
+            if i == pagina:
+                html+="<li class='page-item active'><span class='page-link'>"+str(i)+"</span></li>"
+            else:
+                html+="<li class='page-item'><a class='page-link' onclick='buscarporRES("+str(i)+")'>"+str(i)+"</a></li>"
+
+        if pagina < (TotalPaginas - adjacents - 1):
+            html+="<li class='page-item'><span class='page-link'>...</span></li>"
+
+        if pagina < (TotalPaginas - adjacents):
+            html+="<li class='page-item'><a class='page-link' onclick='buscarporRES("+str(TotalPaginas)+")'>"+str(TotalPaginas)+"</a></li>"
+
+        if pagina < TotalPaginas:
+            html+="<li class='page-item'><a class='page-link' onclick='buscarporRES("+str(pagina+1)+")'>"+siguiente+"</a></li>"
+        else:
+            html+="<li class='page-item'><span class='page-link text-muted'>"+siguiente+"</span></li>"
+
+        html+='''</ul>
+        </div>
+    </div>
+'''
+
+    return html
+
+@app.route("/Efresp", methods=['POST'])
+def formularioRespuestas():
+    if request.method == 'POST':
+        id = request.form.get('id')
+        listarDeCuanto = request.form.get('listarDeCuanto')
+        tipo_respuesta = request.form.get('respuesta')
+        pagina = request.form.get('pagina')
+        conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+        cursor = conn.cursor()
+        # Consulta para verificar si el usuario existe
+        consulta = "SELECT * FROM respuesta"
+        cursor.execute(consulta)
+        sql_consulta = cursor.fetchall()
+        cons = "select * from respuesta where cod_respuesta = "+str(id)
+        cursor.execute(cons)
+        sql_co = cursor.fetchone()
+        cursor.close()
+        conn.close()
+        if 'usuario' in session:
+            return render_template('EditarRespuesta.html',consulta = sql_consulta,usuario=session['usuario'],
+            id=id,
+            listarDeCuanto=listarDeCuanto,
+            buscar=buscar,
+            tipo_respuesta=tipo_respuesta,
+            pagina=pagina,
+            sql_co=sql_co)
+        return render_template('EditarRespuesta.html',consulta = sql_consulta,usuario=None)
+
+
+@app.route("/ActResp",methods = ['POST'])
+def ActualizarRespuestas():
+
+    if request.method == 'POST':
+        # Obtener los datos enviados mediante Ajax
+        posible_respuesta = request.form.get("posible_respuesta")
+        consulta = request.form.get("consulta")
+        descripcion = request.form.get("descripcion")
+        id = int(request.form.get('id'))
+        conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+
+        try:
+            with conn.cursor() as cursor:
+                # Consulta parametrizada para insertar datos
+                sql_insert = "update respuesta set resp=%s, consulta=%s,descripcion=%s where cod_respuesta="+str(id)
+                cursor.execute(sql_insert, (posible_respuesta, consulta, descripcion))
+
+            # Confirmar la transacción
+            conn.commit()
+
+        finally:
+            # Cerrar la conexión siempre, incluso si ocurre una excepción
+            conn.close()
+        return 'correcto'
+@app.route("/Delresp",methods = ['POST'])
+def EliminarRespuesta():
+
+    if request.method == 'POST':
+        # Obtener los datos enviados mediante Ajax
+        accion = request.form.get('accion')
+        id = int(request.form.get('id'))
+        conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+
+        try:
+            with conn.cursor() as cursor:
+                # Consulta parametrizada para insertar datos
+                if accion == 'activo':
+                    sql_insert = "update respuesta set estado = 'desactivo' where cod_respuesta="+str(id)
+                else:
+                    sql_insert = "update respuesta set estado = 'activo' where cod_respuesta="+str(id)
+
+                cursor.execute(sql_insert)
+
+            # Confirmar la transacción
+            conn.commit()
+
+        finally:
+            # Cerrar la conexión siempre, incluso si ocurre una excepción
+            conn.close()
+
+        return 'correcto'
+
+@app.route('/Taresp', methods=['POST'])
+def tablaRespuesta3():
+    if request.method == 'POST':
+        # Obtener los datos enviados mediante Ajax
+        pagina = int(request.form.get('pagina'))
+        listarDeCuanto = int(request.form.get('listarDeCuanto'))
+        #buscar = request.form.get('buscar')
+        respuesta = request.form.get('respuesta')
+
+        sql1 = "SELECT COUNT(*) FROM respuesta "
+        sql = "SELECT * FROM respuesta"
+        if respuesta != '':
+            sql+=" where resp = '"+respuesta+"' "
+            sql1+=" where resp = '"+respuesta+"' "
+        #return render_template("index.html")
+        # Verificar si existe la sesión de usuario
+        conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+        cursor = conn.cursor()
+        cursor.execute(sql1)
+        num_filas_total = cursor.fetchone()[0]
+        TotalPaginas = ceil(num_filas_total / listarDeCuanto)
+        inicioList = (pagina - 1) * listarDeCuanto
+        sql+= " LIMIT "+str(inicioList)+" ,"+str(listarDeCuanto)+""
+        cursor.execute(sql)
+        sql_consulta = cursor.fetchall()
+        consulta_res = "SELECT * FROM respuesta"
+        cursor.execute(consulta_res)
+        con_res = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        adjacents = 1
+        anterior = "Anterior"
+        siguiente = "Siguiente"
+        start = max(pagina - adjacents, 1)
+        end = min(pagina + adjacents + 1, TotalPaginas + 1)
+        if 'usuario' in session:
+            # Renderizar el menú para usuario autenticado
+            return render_template('tablaRespuesta.html', usuario=session['usuario'], consulta =sql_consulta, TotalPaginas=TotalPaginas,pagina=pagina,listarDeCuanto=listarDeCuanto
+            , start=start,
+            end=end,
+            anterior=anterior,
+            siguiente=siguiente,
+            adjacents=adjacents,
+            con_res=con_res,
+            num_filas_total=num_filas_total)
+        # Si no existe la sesión de usuario, renderizar un menú básico
+        return render_template('tablaRespuesta.html', usuario=None)
 if __name__ == '__main__':
     app.run(host='0.0.0.0',debug=True,port=5003)
 
