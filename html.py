@@ -13,7 +13,7 @@ html_content = """
             width: 100%;
             border-collapse: collapse;
         }
-        th, td {
+        th, tdffffff {
             border: 1px solid black;
             padding: 8px;
             text-align: left;
