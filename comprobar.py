@@ -269,10 +269,10 @@ def palabra_curso(texto): # Suponiendo que eliminar_tildes(texto) está definida
     return "no"
 def obtener_que_curso_quiere(texto):# Suponiendo que eliminar_tildes(texto) está definida
     curso_keywords = ["1","1er año","1er","1ro","primero","primer","primer año","2","2do año","2do","segundo",
-    "segundo año","3","3er","3er año","tercero","tercer año","tercer","4","4to","4to año","cuarto","cuarto año","5","5to",
-    "5to año","quinto","quinto año"]
-    id_curso = ["1","1","1","1","1","1","1","2","2","2","2","2","3","3","3","3","3","3",
-    "4","4","4","4","4","5","5","5","5","5"]
+    "segundo año","3","3er","3er año","3ro","tercero","tercer año","tercer","4","4to","4to año","cuarto","cuarto año","5","5to",
+    "5to año","quinto","quinto año","5to"]
+    id_curso = ["1","1","1","1","1","1","1","2","2","2","2","2","3","3","3","3","3","3","3",
+    "4","4","4","4","4","5","5","5","5","5","5"]
     curso=[]
     doc2 = nlp(texto)
     for token in doc2:

@@ -13,184 +13,6 @@ from comprobar import obtener_ano_de_fecha
 from unidecode import unidecode
 # Cargar el modelo pre-entrenado
 model = SentenceTransformer('all-MiniLM-L6-v1')
-"""sentencias = [
-    "informacion carreras",
-    "informacion catidad estudiantes",
-    "informacion cantidad estudiantes carrera",
-    "informacion total estudiante carrera",
-    "cantidad de estudiantes que tiene carrera",
-    "informacion estudiantes unsxx universidad nacional siglo xx",
-    "informacion carreras area areas tecnologia salud social",
-    "cuales carreras area areas tecnologia salud social",
-    "informacion estudiantes area tecnologia salud social",
-    "informacion calificacion estudiante carrera",
-    "estadistica estudiantes aprobados area areas carreras tecnologia salud social",
-    "estadistica estudiantes aprobados area areas carreras tecnologia salud social",
-    "cantidad estudiantes reprobados area areas carreras tecnologia salud social",
-    "cuales carreras",
-    "informacion carrera",
-    "cuales materias estudiante",
-    "estadistica estudiantes desertores area areas carreras tecnologia salud social",
-    "estadistica estudiantes abandonaron dejaron estudios area areas carreras tecnologia salud social",
-    "estadistica estudiantes concluyeron estudios areas carreras tecnologia salud social",
-    "cual es la cantidad de estudiantes que concluyeron sus estudios en referencia",
-    "estadistica estudiantes desertores asignaturas especificas areas carreras tecnologia salud social",
-    "cuales cantidad de estudiantes que dejaron asignaturas areas  carreras tecnologia salud social",
-    "cuales cantidad de estudiantes que abandonaron asignaturas areas  carreras tecnologia salud social",
-    "cuales cantidad de estudiantes que dejaron materias areas  carreras tecnologia salud social",
-    "cuales cantidad de estudiantes que abandonaron materias areas  carreras tecnologia salud social",
-    "cual cantidad estudiantes sexo femenino masculino areas  carreras tecnologia salud social",
-    "cual cantidad estudiantes clasificados varones mujeres areas  carreras tecnologia salud social",
-    "poblacion estudiantil clasificado varones mujeres areas  carreras tecnologia salud social",
-    "cantidad estudiantes realizan transferencias universidades",
-    "total estudiantes realizan transferencias universidades sistema universitario",
-    "cantidad estudiantes realizan transferencia universidades unsxx universidad nacional siglo xx",
-    "cantidad estudiantes provenientes universidades transferencias universidades",
-    "total de estudiantes vinieron concepto transferencia",
-    "cantidad estudiantes otras universidades concepto transferencia",
-    "numero estudiantes transferidos universidades",
-    "cantidad estudiantes inscritos primeros niveles areas  carreras ",
-    "existe mas estudiantes inscritos primeros niveles areas carreras ",
-    "en que carreras y areas hay mas inscritos de estudiantes ",
-    "cual es la cantidad de estudiantes inscritos en las tres areas y carreras",
-    "cantidad de estudiante aprobados por areas y carreras",
-    "quiero informacion de nuevos estudiantes inscritos por area y carreras",
-    "quiero que me brindes informacion sobre la modalidad de titulacion que tiene cada carrera",
-    "cuales son las modalidades de titulacion de la carrera",
-    "quiero informacion sobre las modalidades de titulacion que tiene la carrera",
-    "informacion de estudiantes tranferidos a otras universidades",
-    "cual es la cantidad de estudiantes varones y mujeres por areas y carreras",
-    "informacion sobre estudiantes que dejaron sus estudios",
-    "cual es la cantidad de estudiantes que desertaron",
-    "informacion sobre la desercion estudiantil",
-    "cual es la cantidad de estudiantes que abandonaron materias",
-    "quiero indice de estudiantes clasificados en masculino y femenino por areas y carreras",
-    "cual es la cantidad de estudiantes provenientes de otras universidades por concepto de transferencia",
-    "cual es la cantidad de estudiantes que realizan transferencias a otras universidades",
-    "indice de titulados en relacion al porcentaje de inscritos de los primeros niveles",
-    "cual es la cantidad de titulados con relacion a inscritos en primer año",
-    "los matriculados a que region del pais pertenecen clasificados por departamentos y regiones",
-    "cuales son las carreras de la universidad",
-    "cual es la cantidad de estudiantes aprobados y reprobados",
-    "quiero informacion sobre el plan de estudio de la carrera de",
-    "quiero informacion sobre el plan de estudio del area de tecnologia, salud y sociales",
-    "cuales son los planes de estudio en las areas y carreras",
-    "cuales son los plane de estudio",
-    "informacion sobre estudiantes aprobados por areas y carreras",
-    "cual es la cantidad de estudiantes que concluyeron sus estudios con relacion a los primeros niveles por areas y carreras",
-    "cual es la cantidad de estudiantes que dejaron sus materias por areas y carreras",
-    "cual es la cantidad de estudiantes provenientes de otras universidades",
-    "cual es la cantidad de inscritos en materias por areas y carreras",
-    "estadistica a nivel general de inscritos en materias",
-    "estadistica de inscripcion de materias del area tecnologia, salud y social desde",
-    "estadistica a nivel general de inscritos en materias de la carrera de",
-    "cual es la cantidad de inscritos en materias de la carrera de",
-    "informacion de inscritos en materias de la carrera de",
-]"""
-# Definir la lista de pares
-"""
-respuesta =[
-'ver_carreras',
-'total_de_estudiantes',
-'total_de_estudiantes_carrera',
-'total_de_estudiantes_carrera',
-'total_de_estudiantes_carrera',
-'estudiantes_de_unsxx',
-"seleccionar_carreras_area",
-"seleccionar_carreras_area",
-"estudiante_por_area",
-"seleccionar_asignatura_estudiante",
-"total_de_estudiantes_estadisticas",
-"total_de_estudiantes_estadisticas",
-"total_de_estudiantes_estadisticas",
-'ver_carreras',
-'ver_carreras',
-"seleccionar_asignatura_estudiante",
-"seleccionar_estudiantes_desertores",
-"seleccionar_estudiantes_desertores",
-"diferencia_entre_primero_quinto",
-"diferencia_entre_primero_quinto",
-"asignaturas_desercion",
-"asignaturas_desercion",
-"asignaturas_desercion",
-"asignaturas_desercion",
-"asignaturas_desercion",
-"clasificado_sexo",
-"clasificado_sexo",
-"clasificado_sexo",
-"transferencias_buscar",
-"transferencias_buscar",
-"transferencias_buscar",
-"concepto_transferencia",
-"concepto_transferencia",
-"concepto_transferencia",
-"concepto_transferencia",
-"mayor_inscritos",
-"mayor_inscritos",
-"mayor_inscritos",
-"mayor_inscritos",
-"total_de_estudiantes_estadisticas",
-"mayor_inscritos",
-"modalidad_titulacion",
-"modalidad_titulacion",
-"modalidad_titulacion",
-"transferencias_buscar",
-"clasificado_sexo",
-"total_estudiante_desercion",
-"total_estudiante_desercion",
-"total_estudiante_desercion",
-"asignaturas_desercion",
-"clasificado_sexo",
-"concepto_transferencia",
-"transferencias_buscar",
-"titulados_relacion",
-"titulados_relacion",
-"clasificacion_departamento",
-'ver_carreras',
-"total_de_estudiantes_estadisticas",
-"plan_de_estudio",
-"plan_de_estudio",
-"plan_de_estudio",
-"plan_de_estudio",
-"total_de_estudiantes_estadisticas",
-"diferencia_entre_primero_quinto",
-"asignaturas_desercion",
-"concepto_transferencia",#estudiantes que estan en la universidad por transferencia
-"materias_inscritos",
-"materias_inscritos",
-"materias_inscritos",
-"materias_inscritos",
-"materias_inscritos",
-"materias_inscritos",
-]"""
-"""
-consultas_sql = {
-"ver_carreras":"select *from carrera",
-"ver_por_nombre_estudiante":" select e.nombre_es,e.ap_es,e.am_es,e.ci,e.pais_es,e.departamento,e.provincia,e.ciudad,e.region,e.sexo,c.nombre_carrera from carrera as c inner join estudiante as e on c.cod_carrera = e.cod_carrera where e.nombre_es like '%{}%' ",
-"ver_carreras_nombre":"select *from carrera where cod_carrera = {};",
-"total_de_estudiantes":"SELECT COUNT(*) FROM estudiante",
-"total_de_estudiantes_carrera":"select *from estudiante",
-"datos_especificos_estudiante":"SELECT e.nombre_es,e.ap_es,e.am_es,e.ci,e.pais_es,e.departamento,e.provincia,e.ciudad,e.region,e.sexo,c.nombre_carrera,e.cod_es FROM carrera as c inner join estudiante as e on c.cod_carrera = e.cod_carrera  where  ",
-"estudiantes_de_unsxx":"select * from estudiante as e where ",
-"seleccionar_carreras_area":"select *from area as a inner join carrera as c on a.cod_area = c.cod_area where ",
-"estudiante_por_area":"select *from estudiante as e inner join estudiante_perdio as ep on e.cod_es = ep.cod_es",
-"seleccionar_asignatura_estudiante":"select *from cursa_asignatura",
-"seleccionar_asignatura_estudiante_calificacion":"select *from cursa_asignatura",
-"total_de_estudiantes_estadisticas":"select * from estudiante_perdio",
-"seleccionar_estudiantes_desertores":"select * from estudiante_perdio",
-"diferencia_entre_primero_quinto":"select *from estudiante_perdio",
-"asignaturas_desercion":"select *from cursa_asignatura",
-"clasificado_sexo":"select *from estudiante",
-"transferencias_buscar":"select *from transferencia",
-"concepto_transferencia":"select * from transferir ",
-"mayor_inscritos":"select * from estudiante",
-"modalidad_titulacion":"select *from modalidad_titulacion",
-"total_estudiante_desercion":"select *from estudiante_perdio",
-"titulados_relacion":"select *from estudiante",
-"clasificacion_departamento":"select * from estudiante",
-"plan_de_estudio":"select *from plan_de_estudio",
-"materias_inscritos":"select *from cursa_asignatura",
-}"""
 #e.estado = 'desactivo' or e.cod_area = 3 and e.sexo = 'femenino' or  e.sexo = 'masculino';"
 consultas_aux= {"activo_es" :" e.estado = 'activo'",
 "desactivo_es":" e.estado = 'desactivo'",
@@ -409,31 +231,6 @@ def buscar(texto):
             vec1.append(nombre_posicion_sql)
             vec1.append(response)
 
-        if response== "total_de_estudiantes_carrera":
-            nombre_posicion_sql = "total_de_estudiantes_carrera"
-            vec=[]
-            vec1=[]
-            response = ""
-            contar_parametros=0
-            sql = consultas_sql[nombre_posicion_sql]#obtenemos la cosulta
-            #obtener el nombre de la carrera
-            carreras_encontradas = obtener_carreras_nombre(texto)#enviamos el texto y buscamos si existe una carrera
-            aux = ""
-            if carreras_encontradas:#si existe algun nombre de carrera ingresa
-
-                if len(carreras_encontradas)>1:#preguntamos si las carreras encotradas es mayor a 1
-                    si  = "no"
-                    for carr in carreras_encontradas:#recorremos todas las carreras y las concatenamos
-                        if si == "no":
-                            aux+=" cod_carrera = "+str(carr)
-                            si = "si"
-                        elif si == "si":
-                            aux+=" or cod_carrera = "+str(carr)
-                else:
-                    aux = " cod_carrera = "+str(carreras_encontradas.pop(0))
-            response = sql + " where "+aux
-            vec1.append(nombre_posicion_sql)
-            vec1.append(response)
         if response == "datos_especificos_estudiante":
             vec=[]
             vec1=[]
@@ -1041,13 +838,95 @@ def buscar(texto):
             res = busqueda(texto,"materias_inscritos",consultas_sql)
             for r in res:
                 vec1.append(r)
+        if response == "asignaturas":
+            vec1=[]
+            res = consulta_buscar(texto,"asignaturas",consultas_sql)
+            for r in res:
+                vec1.append(r)
+        if response== "total_de_estudiantes_carrera":
+            vec1=[]
+            res = busqueda(texto,"total_de_estudiantes_carrera",consultas_sql)
+            for r in res:
+                vec1.append(r)
         return vec1
     else:
         vec1=[]
         vec1.append("argumentar_poco_mas")
         return vect1
 
+#funcion para construir consulta sql con carreras y grados y obtener_areas_id
+def consulta_buscar(texto,respuesta,consultas_sql):
+    vec = []
+    vec1 = []
+    response = "";
+    areas = obtener_areas_id(texto)#obtener las areas
+    nombre_posicion_sql = respuesta
+    sql = consultas_sql[nombre_posicion_sql]
+    carreras_encontradas = obtener_carreras_nombre(texto)
+    bien_de = 0
+    response2 = ''
+    if carreras_encontradas:
+        grado = obtener_que_curso_quiere(texto)
+        vec1.append("si_car_n")
+        # Obtener la primera carrera encontrada
+        si = "no"
+        idd = ""
+        for car in carreras_encontradas:
+            idd+=str(car)+","
+            if si == "no":
+                response+=" where cod_carrera = "+str(car)
+                si = "si"
+            elif si == "si":
+                response+= " or cod_carrera = "+str(car)
+        vec1.append(idd)
+        if grado:#si existe algun curso en el texto ingresa
+            si = 'no'
+            idd2=''
+            for gra in grado:
+                idd2+=str(gra)+","#concatenamos los id de grado
+                response+= " and cod_grado = "+str(gra)
+            vec1.append("si_grado")
+            vec1.append(idd2)
+        else:
+            vec1.append("no")
+            vec1.append("no")
+        vec1.append("no")
+        vec1.append("no")
+        vec1.append("no")
+        response = sql+" "+response
+    elif areas:
+        vec1.append("no")
+        vec1.append("no")
+        vec1.append("no")
+        vec1.append("no")
+        vec1.append("si_ar")
+        si = "no"
+        idd = ""
+        for i in areas:#recorremos las areas solicitadas
+            idd+=str(i)+","
+            if si == "no":
+                response += " where cod_area = "+str(i)
+                si = "si"
+            elif si == "si":
+                response += " or cod_area="+str(i) #obtenemos la consulta y lo concatenamos
+        vec1.append(idd)
+        vec1.append("no")
+        response = sql+" "+response
+    else:
+        vec1.append("no")
+        vec1.append("no")
+        vec1.append("no")
+        vec1.append("no")
+        vec1.append("no")
+        vec1.append("no")
+        vec1.append("si_total")
+        response=sql
 
+    vec1.append(nombre_posicion_sql)
+    vec1.append(response)
+    return vec1
+
+#funcion para construir una consulta sql con solo fechas carrera y area
 def busqueda(texto,respuesta,consultas_sql):
     print(texto,"   =    ",respuesta)
     vec = []

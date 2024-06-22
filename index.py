@@ -98,12 +98,13 @@ def registrarRespuesta():
         consulta = request.form.get('consulta')
         descripcion = request.form.get('descripcion')
         conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+        estado = 'activo'
 
         try:
             with conn.cursor() as cursor:
                 # Consulta parametrizada para insertar datos
-                sql_insert = "INSERT INTO respuesta (resp, consulta, descripcion) VALUES (%s, %s, %s)"
-                cursor.execute(sql_insert, (posible_respuesta, consulta, descripcion))
+                sql_insert = "INSERT INTO respuesta (resp, consulta, descripcion,estado) VALUES (%s, %s, %s, %s)"
+                cursor.execute(sql_insert, (posible_respuesta, consulta, descripcion,estado))
 
             # Confirmar la transacción
             conn.commit()
@@ -129,12 +130,12 @@ def RegistrarPreguntas():
 
         # Conectar a la base de datos
         conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
-
+        estado = 'activo'
         try:
             with conn.cursor() as cursor:
                 # Consulta parametrizada para insertar datos
-                sql_insert = "INSERT INTO embeddings (texto, embedding, cod_respuesta) VALUES (%s, %s, %s)"
-                cursor.execute(sql_insert, (pregunta_nuevo, embedding_bytes, posible_respuesta))
+                sql_insert = "INSERT INTO embeddings (texto, embedding, cod_respuesta,estado) VALUES (%s, %s, %s, %s)"
+                cursor.execute(sql_insert, (pregunta_nuevo, embedding_bytes, posible_respuesta,estado))
 
             # Confirmar la transacción
             conn.commit()
@@ -366,16 +367,16 @@ def tablaPreguntas2():
         <tbody>'''
         for row in sql_consulta:
             html+="<tr>"
-            html+="<td>"+str(row[5])+"</td>"
+            html+="<td>"+str(row[6])+"</td>"
             html+="<td>"+str(row[1])+"</td>"
             html+="<td>"+str(row[3])+"</td>"
             html+="<td>"
             html+="<div class='btn-group' role='group' aria-label='Basic mixed styles example'>"
-            html+="<button type='button' class='btn btn-info' title='Editar' onclick='editar("+str(row[4])+")'>Editar</button>"
-            if row[8] == 'activo':
-                html += "<button type='button' class='btn btn-danger' title='Desactivar' onclick=\"accionBtnActivar('activo'," + str(row[4]) + ")\">Desactivar</button>"
+            html+="<button type='button' class='btn btn-info' title='Editar' onclick='editar("+str(row[5])+")'>Editar</button>"
+            if row[9] == 'activo':
+                html += "<button type='button' class='btn btn-danger' title='Desactivar' onclick=\"accionBtnActivar('activo'," + str(row[5]) + ")\">Desactivar</button>"
             else:
-                html += "<button type='button' class='btn btn-success' title='Activar' onclick=\"accionBtnActivar('desactivo'," + str(row[4]) + ")\">Activar</button>"
+                html += "<button type='button' class='btn btn-success' title='Activar' onclick=\"accionBtnActivar('desactivo'," + str(row[5]) + ")\">Activar</button>"
 
             html+="</div>"
             html+="</td>"

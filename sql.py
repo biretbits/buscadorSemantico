@@ -531,3 +531,41 @@ def seleccionarCarrerasTodo():
         return sql_consulta
     else:
         return "no"
+
+
+
+def seleccionarGrado():
+    sql_consulta = "select *from grado"#seleccionamos todos los estudiantes
+    conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+    # Crear un cursor para ejecutar consultas
+    cursor = conn.cursor()
+    # Ejecutar la consulta SQL
+    cursor.execute(sql_consulta)
+    # Verifica si hay algún resultado antes de obtenerlos
+    if cursor.rowcount > 0:
+        # Si hay resultados, obtén los datos de la consulta
+        sql_consulta = cursor.fetchall()
+        cursor.close()
+        conn.close()
+
+        return sql_consulta
+    else:
+        return "no"
+
+def NOmbredeGrado_por_id(id):
+    sql_consulta = "select *from grado where cod_grado ="+str(id)#seleccionamos todos los estudiantes
+    conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+    # Crear un cursor para ejecutar consultas
+    cursor = conn.cursor()
+    # Ejecutar la consulta SQL
+    cursor.execute(sql_consulta)
+    # Verifica si hay algún resultado antes de obtenerlos
+    if cursor.rowcount > 0:
+        # Si hay resultados, obtén los datos de la consulta
+        sql_consulta = cursor.fetchone()
+        cursor.close()
+        conn.close()
+
+        return sql_consulta[1]
+    else:
+        return "no"
