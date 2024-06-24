@@ -123,7 +123,7 @@ def buscar(texto):
         if coseno_max > max:#calculamos el maximo item
             max = coseno_max
             id_respuesta = s[3]#cuardamos la posible respuesta
-    print(id_respuesta," cod_respuestad  ")
+    print(id_respuesta," cod_respuestad  ",max)
     consultas_sql={}#creamos un array tipo diccionario
     if id_respuesta > 0:#si es mayor a cero existe un id
         respuesta_bd = seleccionar_respuesta_y_consulta(id_respuesta)
@@ -848,6 +848,31 @@ def buscar(texto):
             res = busqueda(texto,"total_de_estudiantes_carrera",consultas_sql)
             for r in res:
                 vec1.append(r)
+        if response == "porcentaje_de_avance_materias":
+            vec1=[]
+            res = busqueda(texto,"porcentaje_de_avance_materias",consultas_sql)
+            for r in res:
+                vec1.append(r)
+        if response == "titulados":
+            vec1=[]
+            res = busqueda(texto,"titulados",consultas_sql)
+            for r in res:
+                vec1.append(r)
+        if response == "cantidad_docentes":
+            vec1=[]
+            res = busqueda(texto,"cantidad_docentes",consultas_sql)
+            for r in res:
+                vec1.append(r)
+        if response == "docente_sexo":
+            vec1=[]
+            res = busqueda(texto,"docente_sexo",consultas_sql)
+            for r in res:
+                vec1.append(r)
+        if response == "departamento_docente":
+            vec1=[]
+            res = busqueda(texto,"departamento_docente",consultas_sql)
+            for r in res:
+                vec1.append(r)
         return vec1
     else:
         vec1=[]
@@ -1103,7 +1128,7 @@ def construir_consulta(texto,respuesta,consultas_sql):
     vec1.append(response)
     return vec1
 
-textoo = "cual es la cantidad de estudiantes que tiene la carrera de informatica"
+textoo = "informacion de docentes, cual es su departamento de procedencia de la carrera de derecho desde el año 2021 al 2024"
 
 re = buscar(textoo)
 

@@ -521,74 +521,74 @@ insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fec
 insert into docente(nombre_docente,ap_docente,am_docente,ci_docente,profesion,telefono,pais,
 departamento,ciudad,sexo,cod_area,cod_carrera,fecha,estado)values(
 'Roger','torrico','manrique',7845125,'Ingenierio en computacion',78451235,'Bolivia',
-'La paz','Oruro','masculino',1,1,'2024-02-01','activo'
+'la paz','oruro','masculino',1,1,'2024-02-01','activo'
 );
 
 insert into docente(nombre_docente,ap_docente,am_docente,ci_docente,profesion,telefono,pais,
 departamento,ciudad,sexo,cod_area,cod_carrera,fecha,estado)values(
 'Manuel','huanca','ayaviri',78784125,'Ingenierio Informatico',7845456,'Bolivia',
-'La paz','el alto','masculino',1,1,'2024-02-01','activo'
+'la paz','el alto','masculino',1,1,'2024-02-01','activo'
 );
 
 insert into docente(nombre_docente,ap_docente,am_docente,ci_docente,profesion,telefono,pais,
 departamento,ciudad,sexo,cod_area,cod_carrera,fecha,estado)values(
 'Maria','nina','callahuara',73784512,'Ingenierio telecomunicaciones',67457845,'Bolivia',
-'Oruro','Poopo','femenino',1,1,'2024-02-01','activo'
+'oruro','Poopo','femenino',1,1,'2024-02-01','activo'
 );
 
 insert into docente(nombre_docente,ap_docente,am_docente,ci_docente,profesion,telefono,pais,
 departamento,ciudad,sexo,cod_area,cod_carrera,fecha,estado)values(
 'Isabel','pantoja','manrique',7774125,'Licenciada en Enfermeria',67458912,'Bolivia',
-'Cochabamba','quillacollo','femenino',2,12,'2024-02-01','activo'
+'cochabamba','quillacollo','femenino',2,12,'2024-02-01','activo'
 );
 
 
 insert into docente(nombre_docente,ap_docente,am_docente,ci_docente,profesion,telefono,pais,
 departamento,ciudad,sexo,cod_area,cod_carrera,fecha,estado)values(
 'Roman','Ayaviri','nina',7374125,'Licenciado en Enfermeria',67898912,'Bolivia',
-'Cochabamba','quillacollo','masculino',2,12,'2024-02-01','activo'
+'cochabamba','quillacollo','masculino',2,12,'2024-02-01','activo'
 );
 
 insert into docente(nombre_docente,ap_docente,am_docente,ci_docente,profesion,telefono,pais,
 departamento,ciudad,sexo,cod_area,cod_carrera,fecha,estado)values(
 'Carlos','mamani','quispe',777754,'Licenciado en Enfermeria',67457889,'Bolivia',
-'Potosi','Llalagua','masculino',2,12,'2024-02-01','activo'
+'potosi','Llalagua','masculino',2,12,'2024-02-01','activo'
 );
 
 insert into docente(nombre_docente,ap_docente,am_docente,ci_docente,profesion,telefono,pais,
 departamento,ciudad,sexo,cod_area,cod_carrera,fecha,estado)values(
 'Isabel','carrion','janco',7777889,'Ingenieria de minas',67458952,'Bolivia',
-'Cochabamba','quillacollo','masculino',1,2,'2024-02-01','activo'
+'cochabamba','quillacollo','masculino',1,2,'2024-02-01','activo'
 );
 
 insert into docente(nombre_docente,ap_docente,am_docente,ci_docente,profesion,telefono,pais,
 departamento,ciudad,sexo,cod_area,cod_carrera,fecha,estado)values(
 'Roberto carlos','mamani','quispe',7774178,'Ingenierio electromecanico',68458912,'Bolivia',
-'Cochabamba','quillacollo','femenino',1,3,'2024-02-01','activo'
+'cochabamba','quillacollo','femenino',1,3,'2024-02-01','activo'
 );
 
 insert into docente(nombre_docente,ap_docente,am_docente,ci_docente,profesion,telefono,pais,departamento,ciudad,
 sexo,cod_area,cod_carrera,fecha,estado)values('JUan jose','LOpez','manrique',7994125,'Ingenierio agronomo',67778912,'Bolivia',
-'POtosi','Uncia','masculino',1,4,'2024-02-01','activo');
+'potosi','Uncia','masculino',1,4,'2024-02-01','activo');
 
 insert into docente(nombre_docente,ap_docente,am_docente,ci_docente,profesion,telefono,pais,departamento,ciudad,
 sexo,cod_area,cod_carrera,fecha,estado)values('JUan pablo','luna','Martines',7394125,'Ingenierio Informatico',63778912,'Bolivia',
-'POtosi','Uncia','masculino',1,1,'2024-02-01','activo');
+'potosi','Uncia','masculino',1,1,'2024-02-01','activo');
 insert into docente(nombre_docente,ap_docente,am_docente,ci_docente,profesion,telefono,pais,departamento,ciudad,
 sexo,cod_area,cod_carrera,fecha,estado)values('nelson','ayaviri','nian',53394125,'Ingenierio Informatico',63779912,'Bolivia',
-'POtosi','llallagua','masculino',1,1,'2024-02-01','activo');
+'potosi','llallagua','masculino',1,1,'2024-02-01','activo');
 insert into docente(nombre_docente,ap_docente,am_docente,ci_docente,profesion,telefono,pais,departamento,ciudad,
 sexo,cod_area,cod_carrera,fecha,estado)values('mario','dias','lia',6394125,'Ingenierio computacion',73778912,'Bolivia',
-'Oruro','oruro','masculino',1,1,'2024-02-01','activo');
+'oruro','oruro','masculino',1,1,'2024-02-01','activo');
 insert into docente(nombre_docente,ap_docente,am_docente,ci_docente,profesion,telefono,pais,departamento,ciudad,
 sexo,cod_area,cod_carrera,fecha,estado)values('mari','lovera','lopes',7794125,'Ingenierio Informatico',63738912,'Bolivia',
-'POtosi','Uncia','femenino',1,1,'2024-02-01','activo');
+'potosi','Uncia','femenino',1,1,'2024-02-01','activo');
 insert into docente(nombre_docente,ap_docente,am_docente,ci_docente,profesion,telefono,pais,departamento,ciudad,
 sexo,cod_area,cod_carrera,fecha,estado)values('Pablo','canaviri','villca',8394125,'Ingenierio en sistemas',77778912,'Bolivia',
-'Cochabamba','quillacollo','masculino',1,1,'2024-02-01','activo');
+'cochabamba','quillacollo','masculino',1,1,'2024-02-01','activo');
 insert into docente(nombre_docente,ap_docente,am_docente,ci_docente,profesion,telefono,pais,departamento,ciudad,
 sexo,cod_area,cod_carrera,fecha,estado)values('juana','lia','canaviri',9394125,'Ingenierio Informatico',63578912,'Bolivia',
-'sucre','sucre','femenino',1,1,'2024-02-01','activo');
+'chuquisaca','sucre','femenino',1,1,'2024-02-01','activo');
 
 
 
