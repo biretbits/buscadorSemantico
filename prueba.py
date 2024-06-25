@@ -876,12 +876,43 @@ def buscar(texto):
             res = busqueda(texto,"departamento_docente",consultas_sql)
             for r in res:
                 vec1.append(r)
+
+        if response == "datos_carrera":#seleccionamos los datos de la carrera
+            vec1=[]
+            res = buscarDatosCarrera(texto,"datos_carrera",consultas_sql)
+            for r in res:
+                vec1.append(r)
         return vec1
     else:
         vec1=[]
         vec1.append("argumentar_poco_mas")
         return vect1
 
+def buscarDatosCarrera(texto,respuesta,consultas_sql):
+    vec1 = []
+    response = ''
+    nombre_posicion_sql = respuesta
+    sql = consultas_sql[nombre_posicion_sql]
+    carreras_encontradas = obtener_carreras_nombre(texto)
+    if carreras_encontradas:
+        vec1.append("si_car_n")
+        # Obtener la primera carrera encontrada
+        si = "no"
+        idd = ""
+        for car in carreras_encontradas:
+            idd+=str(car)+","
+            if si == "no":
+                response+=" where cod_carrera = "+str(car)
+                si = "si"
+            elif si == "si":
+                response+= " or cod_carrera = "+str(car)
+        response = sql+" "+response
+        vec1.append(idd)
+        vec1.append(nombre_posicion_sql)
+        vec1.append(response)
+    else:
+        vec1.append("argumentar_poco_mas")
+    return vec1
 #funcion para construir consulta sql con carreras y grados y obtener_areas_id
 def consulta_buscar(texto,respuesta,consultas_sql):
     vec = []
@@ -1131,7 +1162,7 @@ def construir_consulta(texto,respuesta,consultas_sql):
     vec1.append(response)
     return vec1
 
-textoo = "reporte de planes de estudio del area de tecnologia desde el 2023 al 2024"
+textoo = "quiero informacion de la carrera"
 
 re = buscar(textoo)
 

@@ -5557,6 +5557,46 @@ def  retornar_valores(datos,ress):
                     html += "</div>"
                     html += "</div>"
                 html += "</div>"
+    if accion1 == "datos_carrera":
+        si_car_n = ress[0]
+        id_car   = ress[1]
+        if si_car_n == "si_car_n":
+            s_dupli = eliminar_dobles(id_car)#si hay doble veces repetido el id lo eliminamos a 1
+            if len(s_dupli)==1:
+                html+="<div align='center' class='alert alert-secondary'>La información de la carrera es la siguente</div>"
+            else:
+                html+="<div align='center' class='alert alert-secondary'>La información de las carreras es la siguiente</div>"
+
+            for i in s_dupli:#recorremos todo los id de areas
+                index = int(i) - 1#obtenemos el id
+                index1 = int(i)
+                html += "<div class='row'>"
+                html += "<div class='col-lg-12'>"
+                html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                html += "<div class='panel-heading'>"
+                html += "<h6 align='center'>Carrera "+ str(nombre_carrera_retor(index1))+"</h6>"
+                html += "</div>"
+                html += "<div class='panel-body'>"
+                html+= "<table class='table' style='font-size:12px'>"
+                html+= "<thead>"
+                html+="<tr>"
+                html+="<td>Dirección</td>"
+                html+="<td>Area</td>"
+                html+="</tr>"
+                html+="</thead>"
+                html+="<tbody>"
+                for row in datos:
+                    if row[0] == index1:
+                        html+="<tr>"
+                        html+="<td>"+str(row[2])+"</td>"
+                        html+="<td>"+str(nombre_area_id(row[3]))+"</td>"
+                        html+="</tr>"
+                html+="</tbody>"
+                html+= "</table>"
+                html += "</div>"
+                html += "</div>"
+                html += "</div>"
+                html += "</div>"
     html += "</container>"
 
     return html

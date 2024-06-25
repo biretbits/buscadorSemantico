@@ -104,9 +104,9 @@
                     <ul class="pagination d-flex flex-wrap">
                         <!-- Botón anterior -->
                         {% if pagina != 1 %}
-                            <li class="page-item"><a class="page-link" onclick="buscarpor({{1}})">{{ anterior}}</a></li>
+                            <li class="page-item"><a class="page-link" onclick="buscarpor({{pagina-1}})">{{ anterior}}</a></li>
                         {% else %}
-                            <li class="page-item"><span class="page-link text-muted">{{ anterior }}</span></li>
+                            <li class="page-item"><span class="page-link text-muted" >{{ anterior }}</span></li>
                         {% endif %}
 
                         <!-- Primer página -->

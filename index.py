@@ -395,9 +395,9 @@ def tablaPreguntas2():
         html+="<ul class='pagination d-flex flex-wrap'>"
 
         if pagina != 1:
-            html+="<li class='page-item'><a class='page-link' onclick='buscarpor(1)'>"+anterior+"</a></li>"
+            html+="<li class='page-item'><a class='page-link' onclick='buscarpor("+str(pagina-1)+")'>"+anterior+"</a></li>"
         else:
-            html+="<li class='page-item'><span class='page-link text-muted'>"+anterior+"</span></li>"
+            html+="<li class='page-item'><span class='page-link text-muted' >"+anterior+"</span></li>"
 
 
         if pagina > (adjacents + 1):
@@ -692,7 +692,7 @@ def tablaRespuesta2():
         html+="<ul class='pagination d-flex flex-wrap'>"
 
         if pagina != 1:
-            html+="<li class='page-item'><a class='page-link' onclick='buscarporRES(1)'>"+anterior+"</a></li>"
+            html+="<li class='page-item'><a class='page-link' onclick='buscarporRES("+str(pagina-1)+")'>"+anterior+"</a></li>"
         else:
             html+="<li class='page-item'><span class='page-link text-muted'>"+anterior+"</span></li>"
 
