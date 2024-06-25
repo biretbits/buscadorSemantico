@@ -783,10 +783,8 @@ def buscar(texto):
             contar_parametros = 0
             nombre_posicion_sql="plan_de_estudio"
             if areas:
-                vec.append("si_ar")
                 contar_parametros+=1
-            else:
-                vec.append("no")
+
             if contar_parametros>0:#existe un nombre de area entonces solo buscar en los areas o en el area
                 si = "no"
                 idd = ""
@@ -798,18 +796,18 @@ def buscar(texto):
                     elif si == "si":
                         response += " or cod_area="+str(areas[i])
                 sql = consultas_sql[nombre_posicion_sql] #obtenemos la consulta y lo concatenamos
-                vec.append(idd)
-                for i in range(len(vec)):
-                    vec1.append(vec[i])
+                vec1.append("si_ar")
+                vec1.append(idd)
+                vec1.append("no")
+                vec1.append("no")
+                vec1.append("no")
                 vec1.append(nombre_posicion_sql)
                 vec1.append(sql+response)
             else:
+                contar_parametros=0
                 carreras_encontradas = obtener_carreras_nombre(texto);#buscar carreras si en el texto hay alguna carrera
                 if carreras_encontradas:#si existe algun nombre de carrera ingresa
-                    vec.append("si_car")#exite una carrera
                     contar_parametros+=1
-                else:
-                    vec.append("no")
 
                 if contar_parametros>0:#existe carreras
                     si = "no"
@@ -822,15 +820,20 @@ def buscar(texto):
                         elif si == "si":
                             response += " or cod_carrera="+str(carreras_encontradas[i])
                     sql = consultas_sql[nombre_posicion_sql] #obtenemos la consulta y lo concatenamos
-                    vec.append(idd)
-                    for i in range(len(vec)):
-                        vec1.append(vec[i])
+                    vec1.append("no")
+                    vec1.append("no")
+                    vec1.append("si_car")
+                    vec1.append(idd)
+                    vec1.append("no")
                     vec1.append(nombre_posicion_sql)
                     vec1.append(sql+response)
                 else:
                     sql = consultas_sql[nombre_posicion_sql] #obtenemos la consulta y lo concatenamos
                     vec1.append("no")
                     vec1.append("no")
+                    vec1.append("no")
+                    vec1.append("no")
+                    vec1.append("si_total")
                     vec1.append(nombre_posicion_sql)
                     vec1.append(sql)
         if response == "materias_inscritos":
@@ -1128,7 +1131,7 @@ def construir_consulta(texto,respuesta,consultas_sql):
     vec1.append(response)
     return vec1
 
-textoo = "informacion de docentes, cual es su departamento de procedencia de la carrera de derecho desde el año 2021 al 2024"
+textoo = "reporte de planes de estudio del area de tecnologia desde el 2023 al 2024"
 
 re = buscar(textoo)
 

@@ -3672,16 +3672,21 @@ def  retornar_valores(datos,ress):
             html += "</div><br>"
 
     if accion1 == "plan_de_estudio":
-        si_are = ress[0]
+        si_ar = ress[0]
+        id_ar  = ress[1]
+        si_car_n = ress[2]
+        id_car   = ress[3]
+
+        si_total = ress[4]
         curs ={0:'1er año',1:"2do año",2:"3er año",3:'4to año',4:'5to año'}
-        if si_are != "no":#si es diferente de no existe una area o areas
-            areas_id = ress[1]#obtenemos los id de areas quue llegan
-            s_dupli = eliminar_dobles(areas_id)#si hay doble veces repetido el id lo eliminamos a 1
+        if si_ar == "si_ar":#si es diferente de no existe una area o areas
+            #obtenemos los id de areas quue llegan
+            s_dupli = eliminar_dobles(id_ar)#si hay doble veces repetido el id lo eliminamos a 1
             print(s_dupli," esta bien o no ")
             for i in s_dupli:#recorremos todo los id de areas
                 index = int(i) - 1#obtenemos el id
                 index1 = int(i)
-                html += "<br><h5 align='center'>Area " + str(areasU[index])+"</h5><br>"
+                html += "<br><h5 align='center'>Area " + str(areasU[index])+"</h5>"
                 print("index   ",index1)
                 carreras = seleccionarcarrera_id(index1)#buscamos con el id todas las carreras relacionadas con el area
                 if carreras != "no":#si es diferente de no entonces ingresamos
@@ -3755,10 +3760,8 @@ def  retornar_valores(datos,ress):
                             html+="<h6 align='center'>No se encontro resultados<h6>"
                 else:
                     html+="<h6 align='center'>No se encontro resultados<h6>"
-        si_car = ress[1]#como no existe alguna area entonces buscaos carreras
-        if si_car != "no":#si carrera es diferente de no entonces existe carrera
-            car_id = ress[2]#obtenemos los id de areas quue llegan
-            s_dupli = eliminar_dobles(car_id)#si hay doble veces repetido el id lo eliminamos a 1
+        elif si_car_n == "si_car":#si carrera es diferente de no entonces existe carrera
+            s_dupli = eliminar_dobles(id_car)#si hay doble veces repetido el id lo eliminamos a 1
             print(s_dupli," esta bien o no ")
             for i in s_dupli:#recorremos todo los id de areas
                 index = int(i) - 1#obtenemos el id
@@ -3830,14 +3833,13 @@ def  retornar_valores(datos,ress):
                     html += "</div>"
                     html += "</div>"
                     html+="</div>"
-                else:
-                    html+="<h6 align='center'>No se encontro resultados<h6>"
+
 
         else:#no hay ni carrera ni area pero si existe plan de estudio
-            areasR = [1,2,3]
-            for i in areasR:#recorremos todo los id de areas
-                index = (i) - 1#obtenemos el id
-                index1 = (i)
+            areas = seleccionarAreas()
+            for are in areas:#recorremos todo los id de areas
+                index = are[0] - 1#obtenemos el id
+                index1 = are[0]
                 html += "<br><h5 align='center'>Area " + str(areasU[index])+"</h5><br>"
                 print("index   ",index1)
                 carreras = seleccionarcarrera_id(index1)#buscamos con el id todas las carreras relacionadas con el area

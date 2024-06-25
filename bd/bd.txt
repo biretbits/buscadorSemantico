@@ -2431,3 +2431,9 @@ creando usuario
 CREATE USER 'unsxx'@'localhost' IDENTIFIED BY '123';
 GRANT ALL PRIVILEGES ON academico.* TO 'unsxx'@'localhost';
 FLUSH PRIVILEGES;
+
+informacino de estadistica a nivel generales por areas y carreras en la desercion de estudiantes en materias especificas
+update cursa_asignatura set desercion = 'si' where cod_cursa = 45;
+update cursa_asignatura set desercion = 'si' where cod_cursa = 50;
+update cursa_asignatura set desercion = 'si' where cod_cursa = 25;
+update cursa_asignatura set desercion = 'si' where cod_cursa = 15;
