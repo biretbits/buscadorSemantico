@@ -44,6 +44,9 @@ echo "Instalando PyMySQL..."
 sudo pip3 install PyMySQL || error_exit "Error al instalar PyMySQL"
 echo "Instalación completada con éxito"
 
+echo "instalando mysql server"
+sudo apt install mysql-server
+echo "instalacion completada"
 echo "instalando spacy"
 sudo pip install spacy
 
@@ -52,3 +55,7 @@ python3 -m spacy download es_core_news_sm
 
 echo "instalando numpy"
 sudo pip install numpy
+
+echo "Instalando sentence-transformers"
+pip install sentence-transformers
+echo "instalacion finalizada"
