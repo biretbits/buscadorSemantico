@@ -79,7 +79,10 @@ foreign key(cod_pe, cod_carrera)references plan_de_estudio(cod_pe, cod_carrera)o
 foreign key(cod_area)references area(cod_area)on delete restrict on update restrict
 );
 
-
+create table tipo_asignatura(
+cod_tp_asig int not null auto_increment primary key,
+asignatura_es char(12)
+);
 
 create table asignatura(
 cod_asig int not null auto_increment,
@@ -93,11 +96,13 @@ cod_pe int,
 cod_carrera int,
 cod_grado int,
 cod_area int,
-estado char(15),
+cod_tp_asig int,
+estado char(15) DEFAULT 'activo',
 primary key(cod_asig,cod_pe,cod_carrera,cod_grado),
 foreign key(cod_pe,cod_carrera)references  plan_de_estudio(cod_pe,cod_carrera)on delete restrict on update restrict,
  foreign key(cod_grado)references grado(cod_grado)on delete restrict on update restrict,
- foreign key(cod_area)references area(cod_area)on delete restrict on update restrict
+ foreign key(cod_area)references area(cod_area)on delete restrict on update restrict,
+ foreign key(cod_tp_asig)references tipo_asignatura(cod_tp_asig)on delete restrict on update restrict
 );
 
 
@@ -646,153 +651,155 @@ insert into modalidad_titulacion(tipo_mt,cod_pe,cod_carrera,cod_area,fecha,estad
 insert into modalidad_titulacion(tipo_mt,cod_pe,cod_carrera,cod_area,fecha,estado)values('excelencia academica',2,1,1,'2024-05-05','activo');
 insert into modalidad_titulacion(tipo_mt,cod_pe,cod_carrera,cod_area,fecha,estado)values('Proyecto de grado',2,1,1,'2024-05-05','activo');
 
+insert into tipo_asignatura(asignatura_es)values('normal');
+insert into tipo_asignatura(asignatura_es)values('especifica');
 
 
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'MAT-1100','ALGEBRA SUPERIOR Y LINEAL',4,0,4,'MOD INGRESO',2,1,1,1
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'MAT-1100','ALGEBRA SUPERIOR Y LINEAL',4,0,4,'MOD INGRESO',2,1,1,1,2
 );
 
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'MAT-1101','ANALISIS MATEMATICOS',4,0,4,'MOD INGRESO',2,1,1,1
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'MAT-1101','ANALISIS MATEMATICOS',4,0,4,'MOD INGRESO',2,1,1,1,2
 );
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'FIS-1100','FISICA I',4,0,4,'MOD INGRESO',2,1,1,1
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'FIS-1100','FISICA I',4,0,4,'MOD INGRESO',2,1,1,1,2
 );
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'INF-1100','METODOLOGIA DE LA PROGRAMACION',4,2,4,'MOD INGRESO',2,1,1,1
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'INF-1100','METODOLOGIA DE LA PROGRAMACION',4,2,4,'MOD INGRESO',2,1,1,1,1
 );
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'INF-1101','ARQUITECTURA DE COMPUTADORAS Y DE DISPOSITIVOS MOVILES',2,2,4,'MOD INGRESO',2,1,1,1
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'INF-1101','ARQUITECTURA DE COMPUTADORAS Y DE DISPOSITIVOS MOVILES',2,2,4,'MOD INGRESO',2,1,1,1,1
 );
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'INF-1102','CONTABILIDAD BASICA ADMINISTRACION GENERAL',2,2,4,'MOD INGRESO',2,1,1,1
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'INF-1102','CONTABILIDAD BASICA ADMINISTRACION GENERAL',2,2,4,'MOD INGRESO',2,1,1,1,1
 );
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'INF-1120','TALLER DE PROGRAMACION I',0,4,4,'MOD INGRESO',2,1,1,1
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'INF-1120','TALLER DE PROGRAMACION I',0,4,4,'MOD INGRESO',2,1,1,1,1
 );
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'INF-1103','METODOLOGIA DE LA INVESTIGACION',2,0,2,'MOD INGRESO',2,1,1,1
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'INF-1103','METODOLOGIA DE LA INVESTIGACION',2,0,2,'MOD INGRESO',2,1,1,1,1
 );
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'INF-1102','ANALISIS MATEMATICO II',4,0,4,'MAT-1102',2,1,2,1
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'INF-1102','ANALISIS MATEMATICO II',4,0,4,'MAT-1102',2,1,2,1,2
 );
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'FIS-1101','FISICA II',4,0,4,'FIS-1100',2,1,2,1
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'FIS-1101','FISICA II',4,0,4,'FIS-1100',2,1,2,1,2
 );
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'INF-2100','DESARROLLO WEB',2,2,4,'INF-1120',2,1,2,1
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'INF-2100','DESARROLLO WEB',2,2,4,'INF-1120',2,1,2,1,1
 );
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'INF-2230','DISENO Y ADMINISTRACION DE BASE DE DATOS',2,2,4,'INF-1100',2,1,2,1
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'INF-2230','DISENO Y ADMINISTRACION DE BASE DE DATOS',2,2,4,'INF-1100',2,1,2,1,1
 );
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'INF-2104','TALLER DE DESARROLLO DE SOFTWARE',2,2,4,'INF-1100',2,1,2,1
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'INF-2104','TALLER DE DESARROLLO DE SOFTWARE',2,2,4,'INF-1100',2,1,2,1,1
 );
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'INF-2106','SISTEMAS OPERATIVOS',2,2,4,'INF-1100',2,1,2,1
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'INF-2106','SISTEMAS OPERATIVOS',2,2,4,'INF-1100',2,1,2,1,1
 );
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'INF-2210','ESTRUCTURA DE DATOS',2,2,4,'INF-1100',2,1,2,1
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'INF-2210','ESTRUCTURA DE DATOS',2,2,4,'INF-1100',2,1,2,1,1
 );
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'INF-2220','ESTADISTICA Y PROBABILIDAD',2,2,4,'INF-1100',2,1,2,1
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'INF-2220','ESTADISTICA Y PROBABILIDAD',2,2,4,'INF-1100',2,1,2,1,1
 );
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'INF-2240','ANALISIS Y DESENO DE SISTEMAS',2,2,4,'INF-1100',2,1,2,1
-);
-
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'INF-3100','INVESTIGACION OPERATIVA',2,2,4,'MAT-1101',2,1,3,1
-);
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'INF-3101','SIMULACION DE SISTEMAS',2,0,4,'INF-1101',2,1,3,1
-);
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'INF-3300','REDES I',2,2,4,'INF-1101',2,1,3,1
-);
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'INF-3630','MICROPROCESADORES Y MICROCONTROLADORES',2,2,4,'INF-1101',2,1,3,1
-);
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'INF-3720','TECNOLOGIAS EMERGENTES',2,2,4,'INF-1101',2,1,3,1
-);
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'INF-3740','TELECOMUNICACIONES',2,2,4,'INF-1101',2,1,3,1
-);
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'INF-3200','PROGRAMACION DE DISPOSITIVOS MOVILES',2,2,4,'INF-2130 INF-2104',2,1,3,1
-);
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'INF-3201','DESARROLLO DE VIDEO JUEGOS PARA DISPOSITIVOS MOVILES',2,2,4,'INF-1101',2,1,3,1
-);
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'INF-3202','REDES MOVILES Y CLUD COMPUTING',2,2,4,'INF-1101',2,1,3,1
-);
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'INF-3203','DESARROLLO DE APLICACIONES MOVILES PARA GEOLOCALIZACION',2,2,4,'INF-2100',2,1,3,1
-);
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'INF-3400','CRIPTOGRAFIA Y ESTEGANOGRAFIA',2,2,4,'INF-2201',2,1,3,1
-);
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'INF-3401','SERVIDORES Y SEGURIDAD EN REDES',2,2,4,'INF-2106',2,1,3,1
-);
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'INF-3402','SEGURIDAD EN SISTEMAS DE INFORMACION Y BASE DE DATOS',2,2,4,'INF-2106',2,1,3,1
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'INF-2240','ANALISIS Y DISEÑO DE SISTEMAS',2,2,4,'INF-1100',2,1,2,1,1
 );
 
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'INF-4100','INGENIERIA DE SOFTWARE',2,2,4,'INF-2240',2,1,4,1
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'INF-3100','INVESTIGACION OPERATIVA',2,2,4,'MAT-1101',2,1,3,1,1
 );
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'INF-4200','INTELIGENCIA ARTIFICIAL',2,2,4,'INF-2220',2,1,4,1
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'INF-3101','SIMULACION DE SISTEMAS',2,0,4,'INF-1101',2,1,3,1,1
 );
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'INF-4300','INGENIERIA DE SISTEMAS',2,0,4,'INF-1102',2,1,4,1
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'INF-3300','REDES I',2,2,4,'INF-1101',2,1,3,1,1
 );
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'INF-4300','PROGRAMACION GRAFICA',2,2,4,'INF-2210',2,1,4,1
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'INF-3630','MICROPROCESADORES Y MICROCONTROLADORES',2,2,4,'INF-1101',2,1,3,1,1
 );
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'INF-4700','ELECTIVA I',2,2,4,'',2,1,4,1
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'INF-3720','TECNOLOGIAS EMERGENTES',2,2,4,'INF-1101',2,1,3,1,1
 );
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'INF-4500','REALIDAD VIRTUAL Y AUMENTADA',2,2,4,'INF-3201',2,1,4,1
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'INF-3740','TELECOMUNICACIONES',2,2,4,'INF-1101',2,1,3,1,1
 );
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'INF-4501','TALLER DE DESARROLLO DE APLICACIONES PARA DISPOSITIVOS MOVILES',2,2,4,'INF-3200',2,1,4,1
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'INF-3200','PROGRAMACION DE DISPOSITIVOS MOVILES',2,2,4,'INF-2130 INF-2104',2,1,3,1,1
 );
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'INF-4502','INTERNET DE LAS COSAS',2,2,4,'INF-3202',2,1,4,1
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'INF-3201','DESARROLLO DE VIDEO JUEGOS PARA DISPOSITIVOS MOVILES',2,2,4,'INF-1101',2,1,3,1,1
 );
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'INF-4503','VISION ARTIFICIAL PARA DISPOSITIVOS MOVILES',2,2,4,'INF-3200',2,1,4,1
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'INF-3202','REDES MOVILES Y CLUD COMPUTING',2,2,4,'INF-1101',2,1,3,1,1
+);
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'INF-3203','DESARROLLO DE APLICACIONES MOVILES PARA GEOLOCALIZACION',2,2,4,'INF-2100',2,1,3,1,1
+);
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'INF-3400','CRIPTOGRAFIA Y ESTEGANOGRAFIA',2,2,4,'INF-2201',2,1,3,1,1
+);
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'INF-3401','SERVIDORES Y SEGURIDAD EN REDES',2,2,4,'INF-2106',2,1,3,1,1
+);
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'INF-3402','SEGURIDAD EN SISTEMAS DE INFORMACION Y BASE DE DATOS',2,2,4,'INF-2106',2,1,3,1,1
 );
 
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'INF-4600','INFORMATICA FORENSE',2,2,4,'INF-3403',2,1,4,1
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'INF-4100','INGENIERIA DE SOFTWARE',2,2,4,'INF-2240',2,1,4,1,1
 );
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'INF-4601','INTELIGENCIA DE AMENAZAS Y ETHICAL HACKING',2,2,4,'INF-3401',2,1,4,1
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'INF-4200','INTELIGENCIA ARTIFICIAL',2,2,4,'INF-2220',2,1,4,1,1
 );
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'INF-4602','SISTEMAS DE GESTION DE SEGURIDAD DE TECNOLOGIAS DE LA INFORMACION',2,2,4,'INF-3100',2,1,4,1
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'INF-4300','INGENIERIA DE SISTEMAS',2,0,4,'INF-1102',2,1,4,1,1
 );
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'INF-4603','AUDITORIA INFORMATICA',2,2,4,'INF-3401',2,1,4,1
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'INF-4300','PROGRAMACION GRAFICA',2,2,4,'INF-2210',2,1,4,1,1
+);
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'INF-4700','ELECTIVA I',2,2,4,'',2,1,4,1,1
+);
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'INF-4500','REALIDAD VIRTUAL Y AUMENTADA',2,2,4,'INF-3201',2,1,4,1,1
+);
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'INF-4501','TALLER DE DESARROLLO DE APLICACIONES PARA DISPOSITIVOS MOVILES',2,2,4,'INF-3200',2,1,4,1,1
+);
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'INF-4502','INTERNET DE LAS COSAS',2,2,4,'INF-3202',2,1,4,1,1
+);
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'INF-4503','VISION ARTIFICIAL PARA DISPOSITIVOS MOVILES',2,2,4,'INF-3200',2,1,4,1,1
 );
 
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'INF-5200','TALLER DE GRADUACION',2,2,4,'4TO AÑO VENCIDO',2,1,5,1
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'INF-4600','INFORMATICA FORENSE',2,2,4,'INF-3403',2,1,4,1,1
 );
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'INF-5201','PRACTICAS PROFESIONALES',2,0,4,'4TO AÑO VENCIDO',2,1,5,1
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'INF-4601','INTELIGENCIA DE AMENAZAS Y ETHICAL HACKING',2,2,4,'INF-3401',2,1,4,1,1
 );
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'INF-5202','EMPRENDIMIENTO, PREPARACION, EVALUACION Y GESTION DE PROYECTOS Y ALTA GERENCIA',2,2,4,'INF-4300',2,1,5,1
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'INF-4602','SISTEMAS DE GESTION DE SEGURIDAD DE TECNOLOGIAS DE LA INFORMACION',2,2,4,'INF-3100',2,1,4,1,1
 );
-insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area)values(
-'INF-5203','ELECTIVA II',2,4,6,'',2,1,5,1
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'INF-4603','AUDITORIA INFORMATICA',2,2,4,'INF-3401',2,1,4,1,1
+);
+
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'INF-5200','TALLER DE GRADUACION',2,2,4,'4TO AÑO VENCIDO',2,1,5,1,1
+);
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'INF-5201','PRACTICAS PROFESIONALES',2,0,4,'4TO AÑO VENCIDO',2,1,5,1,1
+);
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'INF-5202','EMPRENDIMIENTO, PREPARACION, EVALUACION Y GESTION DE PROYECTOS Y ALTA GERENCIA',2,2,4,'INF-4300',2,1,5,1,1
+);
+insert into asignatura(sigla_asig,nombre_asig,ht,hl,th,pre_req,cod_pe,cod_carrera,cod_grado,cod_area,cod_tp_asig)values(
+'INF-5203','ELECTIVA II',2,4,6,'',2,1,5,1,1
 );
 
 

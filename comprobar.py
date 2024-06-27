@@ -2,7 +2,7 @@ import spacy
 import unicodedata
 import pymysql
 import re
-from sql import obtener_id_de_carrera
+from sql import obtener_id_de_carrera,seleccionarAsignaturaTodos
 
 # Cargar el modelo de lenguaje en español
 nlp = spacy.load("es_core_news_sm")
@@ -395,3 +395,27 @@ def obtener_areas_id(texto):
             new_areas.append(id_areas[index])
 
     return new_areas
+
+def obtener_id_materia(texto):
+    doc = nlp(texto)
+
+    # Obtener todas las secuencias de tokens en el texto
+    secuencias = [doc[i:j].text for i in range(len(doc)) for j in range(i + 1, len(doc) + 1)]
+
+    # Obtener las asignaturas desde la base de datos
+    asignaturas =  seleccionarAsignaturaTodos()
+
+    # Lista para almacenar las asignaturas encontradas en el texto
+    asignaturas_encontradas = []
+
+    for asignatura in asignaturas:
+            id_asignatura, nombre_asignatura= asignatura
+            # Iterar sobre las secuencias de tokens del texto
+            for secuencia in secuencias:
+                # Verificar si el nombre de la asignatura está presente en la secuencia de tokens
+                if nombre_asignatura.lower() in secuencia:
+                    # Agregar el ID de la asignatura encontrada
+                    asignaturas_encontradas.append(id_asignatura)
+                    break  # No es necesario seguir buscando si ya encontramos la asignatura
+
+    return asignaturas_encontradas

@@ -569,3 +569,45 @@ def NOmbredeGrado_por_id(id):
         return sql_consulta[1]
     else:
         return "no"
+
+def seleccionarAsignaturaTodos():
+        # Consulta SQL para seleccionar un estudiante por su ID
+        sql_consulta = "SELECT cod_asig, nombre_asig FROM asignatura"
+        conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+        # Crear un cursor para ejecutar consultas
+        cursor = conn.cursor()
+        # Ejecutar la consulta SQL con el ID proporcionado como parámetro
+        cursor.execute(sql_consulta)
+        # Verificar si hay algún resultado antes de obtenerlos
+        if cursor.rowcount > 0:
+            # Si hay resultados, obtener los datos de la consulta
+            asignaturas = cursor.fetchall()
+            # Cerrar el cursor y la conexión
+            cursor.close()
+            conn.close()
+            return asignaturas
+        else:
+            # Si no hay resultados, devolver un mensaje indicando que no se encontró el estudiante
+            return "no"
+
+
+def seleccionar_asignatura_porID(id):
+
+    # Consulta SQL para seleccionar un estudiante por su ID
+    sql_consulta = "SELECT *FROM asignatura WHERE cod_asig = "+str(id)
+    conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+    # Crear un cursor para ejecutar consultas
+    cursor = conn.cursor()
+    # Ejecutar la consulta SQL con el ID proporcionado como parámetro
+    cursor.execute(sql_consulta)
+    # Verificar si hay algún resultado antes de obtenerlos
+    if cursor.rowcount > 0:
+        # Si hay resultados, obtener los datos de la consulta
+        estudiante = cursor.fetchone()
+        # Cerrar el cursor y la conexión
+        cursor.close()
+        conn.close()
+        return estudiante
+    else:
+        # Si no hay resultados, devolver un mensaje indicando que no se encontró el estudiante
+        return 0

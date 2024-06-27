@@ -73,7 +73,7 @@ def preguntasREg():
     conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
     cursor = conn.cursor()
     # Consulta para verificar si el usuario existe
-    consulta = "SELECT * FROM respuesta"
+    consulta = "SELECT * FROM respuesta where estado='activo'"
     cursor.execute(consulta)
     sql_consulta = cursor.fetchall()
     cursor.close()
@@ -191,10 +191,10 @@ def respuesta():
                 return retornar_valores(sql_consulta,respuesta)
             else:
                 # Si no hay resultados, realiza alguna acción adecuada
-                return "Lo siento, no tengo una respuesta para esa pregunta o puede argumentar un poco mas.1";
+                return "<div class = 'alert alert-secondary'>Lo siento, no tengo una respuesta para esa pregunta o puede argumentar un poco mas</div>";
 
         else:
-            return ("Lo siento, no tengo una respuesta para esa pregunta o puede argumentar un poco mas.2")
+            return ("<div class = 'alert alert-secondary'>Lo siento, no tengo una respuesta para esa pregunta o puede argumentar un poco mas</div>")
     else:
         # Si no es una solicitud POST, puedes manejarlo aquí
         return "Solicitud no válida"
@@ -289,7 +289,7 @@ def tablaPregunta():
     consulta = "SELECT * FROM respuesta AS r INNER JOIN embeddings AS e ON r.cod_respuesta = e.cod_respuesta WHERE e.cod_respuesta IS NOT NULL LIMIT %s, %s"
     cursor.execute(consulta, (inicioList, listarDeCuanto))
     sql_consulta = cursor.fetchall()
-    consulta_res = "SELECT * FROM respuesta"
+    consulta_res = "SELECT * FROM respuesta where estado='activo'"
     cursor.execute(consulta_res)
     con_res = cursor.fetchall()
     cursor.close()
