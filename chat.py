@@ -4,6 +4,7 @@ from comprobar import obtener_carreras_nombre,detectar_numeros_delimiter,contien
 from comprobar import palabras_departamento,palabras_provincia,encontrar_nombre,encontrar_apellido,obtener_area,palabra_desercion
 from comprobar import palabra_aplazaron,palabra_aprobados,palabra_curso,obtener_que_curso_quiere
 from comprobar import palabra_nota,fechas,obtener_ano,obtener_areas_id,obtener_id_materia
+from comprobar import seleccionar_si_quiere_por_area_o_carrera
 from sql import seleccionar_estudiante1,seleccionar_consultasEmbeddings,seleccionar_respuesta_y_consulta
 from sentence_transformers import SentenceTransformer, util
 import numpy as np
@@ -858,6 +859,13 @@ def buscar(texto):
         if response == "datos_asignaturas":
             vec1=[]
             res = consulta_buscar(texto,"datos_asignaturas",consultas_sql)
+            for r in res:
+                vec1.append(r)
+        if response == 'carrera_area_mas_inscritos':
+            vec1=[]
+            resulta = seleccionar_si_quiere_por_area_o_carrera(texto)
+            vec1.append(resulta)
+            res = busqueda(texto,"carrera_area_mas_inscritos",consultas_sql)
             for r in res:
                 vec1.append(r)
         return vec1

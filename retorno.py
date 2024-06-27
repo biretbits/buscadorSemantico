@@ -6051,7 +6051,123 @@ def  retornar_valores(datos,ress):
                             html+="<div>"
                     else:
                         html+="<div align='center' class='alert alert-secondary'>No se encontro información</div>"
+    if accion1 == "carrera_area_mas_inscritos":
+        si_hay_area_carr = ress[0]
+        si_car_n = ress[1]
+        id_car   = ress[2]
+        si_ar = ress[3]
+        id_ar  = ress[4]
+        fecha1 = ress[6]
+        fecha2 = ress[7]
+        if fecha1>fecha2:
+            aux = fecha1
+            fecha1 = fecha2
+            fecha2 = aux
+        a11 = int(obtener_ano_de_fecha(fecha1))
+        a22 = int(obtener_ano_de_fecha(fecha2))
+        a1 = int(obtener_ano_de_fecha(fecha1))
+        a2 = int(obtener_ano_de_fecha(fecha2))
+        area = {}
+        carre = {}
+        for anio in range(a1, a2 + (1)):
+            area[anio]=[0]*3
+            carre[anio]=[0]*17
+        if isinstance(fecha1, str):
+            fecha1 = datetime.strptime(fecha1, "%Y-%m-%d").date()
+        if isinstance(fecha2, str):
+            fecha2 = datetime.strptime(fecha2, "%Y-%m-%d").date()
+        for row in datos:#recorremos los datos obtenidos de la base de datos
+            if not isinstance(row[16], type(None)) and row[16]>=fecha1 and row[16] <= fecha2:
+                anoBD = int(obtener_ano_de_fecha(row[16].strftime("%Y-%m-%d")))
+                if row[14]==1:#si es 1 es le curso primero o los recien matriculados
+                    area[anoBD][row[12]-1]+=1
+                    carre[anoBD][row[13]-1]+=1
 
+
+        for anio in range(a1, a2 + 1):  # Asumiendo que a1 y a2 son años inicial y final, +1 para incluir a2
+            areas = seleccionarAreas()  # Esto debe devolver una lista de áreas
+            n = len(areas)  # n es el número de áreas
+            for arr in range(n):
+                for ar1 in range(arr + 1, n):  # Recorrer de izquierda a derecha
+                    if area[anio][arr] < area[anio][ar1]:  # Comparación de elementos
+                        aux = area[anio][arr]
+                        area[anio][arr] = area[anio][ar1]
+                        area[anio][ar1] = aux
+            carrera = seleccionarCarrerasTodo()
+            n = len(carrera)
+            for car in range(n):
+                for car1 in range(car + 1, n):  # Recorrer de izquierda a derecha
+                    if carre[anio][car] < carre[anio][car1]:  # Comparación de elementos
+                        aux = carre[anio][car]
+                        carre[anio][car] = carre[anio][car1]
+                        carre[anio][car1] = aux
+        ar = list(set(si_hay_area_carr))
+        siarea = 0
+        sicarrera = 0
+        for doble in ar:
+            if doble == 1:
+                siarea = 1
+            elif doble == 2:
+                sicarrera=1
+        if siarea == 1 and sicarrera == 1:
+            html+="<div class='alert alert-secondary'>La carrera y área que tienen mas matriculados son los siguientes</div>"
+            areas = seleccionarAreas()
+            html+="<div class='alert alert-warning'>Áreas</div>"
+
+            for anio in range(a1, a2 + (1)):
+                k = 0
+                html+="<div align='center' class='alert alert-secondary'>El área de "
+                for are in areas:
+                    if k < 2:
+                        if k == 0:
+                            html+=str(are[1])+" tiene "+str(area[anio][are[0]-1])+" nuevos matriculados y como tambien el área de "
+                        else:
+                            html+=str(are[1])+" tiene "+str(area[anio][are[0]-1])+" nuevos matriculados"
+                    k = k + 1
+                html+=" en el Año "+str(anio)+"</div>"
+
+            carrera = seleccionarCarrerasTodo()
+            html+="<div class='alert alert-success'>Carreras</div>"
+            for anio in range(a1, a2 + (1)):
+                k = 0
+                html+="<div align='center' class='alert alert-secondary'>La carrera de "
+                for car in carrera:
+                    if k < 2:
+                        if k == 0:
+                            html+=str(car[1])+" tiene "+str(carre[anio][car[0]-1])+" nuevos matriculados y como tambien la carrera de"
+                        else:
+                            html+=str(car[1])+" tiene "+str(carre[anio][car[0]-1])+" nuevos matriculados"
+                    k = k + 1
+                html+=" en el Año "+str(anio)+"</div>"
+        if siarea == 1 and sicarrera == 0:
+            html+="<div class='alert alert-warning'>La área que tienen mas matriculados son los siguientes</div>"
+            areas = seleccionarAreas()
+            for anio in range(a1, a2 + (1)):
+                k = 0
+                html+="<div align='center' class='alert alert-secondary'>El área de "
+                for are in areas:
+                    if k < 2:
+                        if k == 0:
+                            html+=str(are[1])+" tiene "+str(area[anio][are[0]-1])+" nuevos matriculados y como tambien el área de "
+                        else:
+                            html+=str(are[1])+" tiene "+str(area[anio][are[0]-1])+" nuevos matriculados"
+                    k = k + 1
+                html+=" en el Año "+str(anio)+"</div>"
+        if siarea == 0 and sicarrera == 1:
+            carrera = seleccionarCarrerasTodo()
+            html+="<div class='alert alert-success'>Las carreras que tienen mas inscritos son</div> "
+
+            for anio in range(a1, a2 + (1)):
+                k = 0
+                html+="<div align='center' class='alert alert-secondary'>La carrera de "
+                for car in carrera:
+                    if k < 2:
+                        if k == 0:
+                            html+=str(car[1])+" tiene "+str(carre[anio][car[0]-1])+" nuevos matriculados y como tambien la carrera de"
+                        else:
+                            html+=str(car[1])+" tiene "+str(carre[anio][car[0]-1])+" nuevos matriculados"
+                    k = k + 1
+                html+=" en el Año "+str(anio)+"</div>"
     html += "</container>"
 
     return html

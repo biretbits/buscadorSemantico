@@ -2,8 +2,9 @@ import spacy
 import unicodedata
 import pymysql
 import re
-from sql import obtener_id_de_carrera,seleccionarAsignaturaTodos
-
+from sql import obtener_id_de_carrera,seleccionarAsignaturaTodos,buscar_AsignaturaPORnombre
+from sql import buscar_Area_por_nombre,buscar_Carrera_por_nombre
+from unidecode import unidecode
 # Cargar el modelo de lenguaje en español
 nlp = spacy.load("es_core_news_sm")
 
@@ -34,6 +35,7 @@ def obtener_carreras_nombre(texto):
             carreras_encontradas.append(obtener_id_de_carrera(pal.text))
 
     return carreras_encontradas
+
 
 
 def detectar_numeros_delimiter(texto):
@@ -378,8 +380,8 @@ def obtener_ano_de_fecha(fecha):
 
 def obtener_areas_id(texto):
     # Definir áreas y sus IDs correspondientes
-    areas = ['tecnologia', 'técnologia', "tecnologia", "salud", "salud", "social", "sociales"]
-    id_areas = [1, 1, 1, 2, 2, 3, 3]
+    areas = ['tecnologia', 'técnologia','tecno','tecnologi', "tecnologia", "salud", "salud",'salu', "social", "sociales",'soci','socia']
+    id_areas = [1, 1, 1, 1, 1, 2,2, 2, 3, 3,3,3]
     # Cargar el modelo de spaCy (asegúrate de tenerlo instalado y cargado adecuadamente)
     nlp = spacy.load("es_core_news_sm")
     # Procesar el texto con el modelo de spaCy
@@ -396,26 +398,50 @@ def obtener_areas_id(texto):
 
     return new_areas
 
+
 def obtener_id_materia(texto):
+    # Procesar el texto con SpaCy
     doc = nlp(texto)
+    tokens = [token.text for token in doc if token.pos_ in ['NOUN', 'ADJ', 'VERB', 'PROPN', 'NUM']]
 
-    # Obtener todas las secuencias de tokens en el texto
-    secuencias = [doc[i:j].text for i in range(len(doc)) for j in range(i + 1, len(doc) + 1)]
+    # Lista para almacenar las subsecuencias
+    secuencias = []
 
-    # Obtener las asignaturas desde la base de datos
-    asignaturas =  seleccionarAsignaturaTodos()
+    # Generar subsecuencias de tokens
+    for longitud in range(1, len(tokens) + 1):
+        for i in range(len(tokens) - longitud + 1):
+            subsecuencia = ' '.join(tokens[i:i + longitud])
+            secuencias.append(subsecuencia)
 
-    # Lista para almacenar las asignaturas encontradas en el texto
+    # Lista para almacenar los IDs de las asignaturas encontradas en el texto
     asignaturas_encontradas = []
 
-    for asignatura in asignaturas:
-            id_asignatura, nombre_asignatura= asignatura
-            # Iterar sobre las secuencias de tokens del texto
-            for secuencia in secuencias:
-                # Verificar si el nombre de la asignatura está presente en la secuencia de tokens
-                if nombre_asignatura.lower() in secuencia:
-                    # Agregar el ID de la asignatura encontrada
-                    asignaturas_encontradas.append(id_asignatura)
-                    break  # No es necesario seguir buscando si ya encontramos la asignatura
+    # Iterar sobre las secuencias de tokens del texto
+    for secuencia in secuencias:
+        # Buscar asignatura por nombre, ignorando palabras simples como "de", "la", "es", etc.
+        encontro = buscar_AsignaturaPORnombre(secuencia)
+        print(encontro,"   ",secuencia)
+        if encontro != 0:
+            asignaturas_encontradas.append(encontro)
 
     return asignaturas_encontradas
+
+def seleccionar_si_quiere_por_area_o_carrera(texto):
+    # Definir áreas y sus IDs correspondientes
+    bus = ['area', 'areas','are','carrera', "carreras", "carre"]
+    relacion = [1,1,1,2,2,2]
+    # Cargar el modelo de spaCy (asegúrate de tenerlo instalado y cargado adecuadamente)
+    nlp = spacy.load("es_core_news_sm")
+    # Procesar el texto con el modelo de spaCy
+    doc = nlp(texto)
+    # Lista para almacenar los IDs de las áreas encontradas en el texto
+    new = []
+    # Iterar sobre cada token en el documento procesado por spaCy
+    for token in doc:
+        # Verificar si el texto del token está presente en la lista de áreas
+        if token.text in bus:
+            # Obtener el índice correspondiente en 'areas' y agregar el ID correspondiente
+            index = bus.index(token.text)
+            new.append(relacion[index])
+
+    return new
