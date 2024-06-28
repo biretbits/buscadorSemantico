@@ -868,6 +868,11 @@ def buscar(texto):
             res = busqueda(texto,"carrera_area_mas_inscritos",consultas_sql)
             for r in res:
                 vec1.append(r)
+        if response == "total_estudiantes_area":
+            vec1=[]
+            res = busqueda(texto,"total_estudiantes_area",consultas_sql)
+            for r in res:
+                vec1.append(r)
         return vec1
     else:
         vec1=[]
@@ -1200,6 +1205,7 @@ def busqueda(texto,respuesta,consultas_sql):
     vec = []
     vec1 = []
     response = "";
+
     fecha = fechas(texto)
     areas = obtener_areas_id(texto)#obtener las areas
     nombre_posicion_sql = respuesta
@@ -1372,7 +1378,7 @@ def construir_consulta(texto,respuesta,consultas_sql):
     vec1.append(response)
     return vec1
 
-textoo = "en que areas y carreras hay mas inscritos"
+textoo = "cual es el total de estudiantes que tiene el area de tecnologia"
 
 re = buscar(textoo)
 

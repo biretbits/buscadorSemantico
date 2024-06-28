@@ -1,5 +1,5 @@
 from flask import Flask,render_template,request,session
-from flask import Flask, Response, request, send_file
+from flask import Flask, Response, request, send_file,jsonify,current_app as app
 from chat import buscar
 from retorno import retornar_valores
 from flask_session import Session
@@ -12,6 +12,10 @@ from sentence_transformers import SentenceTransformer, util
 import numpy as np
 from unidecode import unidecode
 from math import ceil
+import os
+import subprocess
+import datetime
+
 app = Flask("mi proyecto nuevo")
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SECRET_KEY'] = 'supersecretkey'  # Clave secreta para firmar cookies de sesión
@@ -854,6 +858,31 @@ def tablaRespuesta3():
             num_filas_total=num_filas_total)
         # Si no existe la sesión de usuario, renderizar un menú básico
         return render_template('tablaRespuesta.html', usuario=None)
+
+@app.route('/backup')
+def backup():
+    try:
+        # Nombre del archivo de backup (opcional: incluye la fecha y hora en el nombre)
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        backup_filename = f"academico_{timestamp}.sql"
+        backup_path = os.path.join(os.getcwd(), "bd", backup_filename)  # Ruta completa al archivo de backup
+
+        # Comando para realizar el backup
+        # Asegúrate de tener los permisos adecuados y que el directorio bd exista
+        command = f"mysqldump -u unsxx -p'123' academico > {backup_path}"
+
+        # Ejecuta el comando para hacer el backup
+        subprocess.run(command, shell=True, check=True)
+        # Verifica si el archivo existe en la ruta especificada
+        if os.path.exists(backup_path):
+            # Si el archivo existe, retorna una respuesta para descargarlo
+            return send_file(backup_path, as_attachment=True)
+        else:
+            # Si el archivo no se guardó correctamente, retorna un mensaje de error
+            return jsonify({"error": f"No se pudo crear el archivo de backup en {backup_path}"})
+
+    except subprocess.CalledProcessError as e:
+        return jsonify({"error": str(e)})
 if __name__ == '__main__':
     app.run(host='0.0.0.0',debug=True,port=5003)
 

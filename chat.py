@@ -868,6 +868,11 @@ def buscar(texto):
             res = busqueda(texto,"carrera_area_mas_inscritos",consultas_sql)
             for r in res:
                 vec1.append(r)
+        if response == "total_estudiantes_area":
+            vec1=[]
+            res = busqueda(texto,"total_estudiantes_area",consultas_sql)
+            for r in res:
+                vec1.append(r)
         return vec1
     else:
         vec1=[]
