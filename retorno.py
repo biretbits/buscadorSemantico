@@ -6168,6 +6168,49 @@ def  retornar_valores(datos,ress):
                             html+=str(car[1])+" tiene "+str(carre[anio][car[0]-1])+" nuevos matriculados"
                     k = k + 1
                 html+=" en el Año "+str(anio)+"</div>"
+    if accion1 == "total_estudiantes_area":
+        si_total = ress[4]
+        fecha1 = ress[5]
+        fecha2 = ress[6]
+        if fecha1>fecha2:
+            aux = fecha1
+            fecha1 = fecha2
+            fecha2 = aux
+        a11 = int(obtener_ano_de_fecha(fecha1))
+        a22 = int(obtener_ano_de_fecha(fecha2))
+        a1 = int(obtener_ano_de_fecha(fecha1))
+        a2 = int(obtener_ano_de_fecha(fecha2))
+        area = {}
+        for anio in range(a1, a2 + (1)):
+            area[anio]=[0]*3
+        if isinstance(fecha1, str):
+            fecha1 = datetime.strptime(fecha1, "%Y-%m-%d").date()
+        if isinstance(fecha2, str):
+            fecha2 = datetime.strptime(fecha2, "%Y-%m-%d").date()
+        for row in datos:#recorremos los datos obtenidos de la base de datos
+            if not isinstance(row[16], type(None)) and row[16]>=fecha1 and row[16] <= fecha2:
+                anoBD = int(obtener_ano_de_fecha(row[16].strftime("%Y-%m-%d")))
+                area[anoBD][row[12]-1]+=1
+        if si_total == "si_total":
+            html += "<div align='center' class='alert alert-secondary'>La cantidad de estudiantes que tienen las áreas son lo siguiente</div>"
+            areas = seleccionarAreas()
+            for are in areas:#recorremos todo los id de areas
+                html+="<div class='row'>"
+                for anio in range(a1, a2 + (1)):
+
+                    html += "<div class='col-lg-4'>"
+                    html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                    html += "<div class='panel-heading'>"
+                    html += "<b>Area "+str(nombre_area_id(are[0]))+"</b>"
+                    html += "</div>"
+                    html += "<div class='panel-body'>"
+                    html += "El total de estudiantes que tiene el área es de "+str(area[anio][are[0]-1])+" Estudiantes en el año "+str(anio)
+                    html += "</div>"
+                    html += "</div>"
+                    html += "</div>"
+                html+="<div><br>"
+        else:
+            html+="<div class = 'alert alert-secondary'>Lo siento, no tengo una respuesta para esa pregunta o puede argumentar un poco mas</div>"
     html += "</container>"
 
     return html

@@ -1,52 +1,52 @@
-<nav class='navbar navbar-expand-lg navbar-secondary bg-dark fixed-top shadow-sm'>
-  <div class='container'>
-    <a href='#' class='navbar-brand'><img src='../static/imagenes/unsxx.png' height='30' width='30' class='rounded-circle'></a>
-    <button class='navbar-toggler' type='button' data-bs-toggle='collapse' data-bs-target='#navbarNav' aria-controls='navbarNav' aria-expanded='false' aria-label='Toggle navigation'>
-      <span class='navbar-toggler-icon'></span>
-    </button>
-    <div class='collapse navbar-collapse' id='navbarNav'>
-      <ul class='navbar-nav me-auto mb-2 mb-lg-0'>
-        <li class='nav-item' title='Inicio'>
-          <a class='nav-link btn btn-outline-secondary' href='/'>Inicio</a>
-        </li>
-        {% if usuario %}
-          <li class='nav-item' title='Registro'>
-            <a class='nav-link btn btn-outline-secondary' href='/tpreg'>Preguntas</a>
-          </li>
-          <li class='nav-item' title='Registro de respuesta'>
-            <a class='nav-link btn btn-outline-secondary' href='/tresp'>Respuestas</a>
-          </li>
-          <li class='nav-item' title='backup de la base de datos'>
-            <a class='nav-link btn btn-outline-secondary' href='/backup'>Backup</a>
-          </li>
-        {% endif %}
-      </ul>
-      <ul class='navbar-nav ms-auto'>
-        {% if usuario %}
-          <!-- Si hay un usuario en sesión -->
-          <li class='nav-item dropdown' title='Nombre Usuario'>
-            <a class='nav-link dropdown-toggle btn btn-outline-success' href='#' id='navbarDropdown2' role='button' data-bs-toggle='dropdown' aria-expanded='false'>
-              {{ usuario }} <!-- Mostrar nombre de usuario -->
-            </a>
-            <ul class='dropdown-menu' aria-labelledby='navbarDropdown2'>
-
-              <li><hr class='dropdown-divider'></li>
-              <li class='nav-item' title='Cerrar sesión' style='color:green'>
-                <a class='nav-link text-primary btn btn-outline-danger' href='/cerrar'>
-                  <img src="{{ url_for('static', filename='imagenes/apagar.png') }}" height="22px" width="22px"class="img-circle">
-                  Cerrar sesión
-                </a>
-              </li>
-            </ul>
-          </li>
-        {% else %}
-          <!-- Si no hay un usuario en sesión -->
+<nav class='navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow-sm'>
+    <div class='container'>
+      <a href='#' class='navbar-brand'>
+        <img src='../static/imagenes/unsxx.png' height='30' width='30' class='rounded-circle'>
+      </a>
+      <button class="navbar-toggler bg-dark" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class='collapse navbar-collapse' id='navbarNav'>
+        <ul class='navbar-nav me-auto mb-2 mb-lg-0'>
           <li class='nav-item' title='Inicio'>
-            <a class='nav-link btn btn-outline-warning' href='/login'>Iniciar sesión</a>
+            <a class='nav-link btn btn-outline-secondary text-primary' href='/'>Inicio</a>
           </li>
-
-        {% endif %}
-      </ul>
+          {% if usuario %}
+            <li class='nav-item' title='Registro'>
+              <a class='nav-link btn btn-outline-secondary text-primary' href='/tpreg'>Preguntas</a>
+            </li>
+            <li class='nav-item' title='Registro de respuesta'>
+              <a class='nav-link btn btn-outline-secondary text-primary' href='/tresp'>Respuestas</a>
+            </li>
+            <li class='nav-item' title='backup de la base de datos'>
+              <a class='nav-link btn btn-outline-secondary text-primary' href='/backup'>Backup</a>
+            </li>
+          {% endif %}
+        </ul>
+        <ul class='navbar-nav ms-auto'>
+          {% if usuario %}
+            <!-- Si hay un usuario en sesión -->
+            <li class='nav-item dropdown' title='Nombre Usuario'>
+              <a class='nav-link dropdown-toggle btn btn-outline-info text-primary' href='#' id='navbarDropdown2' role='button' data-bs-toggle='dropdown' aria-expanded='false'>
+                {{ usuario }} <!-- Mostrar nombre de usuario -->
+              </a>
+              <ul class='dropdown-menu' aria-labelledby='navbarDropdown2'>
+                <li><hr class='dropdown-divider'></li>
+                <li class='nav-item' title='Cerrar sesión' style='color:green'>
+                  <a class='nav-link text-primary btn btn-outline-danger' href='/cerrar'>
+                    <img src="{{ url_for('static', filename='imagenes/apagar.png') }}" height="22px" width="22px" class="img-circle">
+                    Cerrar sesión
+                  </a>
+                </li>
+              </ul>
+            </li>
+          {% else %}
+            <!-- Si no hay un usuario en sesión -->
+            <li class='nav-item' title='Inicio'>
+              <a class='nav-link btn btn-outline-warning' href='/login'>Iniciar sesión</a>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
     </div>
-  </div>
-</nav>
+  </nav>

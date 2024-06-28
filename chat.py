@@ -1205,6 +1205,7 @@ def busqueda(texto,respuesta,consultas_sql):
     vec = []
     vec1 = []
     response = "";
+
     fecha = fechas(texto)
     areas = obtener_areas_id(texto)#obtener las areas
     nombre_posicion_sql = respuesta

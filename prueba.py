@@ -1378,7 +1378,7 @@ def construir_consulta(texto,respuesta,consultas_sql):
     vec1.append(response)
     return vec1
 
-textoo = "cual es el total de estudiantes que tiene el area de tecnologia"
+textoo = "informacion sobre la cantidad de estudiantes que tienen las areas"
 
 re = buscar(textoo)
 
