@@ -6211,6 +6211,144 @@ def  retornar_valores(datos,ress):
                 html+="<div><br>"
         else:
             html+="<div class = 'alert alert-secondary'>Lo siento, no tengo una respuesta para esa pregunta o puede argumentar un poco mas</div>"
+    if accion1 == "pasaron_de_curso":
+        id_grados = ress[0]
+        si_car_n = ress[1]
+        id_car   = ress[2]
+        si_ar = ress[3]
+        id_ar  = ress[4]
+        si_total = ress[5]
+        fecha1 = ress[6]
+        fecha2 = ress[7]
+        dat = []
+        dat = [int(d) for d in id_grados.split(',') if d.strip()]
+        print(dat,"   es esto es lakjfsdkljls")
+        pares = []
+        parMin = []
+        # Verificar si la cantidad de datos es par
+        if len(dat) % 2 == 0:
+            # Iterar sobre los pares consecutivos y obtener el mayor de cada par
+            for i in range(0, len(dat), 2):
+                if dat[i] > dat[i + 1]:
+                    pares.append(dat[i])
+                else:
+                    pares.append(dat[i + 1])
+        else:
+            max = 0
+            for i in range(len(dat)):
+                if dat[i] > max:
+                    max = dat[i]
+            pares.append(max)
+        if fecha1>fecha2:
+            aux = fecha1
+            fecha1 = fecha2
+            fecha2 = aux
+        a11 = int(obtener_ano_de_fecha(fecha1))
+        a22 = int(obtener_ano_de_fecha(fecha2))
+        a1 = int(obtener_ano_de_fecha(fecha1))
+        a2 = int(obtener_ano_de_fecha(fecha2))
+        area = {}
+        carre = {}
+        for anio in range(a1, a2 + (1)):
+            areas = seleccionarAreas()
+            area[anio] = {}
+            carre[anio] = {}
+            for are in areas:
+                area[anio][are[0]]=[0]*5
+            carreras = seleccionarCarrerasTodo()
+            for car in carreras:
+                carre[anio][car[0]]=[0]*5
+        if isinstance(fecha1, str):
+            fecha1 = datetime.strptime(fecha1, "%Y-%m-%d").date()
+        if isinstance(fecha2, str):
+            fecha2 = datetime.strptime(fecha2, "%Y-%m-%d").date()
+        for row in datos:#recorremos los datos obtenidos de la base de datos
+            if not isinstance(row[16], type(None)) and row[16]>=fecha1 and row[16] <= fecha2:
+                anoBD = int(obtener_ano_de_fecha(row[16].strftime("%Y-%m-%d")))
+                area[anoBD][row[12]][row[14]-1]+=1
+                carre[anoBD][row[13]][row[14]-1]+=1
+        if si_car_n == "si_car_n":
+            html += "<div align='center' class='alert alert-secondary'>Los estudiantes que pasaron de curso son </div>"
+
+            s_dupli = eliminar_dobles(id_car)#si hay doble veces repetido el id lo eliminamos a 1
+            for i in s_dupli:#recorremos todo los id de carreras
+                index = int(i) - 1#obtenemos el id
+                index1 = int(i)
+                html+="<h6 align='center'>Carrera "+nombre_carrera_retor(index1)+"</h6><br>"#impirmimos el nombre de la carrera
+                html+="<div class='row'>"
+                for anio in range(a1, a2 + (1)):
+                    for cur in pares:
+                        html += "<div class='col-lg-4'>"
+                        html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                        html += "<div class='panel-heading'>"
+                        html += "</div>"
+                        html += "<div class='panel-body'>"
+                        html += "Estudiantes que pasaron a "+str(NOmbredeGrado_por_id(cur))+" son "+str(carre[anio][index1][cur-1])+" en el año "+str(anio)
+                        html += "</div>"
+                        html += "</div>"
+                        html += "</div>"
+                html+="<div><br>"
+        elif si_ar == "si_ar":
+            html += "<div align='center' class='alert alert-secondary'>Los estudiantes que pasaron de curso son </div>"
+            s_dupli = eliminar_dobles(id_ar)#si hay doble veces repetido el id lo eliminamos a 1
+            for i in s_dupli:#recorremos todo los id de areas
+                index = int(i) - 1#obtenemos el id
+                index1 = int(i)
+                html += "<h5 align='center'>Area " + str(nombre_area_id(index1))+"</h5>"
+                html+="<div class='row'>"
+                for anio in range(a1, a2 + (1)):
+                    for cur in pares:
+                        html += "<div class='col-lg-4'>"
+                        html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                        html += "<div class='panel-heading'>"
+                        html += "</div>"
+                        html += "<div class='panel-body'>"
+                        html += "Estudiantes que pasaron a "+str(NOmbredeGrado_por_id(cur))+" son "+str(carre[anio][index1][cur-1])+" en el año "+str(anio)
+                        html += "</div>"
+                        html += "</div>"
+                        html += "</div>"
+                html+="<div><br>"
+        else:
+            html += "<div align='center' class='alert alert-secondary'>Los estudiantes que pasaron de curso son </div>"
+            html += "<div align='center' class='alert alert-secondary'>Áreas </div>"
+            areas = seleccionarAreas()
+            for ar in areas:#recorremos todo los id de areas
+                index = ar[0] - 1#obtenemos el id
+                index1 = ar[0]
+                html += "<h5 align='center'>Area " + str(nombre_area_id(index1))+"</h5>"
+                html+="<div class='row'>"
+                for anio in range(a1, a2 + (1)):
+                    for cur in pares:
+                        html += "<div class='col-lg-4'>"
+                        html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                        html += "<div class='panel-heading'>"
+                        html += "</div>"
+                        html += "<div class='panel-body'>"
+                        html += "Estudiantes que pasaron a "+str(NOmbredeGrado_por_id(cur))+" son "+str(carre[anio][index1][cur-1])+" en el año "+str(anio)
+                        html += "</div>"
+                        html += "</div>"
+                        html += "</div>"
+                html+="<div><br>"
+            html += "<div align='center' class='alert alert-secondary'>Carreras </div>"
+
+            carreras = seleccionarCarrerasTodo()
+            for car in carreras:#recorremos todo los id de carreras
+                index = car[0] - 1#obtenemos el id
+                index1 = car[0]
+                html+="<h6 align='center'>Carrera "+nombre_carrera_retor(index1)+"</h6><br>"#impirmimos el nombre de la carrera
+                html+="<div class='row'>"
+                for anio in range(a1, a2 + (1)):
+                    for cur in pares:
+                        html += "<div class='col-lg-4'>"
+                        html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                        html += "<div class='panel-heading'>"
+                        html += "</div>"
+                        html += "<div class='panel-body'>"
+                        html += "Estudiantes que pasaron a "+str(NOmbredeGrado_por_id(cur))+" son "+str(carre[anio][index1][cur-1])+" en el año "+str(anio)
+                        html += "</div>"
+                        html += "</div>"
+                        html += "</div>"
+                html+="<div><br>"
     html += "</container>"
 
     return html

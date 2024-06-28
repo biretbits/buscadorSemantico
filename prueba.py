@@ -873,11 +873,137 @@ def buscar(texto):
             res = busqueda(texto,"total_estudiantes_area",consultas_sql)
             for r in res:
                 vec1.append(r)
+        if response == "pasaron_de_curso":
+            vec1=[]
+            res=consulta_pasaron(texto,"pasaron_de_curso",consultas_sql)
+            for r in res:
+                vec1.append(r)
         return vec1
     else:
         vec1=[]
         vec1.append("argumentar_poco_mas")
         return vect1
+#contruir consulta para cuantos estudiantes pasaron de curso o # NOTE:
+def consulta_pasaron(texto,respuesta,consultas_sql):
+    vec = []
+    vec1 = []
+    response = "";
+    areas = obtener_areas_id(texto)#obtener las areas
+    nombre_posicion_sql = respuesta
+    sql = consultas_sql[nombre_posicion_sql]
+    carreras_encontradas = obtener_carreras_nombre(texto)
+    bien_de = 0
+    response2 = ''
+    grado = obtener_que_curso_quiere(texto)
+    if grado:#si existe algun curso en el texto ingresa
+        si = 'no'
+        idd2=''
+        for gra in grado:
+            idd2+=str(gra)+","#concatenamos los id de grado
+        vec1.append(idd2)
+
+        if carreras_encontradas:
+
+            vec1.append("si_car_n")
+            # Obtener la primera carrera encontrada
+            si = "no"
+            idd = ""
+            for car in carreras_encontradas:
+                idd+=str(car)+","
+                if si == "no":
+                    response+=" where cod_carrera = "+str(car)
+                    si = "si"
+                elif si == "si":
+                    response+= " or cod_carrera = "+str(car)
+
+            response = sql+" "+response+" and "
+            vec1.append(idd)
+            vec1.append("no")
+            vec1.append("no")
+            vec1.append("no")
+            bien_de = 1
+        elif areas:
+            vec1.append("no")
+            vec1.append("no")
+            vec1.append("si_ar")
+            si = "no"
+            idd = ""
+            for i in areas:#recorremos las areas solicitadas
+                idd+=str(i)+","
+                if si == "no":
+                    response += " where cod_area = "+str(i)
+                    si = "si"
+                elif si == "si":
+                    response += " or cod_area="+str(i) #obtenemos la consulta y lo concatenamos
+            vec1.append(idd)
+            vec1.append("no")
+            response = sql+" "+response+" and "
+            bien_de = 1
+        else:
+            vec1.append("no")
+            vec1.append("no")
+            vec1.append("no")
+            vec1.append("no")
+            vec1.append("si_total")
+            response=sql+" where "
+            bien_de = 2
+        fecha = fechas(texto)
+        if len(fecha) >= 1:#si existe fechas
+            vec.append("si_fecha")
+            if len(fecha) == 1:
+                fecha1 = fecha[0]
+                fecha2 = ""
+            elif len(fecha)>1:
+                fecha1 = fecha[0]
+                fecha2 = fecha[1]
+        else:#no hay fechas
+            fecha_actual = datetime.now()
+            # Formatear la fecha como año, mes, día
+            fecha_formateada = fecha_actual.strftime("%Y-%m-%d")
+            anio = obtener_ano_de_fecha(fecha_formateada)
+            vec.append("si_fecha")
+            fecha1 = anio+"-01-01"
+            fecha2 = anio+"-12-30"
+        si = "no"
+        if fecha2 == "" and fecha1 != "":
+            vec1.append(fecha1)
+            vec1.append(fecha1)
+        else:
+            vec1.append(fecha1)
+            vec1.append(fecha2)
+        response3 = ''
+
+        for i in range(len(vec)):
+            if vec[i] == "si_fecha" and si == "no":
+                if fecha1 != "":#si es diferente de vacio
+                    sql_aux = consultas_aux["fechai"]
+                    response3+=" ( "+sql_aux.format(fecha1)
+                if fecha2 != "":
+                    sql_aux = consultas_aux["fechaf"]
+                    response3+=" and "+sql_aux.format(fecha2)+")"
+                else:
+                    sql_aux = consultas_aux["fechaf"]
+                    response3+=" and "+sql_aux.format(fecha1)+")"
+                si = "si"
+            elif vec[i] == "si_fecha" and si == "si":
+                if fecha1 != "":#si es diferente de vacio
+                    sql_aux = consultas_aux["fechai"]
+                    response3+=" and ( "+sql_aux.format(fecha1)
+                if fecha2 != "":
+                    sql_aux = consultas_aux["fechaf"]
+                    response3+=" and "+sql_aux.format(fecha2)+")"
+                else:
+                    sql_aux = consultas_aux["fechaf"]
+                    response3+=" and "+sql_aux.format(fecha1)+")"
+                si = "si"
+            vec[i] = "no"
+            response = response+" "+response3
+            vec1.append(nombre_posicion_sql)
+            vec1.append(response)
+        return vec1
+    else:
+        vec1.append("argumentar_poco_mas")
+        return vec1
 
 def buscarDatosCarrera(texto,respuesta,consultas_sql):
     vec1 = []
@@ -929,6 +1055,7 @@ def buscarDatosArea(texto,respuesta,consultas_sql):
     else:
         vec1.append("argumentar_poco_mas")
     return vec1
+
 #funcion para construir consulta sql con carreras y grados y obtener_areas_id
 def consulta_buscar(texto,respuesta,consultas_sql):
     vec = []
@@ -999,6 +1126,7 @@ def consulta_buscar(texto,respuesta,consultas_sql):
         vec1.append("si_total")
         response=sql
         bien_de = 2
+
 
     if nombre_posicion_sql == "datos_asignaturas":
         fecha = fechas(texto)
@@ -1378,7 +1506,7 @@ def construir_consulta(texto,respuesta,consultas_sql):
     vec1.append(response)
     return vec1
 
-textoo = "informacion sobre la cantidad de estudiantes que tienen las areas"
+textoo = "quiero que me brindes informacion sobre cuantos estudiantes pasaron de segundo a tercero en el area de tecnologia"
 
 re = buscar(textoo)
 
