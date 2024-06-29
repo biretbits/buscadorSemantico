@@ -10,10 +10,12 @@ from sentence_transformers import SentenceTransformer, util
 import numpy as np
 from datetime import datetime
 from comprobar import obtener_ano_de_fecha
+from sklearn.metrics.pairwise import cosine_similarity
 
 from unidecode import unidecode
 # Cargar el modelo pre-entrenado
-model = SentenceTransformer('all-MiniLM-L6-v1')
+#model = SentenceTransformer('all-MiniLM-L6-v1')
+model = SentenceTransformer('paraphrase-MiniLM-L6-v2')
 #e.estado = 'desactivo' or e.cod_area = 3 and e.sexo = 'femenino' or  e.sexo = 'masculino';"
 consultas_aux= {"activo_es" :" e.estado = 'activo'",
 "desactivo_es":" e.estado = 'desactivo'",
@@ -97,13 +99,30 @@ def obtener_embedding(texto):
         conn.commit()
         return texto_embedding
 
+def seleccionarEmbeddinBd():
+    # Conexión a la base de datos
+    conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+
+    cursor = conn.cursor()
+    # Consulta SQL para obtener el embedding
+    sql_consulta = "SELECT cod_respuesta,embedding FROM embeddings WHERE cod_respuesta is not null"
+    # Ejecutar la consulta SQL
+    cursor.execute(sql_consulta)
+    embeddings = []
+    codigos = []
+    # Obtener todos los embeddings y códigos de asignatura
+    for row in cursor.fetchall():
+        codigos.append(row[0])
+        embeddings.append(np.frombuffer(row[1], dtype=np.float32))  # Convertir el blob a un array numpy
+    return codigos,embeddings
+
 
 def eliminar_tildes(texto):
     return unidecode(texto)
 
 def buscar(texto):
     texto = eliminar_tildes(texto.lower())
-    print(texto)
+    #print(texto)
     consulta = ""
     response = "argumentar_poco_mas"
     # Tokenizar el texto del usuario
@@ -112,26 +131,17 @@ def buscar(texto):
     # Inicializar lista para almacenar los resultados de la similitud del coseno
     coseno_salida = []
     # Calcular la similitud coseno entre la consulta y todas las oraciones
-    resp = seleccionar_consultasEmbeddings()#seleccionamos las consultas que tienen una respuesta
-    max = 0
-    id_respuesta = 0
-    for s in resp:#recorremos las posibles preguntas como del usuario
-        embedding_bd = np.frombuffer(s[2], dtype=np.float32)#obtenemos su embedding de cada consulta
-        coseno_similar = util.cos_sim(texto_embedding, embedding_bd)#calculamos el coseno de similitud
-        coseno_max= coseno_similar.item()
-        print(coseno_max," coseno maximoooooo")
-        #coseno_salida.append(coseno_similar.item())
-        if coseno_max > max:#calculamos el maximo item
-            max = coseno_max
-            id_respuesta = s[3]#cuardamos la posible respuesta
-    print(id_respuesta," cod_respuestad  ",max)
-    consultas_sql={}#creamos un array tipo diccionario
-    if id_respuesta > 0:#si es mayor a cero existe un id
-        respuesta_bd = seleccionar_respuesta_y_consulta(id_respuesta)
-        if respuesta_bd != "no":
-            response = respuesta_bd[1]#obtenemos la respuesta que puede ser ver_carreras u otros
-            consultas_sql[response] = respuesta_bd[2]#y obtenemos la consulta sql y le ponemos como posicion la respuesta
-
+    codigos,embedding = seleccionarEmbeddinBd()#seleccionar embedding de base de dtos
+    embe = np.array(embedding)
+    similitudes = cosine_similarity([texto_embedding], embe)
+    indice_max_coseno = similitudes.argmax()
+    max_coseno = similitudes[0, indice_max_coseno]
+    codigo_asignatura = codigos[indice_max_coseno]
+    respuesta_bd = seleccionar_respuesta_y_consulta(codigo_asignatura)
+    consultas_sql={}
+    if respuesta_bd != "no":
+        response = respuesta_bd[1]
+        consultas_sql[response] = respuesta_bd[2]
     # Ordenar las oraciones según la similitud
     #resultados = zip(range(len(cosine_scores)), cosine_scores)
     #sorted_results = sorted(resultados, key=lambda x: x[1], reverse=True)
@@ -878,6 +888,16 @@ def buscar(texto):
             res=consulta_pasaron(texto,"pasaron_de_curso",consultas_sql)
             for r in res:
                 vec1.append(r)
+        if response == 'estudiantes_regulares_en_materia':
+            vec1=[]
+            res = construir_consulta_materia(texto,"estudiantes_regulares_en_materia",consultas_sql)
+            for r in res:
+                vec1.append(r)
+        if response == 'estudiantes_desercion_en_materia':
+            vec1=[]
+            res = construir_consulta_materia(texto,"estudiantes_desercion_en_materia",consultas_sql)
+            for r in res:
+                vec1.append(r)
         return vec1
     else:
         vec1=[]
@@ -1218,7 +1238,7 @@ def construir_consulta_materia(texto,respuesta,consultas_sql):
     response2 = ''
     existe = 'si'
     materias = obtener_id_materia(texto)
-
+    print(materias,"llego")
     if materias:
         vec1.append("si_mat")
         # Obtener la primera carrera encontrada
@@ -1506,9 +1526,9 @@ def construir_consulta(texto,respuesta,consultas_sql):
     vec1.append(response)
     return vec1
 
-textoo = "quiero que me brindes informacion sobre cuantos estudiantes pasaron de segundo a tercero en el area de tecnologia"
-
+textoo = "en la materia de fisica i cuantos aprobados hay y tambien de la materia de fisica ii y analisis matematico i"
 re = buscar(textoo)
+
 
 print(re)
 #falta

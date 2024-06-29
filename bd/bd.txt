@@ -291,6 +291,7 @@ CREATE TABLE embeddings (
     texto TEXT,
     embedding LONGBLOB,
     cod_respuesta int,
+    estado chart(10) DEFAULT '',
     foreign key(cod_respuesta)references respuesta(cod_respuesta)on delete restrict on update restrict
 );
 

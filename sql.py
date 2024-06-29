@@ -693,12 +693,19 @@ def obtener_asignaturas_embeddign(modelo):
                 sql_update = "UPDATE asignatura SET embedding = %s WHERE cod_asig = %s"
                 cursor.execute(sql_update, (embedding_bytes, asi[0]))
 
-    sql_consu = "SELECT * FROM asignatura"
+    sql_consu = "SELECT cod_asig,embedding FROM asignatura"
     cursor.execute(sql_consu)
     embed = cursor.fetchall()
+    embeddings = []
+    codigos = []
+    # Obtener todos los embeddings y códigos de asignatura
+    for row in embed:
+        codigos.append(row[0])
+        embeddings.append(np.frombuffer(row[1], dtype=np.float32))  # Convertir el blob a un array numpy
     conn.commit()
     conn.close()
-    return embed
+
+    return codigos,embeddings
 
 
 

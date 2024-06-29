@@ -6,8 +6,11 @@ from sql import obtener_id_de_carrera,seleccionarAsignaturaTodos,buscar_Asignatu
 from sql import buscar_Area_por_nombre,buscar_Carrera_por_nombre,obtener_asignaturas_embeddign
 from sentence_transformers import SentenceTransformer, util
 import numpy as np
+from sklearn.metrics.pairwise import cosine_similarity
 from unidecode import unidecode
 from sql import obtener_embeddings_ahora
+
+import warnings
 # Cargar el modelo de lenguaje en español
 
 # Cargar el modelo de embeddings
@@ -405,39 +408,58 @@ def obtener_areas_id(texto):
     return new_areas
 
 
+
 def obtener_id_materia(texto):
-    asignaturas_obtenidos = obtener_asignaturas_embeddign(modelo)
+    codigos, asignaturas_obtenidos = obtener_asignaturas_embeddign(modelo)
     nuevo = []
-    doc = nlp(texto)  # Convertir a minúsculas y procesar con spaCy
-    # Filtrar entidades relevantes (asignaturas) identificadas por spaCy
+    doc = nlp(texto.lower())  # Convertir a minúsculas y procesar con spaCy
     asignaturas_mencionadas = [entidad.text for entidad in doc]
-    secuencias=[]
-    #creamos secuencias del texto qu eingreso el usuario para realizar una busqueda mejor
+    secuencias = []
+
     for longitud in range(1, len(asignaturas_mencionadas) + 1):
         for i in range(len(asignaturas_mencionadas) - longitud + 1):
             subsecuencia = ' '.join(asignaturas_mencionadas[i:i + longitud])
             secuencias.append(subsecuencia)
-    #obtenemos los embedding de cada secuencia del texto por ejemplo cuales son la materia de fisica i
-    #se crear esta secuencia cuales, son , las, fisica, ii,cuales son, y etc
+
     for asig in secuencias:
-        embeddings_texto = obtener_embeddings_ahora(asig,modelo)
+        embeddings_texto = obtener_embeddings_ahora(asig, modelo)
         nuevo.append(embeddings_texto)
-    asignaturas_encontradas = []
-    asi=[]
-    umbral = 0.95#el mas parecido tiene que se mayor a 0.95 con esto podemos decir que es el mas semejante semantico
-    for enc in nuevo:#recorremos las secuencias pero sus embeddings
-        max = 0#en cada recorrido obtenemos el max
-        for asign in asignaturas_obtenidos:#recorremos las asignaturas pero susu embeddings
-            embedding_bd = np.frombuffer(asign[13], dtype=np.float32)#obtenemos su embedding de cada consulta
-            coseno_similar = util.cos_sim(enc, embedding_bd)#calculamos el coseno de similitud
-            coseno_max= coseno_similar.item()
-            #coseno_salida.append(coseno_similar.item())
-            if coseno_max > max and coseno_max>umbral:#calculamos el maximo item
-                max = coseno_max
-                id_respuesta = asign[0]#cuardamos el id de asignatura
-                asi.append(id_respuesta)
-    asi = list(set(asi))
-    return asi
+
+    embe = np.array(nuevo)
+    embe_asig = np.array(asignaturas_obtenidos)
+
+    # Capturar advertencias
+    similitudes = cosine_similarity(embe, embe_asig)
+
+    umbral_similitud = 0.95
+    codigos_asignaturas = []
+    maximos_cosenos = []
+
+    for i, palabra in enumerate(secuencias):
+        indices_superan_umbral = np.where(similitudes[i] >= umbral_similitud)[0]
+
+        if len(indices_superan_umbral) > 0:
+            indice_max_coseno = indices_superan_umbral[np.argmax(similitudes[i, indices_superan_umbral])]
+            codigo_asignatura = codigos[indice_max_coseno]
+            max_coseno = similitudes[i, indice_max_coseno]
+
+            codigos_asignaturas.append(codigo_asignatura)
+            maximos_cosenos.append(max_coseno)
+        else:
+            codigos_asignaturas.append("")
+            maximos_cosenos.append(0.0)
+
+    #for i, palabra in enumerate(secuencias):
+        #print(f"Para la palabra '{palabra}':")
+        #print(f"Código de asignatura: {codigos_asignaturas[i]}")
+        #print(f"Coseno máximo: {maximos_cosenos[i]}")
+        #print()
+    #eliminar vacios
+    codigos_asignaturas = [codigo for codigo in codigos_asignaturas if codigo != "N/A" and codigo != ""]
+    #eliminar dobles datos
+    codigos_asignaturas = list(set(codigos_asignaturas))
+    return codigos_asignaturas
+
 
 def seleccionar_si_quiere_por_area_o_carrera(texto):
     # Definir áreas y sus IDs correspondientes
