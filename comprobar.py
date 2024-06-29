@@ -3,9 +3,15 @@ import unicodedata
 import pymysql
 import re
 from sql import obtener_id_de_carrera,seleccionarAsignaturaTodos,buscar_AsignaturaPORnombre
-from sql import buscar_Area_por_nombre,buscar_Carrera_por_nombre
+from sql import buscar_Area_por_nombre,buscar_Carrera_por_nombre,obtener_asignaturas_embeddign
+from sentence_transformers import SentenceTransformer, util
+import numpy as np
 from unidecode import unidecode
+from sql import obtener_embeddings_ahora
 # Cargar el modelo de lenguaje en español
+
+# Cargar el modelo de embeddings
+modelo = SentenceTransformer('paraphrase-MiniLM-L6-v2')
 nlp = spacy.load("es_core_news_sm")
 
 def obtener_carreras_nombre(texto):
@@ -400,31 +406,38 @@ def obtener_areas_id(texto):
 
 
 def obtener_id_materia(texto):
-    # Procesar el texto con SpaCy
-    doc = nlp(texto)
-    tokens = [token.text for token in doc if token.pos_ in ['NOUN', 'ADJ', 'VERB', 'PROPN', 'NUM']]
-
-    # Lista para almacenar las subsecuencias
-    secuencias = []
-
-    # Generar subsecuencias de tokens
-    for longitud in range(1, len(tokens) + 1):
-        for i in range(len(tokens) - longitud + 1):
-            subsecuencia = ' '.join(tokens[i:i + longitud])
+    asignaturas_obtenidos = obtener_asignaturas_embeddign(modelo)
+    nuevo = []
+    doc = nlp(texto)  # Convertir a minúsculas y procesar con spaCy
+    # Filtrar entidades relevantes (asignaturas) identificadas por spaCy
+    asignaturas_mencionadas = [entidad.text for entidad in doc]
+    secuencias=[]
+    #creamos secuencias del texto qu eingreso el usuario para realizar una busqueda mejor
+    for longitud in range(1, len(asignaturas_mencionadas) + 1):
+        for i in range(len(asignaturas_mencionadas) - longitud + 1):
+            subsecuencia = ' '.join(asignaturas_mencionadas[i:i + longitud])
             secuencias.append(subsecuencia)
-
-    # Lista para almacenar los IDs de las asignaturas encontradas en el texto
+    #obtenemos los embedding de cada secuencia del texto por ejemplo cuales son la materia de fisica i
+    #se crear esta secuencia cuales, son , las, fisica, ii,cuales son, y etc
+    for asig in secuencias:
+        embeddings_texto = obtener_embeddings_ahora(asig,modelo)
+        nuevo.append(embeddings_texto)
     asignaturas_encontradas = []
-
-    # Iterar sobre las secuencias de tokens del texto
-    for secuencia in secuencias:
-        # Buscar asignatura por nombre, ignorando palabras simples como "de", "la", "es", etc.
-        encontro = buscar_AsignaturaPORnombre(secuencia)
-        print(encontro,"   ",secuencia)
-        if encontro != 0:
-            asignaturas_encontradas.append(encontro)
-
-    return asignaturas_encontradas
+    asi=[]
+    umbral = 0.95#el mas parecido tiene que se mayor a 0.95 con esto podemos decir que es el mas semejante semantico
+    for enc in nuevo:#recorremos las secuencias pero sus embeddings
+        max = 0#en cada recorrido obtenemos el max
+        for asign in asignaturas_obtenidos:#recorremos las asignaturas pero susu embeddings
+            embedding_bd = np.frombuffer(asign[13], dtype=np.float32)#obtenemos su embedding de cada consulta
+            coseno_similar = util.cos_sim(enc, embedding_bd)#calculamos el coseno de similitud
+            coseno_max= coseno_similar.item()
+            #coseno_salida.append(coseno_similar.item())
+            if coseno_max > max and coseno_max>umbral:#calculamos el maximo item
+                max = coseno_max
+                id_respuesta = asign[0]#cuardamos el id de asignatura
+                asi.append(id_respuesta)
+    asi = list(set(asi))
+    return asi
 
 def seleccionar_si_quiere_por_area_o_carrera(texto):
     # Definir áreas y sus IDs correspondientes

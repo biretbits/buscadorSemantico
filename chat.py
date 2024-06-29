@@ -104,7 +104,7 @@ def eliminar_tildes(texto):
 
 def buscar(texto):
     texto = eliminar_tildes(texto.lower())
-    print(texto)
+    #print(texto)
     consulta = ""
     response = "argumentar_poco_mas"
     # Tokenizar el texto del usuario
@@ -120,12 +120,12 @@ def buscar(texto):
         embedding_bd = np.frombuffer(s[2], dtype=np.float32)#obtenemos su embedding de cada consulta
         coseno_similar = util.cos_sim(texto_embedding, embedding_bd)#calculamos el coseno de similitud
         coseno_max= coseno_similar.item()
-        print(coseno_max," coseno maximoooooo")
+    #    print(coseno_max," coseno maximoooooo")
         #coseno_salida.append(coseno_similar.item())
         if coseno_max > max:#calculamos el maximo item
             max = coseno_max
             id_respuesta = s[3]#cuardamos la posible respuesta
-    print(id_respuesta," cod_respuestad  ",max)
+    #print(id_respuesta," cod_respuestad  ",max)
     consultas_sql={}#creamos un array tipo diccionario
     if id_respuesta > 0:#si es mayor a cero existe un id
         respuesta_bd = seleccionar_respuesta_y_consulta(id_respuesta)
@@ -879,6 +879,16 @@ def buscar(texto):
             res=consulta_pasaron(texto,"pasaron_de_curso",consultas_sql)
             for r in res:
                 vec1.append(r)
+        if response == 'estudiantes_regulares_en_materia':
+            vec1=[]
+            res = construir_consulta_materia(texto,"estudiantes_regulares_en_materia",consultas_sql)
+            for r in res:
+                vec1.append(r)
+        if response == 'estudiantes_desercion_en_materia':
+            vec1=[]
+            res = construir_consulta_materia(texto,"estudiantes_desercion_en_materia",consultas_sql)
+            for r in res:
+                vec1.append(r)
         return vec1
     else:
         vec1=[]
@@ -1219,7 +1229,7 @@ def construir_consulta_materia(texto,respuesta,consultas_sql):
     response2 = ''
     existe = 'si'
     materias = obtener_id_materia(texto)
-
+    print(materias,"llego")
     if materias:
         vec1.append("si_mat")
         # Obtener la primera carrera encontrada

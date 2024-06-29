@@ -6349,6 +6349,151 @@ def  retornar_valores(datos,ress):
                         html += "</div>"
                         html += "</div>"
                 html+="<div><br>"
+    if accion1 == "estudiantes_regulares_en_materia":
+        si_mat = ress[0]
+        id_mat = ress[1]
+        si_car_n = ress[2]
+        id_car   = ress[3]
+        si_ar = ress[4]
+        id_ar  = ress[5]
+        si_total = ress[6]
+        fecha1 = ress[7]
+        fecha2 = ress[8]
+        if fecha1>fecha2:
+            aux = fecha1
+            fecha1 = fecha2
+            fecha2 = aux
+        fecha11 = fecha1
+        fecha22 = fecha2
+        vcar = {}
+        vare = {}
+        a11 = int(obtener_ano_de_fecha(fecha1))
+        a22 = int(obtener_ano_de_fecha(fecha2))
+        a1 = int(obtener_ano_de_fecha(fecha1))
+        a2 = int(obtener_ano_de_fecha(fecha2))
+        id_materias = eliminar_dobles(id_mat)
+        for mat in id_materias:
+            index = int(mat)
+            vcar[index] = {}
+            dat = seleccionar_asignatura_porID(index)
+            for anio in range(a1, a2 + 1):
+                vcar[index][anio] = {
+                    'aprobado': 0,
+                    'reprobado': 0,
+                    'tipo_asignatura': dat[11],
+                    'area':dat[10],
+                    'carrera':dat[8]
+                }
+
+        if isinstance(fecha1, str):
+            fecha1 = datetime.strptime(fecha1, "%Y-%m-%d").date()
+        if isinstance(fecha2, str):
+            fecha2 = datetime.strptime(fecha2, "%Y-%m-%d").date()
+        for row in datos:#recorremos los datos obtenidos de la base de datos
+          if not isinstance(row[14], type(None)) and row[14]>=fecha1 and row[14] <= fecha2:
+              anoBD = int(obtener_ano_de_fecha(row[14].strftime("%Y-%m-%d")))
+              if row[3]=='activo':
+                  vcar[row[8]][anoBD]['aprobado']+=1
+              else:
+                  vcar[row[8]][anoBD]['reprobado']+=1
+        html+="<div class='alert alert-secondary'>Los estudiantes regulares e irregulares son lo siguiente</div>"
+        for mat in id_materias:
+            index = int(mat)
+            for anio in range(a1, a2 + 1):
+                if si_car_n == "si_car_n":
+                    carreras = eliminar_dobles(id_car)
+                    for car in carreras:
+                        ind = int(car)
+                        if ind == vcar[index][anio]['carrera']:
+                            html+="<div class='alert alert-secondary'>La asignatura de "+nombre_asignatura(index)+" de la carrera de "+nombre_carrera_retor(ind)+" tiene "+str(vcar[index][anio]['aprobado'])+" estudiantes regulares y "+str(vcar[index][anio]['reprobado'])+" estudiantes irregulares del año "+str(anio)+"</div>"
+                elif si_ar == "si_ar":
+                    areas = eliminar_dobles(id_ar)
+                    if vcar[index][anio]['tipo_asignatura'] == 2:#estamos en lo correcto es asignatura de todo el area
+                        for are in areas:
+                            ind = int(are)
+                            if ind == vcar[index][anio]['area']:
+                                html+="<div class='alert alert-secondary'>La asignatura de "+nombre_asignatura(index)+" del area de "+nombre_area_id(ind)+" tiene "+str(vcar[index][anio]['aprobado'])+" estudiantes regulares y "+str(vcar[index][anio]['reprobado'])+" estudiantes irregulares del año "+str(anio)+"</div>"
+                    else:
+                        html+="<div class='alert alert-secondary'>La asignatura de "+nombre_asignatura(index)+" de la carrera de "+nombre_carrera_retor(vcar[index][anio]['carrera'])+" tiene "+str(vcar[index][anio]['aprobado'])+" estudiantes regulares y "+str(vcar[index][anio]['reprobado'])+" estudiantes irregulares del año "+str(anio)+"</div>"
+
+                else:
+                    if vcar[index][anio]['tipo_asignatura'] == 1:#normal
+                        html+="<div class='alert alert-secondary'>La asignatura de "+nombre_asignatura(index)+" de la carrera de "+nombre_carrera_retor(vcar[index][anio]['carrera'])+" tiene "+str(vcar[index][anio]['aprobado'])+" estudiantes regulares y "+str(vcar[index][anio]['reprobado'])+" estudiantes irregulares del año "+str(anio)+"</div>"
+                    else:#materia de un area completo
+                        html+="<div class='alert alert-secondary'>La asignatura de "+nombre_asignatura(index)+" del area de "+nombre_area_id(vcar[index][anio]['area'])+" tiene "+str(vcar[index][anio]['aprobado'])+" estudiantes regulares y "+str(vcar[index][anio]['reprobado'])+" estudiantes irregulares del año "+str(anio)+"</div>"
+    if accion1 == "estudiantes_desercion_en_materia":
+        si_mat = ress[0]
+        id_mat = ress[1]
+        si_car_n = ress[2]
+        id_car   = ress[3]
+        si_ar = ress[4]
+        id_ar  = ress[5]
+        si_total = ress[6]
+        fecha1 = ress[7]
+        fecha2 = ress[8]
+        if fecha1>fecha2:
+            aux = fecha1
+            fecha1 = fecha2
+            fecha2 = aux
+        fecha11 = fecha1
+        fecha22 = fecha2
+        vcar = {}
+        vare = {}
+        a11 = int(obtener_ano_de_fecha(fecha1))
+        a22 = int(obtener_ano_de_fecha(fecha2))
+        a1 = int(obtener_ano_de_fecha(fecha1))
+        a2 = int(obtener_ano_de_fecha(fecha2))
+        id_materias = eliminar_dobles(id_mat)
+        for mat in id_materias:
+            index = int(mat)
+            vcar[index] = {}
+            dat = seleccionar_asignatura_porID(index)
+            for anio in range(a1, a2 + 1):
+                vcar[index][anio] = {
+                    'aprobado': 0,
+                    'reprobado': 0,
+                    'tipo_asignatura': dat[11],
+                    'area':dat[10],
+                    'carrera':dat[8]
+                }
+
+        if isinstance(fecha1, str):
+            fecha1 = datetime.strptime(fecha1, "%Y-%m-%d").date()
+        if isinstance(fecha2, str):
+            fecha2 = datetime.strptime(fecha2, "%Y-%m-%d").date()
+        for row in datos:#recorremos los datos obtenidos de la base de datos
+          if not isinstance(row[14], type(None)) and row[14]>=fecha1 and row[14] <= fecha2:
+              anoBD = int(obtener_ano_de_fecha(row[14].strftime("%Y-%m-%d")))
+              if row[4]=='si':
+                  vcar[row[8]][anoBD]['aprobado']+=1
+              else:
+                  vcar[row[8]][anoBD]['reprobado']+=1
+        html+="<div class='alert alert-secondary'>Los estudiantes que desertaron son lo siguiente</div>"
+        for mat in id_materias:
+            index = int(mat)
+            for anio in range(a1, a2 + 1):
+                if si_car_n == "si_car_n":
+                    carreras = eliminar_dobles(id_car)
+                    for car in carreras:
+                        ind = int(car)
+                        if ind == vcar[index][anio]['carrera']:
+                            html+="<div class='alert alert-secondary'>La asignatura de "+nombre_asignatura(index)+" de la carrera de "+nombre_carrera_retor(ind)+" tiene "+str(vcar[index][anio]['aprobado'])+" desertores y "+str(vcar[index][anio]['reprobado'])+" que siguen del año "+str(anio)+"</div>"
+                elif si_ar == "si_ar":
+                    areas = eliminar_dobles(id_ar)
+                    if vcar[index][anio]['tipo_asignatura'] == 2:#estamos en lo correcto es asignatura de todo el area
+                        for are in areas:
+                            ind = int(are)
+                            if ind == vcar[index][anio]['area']:
+                                html+="<div class='alert alert-secondary'>La asignatura de "+nombre_asignatura(index)+" del area de "+nombre_area_id(ind)+" tiene "+str(vcar[index][anio]['aprobado'])+" desertores y "+str(vcar[index][anio]['reprobado'])+" que siguen del año "+str(anio)+"</div>"
+                    else:
+                        html+="<div class='alert alert-secondary'>La asignatura de "+nombre_asignatura(index)+" de la carrera de "+nombre_carrera_retor(vcar[index][anio]['carrera'])+" tiene "+str(vcar[index][anio]['aprobado'])+" desertores y "+str(vcar[index][anio]['reprobado'])+" que siguen del año "+str(anio)+"</div>"
+
+                else:
+                    if vcar[index][anio]['tipo_asignatura'] == 1:#normal
+                        html+="<div class='alert alert-secondary'>La asignatura de "+nombre_asignatura(index)+" de la carrera de "+nombre_carrera_retor(vcar[index][anio]['carrera'])+" tiene "+str(vcar[index][anio]['aprobado'])+" desertores y "+str(vcar[index][anio]['reprobado'])+" que siguen del año "+str(anio)+"</div>"
+                    else:#materia de un area completo
+                        html+="<div class='alert alert-secondary'>La asignatura de "+nombre_asignatura(index)+" del area de "+nombre_area_id(vcar[index][anio]['area'])+" tiene "+str(vcar[index][anio]['aprobado'])+" desertores y "+str(vcar[index][anio]['reprobado'])+" que siguen del año "+str(anio)+"</div>"
+
     html += "</container>"
 
     return html

@@ -15,16 +15,13 @@ def obtener_embedding(texto):
 def obtener_asignaturas():
     conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
     cursor = conn.cursor()
-
-    sql_consulta = "SELECT * FROM asignatura"
+    sql_consulta = "SELECT * FROM asignatura where embedding =''"
     cursor.execute(sql_consulta)
     res = cursor.fetchall()
-
     for asi in res:
         if asi[13] == b'':  # Si el campo embedding está vacío
             texto_embedding = obtener_embedding(asi[2])
             embedding_bytes = texto_embedding.tobytes()
-
             sql_update = "UPDATE asignatura SET embedding = %s WHERE cod_asig = %s"
             cursor.execute(sql_update, (embedding_bytes, asi[0]))
 
@@ -41,7 +38,6 @@ def obtener_asignaturas():
 def contiene_asignatura(texto, asignaturas, modelo):
     nuevo = []
     doc = nlp(texto.lower())  # Convertir a minúsculas y procesar con spaCy
-
     # Filtrar entidades relevantes (asignaturas) identificadas por spaCy
     asignaturas_mencionadas = [entidad.text for entidad in doc]
     secuencias=[]
@@ -55,7 +51,7 @@ def contiene_asignatura(texto, asignaturas, modelo):
     asignaturas_encontradas = []
     asi=[]
 
-    umbral = 0.9
+    umbral = 0.95
     for enc in nuevo:
         max = 0
         for asign in asignaturas:
@@ -88,7 +84,7 @@ def seleccionar_asignatura_por_id(id_asignatura):
 asignaturas = obtener_asignaturas()
 
 # Ejemplo de uso
-texto = "El próximo semestre tengo clases de fisica i y de fisica ii y de taller de programacion y tambien de analisis matematico"
+texto = "El próximo semestre tengo clases de fisica i y de fisica ii y de taller de programacion y tambien de analisis matematico y electiva ii"
 asignaturas_encontradas = contiene_asignatura(texto, asignaturas, modelo)
 
 if asignaturas_encontradas:

@@ -1,5 +1,6 @@
 import pymysql
-
+from unidecode import unidecode
+import numpy as np
 def seleccionar_estudiante(id):
 
     # Consulta SQL para seleccionar un estudiante por su ID
@@ -672,3 +673,59 @@ def buscar_Carrera_por_nombre(posible_carrera):
     else:
         # Si no hay resultados, devolver un mensaje indicando que no se encontró el estudiante
         return 0
+
+# Función para obtener embeddings de un texto
+def obtener_embedding(texto):
+    return modelo.encode(texto.lower())
+
+# Función para conectar a la base de datos y obtener embeddings de asignaturas
+def obtener_asignaturas_embeddign(modelo):
+    conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+    cursor = conn.cursor()
+    sql_consulta = "SELECT * FROM asignatura where embedding =''"
+    cursor.execute(sql_consulta)
+    if cursor.rowcount > 0:
+        res = cursor.fetchall()
+        for asi in res:
+            if asi[13] == b'':  # Si el campo embedding está vacío
+                texto_embedding = modelo.encode(unidecode(asi[2].lower()))
+                embedding_bytes = texto_embedding.tobytes()
+                sql_update = "UPDATE asignatura SET embedding = %s WHERE cod_asig = %s"
+                cursor.execute(sql_update, (embedding_bytes, asi[0]))
+
+    sql_consu = "SELECT * FROM asignatura"
+    cursor.execute(sql_consu)
+    embed = cursor.fetchall()
+    conn.commit()
+    conn.close()
+    return embed
+
+
+
+def obtener_embeddings_ahora(texto,modelo):
+    # Conexión a la base de datos
+    conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+
+    cursor = conn.cursor()
+    # Consulta SQL para obtener el embedding
+    sql_consulta = "SELECT embedding FROM embeddings WHERE texto = %s and estado='activo' and cod_respuesta=null "
+    # Ejecutar la consulta SQL
+    cursor.execute(sql_consulta, (texto))
+
+    # Verificar si hay algún resultado antes de obtenerlos
+    if cursor.rowcount > 0:
+        # Si hay resultados, obtener el embedding de la consulta
+        embedding_str = cursor.fetchone()[0]
+        # Convertir la cadena de texto del embedding a un array numpy
+        embedding = np.frombuffer(embedding_str, dtype=np.float32)
+        return embedding
+    else:
+        # Si no se encuentra el embedding, calcularlo con el modelo
+        texto_embedding = modelo.encode(texto)
+        # Convertir el embedding a bytes
+        embedding_bytes = texto_embedding.tobytes()
+        # Insertar el texto y el embedding en la base de datos
+        sql_insert = "INSERT INTO embeddings (texto, embedding) VALUES (%s, %s)"
+        cursor.execute(sql_insert, (texto, embedding_bytes))
+        conn.commit()
+        return texto_embedding
