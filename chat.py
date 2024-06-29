@@ -13,7 +13,8 @@ from comprobar import obtener_ano_de_fecha
 
 from unidecode import unidecode
 # Cargar el modelo pre-entrenado
-model = SentenceTransformer('all-MiniLM-L6-v1')
+#model = SentenceTransformer('all-MiniLM-L6-v1')
+model = SentenceTransformer('paraphrase-MiniLM-L6-v2')
 #e.estado = 'desactivo' or e.cod_area = 3 and e.sexo = 'femenino' or  e.sexo = 'masculino';"
 consultas_aux= {"activo_es" :" e.estado = 'activo'",
 "desactivo_es":" e.estado = 'desactivo'",
