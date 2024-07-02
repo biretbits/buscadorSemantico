@@ -291,7 +291,7 @@ CREATE TABLE embeddings (
     texto TEXT,
     embedding LONGBLOB,
     cod_respuesta int,
-    estado chart(10) DEFAULT '',
+    estado char(10) DEFAULT '',
     foreign key(cod_respuesta)references respuesta(cod_respuesta)on delete restrict on update restrict
 );
 
@@ -2446,3 +2446,6 @@ update cursa_asignatura set desercion = 'si' where cod_cursa = 45;
 update cursa_asignatura set desercion = 'si' where cod_cursa = 50;
 update cursa_asignatura set desercion = 'si' where cod_cursa = 25;
 update cursa_asignatura set desercion = 'si' where cod_cursa = 15;
+
+
+LOAD DATA INFILE '/var/lib/mysql-files/preguntas.csv' INTO TABLE embeddings FIELDS TERMINATED BY ';' LINES TERMINATED BY '\n' IGNORE 1 LINES (texto, embedding, cod_respuesta,estado);
