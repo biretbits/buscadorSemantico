@@ -8,7 +8,8 @@ from unidecode import unidecode
 # Cargar el modelo de lenguaje en español
 
 # Cargar el modelo de embeddings
-modelo = SentenceTransformer('paraphrase-MiniLM-L6-v2')
+modelo = SentenceTransformer('all-MiniLM-L6-v1')
+#modelo = SentenceTransformer('paraphrase-MiniLM-L6-v2')
 nlp = spacy.load("es_core_news_sm")
 
 def obtener_embedding_de_textos():

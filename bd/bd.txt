@@ -523,6 +523,207 @@ insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fec
 ('si','UTO','2014-05-15 15:30:00','2014-05-15',34,1,1,'activo');
 insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad tomas frias','2015-05-15 14:50:00','2022-05-15',35,1,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2020-05-15 14:30:00','2020-05-15',28,1,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Univeridad tecnica de Oruro','2016-05-15 13:30:00','2015-05-15',29,1,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Univeridad tecnica de Oruro','2016-05-15 14:30:00','2016-05-15',32,1,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2014-05-15 14:30:00','2017-05-15',33,1,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2014-05-15 15:30:00','2019-05-15',34,1,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Universidad tomas frias','2018-05-15 14:50:00','2022-05-15',35,1,1,'activo');
+
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2020-05-15 14:30:00','2020-05-15',28,1,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Univeridad tecnica de Oruro','2015-05-15 13:30:00','2015-05-15',29,1,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Univeridad tecnica de Oruro','2016-05-15 14:30:00','2016-05-15',32,1,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2014-05-15 14:30:00','2014-05-15',33,1,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2014-05-15 15:30:00','2015-05-15',34,1,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Universidad tomas frias','2015-05-15 14:50:00','2022-05-15',35,1,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2020-05-15 14:30:00','2023-05-15',28,1,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Univeridad tecnica de Oruro','2024-05-15 13:30:00','2015-05-15',29,1,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Univeridad tecnica de Oruro','2023-05-15 14:30:00','2016-05-15',32,1,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2014-05-15 14:30:00','2022-05-15',33,1,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2014-05-15 15:30:00','2021-05-15',34,1,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Universidad tomas frias','2020-05-15 14:50:00','2022-05-15',35,1,1,'activo');
+
+
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2020-05-15 14:30:00','2020-05-15',28,1,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Univeridad tecnica de Oruro','2015-05-15 13:30:00','2015-05-15',29,1,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Univeridad tecnica de Oruro','2016-05-15 14:30:00','2016-05-15',32,1,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2014-05-15 14:30:00','2014-05-15',33,1,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2014-05-15 15:30:00','2014-05-15',34,1,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Universidad tomas frias','2015-05-15 14:50:00','2022-05-15',35,1,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2020-05-15 14:30:00','2020-05-15',28,1,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Univeridad tecnica de Oruro','2016-05-15 13:30:00','2015-05-15',29,1,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Univeridad tecnica de Oruro','2016-05-15 14:30:00','2016-05-15',32,1,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2014-05-15 14:30:00','2017-05-15',33,1,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2014-05-15 15:30:00','2019-05-15',34,1,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Universidad tomas frias','2018-05-15 14:50:00','2022-05-15',35,1,1,'activo');
+
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2020-05-15 14:30:00','2020-05-15',28,1,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Univeridad tecnica de Oruro','2021-05-15 13:30:00','2015-05-15',29,1,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Univeridad tecnica de Oruro','2022-05-15 14:30:00','2016-05-15',32,1,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2014-05-15 14:30:00','2023-05-15',33,1,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2014-05-15 15:30:00','2024-05-15',34,1,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Universidad tomas frias','2019-05-15 14:50:00','2022-05-15',35,1,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2020-05-15 14:30:00','2018-05-15',28,1,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Univeridad tecnica de Oruro','2017-05-15 13:30:00','2015-05-15',29,1,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Univeridad tecnica de Oruro','2016-05-15 14:30:00','2016-05-15',32,1,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2014-05-15 14:30:00','2022-05-15',33,1,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2014-05-15 15:30:00','2015-05-15',34,1,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Universidad tomas frias','2014-05-15 14:50:00','2022-05-15',35,1,1,'activo');
+
+
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2020-05-15 14:30:00','2020-05-15',28,2,12,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Univeridad tecnica de Oruro','2021-05-15 13:30:00','2015-05-15',29,2,13,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Univeridad tecnica de Oruro','2022-05-15 14:30:00','2016-05-15',32,2,13,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2014-05-15 14:30:00','2023-05-15',33,1,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2014-05-15 15:30:00','2024-05-15',34,2,12,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Universidad tomas frias','2019-05-15 14:50:00','2022-05-15',35,2,13,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2020-05-15 14:30:00','2018-05-15',28,2,12,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Univeridad tecnica de Oruro','2017-05-15 13:30:00','2015-05-15',29,2,14,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Univeridad tecnica de Oruro','2016-05-15 14:30:00','2016-05-15',32,2,14,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2014-05-15 14:30:00','2022-05-15',33,2,12,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2014-05-15 15:30:00','2015-05-15',34,2,13,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Universidad tomas frias','2014-05-15 14:50:00','2022-05-15',35,2,14,'activo');
+
+
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2020-05-15 14:30:00','2020-05-15',28,3,8,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Univeridad tecnica de Oruro','2021-05-15 13:30:00','2015-05-15',29,3,16,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Univeridad tecnica de Oruro','2022-05-15 14:30:00','2016-05-15',32,3,8,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2014-05-15 14:30:00','2023-05-15',33,3,16,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2014-05-15 15:30:00','2024-05-15',34,3,8,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Universidad tomas frias','2019-05-15 14:50:00','2022-05-15',35,3,16,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2020-05-15 14:30:00','2018-05-15',28,3,8,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Univeridad tecnica de Oruro','2017-05-15 13:30:00','2015-05-15',29,3,16,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Univeridad tecnica de Oruro','2016-05-15 14:30:00','2016-05-15',32,3,8,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2014-05-15 14:30:00','2022-05-15',33,3,8,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2014-05-15 15:30:00','2015-05-15',34,3,16,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Universidad tomas frias','2014-05-15 14:50:00','2022-05-15',35,3,8,'activo');
+
+
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2020-05-15 14:30:00','2020-05-15',28,3,8,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Univeridad tecnica de Oruro','2021-05-15 13:30:00','2015-05-15',29,3,16,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Univeridad tecnica de Oruro','2022-05-15 14:30:00','2016-05-15',32,3,8,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2014-05-15 14:30:00','2023-05-15',33,3,16,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2014-05-15 15:30:00','2024-05-15',34,3,8,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Universidad tomas frias','2019-05-15 14:50:00','2022-05-15',35,3,16,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2020-05-15 14:30:00','2020-05-15',28,3,8,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Univeridad tecnica de Oruro','2021-05-15 13:30:00','2015-05-15',29,3,16,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Univeridad tecnica de Oruro','2022-05-15 14:30:00','2016-05-15',32,3,8,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2014-05-15 14:30:00','2023-05-15',33,3,8,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2014-05-15 15:30:00','2024-05-15',34,3,16,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Universidad tomas frias','2014-05-15 14:50:00','2024-05-15',35,3,8,'activo');
+
+
+
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2020-05-15 14:30:00','2024-05-15',28,3,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Univeridad tecnica de Oruro','2021-05-15 13:30:00','2024-05-15',29,3,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Univeridad tecnica de Oruro','2022-05-15 14:30:00','2016-05-15',32,3,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2014-05-15 14:30:00','2023-05-15',33,3,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2014-05-15 15:30:00','2024-05-15',34,3,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Universidad tomas frias','2019-05-15 14:50:00','2022-05-15',35,3,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2020-05-15 14:30:00','2020-05-15',28,3,8,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Univeridad tecnica de Oruro','2021-05-15 13:30:00','2015-05-15',29,3,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Univeridad tecnica de Oruro','2022-05-15 14:30:00','2016-05-15',32,3,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2014-05-15 14:30:00','2023-05-15',33,3,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','UTO','2014-05-15 15:30:00','2024-05-15',34,3,1,'activo');
+insert into transferencia(transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)values
+('si','Universidad tomas frias','2014-05-15 14:50:00','2024-05-15',35,3,1,'activo');
+
+
+
+
+
+
+
+
 
 
 insert into docente(nombre_docente,ap_docente,am_docente,ci_docente,profesion,telefono,pais,
@@ -2197,6 +2398,267 @@ cod_cursa,cod_es,cod_dicta,cod_docente,
 cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
 ('si','Universidad de san simon','2023-05-15 14:30:00','2023-02-05','10:05:00'
 ,38,29,22,2,9,2,1,2,1,'activo');
+
+
+insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
+cod_cursa,cod_es,cod_dicta,cod_docente,
+cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+('si','Universidad de san simon','2024-05-15 14:30:00','2023-02-05','10:05:00'
+,38,29,22,2,9,2,1,2,1,'activo');
+
+insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
+cod_cursa,cod_es,cod_dicta,cod_docente,
+cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+('si','Universidad de san simon','2024-05-15 14:30:00','2023-02-05','10:05:00'
+,38,29,22,2,9,2,1,2,1,'activo');
+
+insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
+cod_cursa,cod_es,cod_dicta,cod_docente,
+cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+('si','Universidad de san simon','2024-05-15 14:30:00','2023-02-05','10:05:00'
+,38,29,22,2,9,2,1,2,1,'activo');
+
+insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
+cod_cursa,cod_es,cod_dicta,cod_docente,
+cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+('si','Universidad de san simon','2024-05-15 14:30:00','2023-02-05','10:05:00'
+,38,29,22,2,9,2,1,2,1,'activo');
+
+insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
+cod_cursa,cod_es,cod_dicta,cod_docente,
+cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+('si','Universidad de san simon','2024-05-15 14:30:00','2023-02-05','10:05:00'
+,38,29,22,2,9,2,1,2,1,'activo');
+
+insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
+cod_cursa,cod_es,cod_dicta,cod_docente,
+cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+('si','Universidad de san simon','2024-05-15 14:30:00','2023-02-05','10:05:00'
+,38,29,22,2,9,2,1,2,1,'activo');
+
+insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
+cod_cursa,cod_es,cod_dicta,cod_docente,
+cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+('si','Universidad de san simon','2024-05-15 14:30:00','2023-02-05','10:05:00'
+,38,29,22,2,9,2,1,2,1,'activo');
+
+insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
+cod_cursa,cod_es,cod_dicta,cod_docente,
+cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+('si','Universidad de san simon','2024-05-15 14:30:00','2023-02-05','10:05:00'
+,38,29,22,2,9,2,1,2,1,'activo');
+
+insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
+cod_cursa,cod_es,cod_dicta,cod_docente,
+cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+('si','Universidad de san simon','2024-05-15 14:30:00','2023-02-05','10:05:00'
+,38,29,22,2,9,2,1,2,1,'activo');
+
+insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
+cod_cursa,cod_es,cod_dicta,cod_docente,
+cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+('si','Universidad de san simon','2024-05-15 14:30:00','2023-02-05','10:05:00'
+,38,29,22,2,9,2,1,2,1,'activo');
+
+insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
+cod_cursa,cod_es,cod_dicta,cod_docente,
+cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+('si','Universidad de san simon','2024-05-15 14:30:00','2023-02-05','10:05:00'
+,38,29,22,2,9,2,1,2,1,'activo');
+
+insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
+cod_cursa,cod_es,cod_dicta,cod_docente,
+cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+('si','Universidad de san simon','2024-05-15 14:30:00','2023-02-05','10:05:00'
+,38,29,22,2,9,2,1,2,1,'activo');
+
+insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
+cod_cursa,cod_es,cod_dicta,cod_docente,
+cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+('si','Universidad de san simon','2022-05-15 14:30:00','2022-02-05','10:05:00'
+,38,29,22,2,9,2,1,2,1,'activo');
+
+insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
+cod_cursa,cod_es,cod_dicta,cod_docente,
+cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+('si','Universidad de san simon','2022-05-15 14:30:00','2023-02-05','10:05:00'
+,38,29,22,2,9,2,1,2,1,'activo');
+
+insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
+cod_cursa,cod_es,cod_dicta,cod_docente,
+cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+('si','Universidad de san simon','2021-05-15 14:30:00','2024-02-05','10:05:00'
+,38,29,22,2,9,2,1,2,1,'activo');
+
+insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
+cod_cursa,cod_es,cod_dicta,cod_docente,
+cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+('si','Universidad de san simon','2021-05-15 14:30:00','2020-02-05','10:05:00'
+,38,29,22,2,9,2,1,2,1,'activo');
+
+insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
+cod_cursa,cod_es,cod_dicta,cod_docente,
+cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+('si','Universidad de san simon','2020-05-15 14:30:00','2018-02-05','10:05:00'
+,38,29,22,2,9,2,1,2,1,'activo');
+
+insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
+cod_cursa,cod_es,cod_dicta,cod_docente,
+cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+('si','Universidad de san simon','2020-05-15 14:30:00','2019-02-05','10:05:00'
+,38,29,22,2,9,2,1,2,1,'activo');
+
+insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
+cod_cursa,cod_es,cod_dicta,cod_docente,
+cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+('si','Universidad de san simon','2020-05-15 14:30:00','2014-02-05','10:05:00'
+,38,29,22,2,9,2,1,2,1,'activo');
+
+insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
+cod_cursa,cod_es,cod_dicta,cod_docente,
+cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+('si','Universidad de san simon','2020-05-15 14:30:00','2015-02-05','10:05:00'
+,38,29,22,2,9,2,1,2,1,'activo');
+
+insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
+cod_cursa,cod_es,cod_dicta,cod_docente,
+cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+('si','Universidad de san simon','2019-05-15 14:30:00','2021-02-05','10:05:00'
+,38,29,22,2,9,2,1,2,1,'activo');
+
+insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
+cod_cursa,cod_es,cod_dicta,cod_docente,
+cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+('si','Universidad de san simon','2019-05-15 14:30:00','2022-02-05','10:05:00'
+,38,29,22,2,9,2,1,2,1,'activo');
+
+insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
+cod_cursa,cod_es,cod_dicta,cod_docente,
+cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+('si','Universidad de san simon','2019-05-15 14:30:00','2023-02-05','10:05:00'
+,38,29,22,2,9,2,1,2,1,'activo');
+
+insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
+cod_cursa,cod_es,cod_dicta,cod_docente,
+cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+('si','Universidad de san simon','2019-05-15 14:30:00','2024-02-05','10:05:00'
+,38,29,22,2,9,2,1,2,1,'activo');
+
+insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
+cod_cursa,cod_es,cod_dicta,cod_docente,
+cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+('si','Universidad de san simon','2019-05-15 14:30:00','2021-02-05','10:05:00'
+,38,29,22,2,9,2,1,2,1,'activo');
+
+insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
+cod_cursa,cod_es,cod_dicta,cod_docente,
+cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+('si','Universidad de san simon','2019-05-15 14:30:00','2020-02-05','10:05:00'
+,38,29,22,2,9,2,1,2,1,'activo');
+
+insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
+cod_cursa,cod_es,cod_dicta,cod_docente,
+cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+('si','Universidad de san simon','2019-05-15 14:30:00','2019-02-05','10:05:00'
+,38,29,22,2,9,2,1,2,1,'activo');
+
+insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
+cod_cursa,cod_es,cod_dicta,cod_docente,
+cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+('si','Universidad de san simon','2019-05-15 14:30:00','2023-02-05','10:05:00'
+,38,29,22,2,9,2,1,2,1,'activo');
+
+insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
+cod_cursa,cod_es,cod_dicta,cod_docente,
+cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+('si','Universidad de san simon','2018-05-15 14:30:00','2023-02-05','10:05:00'
+,38,29,22,2,9,2,1,2,1,'activo');
+
+insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
+cod_cursa,cod_es,cod_dicta,cod_docente,
+cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+('si','Universidad de san simon','2018-05-15 14:30:00','2024-02-05','10:05:00'
+,38,29,22,2,9,2,1,2,1,'activo');
+
+insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
+cod_cursa,cod_es,cod_dicta,cod_docente,
+cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+('si','Universidad de san simon','2015-05-15 14:30:00','2015-02-05','10:05:00'
+,38,29,22,2,9,2,1,2,1,'activo');
+
+insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
+cod_cursa,cod_es,cod_dicta,cod_docente,
+cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+('si','Universidad de san simon','2015-05-15 14:30:00','2019-02-05','10:05:00'
+,38,29,22,2,9,2,1,2,1,'activo');
+
+insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
+cod_cursa,cod_es,cod_dicta,cod_docente,
+cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+('si','Universidad de san simon','2016-05-15 14:30:00','2020-02-05','10:05:00'
+,38,29,22,2,9,2,1,2,1,'activo');
+
+insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
+cod_cursa,cod_es,cod_dicta,cod_docente,
+cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+('si','Universidad de san simon','2016-05-15 14:30:00','2021-02-05','10:05:00'
+,38,29,22,2,9,2,1,2,1,'activo');
+
+insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
+cod_cursa,cod_es,cod_dicta,cod_docente,
+cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+('si','Universidad de san simon','2019-05-15 14:30:00','2022-02-05','10:05:00'
+,38,29,22,2,9,2,1,2,1,'activo');
+
+insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
+cod_cursa,cod_es,cod_dicta,cod_docente,
+cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+('si','Universidad de san simon','2017-05-15 14:30:00','2024-02-05','10:05:00'
+,38,29,22,2,9,2,1,2,1,'activo');
+
+insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
+cod_cursa,cod_es,cod_dicta,cod_docente,
+cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+('si','Universidad de san simon','2017-05-15 14:30:00','2024-02-05','10:05:00'
+,38,29,22,2,9,2,1,2,1,'activo');
+
+insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
+cod_cursa,cod_es,cod_dicta,cod_docente,
+cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+('si','Universidad de san simon','2017-05-15 14:30:00','2024-02-05','10:05:00'
+,38,29,22,2,9,2,1,2,1,'activo');
+
+insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
+cod_cursa,cod_es,cod_dicta,cod_docente,
+cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+('si','Universidad de san simon','2017-05-15 14:30:00','2024-02-05','10:05:00'
+,38,29,22,2,9,2,1,2,1,'activo');
+
+insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
+cod_cursa,cod_es,cod_dicta,cod_docente,
+cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+('si','Universidad de san simon','2017-05-15 14:30:00','2016-02-05','10:05:00'
+,38,29,22,2,9,2,1,2,1,'activo');
+
+insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
+cod_cursa,cod_es,cod_dicta,cod_docente,
+cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+('si','Universidad de san simon','2017-05-15 14:30:00','2015-02-05','10:05:00'
+,38,29,22,2,9,2,1,2,1,'activo');
+
+insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
+cod_cursa,cod_es,cod_dicta,cod_docente,
+cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+('si','Universidad de san simon','2017-05-15 14:30:00','2017-02-05','10:05:00'
+,38,29,22,2,9,2,1,2,1,'activo');
+
+insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
+cod_cursa,cod_es,cod_dicta,cod_docente,
+cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+('si','Universidad de san simon','2017-05-15 14:30:00','2018-02-05','10:05:00'
+,38,29,22,2,9,2,1,2,1,'activo');
+
+
 
 
 
