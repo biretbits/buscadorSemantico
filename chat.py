@@ -71,31 +71,52 @@ def maximo(resultado_tensor):
         k = k + 1
     return j
 
-def obtener_embedding(texto):
+def obtener_embedding(texto,posible_respuesta):
     # Conexión a la base de datos
     conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
 
     cursor = conn.cursor()
     # Consulta SQL para obtener el embedding
-    sql_consulta = "SELECT embedding FROM embeddings WHERE texto = %s and estado='activo'"
+    sql_consulta = "SELECT embedding,id FROM embeddings WHERE texto = %s and estado='activo'"
     # Ejecutar la consulta SQL
     cursor.execute(sql_consulta, (texto))
 
     # Verificar si hay algún resultado antes de obtenerlos
     if cursor.rowcount > 0:
         # Si hay resultados, obtener el embedding de la consulta
-        embedding_str = cursor.fetchone()[0]
+        result = cursor.fetchone()
+        embedding_str = result[0]
+        codigo = result[1]
+        print("el id es ",codigo)
         # Convertir la cadena de texto del embedding a un array numpy
+
+        print(posible_respuesta," posible res")
+        try:
+            with conn.cursor() as cursor:
+                if posible_respuesta:
+                    sql_update = "UPDATE embeddings SET cod_respuesta = %s WHERE id = %s"
+                    cursor.execute(sql_update, (posible_respuesta, codigo))
+            # Confirmar la transacción
+            conn.commit()
+        finally:
+            # Cerrar la conexión siempre, incluso si ocurre una excepción
+            conn.close()
         embedding = np.frombuffer(embedding_str, dtype=np.float32)
+
         return embedding
     else:
-        # Si no se encuentra el embedding, calcularlo con el modelo
         texto_embedding = model.encode(texto)
         # Convertir el embedding a bytes
         embedding_bytes = texto_embedding.tobytes()
         # Insertar el texto y el embedding en la base de datos
-        sql_insert = "INSERT INTO embeddings (texto, embedding) VALUES (%s, %s)"
-        cursor.execute(sql_insert, (texto, embedding_bytes))
+        # Si no se encuentra el embedding, calcularlo con el modelo
+        if posible_respuesta != '':
+            sql_insert = "INSERT INTO embeddings (texto, embedding, cod_respuesta) VALUES (%s, %s, %s)"
+            cursor.execute(sql_insert, (texto, embedding_bytes, posible_respuesta))
+        else:
+            sql_insert = "INSERT INTO embeddings (texto, embedding) VALUES (%s, %s)"
+            cursor.execute(sql_insert, (texto, embedding_bytes))
+
         conn.commit()
         return texto_embedding
 
@@ -120,14 +141,15 @@ def seleccionarEmbeddinBd():
 def eliminar_tildes(texto):
     return unidecode(texto)
 
-def buscar(texto):
+def buscar(texto,posible_respuesta):
+    print(posible_respuesta,"respuenndndndnnnnnnnnnnn")
     texto = eliminar_tildes(texto.lower())
     #print(texto)
     consulta = ""
     response = "argumentar_poco_mas"
     # Tokenizar el texto del usuario
     # Codificar las oraciones en un espacio semántico
-    texto_embedding = obtener_embedding(texto)
+    texto_embedding = obtener_embedding(texto,posible_respuesta)
     # Inicializar lista para almacenar los resultados de la similitud del coseno
     coseno_salida = []
     # Calcular la similitud coseno entre la consulta y todas las oraciones

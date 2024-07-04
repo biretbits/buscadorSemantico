@@ -53,11 +53,20 @@ model = SentenceTransformer('all-MiniLM-L6-v1')
 @app.route("/")
 
 def principala():
+
+    conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+    cursor = conn.cursor()
+    # Consulta para verificar si el usuario existe
+    consulta = "SELECT * FROM respuesta where estado='activo'"
+    cursor.execute(consulta)
+    sql_consulta = cursor.fetchall()
+    cursor.close()
+    conn.close()
     #return render_template("index.html")
     # Verificar si existe la sesión de usuario
     if 'usuario' in session:
         # Renderizar el menú para usuario autenticado
-        return render_template('index.html', usuario=session['usuario'])
+        return render_template('index.html', usuario=session['usuario'],consulta = sql_consulta)
     # Si no existe la sesión de usuario, renderizar un menú básico
     return render_template('index.html', usuario=None)
 #permite visualizar tabla de respuesta_bd
@@ -175,7 +184,8 @@ def respuesta():
     if request.method == 'POST':
         # Obtener los datos enviados mediante Ajax
         busqueda = request.form.get('bus')
-        respuesta = buscar(busqueda)
+        posible_respuesta = request.form.get('posible_respuesta')
+        respuesta = buscar(busqueda,posible_respuesta)
         preg = respuesta[-1]
         sql_consulta = respuesta[-1]
         print("sql ",sql_consulta)

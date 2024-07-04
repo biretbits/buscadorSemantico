@@ -61,6 +61,8 @@
           <div class="container mt-5">
             <div class="row">
               <div class="alert alert-success">
+                <div id='error'>
+                </div>
                 <div class="col-md-6 offset-md-3">
                     <h4 class="text-center mb-1 text-primary" style='font-style: italic;'>Buscador semantico</h4>
                     <div class="mb-3" style="position: relative;">
@@ -69,7 +71,17 @@
                           <img src="{{ url_for('static', filename='imagenes/buscar.png') }}" height="22px" width="22px"class="img-circle">
                         </button>
                     </div>
+                    <select name="categorias" id='posible_respuesta' class="form-control" onchange="buscarDatos()">
+                      <option value="">Seleccione tipo de respuesta</option>
+                        {% for categoria in consulta %}
+                            <option value="{{ categoria[0] }}" title="{{ categoria[3] }}">
+                                <abbr title="{{ categoria[1] }}">{{ categoria[1] }}</abbr>
+                            </option>
+                        {% endfor %}
+                    </select>
+
                 </div>
+
               </div>
             </div>
           </div>
@@ -103,12 +115,32 @@
       </div>
     </div>
 
-
     <script type="text/javascript">
     function buscarDatos(){
+      var posible_respuesta = document.getElementById("posible_respuesta").value;
       var bus = document.getElementById("buscar").value;
+      if(posible_respuesta !=''){
+        if(bus == ''){
+          $('#error').html("  <div class='alert alert-danger'> Ponga algo en el buscador</div>");
+            var select = document.getElementById('posible_respuesta');
+            select.selectedIndex = 0;
+              validarError();
+          return;
+        }
+      }else {
+        if (posible_respuesta == ''){
+          if(bus == ''){
+            $('#error').html("  <div class='alert alert-danger'> Ponga algo en el buscador</div>");
+              var select = document.getElementById('posible_respuesta');
+              select.selectedIndex = 0;
+              validarError();
+            return;
+          }
+        }
+      }
       var datos=new  FormData();
       datos.append("bus",bus);
+      datos.append("posible_respuesta",posible_respuesta);
       $.ajax({
         type: "POST", //type of submit
         cache: false, //important or else you might get wrong data returned to you
@@ -118,10 +150,12 @@
         contentType:false,
         processData:false,
         success: function(data){
-          alert(data);
+          //alert(data);
           console.log(data);
             //retorno1(data);
               $('#respuesta').html(data);
+            var select = document.getElementById('posible_respuesta');
+            select.selectedIndex = 0;
         },
       });
     }
@@ -130,7 +164,12 @@
     var maxColumns = 50; // Cambia este valor según tus necesidades
 
 });
-
+// Ejecutar código después de 1 minuto (60,000 milisegundos)
+function validarError(){
+  setTimeout(function() {
+    $('#error').html("");
+  }, 2000);
+}
 
 </script>
 
