@@ -21,6 +21,35 @@
             <li class='nav-item' title='backup de la base de datos'>
               <a class='nav-link btn btn-outline-secondary text-primary' href='/backup'>Backup</a>
             </li>
+
+            <li class='nav-item dropdown' title='Registros'>
+              <a class='nav-link dropdown-toggle btn btn-outline-secondary text-primary' href='#' id='navbarDropdown2' role='button' data-bs-toggle='dropdown' aria-expanded='false'>
+                Registros <!-- Mostrar nombre de usuario -->
+              </a>
+              <ul class='dropdown-menu' aria-labelledby='navbarDropdown2'>
+                <li><hr class='dropdown-divider'></li>
+                <li class='nav-item' title='Registro nuevo de carrera' style='color:green'>
+                  <a class='nav-link text-primary btn btn-outline-info' href='/FormCarrera'>
+                    Registrar Carrera
+                  </a>
+                </li>
+                <li class='nav-item' title='Registro nuevo plan curricular' style='color:green'>
+                  <a class='nav-link text-primary btn btn-outline-info' href='/cerrar'>
+                    Registrar plan de estudio
+                  </a>
+                </li>
+                <li class='nav-item' title='Registro nuevo docente' style='color:green'>
+                  <a class='nav-link text-primary btn btn-outline-info' href='/cerrar'>
+                    Registrar Docentes
+                  </a>
+                </li>
+                <li class='nav-item' title='Registro nueva asignatura' style='color:green'>
+                  <a class='nav-link text-primary btn btn-outline-info' href='/cerrar'>
+                    Registrar Asignatura
+                  </a>
+                </li>
+              </ul>
+            </li>
           {% endif %}
         </ul>
         <ul class='navbar-nav ms-auto'>

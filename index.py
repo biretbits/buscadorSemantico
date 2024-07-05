@@ -893,6 +893,21 @@ def backup():
 
     except subprocess.CalledProcessError as e:
         return jsonify({"error": str(e)})
+
+@app.route('/FormCarrera')
+def FormCarrera():
+    conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+    cursor = conn.cursor()
+    # Consulta para verificar si el usuario existe
+    consultas = "SELECT cod_area,nombre_area FROM area"
+    cursor.execute(consultas)
+    consulta = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    if 'usuario' in session:
+        return render_template('registroCarrera.html',usuario=session['usuario'],consulta=consulta)
+    return render_template('registroCarrera.html',usuario=None,consulta=consulta)
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0',debug=True,port=5003)
 
