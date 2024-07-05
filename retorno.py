@@ -131,6 +131,7 @@ def  retornar_valores(datos,ress):
     accion1 = ress[-2]
     n_car = len(seleccionarCarrerasTodo())
     n_are = len(seleccionarAreas())
+    n_grado = len(seleccionarGrado())
     print("la accion es : ",accion1)
 
     html = ""
@@ -1280,10 +1281,10 @@ def  retornar_valores(datos,ress):
             html += "<br>"
             #crear para areas
 
-            html += "<h5 align='center'>Areas</h5>"
+            html += "<h5 align='center'>Áreas</h5>"
             areas = seleccionarAreas()
             for are in areas:#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
-                html += "<h6 align='center'>Area "+str(nombre_area_id(are[0]))+"</h6>"
+                html += "<h6 align='center'>Área "+str(nombre_area_id(are[0]))+"</h6>"
                 html += "<div class='row'>"
                 for anio in range(a1, a2 + 1):#recorremos las fechas
                     html += "<div class='col-lg-4' style='border: 1px solid black;'>"
@@ -1303,8 +1304,8 @@ def  retornar_valores(datos,ress):
             h = 1
             carreras = seleccionarCarrerasTodo()
             for car in carreras:#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
-                html += "<h5 align = 'center'>Carrera</h5>"
-                html += "<h6 align = 'center'>"+str(seleccionarcarrera_id(car[0]))+"</h6>"
+                html += "<h6 align = 'center'>Carrera</h6>"
+                html += "<h6 align = 'center'>"+str(nombre_carrera_retor(car[0]))+"</h6>"
                 html += "<div class='row' style = 'border: 1px solid black;'>"
                 for anio in range(a1, a2 + 1):#recorremos las fechas
                     html += "<div class='col-lg-4 p-4' style = 'border: 1px solid black;background-color:RGBA(255, 250, 0, 0.5)'>"
@@ -1344,20 +1345,23 @@ def  retornar_valores(datos,ress):
         for area in areas:
             vasigDeser[area[0]]={}
             materias = seleccionarAsignaturaAreas(area[0],1)
-            for anio in range(a1, a2 + (1)):
-                vasigDeser[area[0]][anio]={}
-                for mat in materias:
-                    vasigDeser[area[0]][anio][mat[0]]={'si':0,'no':0,'asignatura':mat[2],'carrera':mat[8]}
+            if materias != 'no':
+                for anio in range(a1, a2 + (1)):
+                    vasigDeser[area[0]][anio]={}
+                    for mat in materias:
+                        vasigDeser[area[0]][anio][mat[0]]={'si':0,'no':0,'asignatura':mat[2],'carrera':mat[8]}
         carreras = seleccionarCarrerasTodo()
         for car in carreras:
             vasigCar[car[0]] = {}
             materias = seleccionarAsignatura_por_id(car[0])
-            for anio in range(a1, a2 + (1)):
-                vasigCar[car[0]][anio]={}
-                for gra in grado:
-                    vasigCar[car[0]][anio][gra[0]]={}
-                    for mat in materias:
-                        vasigCar[car[0]][anio][mat[0]]={'si':0,'no':0,'asignatura':mat[2]}
+            if materias != 'no':
+                for anio in range(a1, a2 + (1)):
+                    vasigCar[car[0]][anio]={}
+                    for gra in grado:
+                        vasigCar[car[0]][anio][gra[0]]={}
+                        for mat in materias:
+                            if mat[9] == gra[0]:
+                                vasigCar[car[0]][anio][gra[0]][mat[0]]={'si':0,'no':0,'asignatura':mat[2]}
 
         if isinstance(fecha1, str):
             fecha1 = datetime.strptime(fecha1, "%Y-%m-%d").date()
@@ -1367,12 +1371,11 @@ def  retornar_valores(datos,ress):
             if not isinstance(row[14], type(None)) and  row[14]>=fecha1 and row[14] <= fecha2:
                 anoBD = int(obtener_ano_de_fecha(row[14].strftime("%Y-%m-%d")))
                 if row[4] == 'si':#contar los de primer año
-                    vasigDeser[row[12]][anoBD][row[4]]+=1
+                    vasigDeser[row[12]][anoBD][row[8]][row[4]]+=1
                     vasigCar[row[10]][anoBD][row[11]][row[8]][row[4]]+=1
                 elif row[4] == 'no':#contamos solo de 5to año y aprobados
-                    vasigDeser[row[12]][anoBD][row[4]]+=1
+                    vasigDeser[row[12]][anoBD][row[8]][row[4]]+=1
                     vasigCar[row[10]][anoBD][row[11]][row[8]][row[4]]+=1
-        colorr ={0:'beige',1:'Gainsboro',2:'Khaki',3:'Lavender',4:'LightYellow'}
         if si_car_n == "si_car_n":#esta buscando carreras
             mensaje = "Las asignaturas que tienen mas estudiantes desertores en las siguientes carreras son"
             html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
@@ -1388,7 +1391,7 @@ def  retornar_valores(datos,ress):
                         html += "<h6 align='center'>Año "+str(anio)+"</h6>"
                         html += "<div class='row'>"#abrimos una fila
                         for gra in grado:#recorremos los cursos
-                            html += "<div class='col-lg-3' style = 'background-color:"+str(colorr[g])+";border: 1px solid black;'>"
+                            html += "<div class='col-lg-3' style = 'background-color:khaki;border: 1px solid black;'>"
                             html += "<div class='panel panel-default text-center'>"
                             html += "<div class='panel-heading'>"
                             html += "Curso "+str(gra[1])#imprimimos el curso
@@ -1403,8 +1406,9 @@ def  retornar_valores(datos,ress):
                             html += "</thead>"
                             html += "<tbody>"
                             for asi in asig:#recorremos las asignaturas
-                                html += "<tr><td>"+str(vasigCar[index1][anio][gra[0]][asi[0]]['asignatura'])+"</td>"
-                                html += "<td>"+str(vasigCar[index1][anio][gra[0]][asi[0]]['si'])+"</td></tr>"
+                                if gra[0] == asi[9]:
+                                    html += "<tr><td>"+str(vasigCar[index1][anio][gra[0]][asi[0]]['asignatura'])+"</td>"
+                                    html += "<td>"+str(vasigCar[index1][anio][gra[0]][asi[0]]['si'])+"</td></tr>"
                             #html += menCOncluyeron(vareasApro[i],vareasApla[i])
                             html += "<tbody>"
                             html += "</table>"
@@ -1449,11 +1453,16 @@ def  retornar_valores(datos,ress):
                         html += "</tr>"
                         html += "</thead>"
                         html += "<tbody>"
+                        contar = 0
                         for asi in materias:
-                            html += "<tr><td>"+str(vasigDeser[index1[anio][asi[0]]['asignatura'])+"</td>"
-                            html += "<td>"+str(vasigDeser[index1][anio][asi[0]]['si'])+"</td>"
-                            html += "<td>"+str(vasigDeser[index1][anio][asi[0]]['carrera'])+"</td></tr>"
+                            if vasigDeser[index1][anio][asi[0]]['si']>0:
+                                html += "<tr><td>"+str(vasigDeser[index1][anio][asi[0]]['asignatura'])+"</td>"
+                                html += "<td>"+str(vasigDeser[index1][anio][asi[0]]['si'])+"</td>"
+                                html += "<td>"+str(vasigDeser[index1][anio][asi[0]]['carrera'])+"</td></tr>"
                                     #html += "<td>"+str(nombre_carrera(vareasT[i+1][asi[0]].get(1)))+"</td></tr>"
+                                contar = 1
+                        if contar == 0:
+                            html+="<tr><td colspan='3'>No se encontro información</td></tr>"
                         html += "<tbody>"
                         html += "</table>"
                         html += "</div>"
@@ -1496,10 +1505,15 @@ def  retornar_valores(datos,ress):
                         html += "</tr>"
                         html += "</thead>"
                         html += "<tbody>"
+                        contar = 0
                         for asi in materias:
-                            html += "<tr><td>"+str(vasigDeser[index1[anio][asi[0]]['asignatura'])+"</td>"
-                            html += "<td>"+str(vasigDeser[index1][anio][asi[0]]['si'])+"</td>"
-                            html += "<td>"+str(vasigDeser[index1][anio][asi[0]]['carrera'])+"</td></tr>"
+                            if vasigDeser[index1][anio][asi[0]]['si']>0:
+                                html += "<tr><td>"+str(vasigDeser[index1][anio][asi[0]]['asignatura'])+"</td>"
+                                html += "<td>"+str(vasigDeser[index1][anio][asi[0]]['si'])+"</td>"
+                                html += "<td>"+str(vasigDeser[index1][anio][asi[0]]['carrera'])+"</td></tr>"
+                                contar = 1
+                        if contar == 0:
+                            html+="<tr><td colspan='3'>No se encontro información</td></tr>"
                                     #html += "<td>"+str(nombre_carrera(vareasT[i+1][asi[0]].get(1)))+"</td></tr>"
                         html += "<tbody>"
                         html += "</table>"
@@ -1521,7 +1535,7 @@ def  retornar_valores(datos,ress):
                         html += "<h6 align='center'>Año "+str(anio)+"</h6>"
                         html += "<div class='row'>"#abrimos una fila
                         for gra in grado:#recorremos los cursos
-                            html += "<div class='col-lg-3' style = 'background-color:"+str(colorr[g])+";border: 1px solid black;'>"
+                            html += "<div class='col-lg-3' style = 'background-color:khaki;border: 1px solid black;'>"
                             html += "<div class='panel panel-default text-center'>"
                             html += "<div class='panel-heading'>"
                             html += "Curso "+str(gra[1])#imprimimos el curso
@@ -1536,8 +1550,9 @@ def  retornar_valores(datos,ress):
                             html += "</thead>"
                             html += "<tbody>"
                             for asi in asig:#recorremos las asignaturas
-                                html += "<tr><td>"+str(vasigCar[index1][anio][gra[0]][asi[0]]['asignatura'])+"</td>"
-                                html += "<td>"+str(vasigCar[index1][anio][gra[0]][asi[0]]['si'])+"</td></tr>"
+                                if gra[0] == asi[9]:
+                                    html += "<tr><td>"+str(vasigCar[index1][anio][gra[0]][asi[0]]['asignatura'])+"</td>"
+                                    html += "<td>"+str(vasigCar[index1][anio][gra[0]][asi[0]]['si'])+"</td></tr>"
                             #html += menCOncluyeron(vareasApro[i],vareasApla[i])
                             html += "<tbody>"
                             html += "</table>"
@@ -1566,34 +1581,23 @@ def  retornar_valores(datos,ress):
             aux = fecha1
             fecha1 = fecha2
             fecha2 = aux
-        vapro = [0] * 17
-        vaplaz = [0] * 17
+
         vareas = {}
         vareasr = {}
-        capro = 0
-        caplaz = 0
-        cdes = 0
-        cndes = 0
-        total = 0
-        ctec = 0
-        csal = 0
-        csoc = 0
+        c_infor = {}
+        c_inforr = {}
         a11 = int(obtener_ano_de_fecha(fecha1))
         a22 = int(obtener_ano_de_fecha(fecha2))
         a1 = int(obtener_ano_de_fecha(fecha1))
         a2 = int(obtener_ano_de_fecha(fecha2))
             ##enviamos el id de la carrera y el plan de estudio
         for anio in range(a1, a2 + (1)):
-            vareas[anio] = [0,0,0]
-            vareasr[anio] = [0,0,0]
+            vareas[anio] = [0]*n_are
+            vareasr[anio] = [0]*n_are
         for anio in range(a1, a2 + (1)):
-            c_infor[anio] = [0]*17
-            c_inforr[anio] = [0]*17
+            c_infor[anio] = [0]*n_car
+            c_inforr[anio] = [0]*n_car
 
-       #carrerarr_a= [carreraa[0] for carreraa in ro]#aqui tengo todas las carreras pero sus id
-        cursoss ={0:'1er año',1:"2do año",2:"3er año",3:'4to año',4:'5to año'}
-        guardar = []
-        guardar1 = []
         if isinstance(fecha1, str):
             fecha1 = datetime.strptime(fecha1, "%Y-%m-%d").date()
         if isinstance(fecha2, str):
@@ -1647,17 +1651,16 @@ def  retornar_valores(datos,ress):
                 html += "</div>"
                 html += "<br>"
         elif si_ar == "si_ar":
-            mensaje = "La cantidad de estudiantes clasificado por varones y mujeres de las siguientes areas son"
+            mensaje = "La cantidad de estudiantes clasificado por varones y mujeres de las siguientes áreas son"
             html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
-            s_dupli = eliminar_dobles(id_ar)#si hay doble veces repetido el id lo eliminamos a 1
-            print(s_dupli,"vector ")
+            s_dupli = eliminar_dobles(id_ar)#
             for i in s_dupli:#recorremos todo los id de areas
                 index = int(i) - 1#obtenemos el id
                 index1 = int(i)
                 #seleccionamos las asingturas con el cod de area
-                html += "<h6 align='center'>Area "+nombre_area_id(index1)+"</h6>"
+                html += "<h6 align='center'>Área "+nombre_area_id(index1)+"</h6>"
 
-                html += "<div class='row'style = 'border: 1px solid black;background-color:khaki'>"
+                html += "<div class='row'>"
                 for anio in range(a1, a2 + (1)):
                     html += "<div class='col-lg-4'>"
                     html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
@@ -1684,17 +1687,17 @@ def  retornar_valores(datos,ress):
                 html += "<br>"
         else:
             mensaje = "La cantidad de estudiantes clasificado por varones y mujeres"
-            mensaje += " detallamos en los siguientes cuadros por area y carreras"
+            mensaje += " detallamos en los siguientes cuadros por áreas y carreras"
             html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
             # Crear el gráfico de torta
 
             #crear para areas
 
-            html += "<h4 align='center'>Areas</h4>"
-            k1 = 1
-            for i in range(3):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
-                html += "<h6 align='center'>Area "+str(nombre_area_id(i+1))+"</h6>"
-                html += "<div class='row'style = 'border: 1px solid black;background-color:khaki'>"
+            html += "<h5 align='center'>Áreas</h5>"
+            areas = seleccionarAreas()
+            for are in areas:#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
+                html += "<h6 align='center'>Área "+str(nombre_area_id(are[0]))+"</h6>"
+                html += "<div class='row'>"
                 for anio in range(a1, a2 + (1)):
                     html += "<div class='col-lg-4'>"
                     html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
@@ -1710,8 +1713,8 @@ def  retornar_valores(datos,ress):
                     html += "</tr>"
                     html += "</thead>"
                     html += "<tbody>"
-                    html += "<tr><td>"+str(vareas[anio][i])+"</td>"
-                    html += "<td>"+str(vareasr[anio][i])+"</td></tr>"
+                    html += "<tr><td>"+str(vareas[anio][are[0]-1])+"</td>"
+                    html += "<td>"+str(vareasr[anio][are[0]-1])+"</td></tr>"
                     html += "<tbody>"
                     html += "</table>"
                     html += "</div>"
@@ -1720,8 +1723,10 @@ def  retornar_valores(datos,ress):
                 html += "</div>"
                 html += "<br>"
             h = 1
-            for i in range(17):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
-                html+="<h5 align='center'>Carrera "+str(nombre_carrera_retor(i+1))+"</h5>"#nombre de la carrera
+            html += "<h5 align='center'>Carreras</h5>"
+            carreras = seleccionarCarrerasTodo()
+            for car in carreras:#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
+                html+="<h5 align='center'>Carrera "+str(nombre_carrera_retor(car[0]))+"</h5>"#nombre de la carrera
                 html+="<div class='row'>"
                 for anio in range(a1, a2 + (1)):#recoremos los anos que pueden sere desde una año inicio a un año fin
                     html += "<div class='col-lg-3' style = 'background-color:khaki;border: 1px solid black;'>"
@@ -1739,8 +1744,8 @@ def  retornar_valores(datos,ress):
                     html += "</thead>"
                     html += "<tbody>"
 
-                    html += "<tr><td>"+str(c_infor[anio][i])+"</td>"
-                    html += "<td>"+str(c_inforr[anio][i])+"</td></tr>"
+                    html += "<tr><td>"+str(c_infor[anio][car[0]-1])+"</td>"
+                    html += "<td>"+str(c_inforr[anio][car[0]-1])+"</td></tr>"
                                       #html += menCOncluyeron(vareasApro[i],vareasApla[i])
                     html += "<tbody>"
                     html += "</table>"
@@ -1771,8 +1776,8 @@ def  retornar_valores(datos,ress):
         a1 = int(obtener_ano_de_fecha(fecha1))
         a2 = int(obtener_ano_de_fecha(fecha2))
         for anio in range(a1, a2 + (1)):
-            vanio[anio] = [0]*3
-            vcaranio[anio] = [0]*17
+            vanio[anio] = [0]*n_are
+            vcaranio[anio] = [0]*n_car
         if isinstance(fecha1, str):
             fecha1 = datetime.strptime(fecha1, "%Y-%m-%d").date()
         if isinstance(fecha2, str):
@@ -1812,16 +1817,16 @@ def  retornar_valores(datos,ress):
 
             s_dupli = eliminar_dobles(id_ar)#si hay doble veces repetido el id lo eliminamos a 1
             if len(s_dupli)==1:
-                mensaje = "La cantidad de estudiantes que realizaron transferencias a otras universidades desde el año "+str(a1)+" al año "+str(a2)+" son "+str(total)+" de la siguiente area"
+                mensaje = "La cantidad de estudiantes que realizaron transferencias a otras universidades desde el año "+str(a1)+" al año "+str(a2)+" son "+str(total)+" de la siguiente área"
             else:
-                mensaje = "La cantidad de estudiantes que realizaron transferencias a otras universidades desde el año "+str(a1)+" al año "+str(a2)+" son "+str(total)+" de las siguientes areas"
+                mensaje = "La cantidad de estudiantes que realizaron transferencias a otras universidades desde el año "+str(a1)+" al año "+str(a2)+" son "+str(total)+" de las siguientes áreas"
             html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
             print(s_dupli,"vector ")
             for i in s_dupli:#recorremos todo los id de areas
                 index = int(i) - 1#obtenemos el id
                 index1 = int(i)
                 #seleccionamos las asingturas con el cod de area
-                html += "<h6 align='center'>Area "+nombre_area_id(index1)+"</h6>"
+                html += "<h6 align='center'>Área "+nombre_area_id(index1)+"</h6>"
                 html += "<div class='row'style = 'border: 1px solid black;'>"
                 for anio in range(a1, a2 + (1)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
                     html += "<div class='col-lg-3'>"
@@ -1847,7 +1852,7 @@ def  retornar_valores(datos,ress):
             areas = seleccionarAreas()
 
             for ar in areas:
-                html += "<h6 align='center'>Area "+nombre_area_id(ar[0])+"</h6>"
+                html += "<h6 align='center'>Área "+nombre_area_id(ar[0])+"</h6>"
                 html += "<div class='row'style = 'border: 1px solid black;'>"
                 for anio in range(a1, a2 + (1)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
                     html += "<div class='col-lg-3'>"
@@ -1900,8 +1905,8 @@ def  retornar_valores(datos,ress):
         a1 = int(obtener_ano_de_fecha(fecha1))
         a2 = int(obtener_ano_de_fecha(fecha2))
         for anio in range(a1, a2 + (1)):
-            vanio[anio]=[0]*3
-            vcaranio[anio]=[0]*17
+            vanio[anio]=[0]*n_are
+            vcaranio[anio]=[0]*n_car
         if isinstance(fecha1, str):
             fecha1 = datetime.strptime(fecha1, "%Y-%m-%d").date()
         if isinstance(fecha2, str):
@@ -1941,16 +1946,15 @@ def  retornar_valores(datos,ress):
 
             s_dupli = eliminar_dobles(id_ar)#si hay doble veces repetido el id lo eliminamos a 1
             if len(s_dupli)==1:
-                mensaje = "Los estudiantes transferidos de otras universidades desde el año "+str(a1)+" al año "+str(a2)+" son "+str(total)+" en total en la siguiente area"
+                mensaje = "Los estudiantes transferidos de otras universidades desde el año "+str(a1)+" al año "+str(a2)+" son "+str(total)+" en total en la siguiente área"
             else:
-                mensaje = "Los estudiantes transferidos de otras universidades desde el año "+str(a1)+" al año "+str(a2)+" son "+str(total)+" en total de las siguientes areas"
+                mensaje = "Los estudiantes transferidos de otras universidades desde el año "+str(a1)+" al año "+str(a2)+" son "+str(total)+" en total de las siguientes áreas"
             html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
-            print(s_dupli,"vector ")
             for i in s_dupli:#recorremos todo los id de areas
                 index = int(i) - 1#obtenemos el id
                 index1 = int(i)
                 #seleccionamos las asingturas con el cod de area
-                html += "<h6 align='center'>Area "+nombre_area_id(index1)+"</h6>"
+                html += "<h6 align='center'>Área "+nombre_area_id(index1)+"</h6>"
                 html += "<div class='row'style = 'border: 1px solid black;'>"
                 for anio in range(a1, a2 + (1)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
                     html += "<div class='col-lg-3'>"
@@ -1970,12 +1974,12 @@ def  retornar_valores(datos,ress):
             # Crear el gráfico de torta
             #crear para areas
             html += "<h6 align='center'>TRANSFERENCIAS POR AÑO</h6>"
-            html += "<h6 align='center'>AREAS</h6>"
+            html += "<h6 align='center'>ÁREAS</h6>"
             k1 = 1
             areas = seleccionarAreas()
             for ar in areas:#recorremos todo los id de areas
                 #seleccionamos las asingturas con el cod de area
-                html += "<h6 align='center'>Area "+nombre_area_id(ar[0])+"</h6>"
+                html += "<h6 align='center'>Área "+nombre_area_id(ar[0])+"</h6>"
                 html += "<div class='row'style = 'border: 1px solid black;'>"
                 for anio in range(a1, a2 + (1)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
                     html += "<div class='col-lg-3'>"
@@ -2027,8 +2031,8 @@ def  retornar_valores(datos,ress):
         a2 = int(obtener_ano_de_fecha(fecha2))
         carreras = {}
         for anio in range(a1, a2 + (1)):
-            vanio[anio]=[0]*3
-            carreras[anio] = [0]*17
+            vanio[anio]=[0]*n_are
+            carreras[anio] = [0]*n_car
 
         if isinstance(fecha1, str):
             fecha1 = datetime.strptime(fecha1, "%Y-%m-%d").date()
@@ -2070,9 +2074,9 @@ def  retornar_valores(datos,ress):
 
             s_dupli = eliminar_dobles(id_ar)#si hay doble veces repetido el id lo eliminamos a 1
             if len(s_dupli)==1:
-                mensaje = "La información sobre cuantos inscritos tiene el area se mostrara en los siguientes cuadros"
+                mensaje = "La información sobre cuantos inscritos tiene el área se mostrara en los siguientes cuadros"
             else:
-                mensaje = "La información sobre cuantos inscritos tiene las areas se mostrara en los siguientes cuadros"
+                mensaje = "La información sobre cuantos inscritos tiene las áreas se mostrara en los siguientes cuadros"
 
             html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
             print(s_dupli,"vector ")
@@ -2080,7 +2084,7 @@ def  retornar_valores(datos,ress):
                 index = int(i) - 1#obtenemos el id
                 index1 = int(i)
                 #seleccionamos las asingturas con el cod de area
-                html += "<h6 align='center'>Area "+nombre_area_id(index1)+"</h6>"
+                html += "<h6 align='center'>Área "+nombre_area_id(index1)+"</h6>"
                 html += "<div class='row'style = 'border: 1px solid black;'>"
                 html += "<div class = 'row'>"
                 for anio in range(a1, a2 + (1)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
@@ -2097,7 +2101,7 @@ def  retornar_valores(datos,ress):
                 html += "</div>"
         else:
 
-            mensaje = "La información cuantos inscritos existen por areas y carreras lo detallamos en los siguientes cuadros"
+            mensaje = "La información cuantos inscritos existen por áreas y carreras lo detallamos en los siguientes cuadros"
             html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
             html += "<button onclick='generar()'>Generar</button>"
             html += "<script>"
@@ -2116,12 +2120,12 @@ def  retornar_valores(datos,ress):
             html += "}"
             html += "</script>"
             #crear ara areas
-            html += "<h6 align='center'>Areas</h6>"
+            html += "<h6 align='center'>Áreas</h6>"
             k1 = 1
             areas = seleccionarAreas()
             for ar in areas:#recorremos todo los id de areas
                 #seleccionamos las asingturas con el cod de area
-                html += "<h6 align='center'>Area "+nombre_area_id(ar[0])+"</h6>"
+                html += "<h6 align='center'>Área "+nombre_area_id(ar[0])+"</h6>"
                 html += "<div class='row'style = 'border: 1px solid black;'>"
                 html += "<div class = 'row'>"
                 for anio in range(a1, a2 + (1)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
@@ -2161,8 +2165,8 @@ def  retornar_valores(datos,ress):
         si_ar = ress[2]
         id_ar  = ress[3]
         si_total = ress[4]
-        vareas = ['']*3
-        vcarreras = ['']*17
+        vareas = ['']*n_are
+        vcarreras = ['']*n_car
         for row in datos:
             if row[2] != 2 and row[3] == 1:
                 vcarreras[row[3]-1]=vcarreras[row[3]-1]+"|"+str(row[1])
@@ -2218,16 +2222,16 @@ def  retornar_valores(datos,ress):
 
             s_dupli = eliminar_dobles(id_ar)#si hay doble veces repetido el id lo eliminamos a 1
             if len(s_dupli)==1:
-                mensaje = "La modalidad de titulación del area son"
+                mensaje = "La modalidad de titulación del área son"
             else:
-                mensaje = "Las modalidades de titulación de las siguientes areas son"
+                mensaje = "Las modalidades de titulación de las siguientes áreas son"
             html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
             print(s_dupli,"vector ")
             for i in s_dupli:#recorremos todo los id de areas
                 index = int(i) - 1#obtenemos el id
                 index1 = int(i)
                 #seleccionamos las asingturas con el cod de area
-                html += "<h6 align='center'>Area "+nombre_area_id(index1)+"</h6>"
+                html += "<h6 align='center'>Área "+nombre_area_id(index1)+"</h6>"
                 carreras = seleccionarcarrera_id(index1)
                 html += "<div class='row'>"
                 for car in carreras:
@@ -2287,7 +2291,7 @@ def  retornar_valores(datos,ress):
             html += "</script>"
             areas = seleccionarAreas()
             for ar in areas:#recorremos todo los id de areas
-                html += "<h6 align='center'>Area "+nombre_area_id(ar[0])+"</h6>"
+                html += "<h6 align='center'>Área "+nombre_area_id(ar[0])+"</h6>"
                 carreras = seleccionarcarrera_id(ar[0])
                 html+="<div class='row'>"
                 for car in carreras:
@@ -2347,11 +2351,11 @@ def  retornar_valores(datos,ress):
         carreras = {}
         carrerasno = {}
         for anio in range(a1, a2 + (1)):
-            vareas[anio]=[0,0,0]
-            vareasno[anio]=[0,0,0]
+            vareas[anio]=[0]*n_are
+            vareasno[anio]=[0]*n_are
         for anio in range(a1, a2 + (1)):
-            carreras[anio] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-            carrerasno[anio] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+            carreras[anio] = [0]*n_car
+            carrerasno[anio] = [0]*n_car
         if isinstance(fecha1, str):
             fecha1 = datetime.strptime(fecha1, "%Y-%m-%d").date()
         if isinstance(fecha2, str):
@@ -2395,9 +2399,9 @@ def  retornar_valores(datos,ress):
         elif si_ar == "si_ar":
             s_dupli = eliminar_dobles(id_ar)#si hay doble veces repetido el id lo eliminamos a 1
             if len(s_dupli)==1:
-                mensaje = "La información sobre desercion estudiantil del area es"
+                mensaje = "La información sobre desercion estudiantil del área es"
             else:
-                mensaje = "La información sobre desercion estudiantil de los areas son"
+                mensaje = "La información sobre desercion estudiantil de los áreas son"
 
             html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
 
@@ -2430,7 +2434,7 @@ def  retornar_valores(datos,ress):
             areas = seleccionarAreas()
             for are in areas:#recorremos todo los id de areas
                 #seleccionamos las asingturas con el cod de area
-                html += "<h6 align='center'>Area "+nombre_area_id(are[0])+"</h6>"
+                html += "<h6 align='center'>Área "+nombre_area_id(are[0])+"</h6>"
                 html += "<div class = 'row'>"
                 for anio in range(a1, a2 + (1)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
                     html += "<div class='col-lg-4'>"
@@ -2489,11 +2493,11 @@ def  retornar_valores(datos,ress):
         carreras = {}
         carrerasTitu = {}
         for anio in range(a1, a2 + (1)):
-            vareas[anio]=[0,0,0]
-            vareasTitu[anio]=[0,0,0]
+            vareas[anio]=[0]*n_are
+            vareasTitu[anio]=[0]*n_are
         for anio in range(a1, a2 + (1)):
-            carreras[anio] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-            carrerasTitu[anio] = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+            carreras[anio] = [0]*n_car
+            carrerasTitu[anio] = [0]*n_car
         if isinstance(fecha1, str):
             fecha1 = datetime.strptime(fecha1, "%Y-%m-%d").date()
         if isinstance(fecha2, str):
@@ -2555,9 +2559,9 @@ def  retornar_valores(datos,ress):
 
             s_dupli = eliminar_dobles(id_ar)#si hay doble veces repetido el id lo eliminamos a 1
             if len(s_dupli)==1:
-                mensaje = "En los siguientes cuadros detallamos los titulados con relación a los primeros niveles de la siguiente area"
+                mensaje = "En los siguientes cuadros detallamos los titulados con relación a los primeros niveles de la siguiente área"
             else:
-                mensaje = "En los siguientes cuadros detallamos los titulados con relación a los primeros niveles de las siguientes areas"
+                mensaje = "En los siguientes cuadros detallamos los titulados con relación a los primeros niveles de las siguientes áreas"
 
             html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
 
@@ -2565,7 +2569,7 @@ def  retornar_valores(datos,ress):
                 index = int(i) - 1#obtenemos el id
                 index1 = int(i)
                 #seleccionamos las asingturas con el cod de area
-                html += "<h6 align='center'>Area "+nombre_area_id(index1)+"</h6>"
+                html += "<h6 align='center'>Área "+nombre_area_id(index1)+"</h6>"
                 html += "<div class = 'row'>"
                 for anio in range(a1, a2 + (1)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
                     html += "<div class='col-lg-4'>"
@@ -2604,7 +2608,7 @@ def  retornar_valores(datos,ress):
             areas = seleccionarAreas()
             for are in areas:#recorremos todo los id de areas
                 #seleccionamos las asingturas con el cod de area
-                html += "<h6 align='center'>Area "+nombre_area_id(are[0])+"</h6>"
+                html += "<h6 align='center'>Área "+nombre_area_id(are[0])+"</h6>"
                 html += "<div class = 'row'>"
                 for anio in range(a1, a2 + (1)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
                     html += "<div class='col-lg-4'>"
@@ -2803,9 +2807,9 @@ def  retornar_valores(datos,ress):
         elif si_ar == "si_ar":
             s_dupli = eliminar_dobles(id_ar)#si hay doble veces repetido el id lo eliminamos a 1
             if len(s_dupli)==1:
-                mensaje = "La cantidad de estudiantes clasificados por departamentos y regiones del area son"
+                mensaje = "La cantidad de estudiantes clasificados por departamentos y regiones del área son"
             else:
-                mensaje = "La cantidad de estudiantes clasificados por departamentos y regiones de los areas son"
+                mensaje = "La cantidad de estudiantes clasificados por departamentos y regiones de los áreas son"
 
             html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
             html += "<div class='alert alert-secondary'>Regiones</div>"
@@ -2813,7 +2817,7 @@ def  retornar_valores(datos,ress):
                 index = int(i) - 1#obtenemos el id
                 index1 = int(i)
                 #seleccionamos las asingturas con el cod de area
-                html += "<h6 align='center'>Area "+nombre_area_id(index1)+"</h6>"
+                html += "<h6 align='center'>Área "+nombre_area_id(index1)+"</h6>"
                 html += "<div class = 'row'>"
                 for anio in range(a1, a2 + (1)):
                     html += "<h6 align='center'style='color:black'>"+str(anio)+"</h6>"
@@ -2836,7 +2840,7 @@ def  retornar_valores(datos,ress):
                 index = int(i) - 1#obtenemos el id
                 index1 = int(i)
                 #seleccionamos las asingturas con el cod de area
-                html += "<h6 align='center'>Area "+nombre_area_id(index1)+"</h6>"
+                html += "<h6 align='center'>Área "+nombre_area_id(index1)+"</h6>"
                 html += "<div class = 'row'>"
                 for anio in range(a1, a2 + (1)):
                     html += "<h6 align='center'style='color:black'>"+str(anio)+"</h6>"
@@ -2866,7 +2870,7 @@ def  retornar_valores(datos,ress):
                 index = are[0] - 1#obtenemos el id
                 index1 = are[0]
                 #seleccionamos las asingturas con el cod de area
-                html += "<h6 align='center'>Area "+nombre_area_id(index1)+"</h6>"
+                html += "<h6 align='center'>Área "+nombre_area_id(index1)+"</h6>"
                 html += "<div class = 'row'>"
                 for anio in range(a1, a2 + (1)):
                     html += "<h6 align='center'style='color:black'>"+str(anio)+"</h6>"
@@ -2984,11 +2988,12 @@ def  retornar_valores(datos,ress):
                         mt = modalidad_titulacion_id(car[0])#seleccinamos la modalidad de titulacion
                         if asig != "no":
                             html+="<div class='row'>"
-                            for k in range(5):
+                            grado = seleccionarGrado()
+                            for gra in grado:
                                 html += "<div class='col-lg-6'>"
                                 html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
                                 html += "<div class='panel-heading'>"
-                                html += (curs[k])
+                                html += "Curso "+str(gra[1])
                                 html += "</div>"
                                 html += "<div class='panel-body'>"
                                 html+= "<table class='table' style='font-size: 12px'>"
@@ -3003,7 +3008,7 @@ def  retornar_valores(datos,ress):
                                 p = 1
                                 for asigg in asig:
                                     html+="<tr>"
-                                    if (k+1) == asigg[9]:#si el curso de asignatura es igual a k entonces
+                                    if gra[0] == asigg[9]:#si el curso de asignatura es igual a k entonces
                                         html+="<td>"+str(p)+"</td>"
                                         p = p + 1
                                         html+="<td>"+str(asigg[1])+"</td>"
@@ -3059,11 +3064,12 @@ def  retornar_valores(datos,ress):
                 mt = modalidad_titulacion_id(index1)#seleccinamos la modalidad de titulacion
                 if asig != "no":
                     html+="<div class='row'>"
-                    for k in range(5):
+                    grado = seleccionarGrado()
+                    for gra in grado:
                         html += "<div class='col-lg-6'>"
                         html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
                         html += "<div class='panel-heading'>"
-                        html += (curs[k])
+                        html +="Curso "+str(gra[1])
                         html += "</div>"
                         html += "<div class='panel-body'>"
                         html+= "<table class='table' style='font-size: 12px'>"
@@ -3078,7 +3084,7 @@ def  retornar_valores(datos,ress):
                         p = 1
                         for asigg in asig:
                             html+="<tr>"
-                            if (k+1) == asigg[9]:#si el curso de asignatura es igual a k entonces
+                            if gra[0] == asigg[9]:#si el curso de asignatura es igual a k entonces
                                 html+="<td>"+str(p)+"</td>"
                                 p = p + 1
                                 html+="<td>"+str(asigg[1])+"</td>"
@@ -3138,11 +3144,12 @@ def  retornar_valores(datos,ress):
                         mt = modalidad_titulacion_id(car[0])#seleccinamos la modalidad de titulacion
                         if asig != "no":
                             html+="<div class='row'>"
-                            for k in range(5):
+                            grado = seleccionarGrado()
+                            for gra in grado:
                                 html += "<div class='col-lg-6'>"
                                 html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
                                 html += "<div class='panel-heading'>"
-                                html += (curs[k])
+                                html += "Curso "+str(gra[1])
                                 html += "</div>"
                                 html += "<div class='panel-body'>"
                                 html+= "<table class='table' style='font-size: 12px'>"
@@ -3157,7 +3164,7 @@ def  retornar_valores(datos,ress):
                                 p = 1
                                 for asigg in asig:
                                     html+="<tr>"
-                                    if (k+1) == asigg[9]:#si el curso de asignatura es igual a k entonces
+                                    if gra[0] == asigg[9]:#si el curso de asignatura es igual a k entonces
                                         html+="<td>"+str(p)+"</td>"
                                         p = p + 1
                                         html+="<td>"+str(asigg[1])+"</td>"
@@ -3203,7 +3210,6 @@ def  retornar_valores(datos,ress):
                 else:
                     html+="<h6 align='center'>No se encontro resultados<h6>"
     if accion1 == "materias_inscritos":
-
         si_car_n = ress[0]
         id_car   = ress[1]
         si_ar = ress[2]
@@ -3217,193 +3223,64 @@ def  retornar_valores(datos,ress):
             fecha2 = aux
         fecha11 = fecha1
         fecha22 = fecha2
-        print(fecha1," ee    ",fecha2)
-        vapro = [0] * 17
-        vaplaz = [0] * 17
-        vareasT = {}
-        vareasTr = {}
-        vareasS = {}
-        vareasSr = {}
-        vareasSo = {}
-        vareasSor = {}
-        capro = 0
-        caplaz = 0
-        cdes = 0
-        cndes = 0
-        total = 0
-        ctec = 0
-        csal = 0
-        csoc = 0
+        vcar={}
+        vare = {}
+
         a11 = int(obtener_ano_de_fecha(fecha1))
         a22 = int(obtener_ano_de_fecha(fecha2))
         a1 = int(obtener_ano_de_fecha(fecha1))
         a2 = int(obtener_ano_de_fecha(fecha2))
-        for car in range(17):
-            asig = seleccionarAsignatura((car+1),1)##enviamos el id de la carrera y el plan de estudio
+        carreras = seleccionarCarrerasTodo()
+        for car in carreras:
+            vcar[car[0]]={}
+            asig = seleccionarAsignatura(car[0],1)##enviamos el id de la carrera y el plan de estudio
             if asig != "no":
                 for anio in range(a1, a2 + (1)):
-                    c_infor[anio] = {}
-                    c_civil[anio] = {}
-                    c_minas[anio] = {}
-                    c_elec[anio] = {}
-                    c_mec[anio] = {}
-                    c_agro[anio] = {}
-                    c_lit[anio] = {}
-                    c_der[anio] = {}
-                    c_cie[anio] = {}
-                    c_cont[anio] = {}
-                    c_odon[anio] = {}
-                    c_lab[anio] = {}
-                    c_enf[anio] = {}
-                    c_med[anio] = {}
-                    c_bio[anio] = {}
-                    c_cso[anio] = {}
-                    c_quim[anio] = {}
-                    c_inforr[anio] = {}
-                    c_civilr[anio] = {}
-                    c_minasr[anio] = {}
-                    c_elecr[anio] = {}
-                    c_mecr[anio] = {}
-                    c_agror[anio] = {}
-                    c_litr[anio] = {}
-                    c_derr[anio] = {}
-                    c_cier[anio] = {}
-                    c_contr[anio] = {}
-                    c_odonr[anio] = {}
-                    c_labr[anio] = {}
-                    c_enfr[anio] = {}
-                    c_medr[anio] = {}
-                    c_bior[anio] = {}
-                    c_csor[anio] = {}
-                    c_quimr[anio] = {}
-                    for arr in asig:
-                        if arr[8] == 1:#carrera 1 informatica
-                        #año id de asignatura  = contar id grado id asignatura
-                            c_infor[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
-                            c_inforr[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
-                        elif arr[8] == 2:
-                            c_civil[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
-                            c_civilr[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
-                        elif arr[8] == 3:
-                            c_minas[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
-                            c_minasr[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
-                        elif arr[8] == 4:
-                            c_elec[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
-                            c_elecr[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
-                        elif arr[8] == 5:
-                            c_mec[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
-                            c_mecr[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
-                        elif arr[8] == 6:
-                            c_agro[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
-                            c_agror[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
-                        elif arr[8] == 7:
-                            c_lit[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
-                            c_litr[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
-                        elif arr[8] == 8:
-                            c_der[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
-                            c_derr[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
-                        elif arr[8] == 9:
-                            c_cie[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
-                            c_cier[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
-                        elif arr[8] == 10:
-                            c_cont[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
-                            c_contr[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
-                        elif arr[8] == 11:
-                            c_odon[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
-                            c_odonr[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
-                        elif arr[8] == 12:
-                            c_lab[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
-                            c_labr[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
-                        elif arr[8] == 13:
-                            c_enf[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
-                            c_enfr[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
-                        elif arr[8] == 14:
-                            c_med[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
-                            c_medr[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
-                        elif arr[8] == 15:
-                            c_bio[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
-                            c_bior[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
-                        elif arr[8] == 16:
-                            c_cso[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
-                            c_csor[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
-                        elif arr[8] == 17:
-                            c_quim[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
-                            c_quimr[anio][arr[0]] = [0,arr[9],arr[0],arr[10]]
-        guardar = []
-        guardar1 = []
+                    vcar[car[0]][anio]={}
+                    grado = seleccionarGrado()
+                    for gra in grado:
+                        vcar[car[0]][anio][gra[0]]={}
+                        for arr in asig:
+                            vcar[car[0]][anio][gra[0]][arr[0]]={'inscritos':0,'materia':arr[2]}
+
         if isinstance(fecha1, str):
             fecha1 = datetime.strptime(fecha1, "%Y-%m-%d").date()
         if isinstance(fecha2, str):
             fecha2 = datetime.strptime(fecha2, "%Y-%m-%d").date()
-        print(fecha1," ee121dddd    ",fecha2)
+
         for row in datos:#recorremos los datos obtenidos de la base de datos
 
             if not isinstance(row[14], type(None)) and row[14]>=fecha1 and row[14] <= fecha2:
                 anoBD = int(obtener_ano_de_fecha(row[14].strftime("%Y-%m-%d")))
-
-                if row[10] == 1:
-                    c_infor[anoBD][row[8]][0]+=1
-                elif row[10] == 2:
-                    c_civil[anoBD][row[8]][0]+=1
-                elif row[10] == 3:
-                    c_minas[anoBD][row[8]][0]+=1
-                elif row[10] == 4:
-                    c_elec[anoBD][row[8]][0]+=1
-                elif row[10] == 5:
-                    c_mec[anoBD][row[8]][0]+=1
-                elif row[10] == 6:
-                    c_agro[anoBD][row[8]][0]+=1
-                elif row[10] == 7:
-                    c_lit[anoBD][row[8]][0]+=1
-                elif row[10] == 8:
-                    c_der[anoBD][row[8]][0]+=1
-                elif row[10] == 9:
-                    c_cie[anoBD][row[8]][0]+=1
-                elif row[10] == 10:
-                    c_cont[anoBD][row[8]][0]+=1
-                elif row[10] == 11:
-                    c_odon[anoBD][row[8]][0]+=1
-                elif row[10] == 12:
-                    c_lab[anoBD][row[8]][0]+=1
-                elif row[10] == 13:
-                    c_enf[anoBD][row[8]][0]+=1
-                elif row[10] == 14:
-                    c_med[anoBD][row[8]][0]+=1
-                elif row[10] == 15:
-                    c_bio[anoBD][row[8]][0]+=1
-                elif row[10] == 16:
-                    c_cso[anoBD][row[8]][0]+=1
-                elif row[10] == 17:
-                    c_quim[anoBD][row[8]][0]+=1
+                if row[8] != '' or row[8] is not None:
+                    vcar[row[10]][anoBD][row[11]][row[8]]['inscritos']+=1
         si_are = ress[0]
-        curs ={0:'1er año',1:"2do año",2:"3er año",3:'4to año',4:'5to año'}
         if si_ar == "si_ar":#si es diferente de no existe una area o areas
             #obtenemos los id de areas quue llegan
             s_dupli = eliminar_dobles(id_ar)#si hay doble veces repetido el id lo eliminamos a 1
             for i in s_dupli:#recorremos todo los id de areas
                 index = int(i) - 1#obtenemos el id
                 index1 = int(i)
-                html += "<h5 align='center'>Area " + str(areasU[index])+"</h5>"
+                html += "<h5 align='center'>Área " + str(nombre_area_id(index1))+"</h5>"
                 carreras = seleccionarcarrera_id(index1)#buscamos con el id todas las carreras relacionadas con el area
                 if carreras != "no":#si es diferente de no entonces ingresamos
                     for car in carreras:#recorremos todas las carreras encontradas
-
                         materias = seleccionarAsignatura_por_id(car[0])#seleccionar asiganturas carrera
                         if materias != "no":
                             html += "<h5 align='center'>Carrera " + str(car[1])+"</h5>"
                             html+="<div class='row'>"
                             for anio in range(a1, a2 + (1)):
                                 html += "<h6 align='center'>" + str(anio)+"</h6>"
-
-                                for g in range(5):
+                                grado = seleccionarGrado()
+                                for gra in grado:
                                     html += "<div class='col-lg-4'>"
                                     html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
                                     html += "<div class='panel-heading'>"
-                                    cur = g+1
+                                    cur = gra[0]
                                     print(cur," = ",car[0])
                                     fech1 = str(anio)+"-01-01"
                                     fech2 = str(anio)+"-12-30"
-                                    html += curs[g]
+                                    html += str(gra[1])
                                     html += "</div>"
                                     html += "<div class='panel-body'>"
                                     html+= "<table class='table' style='font-size:12px'>"
@@ -3416,74 +3293,9 @@ def  retornar_valores(datos,ress):
                                     html+="<tbody>"
                                     k = 1
                                     for mat in materias:
-                                        if car[0] == 1:#si carrera es igual a 1 es informatica
-                                            if (g+1) == c_infor[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                                html+="<tr><td>"+nombre_asignatura(c_infor[anio][mat[0]][2])+"</td>"
-                                                html+="<td>"+str(c_infor[anio][mat[0]][0])+"</td></tr>"
-                                        elif car[0] == 2:
-                                            if (g+1) == c_civil[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                                html+="<tr><td>"+nombre_asignatura(c_civil[anio][mat[0]][2])+"</td>"
-                                                html+="<td>"+str(c_civil[anio][mat[0]][0])+"</td></tr>"
-                                        elif car[0] == 3:
-                                            if (g+1) == c_minas[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                                html+="<tr><td>"+nombre_asignatura(c_minas[anio][mat[0]][2])+"</td>"
-                                                html+="<td>"+str(c_minas[anio][mat[0]][0])+"</td></tr>"
-                                        elif car[0] == 4:
-                                            if (g+1) == c_elec[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                                html+="<tr><td>"+nombre_asignatura(c_elec[anio][mat[0]][2])+"</td>"
-                                                html+="<td>"+str(c_elec[anio][mat[0]][0])+"</td></tr>"
-                                        elif car[0] == 5:
-                                            if (g+1) == c_mec[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                                html+="<tr><td>"+nombre_asignatura(c_mec[anio][mat[0]][2])+"</td>"
-                                                html+="<td>"+str(c_mec[anio][mat[0]][0])+"</td></tr>"
-                                        elif car[0] == 6:
-                                            if (g+1) == c_agro[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                                html+="<tr><td>"+nombre_asignatura(c_agro[anio][mat[0]][2])+"</td>"
-                                                html+="<td>"+str(c_agro[anio][mat[0]][0])+"</td></tr>"
-                                        elif car[0] == 7:
-                                            if (g+1) == c_lit[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                                html+="<tr><td>"+nombre_asignatura(c_lit[anio][mat[0]][2])+"</td>"
-                                                html+="<td>"+str(c_lit[anio][mat[0]][0])+"</td></tr>"
-                                        elif car[0] == 8:
-                                            if (g+1) == c_der[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                                html+="<tr><td>"+nombre_asignatura(c_der[anio][mat[0]][2])+"</td>"
-                                                html+="<td>"+str(c_der[anio][mat[0]][0])+"</td></tr>"
-                                        elif car[0] == 9:
-                                            if (g+1) == c_cie[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                                html+="<tr><td>"+nombre_asignatura(c_cie[anio][mat[0]][2])+"</td>"
-                                                html+="<td>"+str(c_cie[anio][mat[0]][0])+"</td></tr>"
-                                        elif car[0] == 10:
-                                            if (g+1) == c_cont[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                                html+="<tr><td>"+nombre_asignatura(c_cont[anio][mat[0]][2])+"</td>"
-                                                html+="<td>"+str(c_cont[anio][mat[0]][0])+"</td></tr>"
-                                        elif car[0] == 11:
-                                            if (g+1) == c_odon[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                                html+="<tr><td>"+nombre_asignatura(c_odon[anio][mat[0]][2])+"</td>"
-                                                html+="<td>"+str(c_odon[anio][mat[0]][0])+"</td></tr>"
-                                        elif car[0] == 12:
-                                            if (g+1) == c_lab[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                                html+="<tr><td>"+nombre_asignatura(c_lab[anio][mat[0]][2])+"</td>"
-                                                html+="<td>"+str(c_lab[anio][mat[0]][0])+"</td></tr>"
-                                        elif car[0] == 13:
-                                            if (g+1) == c_enf[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                                html+="<tr><td>"+nombre_asignatura(c_enf[anio][mat[0]][2])+"</td>"
-                                                html+="<td>"+str(c_enf[anio][mat[0]][0])+"</td></tr>"
-                                        elif car[0] == 14:
-                                            if (g+1) == c_med[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                                html+="<tr><td>"+nombre_asignatura(c_med[anio][mat[0]][2])+"</td>"
-                                                html+="<td>"+str(c_med[anio][mat[0]][0])+"</td></tr>"
-                                        elif car[0] == 15:
-                                            if (g+1) == c_bio[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                                html+="<tr><td>"+nombre_asignatura(c_bio[anio][mat[0]][2])+"</td>"
-                                                html+="<td>"+str(c_bio[anio][mat[0]][0])+"</td></tr>"
-                                        elif car[0] == 16:
-                                            if (g+1) == c_cso[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                                html+="<tr><td>"+nombre_asignatura(c_cso[anio][mat[0]][2])+"</td>"
-                                                html+="<td>"+str(c_cso[anio][mat[0]][0])+"</td></tr>"
-                                        elif car[0] == 17:
-                                            if (g+1) == c_quim[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                                html+="<tr><td>"+nombre_asignatura(c_quim[anio][mat[0]][2])+"</td>"
-                                                html+="<td>"+str(c_quim[anio][mat[0]][0])+"</td></tr>"
+                                        if gra[0] == mat[9]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                            html+="<tr><td>"+(vcar[car[0]][anio][gra[0]][mat[0]]['materia'])+"</td>"
+                                            html+="<td>"+str(vcar[car[0]][anio][gra[0]][mat[0]]['inscritos'])+"</td></tr>"
 
                                     html+="</tbody>"
                                     html+= "</table>"
@@ -3514,14 +3326,15 @@ def  retornar_valores(datos,ress):
                     html+="<div class='row'>"
                     for anio in range(a1, a2 + (1)):
                         html += "<h6 align='center'>" + str(anio)+"</h6>"
-                        for g in range(5):
+                        grado = seleccionarGrado()
+                        for gra in grado:
                             html += "<div class='col-lg-4'>"
                             html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
                             html += "<div class='panel-heading'>"
-                            cur = g+1
+                            cur = gra[0]
                             fech1 = str(anio)+"-01-01"
                             fech2 = str(anio)+"-12-30"
-                            html += curs[g]
+                            html += "Curso "+str(gra[1])
                             html += "</div>"
                             html += "<div class='panel-body'>"
                             html+= "<table class='table' style='font-size:12px'>"
@@ -3534,74 +3347,9 @@ def  retornar_valores(datos,ress):
                             html+="<tbody>"
                             k = 1
                             for mat in materias:
-                                if index1 == 1:#si carrera es igual a 1 es informatica
-                                    if (g+1) == c_infor[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                        html+="<tr><td>"+nombre_asignatura(c_infor[anio][mat[0]][2])+"</td>"
-                                        html+="<td>"+str(c_infor[anio][mat[0]][0])+"</td></tr>"
-                                elif index1 == 2:
-                                    if (g+1) == c_civil[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                        html+="<tr><td>"+nombre_asignatura(c_civil[anio][mat[0]][2])+"</td>"
-                                        html+="<td>"+str(c_civil[anio][mat[0]][0])+"</td></tr>"
-                                elif index1 == 3:
-                                    if (g+1) == c_minas[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                        html+="<tr><td>"+nombre_asignatura(c_minas[anio][mat[0]][2])+"</td>"
-                                        html+="<td>"+str(c_minas[anio][mat[0]][0])+"</td></tr>"
-                                elif index1 == 4:
-                                    if (g+1) == c_elec[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                        html+="<tr><td>"+nombre_asignatura(c_elec[anio][mat[0]][2])+"</td>"
-                                        html+="<td>"+str(c_elec[anio][mat[0]][0])+"</td></tr>"
-                                elif index1 == 5:
-                                    if (g+1) == c_mec[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                        html+="<tr><td>"+nombre_asignatura(c_mec[anio][mat[0]][2])+"</td>"
-                                        html+="<td>"+str(c_mec[anio][mat[0]][0])+"</td></tr>"
-                                elif index1 == 6:
-                                    if (g+1) == c_agro[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                        html+="<tr><td>"+nombre_asignatura(c_agro[anio][mat[0]][2])+"</td>"
-                                        html+="<td>"+str(c_agro[anio][mat[0]][0])+"</td></tr>"
-                                elif index1 == 7:
-                                    if (g+1) == c_lit[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                        html+="<tr><td>"+nombre_asignatura(c_lit[anio][mat[0]][2])+"</td>"
-                                        html+="<td>"+str(c_lit[anio][mat[0]][0])+"</td></tr>"
-                                elif index1 == 8:
-                                    if (g+1) == c_der[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                        html+="<tr><td>"+nombre_asignatura(c_der[anio][mat[0]][2])+"</td>"
-                                        html+="<td>"+str(c_der[anio][mat[0]][0])+"</td></tr>"
-                                elif index1 == 9:
-                                    if (g+1) == c_cie[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                        html+="<tr><td>"+nombre_asignatura(c_cie[anio][mat[0]][2])+"</td>"
-                                        html+="<td>"+str(c_cie[anio][mat[0]][0])+"</td></tr>"
-                                elif index1 == 10:
-                                    if (g+1) == c_cont[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                        html+="<tr><td>"+nombre_asignatura(c_cont[anio][mat[0]][2])+"</td>"
-                                        html+="<td>"+str(c_cont[anio][mat[0]][0])+"</td></tr>"
-                                elif index1 == 11:
-                                    if (g+1) == c_odon[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                        html+="<tr><td>"+nombre_asignatura(c_odon[anio][mat[0]][2])+"</td>"
-                                        html+="<td>"+str(c_odon[anio][mat[0]][0])+"</td></tr>"
-                                elif index1 == 12:
-                                    if (g+1) == c_lab[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                        html+="<tr><td>"+nombre_asignatura(c_lab[anio][mat[0]][2])+"</td>"
-                                        html+="<td>"+str(c_lab[anio][mat[0]][0])+"</td></tr>"
-                                elif index1 == 13:
-                                    if (g+1) == c_enf[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                        html+="<tr><td>"+nombre_asignatura(c_enf[anio][mat[0]][2])+"</td>"
-                                        html+="<td>"+str(c_enf[anio][mat[0]][0])+"</td></tr>"
-                                elif index1 == 14:
-                                    if (g+1) == c_med[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                        html+="<tr><td>"+nombre_asignatura(c_med[anio][mat[0]][2])+"</td>"
-                                        html+="<td>"+str(c_med[anio][mat[0]][0])+"</td></tr>"
-                                elif index1 == 15:
-                                    if (g+1) == c_bio[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                        html+="<tr><td>"+nombre_asignatura(c_bio[anio][mat[0]][2])+"</td>"
-                                        html+="<td>"+str(c_bio[anio][mat[0]][0])+"</td></tr>"
-                                elif index1 == 16:
-                                    if (g+1) == c_cso[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                        html+="<tr><td>"+nombre_asignatura(c_cso[anio][mat[0]][2])+"</td>"
-                                        html+="<td>"+str(c_cso[anio][mat[0]][0])+"</td></tr>"
-                                elif index1 == 17:
-                                    if (g+1) == c_quim[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                        html+="<tr><td>"+nombre_asignatura(c_quim[anio][mat[0]][2])+"</td>"
-                                        html+="<td>"+str(c_quim[anio][mat[0]][0])+"</td></tr>"
+                                if gra[0] == mat[9]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                    html+="<tr><td>"+(vcar[index1][anio][gra[0]][mat[0]]['materia'])+"</td>"
+                                    html+="<td>"+str(vcar[index1][anio][gra[0]][mat[0]]['inscritos'])+"</td></tr>"
 
                             html+="</tbody>"
                             html+= "</table>"
@@ -3629,16 +3377,16 @@ def  retornar_valores(datos,ress):
                             html+="<div class='row'>"
                             for anio in range(a1, a2 + (1)):
                                 html += "<h6 align='center'>" + str(anio)+"</h6>"
-
-                                for g in range(5):
+                                grado = seleccionarGrado()
+                                for gra in grado:
                                     html += "<div class='col-lg-4'>"
                                     html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
                                     html += "<div class='panel-heading'>"
-                                    cur = g+1
+                                    cur = gra[0]
                                     print(cur," = ",car[0])
                                     fech1 = str(anio)+"-01-01"
                                     fech2 = str(anio)+"-12-30"
-                                    html += curs[g]
+                                    html += gra[1]
                                     html += "</div>"
                                     html += "<div class='panel-body'>"
                                     html+= "<table class='table' style='font-size:12px'>"
@@ -3651,74 +3399,9 @@ def  retornar_valores(datos,ress):
                                     html+="<tbody>"
                                     k = 1
                                     for mat in materias:
-                                        if car[0] == 1:#si carrera es igual a 1 es informatica
-                                            if (g+1) == c_infor[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                                html+="<tr><td>"+nombre_asignatura(c_infor[anio][mat[0]][2])+"</td>"
-                                                html+="<td>"+str(c_infor[anio][mat[0]][0])+"</td></tr>"
-                                        elif car[0] == 2:
-                                            if (g+1) == c_civil[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                                html+="<tr><td>"+nombre_asignatura(c_civil[anio][mat[0]][2])+"</td>"
-                                                html+="<td>"+str(c_civil[anio][mat[0]][0])+"</td></tr>"
-                                        elif car[0] == 3:
-                                            if (g+1) == c_minas[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                                html+="<tr><td>"+nombre_asignatura(c_minas[anio][mat[0]][2])+"</td>"
-                                                html+="<td>"+str(c_minas[anio][mat[0]][0])+"</td></tr>"
-                                        elif car[0] == 4:
-                                            if (g+1) == c_elec[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                                html+="<tr><td>"+nombre_asignatura(c_elec[anio][mat[0]][2])+"</td>"
-                                                html+="<td>"+str(c_elec[anio][mat[0]][0])+"</td></tr>"
-                                        elif car[0] == 5:
-                                            if (g+1) == c_mec[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                                html+="<tr><td>"+nombre_asignatura(c_mec[anio][mat[0]][2])+"</td>"
-                                                html+="<td>"+str(c_mec[anio][mat[0]][0])+"</td></tr>"
-                                        elif car[0] == 6:
-                                            if (g+1) == c_agro[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                                html+="<tr><td>"+nombre_asignatura(c_agro[anio][mat[0]][2])+"</td>"
-                                                html+="<td>"+str(c_agro[anio][mat[0]][0])+"</td></tr>"
-                                        elif car[0] == 7:
-                                            if (g+1) == c_lit[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                                html+="<tr><td>"+nombre_asignatura(c_lit[anio][mat[0]][2])+"</td>"
-                                                html+="<td>"+str(c_lit[anio][mat[0]][0])+"</td></tr>"
-                                        elif car[0] == 8:
-                                            if (g+1) == c_der[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                                html+="<tr><td>"+nombre_asignatura(c_der[anio][mat[0]][2])+"</td>"
-                                                html+="<td>"+str(c_der[anio][mat[0]][0])+"</td></tr>"
-                                        elif car[0] == 9:
-                                            if (g+1) == c_cie[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                                html+="<tr><td>"+nombre_asignatura(c_cie[anio][mat[0]][2])+"</td>"
-                                                html+="<td>"+str(c_cie[anio][mat[0]][0])+"</td></tr>"
-                                        elif car[0] == 10:
-                                            if (g+1) == c_cont[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                                html+="<tr><td>"+nombre_asignatura(c_cont[anio][mat[0]][2])+"</td>"
-                                                html+="<td>"+str(c_cont[anio][mat[0]][0])+"</td></tr>"
-                                        elif car[0] == 11:
-                                            if (g+1) == c_odon[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                                html+="<tr><td>"+nombre_asignatura(c_odon[anio][mat[0]][2])+"</td>"
-                                                html+="<td>"+str(c_odon[anio][mat[0]][0])+"</td></tr>"
-                                        elif car[0] == 12:
-                                            if (g+1) == c_lab[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                                html+="<tr><td>"+nombre_asignatura(c_lab[anio][mat[0]][2])+"</td>"
-                                                html+="<td>"+str(c_lab[anio][mat[0]][0])+"</td></tr>"
-                                        elif car[0] == 13:
-                                            if (g+1) == c_enf[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                                html+="<tr><td>"+nombre_asignatura(c_enf[anio][mat[0]][2])+"</td>"
-                                                html+="<td>"+str(c_enf[anio][mat[0]][0])+"</td></tr>"
-                                        elif car[0] == 14:
-                                            if (g+1) == c_med[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                                html+="<tr><td>"+nombre_asignatura(c_med[anio][mat[0]][2])+"</td>"
-                                                html+="<td>"+str(c_med[anio][mat[0]][0])+"</td></tr>"
-                                        elif car[0] == 15:
-                                            if (g+1) == c_bio[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                                html+="<tr><td>"+nombre_asignatura(c_bio[anio][mat[0]][2])+"</td>"
-                                                html+="<td>"+str(c_bio[anio][mat[0]][0])+"</td></tr>"
-                                        elif car[0] == 16:
-                                            if (g+1) == c_cso[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                                html+="<tr><td>"+nombre_asignatura(c_cso[anio][mat[0]][2])+"</td>"
-                                                html+="<td>"+str(c_cso[anio][mat[0]][0])+"</td></tr>"
-                                        elif car[0] == 17:
-                                            if (g+1) == c_quim[anio][mat[0]][1]:#si el grado actual es igula a 1, 2 o etc ingresa
-                                                html+="<tr><td>"+nombre_asignatura(c_quim[anio][mat[0]][2])+"</td>"
-                                                html+="<td>"+str(c_quim[anio][mat[0]][0])+"</td></tr>"
+                                        if gra[0] == mat[9]:#si el grado actual es igula a 1, 2 o etc ingresa
+                                            html+="<tr><td>"+(vcar[car[0]][anio][gra[0]][mat[0]]['materia'])+"</td>"
+                                            html+="<td>"+str(vcar[car[0]][anio][gra[0]][mat[0]]['inscritos'])+"</td></tr>"
 
                                     html+="</tbody>"
                                     html+= "</table>"
@@ -3920,9 +3603,9 @@ def  retornar_valores(datos,ress):
         a2 = int(obtener_ano_de_fecha(fecha2))
 
         for anio in range(a1, a2 + (1)):
-            vare[anio]=[0]*3
+            vare[anio]=[0]*n_are
         for anio in range(a1, a2 + (1)):
-            vcar[anio]=[0]*17
+            vcar[anio]=[0]*n_car
         if isinstance(fecha1, str):
             fecha1 = datetime.strptime(fecha1, "%Y-%m-%d").date()
         if isinstance(fecha2, str):
@@ -4246,8 +3929,8 @@ def  retornar_valores(datos,ress):
         areas = seleccionarAreas()
 
         for anio in range(a1, a2 + (1)):
-            vare[anio] = [0]*3
-            vcar[anio] = [0]*17
+            vare[anio] = [0]*n_are
+            vcar[anio] = [0]*n_car
         if isinstance(fecha1, str):
             fecha1 = datetime.strptime(fecha1, "%Y-%m-%d").date()
         if isinstance(fecha2, str):
@@ -4370,8 +4053,8 @@ def  retornar_valores(datos,ress):
         areas = seleccionarAreas()
 
         for anio in range(a1, a2 + (1)):
-            vare[anio] = [0]*3
-            vcar[anio] = [0]*17
+            vare[anio] = [0]*n_are
+            vcar[anio] = [0]*n_car
         if isinstance(fecha1, str):
             fecha1 = datetime.strptime(fecha1, "%Y-%m-%d").date()
         if isinstance(fecha2, str):
@@ -5284,8 +4967,8 @@ def  retornar_valores(datos,ress):
         area = {}
         carre = {}
         for anio in range(a1, a2 + (1)):
-            area[anio]=[0]*3
-            carre[anio]=[0]*17
+            area[anio]=[0]*n_are
+            carre[anio]=[0]*n_car
         if isinstance(fecha1, str):
             fecha1 = datetime.strptime(fecha1, "%Y-%m-%d").date()
         if isinstance(fecha2, str):
@@ -5396,7 +5079,7 @@ def  retornar_valores(datos,ress):
         a2 = int(obtener_ano_de_fecha(fecha2))
         area = {}
         for anio in range(a1, a2 + (1)):
-            area[anio]=[0]*3
+            area[anio]=[0]*n_are
         if isinstance(fecha1, str):
             fecha1 = datetime.strptime(fecha1, "%Y-%m-%d").date()
         if isinstance(fecha2, str):
@@ -5436,7 +5119,6 @@ def  retornar_valores(datos,ress):
         fecha2 = ress[7]
         dat = []
         dat = [int(d) for d in id_grados.split(',') if d.strip()]
-        print(dat,"   es esto es lakjfsdkljls")
         pares = []
         parMin = []
         # Verificar si la cantidad de datos es par
@@ -5463,15 +5145,16 @@ def  retornar_valores(datos,ress):
         a2 = int(obtener_ano_de_fecha(fecha2))
         area = {}
         carre = {}
+
         for anio in range(a1, a2 + (1)):
             areas = seleccionarAreas()
             area[anio] = {}
             carre[anio] = {}
             for are in areas:
-                area[anio][are[0]]=[0]*5
+                area[anio][are[0]]=[0]*n_grado
             carreras = seleccionarCarrerasTodo()
             for car in carreras:
-                carre[anio][car[0]]=[0]*5
+                carre[anio][car[0]]=[0]*n_grado
         if isinstance(fecha1, str):
             fecha1 = datetime.strptime(fecha1, "%Y-%m-%d").date()
         if isinstance(fecha2, str):
