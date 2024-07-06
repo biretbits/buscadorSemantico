@@ -207,11 +207,16 @@ cod_grado int,
 cod_area int,
 estado char(15),
 fecha date,
+teoria int DEFAULT 0,
+investigacion int DEFAULT 0,
+extencion int DEFAULT 0,
+cod_parcial int,
 primary key(cod_cursa,cod_es,cod_dicta,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado),
 foreign key(cod_es)references estudiante(cod_es)on delete restrict on update restrict,
 foreign key(cod_dicta,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado)references dicta_asignatura(cod_dicta,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado)on delete restrict on update restrict
 ,
-foreign key(cod_area)references area(cod_area)on delete restrict on update restrict
+foreign key(cod_area)references area(cod_area)on delete restrict on update restrict,
+foreign key(cod_parcial)references parciales(cod_parcial)on delete restrict on update restrict
 );
 
 
@@ -295,7 +300,17 @@ CREATE TABLE embeddings (
     foreign key(cod_respuesta)references respuesta(cod_respuesta)on delete restrict on update restrict
 );
 
+create table parciales(
+cod_parcial int not null auto_increment primary key,
+nombre_parcial char(45),
+estado char(10) DEFAULT 'activo'
+);
 
+
+insert into parciales(nombre_parcial)values('1er parcial');
+insert into parciales(nombre_parcial)values('2do parcial');
+insert into parciales(nombre_parcial)values('3er parcial');
+insert into parciales(nombre_parcial)values('4to parcial');
 
 
 
@@ -1158,1177 +1173,1177 @@ insert into dicta_asignatura(porcentaje_avance,ano_dicta,cod_docente,cod_asig,co
 (99,2023,13,7,2,1,1,1,'activo','2024-02-05');
 
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',1,1,1,2,2,1,1,1,'activo','2024-06-04'
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',1,1,1,2,2,1,1,1,'activo','2024-06-04',50,60,90,1
 );
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',1,2,1,3,2,1,1,1,'activo','2024-06-04'
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',1,2,1,3,2,1,1,1,'activo','2024-06-04',53,60,85,1
 );
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',2,1,1,2,2,1,1,1,'activo','2024-06-04'
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',2,1,1,2,2,1,1,1,'activo','2024-06-04',50,60,90,1
 );
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',3,1,1,2,2,1,1,1,'activo','2024-06-04'
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',3,1,1,2,2,1,1,1,'activo','2024-06-04',50,60,90,1
 );
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',4,1,1,2,2,1,1,1,'activo','2024-06-04'
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',4,1,1,2,2,1,1,1,'activo','2024-06-04',60,60,90,1
 );
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',5,1,1,2,2,1,1,1,'activo','2024-06-04'
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',5,1,1,2,2,1,1,1,'activo','2024-06-04',70,60,90,1
 );
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',6,1,1,2,2,1,1,1,'activo','2024-06-04'
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',6,1,1,2,2,1,1,1,'activo','2024-06-04',50,60,90,1
 );
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',7,1,1,2,2,1,1,1,'activo','2024-06-04'
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',7,1,1,2,2,1,1,1,'activo','2024-06-04',90,60,90,1
 );
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',8,1,1,2,2,1,1,1,'activo','2024-06-04'
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',8,1,1,2,2,1,1,1,'activo','2024-06-04',50,70,90,1
 );
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',9,1,1,2,2,1,1,1,'activo','2024-06-04'
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',9,1,1,2,2,1,1,1,'activo','2024-06-04',80,60,90,1
 );
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',10,1,1,2,2,1,1,1,'activo','2024-06-04'
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',10,1,1,2,2,1,1,1,'activo','2024-06-04',50,60,100,1
 );
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',11,1,1,2,2,1,1,1,'activo','2024-06-04'
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',11,1,1,2,2,1,1,1,'activo','2024-06-04',50,40,90,1
 );
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',12,1,1,2,2,1,1,1,'activo','2024-06-04'
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',12,1,1,2,2,1,1,1,'activo','2024-06-04',50,60,70,1
 );
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',13,1,1,2,2,1,1,1,'activo','2024-06-04'
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',13,1,1,2,2,1,1,1,'activo','2024-06-04',50,60,90,1
 );
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',14,1,1,2,2,1,1,1,'activo','2024-06-04'
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',14,1,1,2,2,1,1,1,'activo','2024-06-04',50,60,90,1
 );
 
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',15,67,2,2,2,1,1,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',15,67,2,2,2,1,1,1,'activo','2024-06-04',50,60,90,1);
 
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',23,68,3,3,2,1,1,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',23,68,3,3,2,1,1,1,'activo','2024-06-04',50,60,90,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',24,69,10,4,2,1,1,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',24,69,10,4,2,1,1,1,'activo','2024-06-04',50,60,90,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',25,69,10,4,2,1,1,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',25,69,10,4,2,1,1,1,'activo','2024-06-04',50,60,90,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',26,70,11,5,2,1,1,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',26,70,11,5,2,1,1,1,'activo','2024-06-04',50,60,90,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',27,71,12,6,2,1,1,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',27,71,12,6,2,1,1,1,'activo','2024-06-04',50,60,90,1);
 
-
-
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',28,9,2,11,2,1,2,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',28,10,2,12,2,1,2,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',28,11,2,13,2,1,2,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',28,12,2,14,2,1,2,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',28,13,2,15,2,1,2,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',28,14,2,16,2,1,2,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',28,15,2,17,2,1,2,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',28,22,2,9,2,1,2,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',28,23,3,10,2,1,2,1,'activo','2024-06-04');
 
 
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',29,9,2,11,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',28,9,2,11,2,1,2,1,'activo','2024-06-04',50,60,90,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',29,10,2,12,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',28,10,2,12,2,1,2,1,'activo','2024-06-04',50,60,90,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',29,11,2,13,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',28,11,2,13,2,1,2,1,'activo','2024-06-04',50,60,90,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',29,12,2,14,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',28,12,2,14,2,1,2,1,'activo','2024-06-04',50,60,90,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',29,13,2,15,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',28,13,2,15,2,1,2,1,'activo','2024-06-04',50,60,90,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',29,14,2,16,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',28,14,2,16,2,1,2,1,'activo','2024-06-04',50,60,90,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',29,15,2,17,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',28,15,2,17,2,1,2,1,'activo','2024-06-04',50,60,90,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',29,22,2,9,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',28,22,2,9,2,1,2,1,'activo','2024-06-04',50,60,90,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',29,23,3,10,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',28,23,3,10,2,1,2,1,'activo','2024-06-04',50,60,90,1);
+
+
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',30,9,2,11,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',29,9,2,11,2,1,2,1,'activo','2024-06-04',50,60,90,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',30,10,2,12,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',29,10,2,12,2,1,2,1,'activo','2024-06-04',50,60,90,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',30,11,2,13,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',29,11,2,13,2,1,2,1,'activo','2024-06-04',50,60,90,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',30,12,2,14,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',29,12,2,14,2,1,2,1,'activo','2024-06-04',50,60,90,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',30,13,2,15,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',29,13,2,15,2,1,2,1,'activo','2024-06-04',50,60,90,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',30,14,2,16,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',29,14,2,16,2,1,2,1,'activo','2024-06-04',50,60,90,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',30,15,2,17,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',29,15,2,17,2,1,2,1,'activo','2024-06-04',50,60,90,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',30,22,2,9,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',29,22,2,9,2,1,2,1,'activo','2024-06-04',50,60,90,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',30,23,3,10,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',29,23,3,10,2,1,2,1,'activo','2024-06-04',50,60,90,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',31,9,2,11,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',30,9,2,11,2,1,2,1,'activo','2024-06-04',50,60,90,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',31,10,2,12,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',30,10,2,12,2,1,2,1,'activo','2024-06-04',50,60,90,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',30,11,2,13,2,1,2,1,'activo','2024-06-04',50,60,90,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',30,12,2,14,2,1,2,1,'activo','2024-06-04',50,60,90,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',30,13,2,15,2,1,2,1,'activo','2024-06-04',70,51,60,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',30,14,2,16,2,1,2,1,'activo','2024-06-04',70,51,60,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',30,15,2,17,2,1,2,1,'activo','2024-06-04',70,51,60,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',30,22,2,9,2,1,2,1,'activo','2024-06-04',70,51,60,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',30,23,3,10,2,1,2,1,'activo','2024-06-04',70,51,60,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',31,9,2,11,2,1,2,1,'activo','2024-06-04',70,51,60,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',31,10,2,12,2,1,2,1,'activo','2024-06-04',70,51,60,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
 ,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values(
-2023,0,'activo','no',31,11,2,13,2,1,2,1,'activo');
+2023,0,'activo','no',31,11,2,13,2,1,2,1,'activo','2024-05-04',70,51,60,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',31,12,2,14,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',31,12,2,14,2,1,2,1,'activo','2024-06-04',70,51,60,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',31,13,2,15,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',31,13,2,15,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',31,14,2,16,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',31,14,2,16,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',31,15,2,17,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',31,15,2,17,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',31,22,2,9,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',31,22,2,9,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',31,23,3,10,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',31,23,3,10,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',32,9,2,11,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',32,9,2,11,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',32,10,2,12,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',32,10,2,12,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',32,11,2,13,2,1,2,1,'activo','2024-05-02');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',32,11,2,13,2,1,2,1,'activo','2024-05-02',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',32,12,2,14,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',32,12,2,14,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',32,13,2,15,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',32,13,2,15,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',32,14,2,16,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',32,14,2,16,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',32,15,2,17,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',32,15,2,17,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',32,22,2,9,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',32,22,2,9,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',32,23,3,10,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',32,23,3,10,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',33,24,10,11,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',33,24,10,11,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',33,25,11,12,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',33,25,11,12,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',33,26,12,12,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',33,26,12,12,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha),values(
-2023,0,'activo','no',33,27,13,13,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial),values(
+2023,0,'activo','no',33,27,13,13,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',33,28,14,14,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',33,28,14,14,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',33,29,15,15,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',33,29,15,15,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',33,30,13,16,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',33,30,13,16,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',33,31,15,17,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',33,31,15,17,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',34,9,2,11,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',34,9,2,11,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',34,10,2,12,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',34,10,2,12,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',34,11,2,13,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',34,11,2,13,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',34,12,2,14,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',34,12,2,14,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',34,13,2,15,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',34,13,2,15,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',34,14,2,16,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',34,14,2,16,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',34,15,2,17,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',34,15,2,17,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',34,22,2,9,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',34,22,2,9,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',34,23,3,10,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',34,23,3,10,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',35,9,2,11,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',35,9,2,11,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',35,10,2,12,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',35,10,2,12,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',35,11,2,13,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',35,11,2,13,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',35,12,2,14,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',35,12,2,14,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',35,13,2,15,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',35,13,2,15,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',35,14,2,16,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',35,14,2,16,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',35,15,2,17,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',35,15,2,17,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',35,22,2,9,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',35,22,2,9,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',35,23,3,10,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',35,23,3,10,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',36,9,2,11,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',36,9,2,11,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',36,10,2,12,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',36,10,2,12,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',36,11,2,13,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',36,11,2,13,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',36,12,2,14,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',36,12,2,14,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',36,13,2,15,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',36,13,2,15,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',36,14,2,16,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',36,14,2,16,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',36,15,2,17,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',36,15,2,17,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',36,22,2,9,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',36,22,2,9,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',36,23,3,10,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',36,23,3,10,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',37,9,2,11,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',37,9,2,11,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',37,10,2,12,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',37,10,2,12,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',37,11,2,13,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',37,11,2,13,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',37,12,2,14,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',37,12,2,14,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',37,13,2,15,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',37,13,2,15,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',37,14,2,16,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',37,14,2,16,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',37,15,2,17,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',37,15,2,17,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',37,22,2,9,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',37,22,2,9,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',37,23,3,10,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',37,23,3,10,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',38,9,2,11,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',38,9,2,11,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',38,10,2,12,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',38,10,2,12,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',38,11,2,13,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',38,11,2,13,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',38,12,2,14,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',38,12,2,14,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',38,13,2,15,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',38,13,2,15,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',38,14,2,16,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',38,14,2,16,2,1,2,1,'activo','2024-06-04',51,51,80,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',38,15,2,17,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',38,15,2,17,2,1,2,1,'activo','2024-06-04',78,45,50,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',38,22,2,9,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',38,22,2,9,2,1,2,1,'activo','2024-06-04',52,53,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',38,23,3,10,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',38,23,3,10,2,1,2,1,'activo','2024-06-04',52,53,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',39,9,2,11,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',39,9,2,11,2,1,2,1,'activo','2024-06-04',52,53,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',39,10,2,12,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',39,10,2,12,2,1,2,1,'activo','2024-06-04',52,53,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',39,11,2,13,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',39,11,2,13,2,1,2,1,'activo','2024-06-04',52,53,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',39,12,2,14,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',39,12,2,14,2,1,2,1,'activo','2024-06-04',52,53,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',39,13,2,15,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',39,13,2,15,2,1,2,1,'activo','2024-06-04',52,53,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',39,14,2,16,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',39,14,2,16,2,1,2,1,'activo','2024-06-04',52,53,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',39,15,2,17,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',39,15,2,17,2,1,2,1,'activo','2024-06-04',52,53,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',39,22,2,9,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',39,22,2,9,2,1,2,1,'activo','2024-06-04',52,53,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',40,9,2,11,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',40,9,2,11,2,1,2,1,'activo','2024-06-04',52,53,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',40,25,11,12,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',40,25,11,12,2,1,2,1,'activo','2024-06-04',52,53,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',40,26,12,12,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',40,26,12,12,2,1,2,1,'activo','2024-06-04',52,53,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',40,27,13,13,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',40,27,13,13,2,1,2,1,'activo','2024-06-04',52,53,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',40,28,14,14,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',40,28,14,14,2,1,2,1,'activo','2024-06-04',52,53,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',40,29,15,15,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',40,29,15,15,2,1,2,1,'activo','2024-06-04',52,53,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',40,30,13,16,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',40,30,13,16,2,1,2,1,'activo','2024-06-04',52,53,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',40,31,15,17,2,1,2,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',40,31,15,17,2,1,2,1,'activo','2024-06-04',52,53,70,1);
 
 
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',41,16,3,18,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',41,16,3,18,2,1,3,1,'activo','2024-06-04',65,70,45,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',41,17,3,19,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',41,17,3,19,2,1,3,1,'activo','2024-06-04',65,70,45,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',41,18,3,20,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',41,18,3,20,2,1,3,1,'activo','2024-06-04',65,70,45,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',41,19,3,21,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',41,19,3,21,2,1,3,1,'activo','2024-06-04',65,70,45,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',41,20,3,22,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',41,20,3,22,2,1,3,1,'activo','2024-06-04',65,70,45,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',41,21,3,23,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',41,21,3,23,2,1,3,1,'activo','2024-06-04',65,70,45,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',41,32,1,18,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',41,32,1,18,2,1,3,1,'activo','2024-06-04',65,70,45,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',41,33,2,19,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',41,33,2,19,2,1,3,1,'activo','2024-06-04',65,70,45,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',41,34,3,20,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',41,34,3,20,2,1,3,1,'activo','2024-06-04',65,70,45,1);
 
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',42,16,3,18,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',42,16,3,18,2,1,3,1,'activo','2024-06-04',65,70,45,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',42,17,3,19,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',42,17,3,19,2,1,3,1,'activo','2024-06-04',65,70,45,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',42,18,3,20,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',42,18,3,20,2,1,3,1,'activo','2024-06-04',65,70,45,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',42,19,3,21,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',42,19,3,21,2,1,3,1,'activo','2024-06-04',65,70,45,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',42,20,3,22,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',42,20,3,22,2,1,3,1,'activo','2024-06-04',65,70,45,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',42,21,3,23,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',42,21,3,23,2,1,3,1,'activo','2024-06-04',56,65,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',42,32,1,18,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',42,32,1,18,2,1,3,1,'activo','2024-06-04',56,65,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',42,33,2,19,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',42,33,2,19,2,1,3,1,'activo','2024-06-04',56,65,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',42,34,3,20,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',42,34,3,20,2,1,3,1,'activo','2024-06-04',56,65,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',43,16,3,18,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',43,16,3,18,2,1,3,1,'activo','2024-06-04',56,65,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',43,17,3,19,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',43,17,3,19,2,1,3,1,'activo','2024-06-04',56,65,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',43,18,3,20,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',43,18,3,20,2,1,3,1,'activo','2024-06-04',56,65,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',43,19,3,21,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',43,19,3,21,2,1,3,1,'activo','2024-06-04',56,65,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',43,20,3,22,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',43,20,3,22,2,1,3,1,'activo','2024-06-04',56,65,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',43,21,3,23,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',43,21,3,23,2,1,3,1,'activo','2024-06-04',56,65,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',43,32,1,18,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',43,32,1,18,2,1,3,1,'activo','2024-06-04',56,65,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',43,33,2,19,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',43,33,2,19,2,1,3,1,'activo','2024-06-04',56,65,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',43,34,3,20,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',43,34,3,20,2,1,3,1,'activo','2024-06-04',56,65,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',44,16,3,18,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',44,16,3,18,2,1,3,1,'activo','2024-06-04',56,65,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',44,17,3,19,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',44,17,3,19,2,1,3,1,'activo','2024-06-04',56,65,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',44,18,3,20,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',44,18,3,20,2,1,3,1,'activo','2024-06-04',56,65,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',44,19,3,21,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',44,19,3,21,2,1,3,1,'activo','2024-06-04',56,65,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',44,20,3,22,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',44,20,3,22,2,1,3,1,'activo','2024-06-04',56,65,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',44,21,3,23,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',44,21,3,23,2,1,3,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',44,32,1,18,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',44,32,1,18,2,1,3,1,'activo','2024-06-04',56,65,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',44,33,2,19,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',44,33,2,19,2,1,3,1,'activo','2024-06-04',56,65,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',44,34,3,20,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',44,34,3,20,2,1,3,1,'activo','2024-06-04',56,65,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',45,16,3,18,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',45,16,3,18,2,1,3,1,'activo','2024-06-04',56,65,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',45,17,3,19,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',45,17,3,19,2,1,3,1,'activo','2024-06-04',56,65,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',45,18,3,20,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',45,18,3,20,2,1,3,1,'activo','2024-06-04',56,65,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',45,19,3,21,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',45,19,3,21,2,1,3,1,'activo','2024-06-04',56,65,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',45,20,3,22,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',45,20,3,22,2,1,3,1,'activo','2024-06-04',56,65,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',45,21,3,23,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',45,21,3,23,2,1,3,1,'activo','2024-06-04',56,65,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',45,32,1,18,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',45,32,1,18,2,1,3,1,'activo','2024-06-04',56,65,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',45,33,2,19,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',45,33,2,19,2,1,3,1,'activo','2024-06-04',56,65,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',45,34,3,20,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',45,34,3,20,2,1,3,1,'activo','2024-06-04',56,65,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',46,16,3,18,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',46,16,3,18,2,1,3,1,'activo','2024-06-04',56,65,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',46,17,3,19,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',46,17,3,19,2,1,3,1,'activo','2024-06-04',56,65,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',46,18,3,20,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',46,18,3,20,2,1,3,1,'activo','2024-06-04',56,65,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',46,19,3,21,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',46,19,3,21,2,1,3,1,'activo','2024-06-04',56,65,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',46,20,3,22,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',46,20,3,22,2,1,3,1,'activo','2024-06-04',56,65,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',46,21,3,23,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',46,21,3,23,2,1,3,1,'activo','2024-06-04',56,65,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',46,32,1,18,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',46,32,1,18,2,1,3,1,'activo','2024-06-04',56,65,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',46,33,2,19,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',46,33,2,19,2,1,3,1,'activo','2024-06-04',56,65,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',46,34,3,20,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',46,34,3,20,2,1,3,1,'activo','2024-06-04',56,65,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',47,16,3,18,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',47,16,3,18,2,1,3,1,'activo','2024-06-04',56,65,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',47,17,3,19,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',47,17,3,19,2,1,3,1,'activo','2024-06-04',56,65,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',47,18,3,20,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',47,18,3,20,2,1,3,1,'activo','2024-06-04',56,65,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',47,19,3,21,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',47,19,3,21,2,1,3,1,'activo','2024-06-04',56,65,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',47,20,3,22,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',47,20,3,22,2,1,3,1,'activo','2024-06-04',56,65,70,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',47,21,3,23,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',47,21,3,23,2,1,3,1,'activo','2024-06-04',70,80,52,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',47,32,1,18,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',47,32,1,18,2,1,3,1,'activo','2024-06-04',70,80,52,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',47,33,2,19,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',47,33,2,19,2,1,3,1,'activo','2024-06-04',70,80,52,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',47,34,3,20,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',47,34,3,20,2,1,3,1,'activo','2024-06-04',70,80,52,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',48,16,3,18,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',48,16,3,18,2,1,3,1,'activo','2024-06-04',70,80,52,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',48,17,3,19,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',48,17,3,19,2,1,3,1,'activo','2024-06-04',70,80,52,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',48,18,3,20,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',48,18,3,20,2,1,3,1,'activo','2024-06-04',70,80,52,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',48,19,3,21,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',48,19,3,21,2,1,3,1,'activo','2024-06-04',70,80,52,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',48,20,3,22,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',48,20,3,22,2,1,3,1,'activo','2024-06-04',70,80,52,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',48,21,3,23,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',48,21,3,23,2,1,3,1,'activo','2024-06-04',70,80,52,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',48,32,1,18,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',48,32,1,18,2,1,3,1,'activo','2024-06-04',70,80,52,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',48,33,2,19,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',48,33,2,19,2,1,3,1,'activo','2024-06-04',70,80,52,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',48,34,3,20,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',48,34,3,20,2,1,3,1,'activo','2024-06-04',70,80,52,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',49,16,3,18,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',49,16,3,18,2,1,3,1,'activo','2024-06-04',70,80,52,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',49,17,3,19,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',49,17,3,19,2,1,3,1,'activo','2024-06-04',70,80,52,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',49,18,3,20,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',49,18,3,20,2,1,3,1,'activo','2024-06-04',70,80,52,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',49,19,3,21,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',49,19,3,21,2,1,3,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',49,20,3,22,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',49,20,3,22,2,1,3,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',49,21,3,23,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',49,21,3,23,2,1,3,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',49,32,1,18,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',49,32,1,18,2,1,3,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',49,33,2,19,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',49,33,2,19,2,1,3,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',49,34,3,20,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',49,34,3,20,2,1,3,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',50,16,3,18,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',50,16,3,18,2,1,3,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',50,17,3,19,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',50,17,3,19,2,1,3,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',50,18,3,20,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',50,18,3,20,2,1,3,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',50,19,3,21,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',50,19,3,21,2,1,3,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',50,20,3,22,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',50,20,3,22,2,1,3,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',50,21,3,23,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',50,21,3,23,2,1,3,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',50,32,1,18,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',50,32,1,18,2,1,3,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',50,33,2,19,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',50,33,2,19,2,1,3,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',50,34,3,20,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',50,34,3,20,2,1,3,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',51,16,3,18,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',51,16,3,18,2,1,3,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',51,17,3,19,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',51,17,3,19,2,1,3,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',51,18,3,20,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',51,18,3,20,2,1,3,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',51,19,3,21,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',51,19,3,21,2,1,3,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',51,20,3,22,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',51,20,3,22,2,1,3,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',51,21,3,23,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',51,21,3,23,2,1,3,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',51,32,1,18,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',51,32,1,18,2,1,3,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',51,33,2,19,2,1,3,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',51,33,2,19,2,1,3,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',51,34,3,20,2,1,3,1,'activo','2024-06-04');
-
-
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',52,44,1,31,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',52,45,2,32,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',52,46,3,33,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',52,47,10,34,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',52,48,11,35,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',52,49,12,36,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',52,50,13,37,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',52,51,14,38,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',52,52,15,39,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',52,53,2,41,2,1,4,1,'activo','2024-06-04');
-
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',53,44,1,31,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',53,45,2,32,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',53,46,3,33,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',53,47,10,34,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',53,48,11,35,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',53,49,12,36,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',53,50,13,37,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',53,51,14,38,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',53,52,15,39,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',53,53,2,41,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',54,44,1,31,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',54,45,2,32,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',54,46,3,33,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',54,47,10,34,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',54,48,11,35,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',54,49,12,36,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',54,50,13,37,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',54,51,14,38,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',54,52,15,39,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',54,53,2,41,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',55,44,1,31,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',55,45,2,32,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',55,46,3,33,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',55,47,10,34,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',55,48,11,35,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',55,49,12,36,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',55,50,13,37,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',55,51,14,38,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',55,52,15,39,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',55,53,2,41,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',56,44,1,31,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',56,45,2,32,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',56,46,3,33,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',56,47,10,34,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',56,48,11,35,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',56,49,12,36,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',56,50,13,37,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',56,51,14,38,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',56,52,15,39,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',56,53,2,41,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',57,44,1,31,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',57,45,2,32,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',57,46,3,33,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',57,47,10,34,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',57,48,11,35,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',57,49,12,36,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',57,50,13,37,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',57,51,14,38,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',57,52,15,39,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',57,53,2,41,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',58,44,1,31,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',58,45,2,32,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',58,46,3,33,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',58,47,10,34,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',58,48,11,35,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',58,49,12,36,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',58,50,13,37,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',58,51,14,38,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',58,52,15,39,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',58,53,2,41,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',59,44,1,31,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',59,45,2,32,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',59,46,3,33,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',59,47,10,34,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',59,48,11,35,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',59,49,12,36,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',59,50,13,37,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',59,51,14,38,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',59,52,15,39,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',59,53,1,41,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',60,44,1,31,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',60,45,2,32,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',60,46,3,33,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',60,47,10,34,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',60,48,11,35,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',60,49,12,36,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',60,50,13,37,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',60,51,14,38,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',60,52,15,39,2,1,4,1,'activo','2024-06-04');
-insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',60,53,2,41,2,1,4,1,'activo','2024-06-04');
-
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',51,34,3,20,2,1,3,1,'activo','2024-04-04',52,53,64,1);
 
 
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',61,55,1,44,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',52,44,1,31,2,1,4,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',61,56,3,45,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',52,45,2,32,2,1,4,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',61,57,10,46,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',52,46,3,33,2,1,4,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',61,58,11,47,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',52,47,10,34,2,1,4,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',61,59,2,44,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',52,48,11,35,2,1,4,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',61,60,12,45,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',52,49,12,36,2,1,4,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',61,61,13,46,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',52,50,13,37,2,1,4,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',61,62,15,47,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',52,51,14,38,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',52,52,15,39,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',52,53,2,41,2,1,4,1,'activo','2024-04-04',52,53,64,1);
 
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',62,55,1,44,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',53,44,1,31,2,1,4,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',62,56,3,45,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',53,45,2,32,2,1,4,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',62,57,10,46,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',53,46,3,33,2,1,4,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',62,58,11,47,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',53,47,10,34,2,1,4,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',62,59,2,44,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',53,48,11,35,2,1,4,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',62,60,12,45,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',53,49,12,36,2,1,4,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',62,61,13,46,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',53,50,13,37,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',53,51,14,38,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',53,52,15,39,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',53,53,2,41,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',54,44,1,31,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',54,45,2,32,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',54,46,3,33,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',54,47,10,34,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',54,48,11,35,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',54,49,12,36,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',54,50,13,37,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',54,51,14,38,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',54,52,15,39,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',54,53,2,41,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',55,44,1,31,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',55,45,2,32,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',55,46,3,33,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',55,47,10,34,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',55,48,11,35,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',55,49,12,36,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',55,50,13,37,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',55,51,14,38,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',55,52,15,39,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',55,53,2,41,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',56,44,1,31,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',56,45,2,32,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',56,46,3,33,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',56,47,10,34,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',56,48,11,35,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',56,49,12,36,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',56,50,13,37,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',56,51,14,38,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',56,52,15,39,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',56,53,2,41,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',57,44,1,31,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',57,45,2,32,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',57,46,3,33,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',57,47,10,34,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',57,48,11,35,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',57,49,12,36,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',57,50,13,37,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',57,51,14,38,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',57,52,15,39,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',57,53,2,41,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',58,44,1,31,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',58,45,2,32,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',58,46,3,33,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',58,47,10,34,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',58,48,11,35,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',58,49,12,36,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',58,50,13,37,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',58,51,14,38,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',58,52,15,39,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',58,53,2,41,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',59,44,1,31,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',59,45,2,32,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',59,46,3,33,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',59,47,10,34,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',59,48,11,35,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',59,49,12,36,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',59,50,13,37,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',59,51,14,38,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',59,52,15,39,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',59,53,1,41,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',60,44,1,31,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',60,45,2,32,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',60,46,3,33,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',60,47,10,34,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',60,48,11,35,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',60,49,12,36,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',60,50,13,37,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',60,51,14,38,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',60,52,15,39,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',60,53,2,41,2,1,4,1,'activo','2024-04-04',52,53,64,1);
+
+
+
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',61,55,1,44,2,1,5,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',61,56,3,45,2,1,5,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',61,57,10,46,2,1,5,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',61,58,11,47,2,1,5,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',61,59,2,44,2,1,5,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',61,60,12,45,2,1,5,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',61,61,13,46,2,1,5,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',61,62,15,47,2,1,5,1,'activo','2024-04-04',52,53,64,1);
+
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',62,55,1,44,2,1,5,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',62,56,3,45,2,1,5,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',62,57,10,46,2,1,5,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',62,58,11,47,2,1,5,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',62,59,2,44,2,1,5,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',62,60,12,45,2,1,5,1,'activo','2024-04-04',52,53,64,1);
+insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',62,61,13,46,2,1,5,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
 ,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values(
 2023,0,'activo','no',62,62,15,47,2,1,5,1,'activo');
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',63,55,1,44,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',63,55,1,44,2,1,5,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',63,56,3,45,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',63,56,3,45,2,1,5,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',63,57,10,46,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',63,57,10,46,2,1,5,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',63,58,11,47,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',63,58,11,47,2,1,5,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',63,59,2,44,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',63,59,2,44,2,1,5,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',63,60,12,45,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',63,60,12,45,2,1,5,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',63,61,13,46,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',63,61,13,46,2,1,5,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',63,62,15,47,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',63,62,15,47,2,1,5,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',64,55,1,44,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',64,55,1,44,2,1,5,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',64,56,3,45,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',64,56,3,45,2,1,5,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',64,57,10,46,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',64,57,10,46,2,1,5,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',64,58,11,47,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',64,58,11,47,2,1,5,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',64,59,2,44,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',64,59,2,44,2,1,5,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',64,60,12,45,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',64,60,12,45,2,1,5,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',64,61,13,46,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',64,61,13,46,2,1,5,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',64,62,15,47,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',64,62,15,47,2,1,5,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',65,55,1,44,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',65,55,1,44,2,1,5,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',65,56,3,45,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',65,56,3,45,2,1,5,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',65,57,10,46,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',65,57,10,46,2,1,5,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',65,58,11,47,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',65,58,11,47,2,1,5,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',65,59,2,44,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',65,59,2,44,2,1,5,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',65,60,12,45,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',65,60,12,45,2,1,5,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',65,61,13,46,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',65,61,13,46,2,1,5,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',65,62,15,47,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',65,62,15,47,2,1,5,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',66,55,1,44,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',66,55,1,44,2,1,5,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',66,56,3,45,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',66,56,3,45,2,1,5,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',66,57,10,46,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',66,57,10,46,2,1,5,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',66,58,11,47,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',66,58,11,47,2,1,5,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',66,59,2,44,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',66,59,2,44,2,1,5,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',66,60,12,45,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',66,60,12,45,2,1,5,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',66,61,13,46,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',66,61,13,46,2,1,5,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',66,62,15,47,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',66,62,15,47,2,1,5,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',67,55,1,44,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',67,55,1,44,2,1,5,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',67,56,3,45,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',67,56,3,45,2,1,5,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',67,57,10,46,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',67,57,10,46,2,1,5,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',67,58,11,47,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',67,58,11,47,2,1,5,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',67,59,2,44,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',67,59,2,44,2,1,5,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',67,60,12,45,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',67,60,12,45,2,1,5,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',67,61,13,46,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',67,61,13,46,2,1,5,1,'activo','2024-04-04',52,53,64,1);
 insert into cursa_asignatura(ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta
-,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha)values(
-2023,0,'activo','no',67,62,15,47,2,1,5,1,'activo','2024-06-04');
+,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial)values(
+2023,0,'activo','no',67,62,15,47,2,1,5,1,'activo','2024-04-04',52,53,64,1);
 
 
 
