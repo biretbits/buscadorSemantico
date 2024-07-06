@@ -3247,9 +3247,7 @@ def  retornar_valores(datos,ress):
             fecha1 = datetime.strptime(fecha1, "%Y-%m-%d").date()
         if isinstance(fecha2, str):
             fecha2 = datetime.strptime(fecha2, "%Y-%m-%d").date()
-
         for row in datos:#recorremos los datos obtenidos de la base de datos
-
             if not isinstance(row[14], type(None)) and row[14]>=fecha1 and row[14] <= fecha2:
                 anoBD = int(obtener_ano_de_fecha(row[14].strftime("%Y-%m-%d")))
                 if row[8] != '' or row[8] is not None:
@@ -4681,14 +4679,18 @@ def  retornar_valores(datos,ress):
             fecha1 = datetime.strptime(fecha1, "%Y-%m-%d").date()
         if isinstance(fecha2, str):
             fecha2 = datetime.strptime(fecha2, "%Y-%m-%d").date()
+
         for row in datos:#recorremos los datos obtenidos de la base de datos
           if not isinstance(row[14], type(None)) and row[14]>=fecha1 and row[14] <= fecha2:
               anoBD = int(obtener_ano_de_fecha(row[14].strftime("%Y-%m-%d")))
+              mate1 = row[8]
               if row[2]>50:
                   vcar[row[8]][anoBD]['aprobado']+=1
-              else:
+                  mate1 = row[8]
+              elif row[2]!=0 or row[8] != mate1 and row[2]>0:
                   vcar[row[8]][anoBD]['reprobado']+=1
-        html+="<div class='alert alert-secondary'>Los estudiantes aprobados y reprobados son lo siguiente</div>"
+                  mate1 = row[8]
+        html+="<div class='alert alert-secondary'>Los estudiantes aprobados y reprobados son los siguiente</div>"
         for mat in id_materias:
             index = int(mat)
             for anio in range(a1, a2 + 1):
@@ -4768,15 +4770,21 @@ def  retornar_valores(datos,ress):
             fecha1 = datetime.strptime(fecha1, "%Y-%m-%d").date()
         if isinstance(fecha2, str):
             fecha2 = datetime.strptime(fecha2, "%Y-%m-%d").date()
+
         for row in datos:#recorremos los datos obtenidos de la base de datos
             if not isinstance(row[14], type(None)) and row[14]>=fecha1 and row[14] <= fecha2:
                 anoBD = int(obtener_ano_de_fecha(row[14].strftime("%Y-%m-%d")))
+                mate1 = row[8]
                 if row[2]>50:
                     varea[row[12]][row[10]][anoBD][row[11]][row[8]]['aprobado']+=1
                     vcar[row[10]][anoBD][row[11]][row[8]]['aprobado']+=1
-                else:
+                    mate1 = row[8]
+
+                elif row[2]!=0 or row[8] != mate1 and row[2]>0:
                     varea[row[12]][row[10]][anoBD][row[11]][row[8]]['reprobado']+=1
                     vcar[row[10]][anoBD][row[11]][row[8]]['reprobado']+=1
+                    mate1 = row[8]
+
         if si_car_n == "si_car_n":
             s_dupli = eliminar_dobles(id_car)#si hay doble veces repetido el id lo eliminamos a 1
             existe = "no"

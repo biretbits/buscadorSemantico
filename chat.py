@@ -1488,7 +1488,8 @@ def busqueda(texto,respuesta,consultas_sql):
             if nombre_posicion_sql == "titulados_relacion":
                 vec1.append("select *from titulado where "+response3)
             response=sql+" where "+response3
-
+    if nombre_posicion_sql == "materias_inscritos":
+        response +=" and cod_parcial = 1" 
     vec1.append(nombre_posicion_sql)
     vec1.append(response)
     return vec1
