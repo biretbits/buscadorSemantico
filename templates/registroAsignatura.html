@@ -16,48 +16,50 @@
         <div class="col-md-6">
           <div class="card shadow-sm">
             <div class="card-body">
-              <h5 class="card-title text-center mb-4">REGISTRO DE DOCENTE</h5>
+              <div id="error">
+
+              </div>
+              <h5 class="card-title text-center mb-4">REGISTRO DE NUEVA ASIGNATURA</h5>
 
               <form method="POST">
                 <div class="mb-3">
-                  <label for="Nombre de docente" class="form-label">Nombre de Docente</label>
-                  <input type="text" class="form-control" id="docente" name="docente" required placeholder="ponga el nombre del docente" required>
+                  <label for="Sigla de la asignatura" class="form-label">Sigla de la asignatura</label>
+                  <input type="text" class="form-control" id="sigla" name="sigla" required placeholder="ponga la sigla de la asignatura" required>
                 </div>
                 <div class="mb-3">
-                  <label for="Apellido paterno" class="form-label">Apellido paterno</label>
-                  <input type="text" class="form-control" id="paterno" name="paterno" required placeholder="ponga el Apellido paterno" required>
-                </div>
-                <div class="mb-3">
-                  <label for="Apellido materno" class="form-label">Apellido materno</label>
-                  <input type="text" class="form-control" id="materno" name="materno" required placeholder="ponga el Apellido materno" required>
-                </div>
-                <div class="mb-3">
-                  <label for="C.I." class="form-label">C.I.</label>
-                  <input type="number" class="form-control" id="ci" name="ci" required placeholder="ponga el C.I.">
-                </div>
-                <div class="mb-3">
-                  <label for="profesion" class="form-label">Profesión</label>
-                  <input type="text" class="form-control" id="profesion" name="profesion" required placeholder="ponga la profesión">
-                </div>
-                <div class='mb-3'>
-                  <label for="departamento">departamento</label>
-                  <input type="text" class="form-control"name="departamento" id='departamento' placeholder="Ingrese el dato" required>
+                  <label for="Nombre de la asignatura" class="form-label">Nombre de la asignatura</label>
+                  <input type="text" class="form-control" id="asignatura" name="asignatura" required placeholder="ponga el nombre de la asignatura" required>
                 </div>
 
                 <div class="mb-3">
-                  <label for="sexo">Sexo</label>
-                  <select name="sexo" id='sexo' class="form-control" required>
-                    <option value="">Seleccione sexo</option>
-                    <option value="masculino">masculino</option>
-                    <option value="femenino">femenino</option>
+                  <label for="plan">Plan de estudio</label>
+                  <select name="plan" id='plan' class="form-control" required>
+                    <option value="">Seleccione plan de estudio</option>
+                      {% for categoria in consultaplan %}
+                          <option value="{{ categoria[0] }}" title="{{ categoria[1] }}">
+                            {{ categoria[1]}} - {{ categoria[2]}}
+                          </option>
+                      {% endfor %}
                   </select>
-
                 </div>
+
                 <div class="mb-3">
-                  <label for="area">Docente de la Carrera</label>
+                  <label for="carrera">Asignatura de que Carrera</label>
                   <select name="carrera" id='carrera' class="form-control" required>
                     <option value="">Seleccione carrera</option>
                       {% for categoria in consultacarrera %}
+                          <option value="{{ categoria[0] }}" title="{{ categoria[1] }}">
+                            {{ categoria[1] }}
+                          </option>
+                      {% endfor %}
+                  </select>
+                </div>
+
+                <div class="mb-3">
+                  <label for="grado">Grado de la asignatura</label>
+                  <select name="grado" id='grado' class="form-control" required>
+                    <option value="">Seleccione grado</option>
+                      {% for categoria in consultagrado %}
                           <option value="{{ categoria[0] }}" title="{{ categoria[1] }}">
                             {{ categoria[1] }}
                           </option>
@@ -74,12 +76,10 @@
                           </option>
                       {% endfor %}
                   </select>
+
                 </div>
 
-                                  <div id="error">
-
-                                  </div>
-                  <div class="d-grid gap-2">
+                <div class="d-grid gap-2">
                   <button type="button" class="btn btn-primary btn-block" onclick="registrar()">Registrar</button>
                 </div>
 
@@ -98,35 +98,29 @@
 
     <script type="text/javascript">
     function registrar(){
-
-      var docente = document.getElementById("docente").value;
-      var paterno = document.getElementById("paterno").value;
-      var materno = document.getElementById("materno").value;
-      var ci = document.getElementById("ci").value;
-      var profesion = document.getElementById('profesion').value;
-      var departamento = document.getElementById("departamento").value;
-      var sexo = document.getElementById("sexo").value;
+      var sigla = document.getElementById("sigla").value;
+      var asignatura = document.getElementById("asignatura").value;
       var carrera = document.getElementById("carrera").value;
+      var grado = document.getElementById("grado").value;
       var area = document.getElementById("area").value;
-      if(carrera == '' || docente == '' || area == '' || paterno=='' || materno == ''||ci==''||departamento==''||sexo==''||profesion==''){
-        $('#error').html("<div class='alert alert-danger'>Algun campo vacio o falta seleccionar</div>");
+      var plan = document.getElementById('plan').value;
+      if(carrera == '' || asignatura == '' || area == '' || grado == '' || sigla=='' || plan == ''){
+        $('#error').html("<div class='alert alert-danger'>Algun campo vacion o falta seleccionar</div>");
         vaciar();
         return ;
       }
       var datos=new  FormData();
-      datos.append("docente",docente);
-      datos.append("paterno",paterno);
-      datos.append("materno",materno);
-      datos.append("ci",ci);
-      datos.append("profesion",profesion);
-      datos.append("departamento",departamento);
-      datos.append("sexo",sexo);
+
       datos.append("carrera",carrera);
       datos.append("area",area);
+      datos.append("sigla",sigla);
+      datos.append("asignatura",asignatura);
+      datos.append("grado",grado);
+      datos.append("plan",plan);
       $.ajax({
         type: "POST", //type of submit
         cache: false, //important or else you might get wrong data returned to you
-        url: "/RegDocente", //destination
+        url: "/RegAsignatura", //destination
         datatype: "html", //expected data format from process.php
         data: datos, //target your form's data and serialize for a POST
         contentType:false,
@@ -157,7 +151,7 @@
     }
 function redireccionar(){
   // Redireccionar a una URL específica
-  window.location.href = "/FormDocente";
+  window.location.href = "/FormAsig";
 }
 </script>
 <script src="{{ url_for('static', filename='bootstrap-5.0.2/js/bootstrap.min.js') }}" charset="utf-8"></script>

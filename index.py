@@ -980,6 +980,65 @@ def RegFormDocente():
             conn.close()
         return 'correcto'
 
+#registro de materiasss
+
+@app.route('/FormAsig')
+def FormAsinagtura():
+    conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+    cursor = conn.cursor()
+    # Consulta para verificar si el usuario existe
+    consultas = "SELECT cod_area,nombre_area FROM area"
+    cursor.execute(consultas)
+    consulta = cursor.fetchall()
+
+    # Consulta para verificar si el usuario existe
+    consulcarrera = "SELECT cod_carrera,nombre_carrera FROM carrera"
+    cursor.execute(consulcarrera)
+    consultacarrera = cursor.fetchall()
+
+    # Consulta para verificar si el usuario existe
+    consulgrado = "SELECT cod_grado,nombre_grado FROM grado"
+    cursor.execute(consulgrado)
+    consultagrado = cursor.fetchall()
+
+    # Consulta para verificar si el usuario existe
+    consulplan = "select p.cod_pe,p.nombre_pe,c.nombre_carrera from carrera as c inner join plan_de_estudio as p where c.cod_carrera = p.cod_carrera"
+    cursor.execute(consulplan)
+    consultaplan = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    if 'usuario' in session:
+        return render_template('registroAsignatura.html',usuario=session['usuario'],consulta=consulta,consultacarrera=consultacarrera,consultagrado=consultagrado,consultaplan=consultaplan)
+    return render_template('registroAsignatura.html',usuario=None,consulta=consulta,consultacarrera=consultacarrera,consultagrado=consultagrado,consultaplan=consultaplan)
+
+@app.route('/RegAsignatura',methods=['POST'])
+def RegFormAsignatura():
+    if request.method == 'POST':
+        sigla = request.form.get('sigla')
+        asignatura = request.form.get('asignatura')
+        grado = request.form.get('grado')
+        carrera = request.form.get('carrera')
+        area = request.form.get('area')
+        plan = request.form.get('plan')
+        conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+        cursor = conn.cursor()
+        estado = 'activo'
+        pregunta_nuevo = unidecode(asignatura.lower())
+        # Calcular el embedding del texto
+        texto_embedding = model.encode(pregunta_nuevo)
+        # Convertir el embedding a bytes
+        embedding_bytes = texto_embedding.tobytes()
+        try:
+            with conn.cursor() as cursor:
+                # Consulta para verificar si el usuario existe
+                consultas = "insert into asignatura(sigla_asig ,nombre_asig,ht ,hl ,th ,pre_req ,cod_pe ,cod_carrera,cod_grado,cod_area,cod_tp_asig,estado,embedding)values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+                cursor.execute(consultas,(sigla,asignatura,0,0,0,'',plan,carrera,grado,area,1,'activo',embedding_bytes))
+            conn.commit()
+        finally:
+            # Cerrar la conexión siempre, incluso si ocurre una excepción
+            conn.close()
+        return 'correcto'
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',debug=True,port=5003)
