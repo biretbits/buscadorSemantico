@@ -14,7 +14,8 @@ from unidecode import unidecode
 from math import ceil
 import os
 import subprocess
-import datetime
+from datetime import datetime
+
 
 app = Flask("mi proyecto nuevo")
 app.config['SESSION_TYPE'] = 'filesystem'
@@ -907,6 +908,78 @@ def FormCarrera():
     if 'usuario' in session:
         return render_template('registroCarrera.html',usuario=session['usuario'],consulta=consulta)
     return render_template('registroCarrera.html',usuario=None,consulta=consulta)
+
+@app.route('/RegCarrera',methods=['POST'])
+def RegFormCarrera():
+    if request.method == 'POST':
+        carrera = request.form.get('carrera')
+        direccion = request.form.get('direccion')
+        area = request.form.get('area')
+        conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+        cursor = conn.cursor()
+        estado = 'activo'
+        try:
+            with conn.cursor() as cursor:
+                # Consulta para verificar si el usuario existe
+                consultas = "insert into carrera(nombre_carrera,direccion_carrera,cod_area,estado)values(%s,%s,%s,%s)"
+                cursor.execute(consultas,(carrera,direccion,area,'activo'))
+            conn.commit()
+        finally:
+            # Cerrar la conexión siempre, incluso si ocurre una excepción
+            conn.close()
+        return 'correcto'
+
+#registro de docente_
+
+@app.route('/FormDocente')
+def FormDocente():
+    conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+    cursor = conn.cursor()
+    # Consulta para verificar si el usuario existe
+    consultas = "SELECT cod_area,nombre_area FROM area"
+    cursor.execute(consultas)
+    consulta = cursor.fetchall()
+
+    # Consulta para verificar si el usuario existe
+    consulcarrera = "SELECT cod_carrera,nombre_carrera FROM carrera"
+    cursor.execute(consulcarrera)
+    consultacarrera = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    if 'usuario' in session:
+        return render_template('registroDocente.html',usuario=session['usuario'],consulta=consulta,consultacarrera=consultacarrera)
+    return render_template('registroDocente.html',usuario=None,consulta=consulta,consultacarrera=consultacarrera)
+
+@app.route('/RegDocente',methods=['POST'])
+def RegFormDocente():
+    if request.method == 'POST':
+        docente = request.form.get('docente')
+        paterno = request.form.get('paterno')
+        materno = request.form.get('materno')
+        ci = request.form.get('ci')
+        profesion = request.form.get('profesion')
+        departamento = request.form.get('departamento')
+        sexo = request.form.get('sexo')
+        carrera = request.form.get('carrera')
+        area = request.form.get('area')
+        conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+        cursor = conn.cursor()
+        estado = 'activo'
+        fecha_actual = datetime.now().date()
+
+        # Formatear la fecha en el formato YYYY-MM-DD
+        fecha_formateada = fecha_actual.strftime("%Y-%m-%d")
+        try:
+            with conn.cursor() as cursor:
+                # Consulta para verificar si el usuario existe
+                consultas = "insert into docente(nombre_docente,ap_docente,am_docente,ci_docente,profesion,telefono,pais,departamento,ciudad,sexo,cod_area,cod_carrera,fecha,estado)values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+                cursor.execute(consultas,(docente,paterno,materno,ci,profesion,0,'Bolivia',departamento,'',sexo,area,carrera,fecha_formateada,'activo'))
+            conn.commit()
+        finally:
+            # Cerrar la conexión siempre, incluso si ocurre una excepción
+            conn.close()
+        return 'correcto'
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',debug=True,port=5003)

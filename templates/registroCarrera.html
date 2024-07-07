@@ -19,16 +19,12 @@
               <div id="error">
 
               </div>
-              <h4 class="card-title text-center mb-4">Registro de nueva Carrera</h4>
+              <h5 class="card-title text-center mb-4">REGISTRO DE NUEVA CARRERA</h5>
 
               <form method="POST">
                 <div class="mb-3">
                   <label for="Nombre de la carrera nueva" class="form-label">Nombre de Carrera</label>
                   <input type="text" class="form-control" id="carrera" name="carrera" required placeholder="ponga el nombre de la nueva carrera" required>
-                </div>
-                <div class="mb-3">
-                  <label for="Dirección de la carrera" class="form-label">Dirección de la Carrera</label>
-                  <input type="text" class="form-control" id="direccion" name="direccion" required placeholder="ponga la Dirección" required>
                 </div>
                 <div class="mb-3">
                   <label for="Dirección de la carrera" class="form-label">Dirección de la Carrera</label>
@@ -66,26 +62,22 @@
 
     <script type="text/javascript">
     function registrar(){
-      var posible_respuesta = document.getElementById("posible_respuesta").value;
-      var consulta = document.getElementById("consulta").value;
-      var descripcion = document.getElementById("descripcion").value;
-      var re = verificar_si_tiene_espacios(posible_respuesta);
-      if(re == "tiene_espacios"){
-        $('#error').html("<div class='alert alert-danger'>Formato de posible respuesta erronea, utilice para unir la barra baja _</div>");
-        return;
+      var carrera = document.getElementById("carrera").value;
+      var direccion = document.getElementById("direccion").value;
+      var area = document.getElementById("area").value;
+      if(carrera == '' || direccion == '' || area == ''){
+        $('#error').html("<div class='alert alert-danger'>Algun campo vacion o falta seleccionar</div>");
+        vaciar();
+        return ;
       }
       var datos=new  FormData();
-      datos.append("posible_respuesta",posible_respuesta);
-      datos.append("consulta",consulta);
-      datos.append("descripcion",descripcion);
-      if(posible_respuesta == '' || consulta == '' || descripcion == ''){
-        $('#error').html("<div class='alert alert-danger'>Algun campo sin datos o sin seleccionar</div>");
-        return;
-      }
+      datos.append("carrera",carrera);
+      datos.append("direccion",direccion);
+      datos.append("area",area);
       $.ajax({
         type: "POST", //type of submit
         cache: false, //important or else you might get wrong data returned to you
-        url: "/regResp", //destination
+        url: "/RegCarrera", //destination
         datatype: "html", //expected data format from process.php
         data: datos, //target your form's data and serialize for a POST
         contentType:false,
@@ -94,29 +86,29 @@
           //alert(data);
           console.log(data);
           if(data == "correcto"){
-            redireccionar();
+            $('#error').html("<div class='alert alert-success'>Se guardo la información correctamente</div>");
           }else{
-            $('#error').html("<div class='alert alert-danger'>Ocurrio un problema al insertar los datos</div>");
+            $('#error').html("<div class='alert alert-danger'>Sucedio algun problema al registrar</div>");
           }
             //retorno1(data);
+          validarError();
         }
       });
     }
-
+    // Ejecutar código después de 1 minuto (60,000 milisegundos)
+    function validarError(){
+      setTimeout(function() {
+        redireccionar();
+      }, 3000);
+    }
+    function vaciar(){
+      setTimeout(function() {
+        $('#error').html("");
+      }, 2000);
+    }
 function redireccionar(){
   // Redireccionar a una URL específica
-  window.location.href = "/resp";
-}
-
-function verificar_si_tiene_espacios(texto) {
-  // Utilizamos una expresión regular que busca espacios
-  let tieneEspacios = /[ ]/g.test(texto);
-
-  if (tieneEspacios) {
-    return "tiene_espacios";
-  } else {
-    return "no_tiene_espacios";
-  }
+  window.location.href = "/FormCarrera";
 }
 </script>
 <script src="{{ url_for('static', filename='bootstrap-5.0.2/js/bootstrap.min.js') }}" charset="utf-8"></script>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Flask App</title>
+  <script src="{{ url_for('static', filename='jquery-3.5.1.min.js') }}" charset="utf-8"></script>
+
+  <link href="{{ url_for('static', filename='bootstrap-5.0.2/css/bootstrap.min.css') }}" type="text/css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script></head>
+<body class="cc">
+    {% include 'menu.html' %}
+    <br><br><br>
+    <div class="container mt-5">
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title text-center mb-4">REGISTRO DE DOCENTE</h5>
+
+              <form method="POST">
+                <div class="mb-3">
+                  <label for="Nombre de docente" class="form-label">Nombre de Docente</label>
+                  <input type="text" class="form-control" id="docente" name="docente" required placeholder="ponga el nombre del docente" required>
+                </div>
+                <div class="mb-3">
+                  <label for="Apellido paterno" class="form-label">Apellido paterno</label>
+                  <input type="text" class="form-control" id="paterno" name="paterno" required placeholder="ponga el Apellido paterno" required>
+                </div>
+                <div class="mb-3">
+                  <label for="Apellido materno" class="form-label">Apellido materno</label>
+                  <input type="text" class="form-control" id="materno" name="materno" required placeholder="ponga el Apellido materno" required>
+                </div>
+                <div class="mb-3">
+                  <label for="C.I." class="form-label">C.I.</label>
+                  <input type="number" class="form-control" id="ci" name="ci" required placeholder="ponga el C.I.">
+                </div>
+                <div class="mb-3">
+                  <label for="profesion" class="form-label">Profesión</label>
+                  <input type="text" class="form-control" id="profesion" name="profesion" required placeholder="ponga la profesión">
+                </div>
+                <div class='mb-3'>
+                  <label for="departamento">departamento</label>
+                  <input type="text" class="form-control"name="departamento" id='departamento' placeholder="Ingrese el dato" required>
+                </div>
+
+                <div class="mb-3">
+                  <label for="sexo">Sexo</label>
+                  <select name="sexo" id='sexo' class="form-control" required>
+                    <option value="">Seleccione sexo</option>
+                    <option value="masculino">masculino</option>
+                    <option value="femenino">femenino</option>
+                  </select>
+
+                </div>
+                <div class="mb-3">
+                  <label for="area">Docente de la Carrera</label>
+                  <select name="carrera" id='carrera' class="form-control" required>
+                    <option value="">Seleccione carrera</option>
+                      {% for categoria in consultacarrera %}
+                          <option value="{{ categoria[0] }}" title="{{ categoria[1] }}">
+                            {{ categoria[1] }}
+                          </option>
+                      {% endfor %}
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label for="area">Área</label>
+                  <select name="area" id='area' class="form-control" required>
+                    <option value="">Seleccione área</option>
+                      {% for categoria in consulta %}
+                          <option value="{{ categoria[0] }}" title="{{ categoria[1] }}">
+                            {{ categoria[1] }}
+                          </option>
+                      {% endfor %}
+                  </select>
+                </div>
+
+                                  <div id="error">
+
+                                  </div>
+                  <div class="d-grid gap-2">
+                  <button type="button" class="btn btn-primary btn-block" onclick="registrar()">Registrar</button>
+                </div>
+
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='respuesta'>
+
+      </div>
+    </div>
+
+</body>
+</html>
+
+    <script type="text/javascript">
+    function registrar(){
+
+      var docente = document.getElementById("docente").value;
+      var paterno = document.getElementById("paterno").value;
+      var materno = document.getElementById("materno").value;
+      var ci = document.getElementById("ci").value;
+      var profesion = document.getElementById('profesion').value;
+      var departamento = document.getElementById("departamento").value;
+      var sexo = document.getElementById("sexo").value;
+      var carrera = document.getElementById("carrera").value;
+      var area = document.getElementById("area").value;
+      if(carrera == '' || docente == '' || area == '' || paterno=='' || materno == ''||ci==''||departamento==''||sexo==''||profesion==''){
+        $('#error').html("<div class='alert alert-danger'>Algun campo vacion o falta seleccionar</div>");
+        vaciar();
+        return ;
+      }
+      var datos=new  FormData();
+      datos.append("docente",docente);
+      datos.append("paterno",paterno);
+      datos.append("materno",materno);
+      datos.append("ci",ci);
+      datos.append("profesion",profesion);
+      datos.append("departamento",departamento);
+      datos.append("sexo",sexo);
+      datos.append("carrera",carrera);
+      datos.append("area",area);
+      alert(45);
+      $.ajax({
+        type: "POST", //type of submit
+        cache: false, //important or else you might get wrong data returned to you
+        url: "/RegDocente", //destination
+        datatype: "html", //expected data format from process.php
+        data: datos, //target your form's data and serialize for a POST
+        contentType:false,
+        processData:false,
+        success: function(data){
+          alert(data);
+          console.log(data);
+          if(data == "correcto"){
+            $('#error').html("<div class='alert alert-success'>Se guardo la información correctamente</div>");
+          }else{
+            $('#error').html("<div class='alert alert-danger'>Sucedio algun problema al registrar</div>");
+          }
+            //retorno1(data);
+          validarError();
+        }
+      });
+    }
+    // Ejecutar código después de 1 minuto (60,000 milisegundos)
+    function validarError(){
+      setTimeout(function() {
+        redireccionar();
+      }, 3000);
+    }
+    function vaciar(){
+      setTimeout(function() {
+        $('#error').html("");
+      }, 2000);
+    }
+function redireccionar(){
+  // Redireccionar a una URL específica
+  window.location.href = "/FormDocente";
+}
+</script>
+<script src="{{ url_for('static', filename='bootstrap-5.0.2/js/bootstrap.min.js') }}" charset="utf-8"></script>
