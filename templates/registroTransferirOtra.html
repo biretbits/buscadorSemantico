@@ -19,65 +19,25 @@
               <div id="error">
 
               </div>
-              <h5 class="card-title text-center mb-4">REGISTRO DE NUEVA ASIGNATURA</h5>
+              <h5 class="card-title text-center mb-4">REGISTRO DE NUEVA TRANSFERENCIA A OTRA UNIVERSIDAD</h5>
 
               <form method="POST">
                 <div class="mb-3">
-                  <label for="Sigla de la asignatura" class="form-label">Sigla de la asignatura</label>
+                  <label for="Nombre de la universidad a transferir" class="form-label">Nombre de la universidad a transferir</label>
                   <input type="text" class="form-control" id="sigla" name="sigla" required placeholder="ponga la sigla de la asignatura" required>
                 </div>
                 <div class="mb-3">
-                  <label for="Nombre de la asignatura" class="form-label">Nombre de la asignatura</label>
-                  <input type="text" class="form-control" id="asignatura" name="asignatura" required placeholder="ponga el nombre de la asignatura" required>
-                </div>
+                      <label for="cod_es">Estudiante</label>
+                      <select name="cod_es" id="cod_es" class="form-control" required>
+                          <option value="">Seleccione al estudiante</option>
+                          {% for categoria in consultaestu %}
+                              <option value="{{ categoria[0] }}|{{ categoria[1] }}|{{ categoria[2] }}" title="{{ categoria[6] }}">
+                                  {{ categoria[3] }} {{ categoria[4] }} {{ categoria[5] }} - {{ categoria[7]}} - {{categoria[6]}}
+                              </option>
+                          {% endfor %}
+                      </select>
+                  </div>
 
-                <div class="mb-3">
-                  <label for="plan">Plan de estudio</label>
-                  <select name="plan" id='plan' class="form-control" required>
-                    <option value="">Seleccione plan de estudio</option>
-                      {% for categoria in consultaplan %}
-                          <option value="{{ categoria[0] }}" title="{{ categoria[1] }}">
-                            {{ categoria[1]}} - {{ categoria[2]}}
-                          </option>
-                      {% endfor %}
-                  </select>
-                </div>
-
-                <div class="mb-3">
-                  <label for="carrera">Asignatura de que Carrera</label>
-                  <select name="carrera" id='carrera' class="form-control" required>
-                    <option value="">Seleccione carrera</option>
-                      {% for categoria in consultacarrera %}
-                          <option value="{{ categoria[0] }}" title="{{ categoria[1] }}">
-                            {{ categoria[1] }}
-                          </option>
-                      {% endfor %}
-                  </select>
-                </div>
-
-                <div class="mb-3">
-                  <label for="grado">Grado de la asignatura</label>
-                  <select name="grado" id='grado' class="form-control" required>
-                    <option value="">Seleccione grado</option>
-                      {% for categoria in consultagrado %}
-                          <option value="{{ categoria[0] }}" title="{{ categoria[1] }}">
-                            {{ categoria[1] }}
-                          </option>
-                      {% endfor %}
-                  </select>
-                </div>
-                <div class="mb-3">
-                  <label for="area">Área</label>
-                  <select name="area" id='area' class="form-control" required>
-                    <option value="">Seleccione área</option>
-                      {% for categoria in consulta %}
-                          <option value="{{ categoria[0] }}" title="{{ categoria[1] }}">
-                            {{ categoria[1] }}
-                          </option>
-                      {% endfor %}
-                  </select>
-
-                </div>
 
                 <div class="d-grid gap-2">
                   <button type="button" class="btn btn-primary btn-block" onclick="registrar()">Registrar</button>

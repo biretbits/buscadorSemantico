@@ -1038,6 +1038,56 @@ def RegFormAsignatura():
             # Cerrar la conexión siempre, incluso si ocurre una excepción
             conn.close()
         return 'correcto'
+#treansferencia a otra universidad
+
+@app.route('/FormTranferirO')
+def FormTransferirOtraUNiversidad():
+    conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+    cursor = conn.cursor()
+    # Consulta para verificar si el usuario existe
+    consulestu =("SELECT e.cod_es, e.cod_area, e.cod_carrera, e.nombre_es, e.ap_es, e.am_es, c.nombre_carrera, g.nombre_grado "
+                   "FROM estudiante as e "
+                   "INNER JOIN carrera as c ON e.cod_carrera = c.cod_carrera "
+                   "INNER JOIN grado as g ON e.cod_grado = g.cod_grado")
+
+
+    cursor.execute(consulestu)
+    consultaestu = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+    if 'usuario' in session:
+        return render_template('registroTransferirOtra.html',usuario=session['usuario'],consultaestu=consultaestu)
+    return render_template('registroTransferirOtra.html',usuario=None,consultaestu=consultaestu)
+
+@app.route('/RegTransferirO',methods=['POST'])
+def RegFormTransferirOtra():
+    if request.method == 'POST':
+        sigla = request.form.get('sigla')
+        asignatura = request.form.get('asignatura')
+        grado = request.form.get('grado')
+        carrera = request.form.get('carrera')
+        area = request.form.get('area')
+        plan = request.form.get('plan')
+        conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+        cursor = conn.cursor()
+        estado = 'activo'
+        pregunta_nuevo = unidecode(asignatura.lower())
+        # Calcular el embedding del texto
+        texto_embedding = model.encode(pregunta_nuevo)
+        # Convertir el embedding a bytes
+        embedding_bytes = texto_embedding.tobytes()
+        try:
+            with conn.cursor() as cursor:
+                # Consulta para verificar si el usuario existe
+                consultas = "insert into asignatura(sigla_asig ,nombre_asig,ht ,hl ,th ,pre_req ,cod_pe ,cod_carrera,cod_grado,cod_area,cod_tp_asig,estado,embedding)values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+                cursor.execute(consultas,(sigla,asignatura,0,0,0,'',plan,carrera,grado,area,1,'activo',embedding_bytes))
+            conn.commit()
+        finally:
+            # Cerrar la conexión siempre, incluso si ocurre una excepción
+            conn.close()
+        return 'correcto'
+
 
 
 if __name__ == '__main__':

@@ -267,20 +267,15 @@ universidad_trans char(200),
 fecha_hora datetime,
 fecha date,
 hora time,
-cod_cursa int,
 cod_es int,
-cod_dicta int,
-cod_docente int,
-cod_asig int,
-cod_pe int,
-cod_carrera int,
-cod_grado int,
 cod_area int,
+cod_carrera int,
 estado char(15),
-primary key(cod_transferir,cod_cursa,cod_es,cod_dicta,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado),
-foreign key(cod_cursa,cod_es,cod_dicta,cod_docente,cod_asig,cod_pe,cod_carrera ,
-cod_grado)references cursa_asignatura(cod_cursa,cod_es,cod_dicta,cod_docente,cod_asig,cod_pe,cod_carrera ,
-cod_grado)on delete restrict on update restrict
+primary key(cod_transferir,cod_es),
+foreign key(cod_es)references estudiante(cod_es)on delete restrict on update restrict,
+foreign key(cod_carrera)references carrera(cod_carrera)on delete restrict on update restrict
+,
+foreign key(cod_area)references area(cod_area)on delete restrict on update restrict
 );
 
 
@@ -2370,308 +2365,275 @@ insert into titulado(estado_titu,nota_titu,cod_def,cod_es,cod_mt,cod_pe,cod_carr
 
 
 
+create table transferir(
+cod_transferir int not null auto_increment,
+transferir char(10),
+universidad_trans char(200),
+fecha_hora datetime,
+fecha date,
+hora time,
+cod_es int,
+cod_area int,
+cod_carrera int,
+estado char(15),
+primary key(cod_transferir,cod_es),
+foreign key(cod_es)references estudiante(cod_es)on delete restrict on update restrict,
+foreign key(cod_carrera)references carrera(cod_carrera)on delete restrict on update restrict
+,
+foreign key(cod_area)references area(cod_area)on delete restrict on update restrict
+);
+
 
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad del valle','2022-05-15 14:30:00','2021-02-05','10:05:00'
-,302,58,52,15,39,2,1,4,2,'activo');
+,302,2,2,'activo');
 
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad mayor de san andres','2018-05-15 14:30:00','2021-01-05','10:05:00'
-,292,57,52,15,39,2,1,4,1,'activo');
+,292,1,1'activo');
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad tomas frias','2021-05-15 14:30:00','2022-02-05','11:05:00'
-,116,38,15,2,17,2,1,2,1,'activo');
+,116,1,1,'activo');
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad del valle','2022-05-15 14:30:00','2022-02-08','9:05:00'
-,151,42,33,2,19,2,1,3,1,'activo');
+,151,1,1,'activo');
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad del valle','2022-05-15 14:30:00','2023-02-05','10:05:00'
-,169,44,33,2,19,2,1,3,1,'activo');
+,169,1,1,'activo');
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad del valle','2022-05-15 14:30:00','2020-02-05','10:05:00'
-,134,40,31,15,17,2,1,2,1,'activo');
+,134,1,1,'activo');
 
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad del valle','2022-05-15 14:30:00','2023-02-05','10:05:00'
-,39,29,23,3,10,2,1,2,1,'activo');
+,39,1,1,'activo');
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad de san simon','2023-05-15 14:30:00','2023-02-05','10:05:00'
-,38,29,22,2,9,2,1,2,1,'activo');
+,38,1,1,'activo');
 
 
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad de san simon','2024-05-15 14:30:00','2023-02-05','10:05:00'
-,38,29,22,2,9,2,1,2,1,'activo');
+,38,1,1,'activo');
 
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad de san simon','2024-05-15 14:30:00','2023-02-05','10:05:00'
-,38,29,22,2,9,2,1,2,1,'activo');
+,38,1,1,'activo');
 
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad de san simon','2024-05-15 14:30:00','2023-02-05','10:05:00'
-,38,29,22,2,9,2,1,2,1,'activo');
+,38,1,1,'activo');
 
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad de san simon','2024-05-15 14:30:00','2023-02-05','10:05:00'
-,38,29,22,2,9,2,1,2,1,'activo');
+,38,1,1,'activo');
 
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad de san simon','2024-05-15 14:30:00','2023-02-05','10:05:00'
-,38,29,22,2,9,2,1,2,1,'activo');
+,1,1,'activo');
 
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad de san simon','2024-05-15 14:30:00','2023-02-05','10:05:00'
-,38,29,22,2,9,2,1,2,1,'activo');
+,1,1,'activo');
 
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad de san simon','2024-05-15 14:30:00','2023-02-05','10:05:00'
-,38,29,22,2,9,2,1,2,1,'activo');
+,1,1,'activo');
 
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad de san simon','2024-05-15 14:30:00','2023-02-05','10:05:00'
-,38,29,22,2,9,2,1,2,1,'activo');
+,1,1,'activo');
 
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad de san simon','2024-05-15 14:30:00','2023-02-05','10:05:00'
-,38,29,22,2,9,2,1,2,1,'activo');
+,1,1,'activo');
 
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad de san simon','2024-05-15 14:30:00','2023-02-05','10:05:00'
-,38,29,22,2,9,2,1,2,1,'activo');
+,38,1,1,'activo');
 
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad de san simon','2024-05-15 14:30:00','2023-02-05','10:05:00'
-,38,29,22,2,9,2,1,2,1,'activo');
+,38,1,1,'activo');
 
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad de san simon','2024-05-15 14:30:00','2023-02-05','10:05:00'
-,38,29,22,2,9,2,1,2,1,'activo');
+,38,1,1,'activo');
 
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad de san simon','2022-05-15 14:30:00','2022-02-05','10:05:00'
-,38,29,22,2,9,2,1,2,1,'activo');
+,38,1,1,'activo');
 
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad de san simon','2022-05-15 14:30:00','2023-02-05','10:05:00'
-,38,29,22,2,9,2,1,2,1,'activo');
+,38,1,1,'activo');
 
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad de san simon','2021-05-15 14:30:00','2024-02-05','10:05:00'
-,38,29,22,2,9,2,1,2,1,'activo');
+,38,1,1,'activo');
 
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad de san simon','2021-05-15 14:30:00','2020-02-05','10:05:00'
-,38,29,22,2,9,2,1,2,1,'activo');
+,38,1,1,'activo');
 
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad de san simon','2020-05-15 14:30:00','2018-02-05','10:05:00'
-,38,29,22,2,9,2,1,2,1,'activo');
+,38,1,1,'activo');
 
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad de san simon','2020-05-15 14:30:00','2019-02-05','10:05:00'
-,38,29,22,2,9,2,1,2,1,'activo');
+,38,1,1,'activo');
 
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad de san simon','2020-05-15 14:30:00','2014-02-05','10:05:00'
-,38,29,22,2,9,2,1,2,1,'activo');
+,38,1,1,'activo');
 
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad de san simon','2020-05-15 14:30:00','2015-02-05','10:05:00'
-,38,29,22,2,9,2,1,2,1,'activo');
+,38,1,1,'activo');
 
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad de san simon','2019-05-15 14:30:00','2021-02-05','10:05:00'
-,38,29,22,2,9,2,1,2,1,'activo');
+,38,1,1,'activo');
 
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad de san simon','2019-05-15 14:30:00','2022-02-05','10:05:00'
-,38,29,22,2,9,2,1,2,1,'activo');
+,38,1,1,'activo');
 
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad de san simon','2019-05-15 14:30:00','2023-02-05','10:05:00'
-,38,29,22,2,9,2,1,2,1,'activo');
+,38,1,1,'activo');
 
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad de san simon','2019-05-15 14:30:00','2024-02-05','10:05:00'
-,38,29,22,2,9,2,1,2,1,'activo');
+,38,1,1,'activo');
 
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad de san simon','2019-05-15 14:30:00','2021-02-05','10:05:00'
-,38,29,22,2,9,2,1,2,1,'activo');
+,38,1,1,'activo');
 
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad de san simon','2019-05-15 14:30:00','2020-02-05','10:05:00'
-,38,29,22,2,9,2,1,2,1,'activo');
+,38,1,1,'activo');
 
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad de san simon','2019-05-15 14:30:00','2019-02-05','10:05:00'
-,38,29,22,2,9,2,1,2,1,'activo');
+,38,1,1,'activo');
 
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad de san simon','2019-05-15 14:30:00','2023-02-05','10:05:00'
-,38,29,22,2,9,2,1,2,1,'activo');
+,38,1,1,'activo');
 
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad de san simon','2018-05-15 14:30:00','2023-02-05','10:05:00'
-,38,29,22,2,9,2,1,2,1,'activo');
+,38,1,1,'activo');
 
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad de san simon','2018-05-15 14:30:00','2024-02-05','10:05:00'
-,38,29,22,2,9,2,1,2,1,'activo');
+,38,1,1,'activo');
 
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad de san simon','2015-05-15 14:30:00','2015-02-05','10:05:00'
-,38,29,22,2,9,2,1,2,1,'activo');
+,38,1,1,'activo');
 
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad de san simon','2015-05-15 14:30:00','2019-02-05','10:05:00'
-,38,29,22,2,9,2,1,2,1,'activo');
+,38,1,1,'activo');
 
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad de san simon','2016-05-15 14:30:00','2020-02-05','10:05:00'
-,38,29,22,2,9,2,1,2,1,'activo');
+,38,1,1,'activo');
 
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad de san simon','2016-05-15 14:30:00','2021-02-05','10:05:00'
-,38,29,22,2,9,2,1,2,1,'activo');
+,38,1,1,'activo');
 
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad de san simon','2019-05-15 14:30:00','2022-02-05','10:05:00'
-,38,29,22,2,9,2,1,2,1,'activo');
+,38,1,1,'activo');
 
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad de san simon','2017-05-15 14:30:00','2024-02-05','10:05:00'
-,38,29,22,2,9,2,1,2,1,'activo');
+,38,1,1,'activo');
 
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad de san simon','2017-05-15 14:30:00','2024-02-05','10:05:00'
-,38,29,22,2,9,2,1,2,1,'activo');
+,38,1,1,'activo');
 
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad de san simon','2017-05-15 14:30:00','2024-02-05','10:05:00'
-,38,29,22,2,9,2,1,2,1,'activo');
+,38,1,1,'activo');
 
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad de san simon','2017-05-15 14:30:00','2024-02-05','10:05:00'
-,38,29,22,2,9,2,1,2,1,'activo');
+,38,1,1,'activo');
 
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad de san simon','2017-05-15 14:30:00','2016-02-05','10:05:00'
-,38,29,22,2,9,2,1,2,1,'activo');
+,38,1,1,'activo');
 
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad de san simon','2017-05-15 14:30:00','2015-02-05','10:05:00'
-,38,29,22,2,9,2,1,2,1,'activo');
+,38,1,1,'activo');
 
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad de san simon','2017-05-15 14:30:00','2017-02-05','10:05:00'
-,38,29,22,2,9,2,1,2,1,'activo');
+,38,1,1,'activo');
 
 insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,
-cod_cursa,cod_es,cod_dicta,cod_docente,
-cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado)values
+cod_es,cod_area,cod_carrera,estado)values
 ('si','Universidad de san simon','2017-05-15 14:30:00','2018-02-05','10:05:00'
-,38,29,22,2,9,2,1,2,1,'activo');
+,38,1,1,'activo');
 
 
 
