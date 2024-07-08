@@ -24,7 +24,7 @@
               <form method="POST">
                 <div class="mb-3">
                   <label for="Nombre de la universidad a transferir" class="form-label">Nombre de la universidad a transferir</label>
-                  <input type="text" class="form-control" id="sigla" name="sigla" required placeholder="ponga la sigla de la asignatura" required>
+                  <input type="text" class="form-control" id="otro" name="otro" required placeholder="ponga la universidad donde se transfirio el estudiante" required>
                 </div>
                 <div class="mb-3">
                       <label for="cod_es">Estudiante</label>
@@ -36,6 +36,10 @@
                               </option>
                           {% endfor %}
                       </select>
+                  </div>
+                  <div class="mb-3">
+                    <label for="fecha" class="form-label">fecha</label>
+                    <input type="date" class="form-control" id="fecha" name="fecha" required placeholder="ponga la fecha" required>
                   </div>
 
 
@@ -58,29 +62,29 @@
 
     <script type="text/javascript">
     function registrar(){
-      var sigla = document.getElementById("sigla").value;
-      var asignatura = document.getElementById("asignatura").value;
-      var carrera = document.getElementById("carrera").value;
-      var grado = document.getElementById("grado").value;
-      var area = document.getElementById("area").value;
-      var plan = document.getElementById('plan').value;
-      if(carrera == '' || asignatura == '' || area == '' || grado == '' || sigla=='' || plan == ''){
+      var otro = document.getElementById('otro').value;
+      var cod_es = document.getElementById('cod_es').value;
+      var fecha = document.getElementById('fecha').value;
+      if(otro== '' || cod_es == ''){
         $('#error').html("<div class='alert alert-danger'>Algun campo vacion o falta seleccionar</div>");
         vaciar();
         return ;
       }
+      var resultado = separar(cod_es)
+      cod_estudiante = resultado[0];
+      area = resultado[1];
+      carrera = resultado[2];
       var datos=new  FormData();
 
       datos.append("carrera",carrera);
       datos.append("area",area);
-      datos.append("sigla",sigla);
-      datos.append("asignatura",asignatura);
-      datos.append("grado",grado);
-      datos.append("plan",plan);
+      datos.append("cod_estudiante",cod_estudiante);
+      datos.append("otro",otro);
+      datos.append('fecha',fecha);
       $.ajax({
         type: "POST", //type of submit
         cache: false, //important or else you might get wrong data returned to you
-        url: "/RegAsignatura", //destination
+        url: "/RegTransferirO", //destination
         datatype: "html", //expected data format from process.php
         data: datos, //target your form's data and serialize for a POST
         contentType:false,
@@ -111,7 +115,12 @@
     }
 function redireccionar(){
   // Redireccionar a una URL específica
-  window.location.href = "/FormAsig";
+  window.location.href = "/FormTranferirO";
+}
+
+function separar(codigos){
+  var split = codigos.split('|');
+  return split;
 }
 </script>
 <script src="{{ url_for('static', filename='bootstrap-5.0.2/js/bootstrap.min.js') }}" charset="utf-8"></script>

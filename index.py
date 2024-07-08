@@ -16,7 +16,6 @@ import os
 import subprocess
 from datetime import datetime
 
-
 app = Flask("mi proyecto nuevo")
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SECRET_KEY'] = 'supersecretkey'  # Clave secreta para firmar cookies de sesión
@@ -874,7 +873,7 @@ def tablaRespuesta3():
 def backup():
     try:
         # Nombre del archivo de backup (opcional: incluye la fecha y hora en el nombre)
-        timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         backup_filename = f"academico_{timestamp}.sql"
         backup_path = os.path.join(os.getcwd(), "bd", backup_filename)  # Ruta completa al archivo de backup
 
@@ -1063,30 +1062,130 @@ def FormTransferirOtraUNiversidad():
 @app.route('/RegTransferirO',methods=['POST'])
 def RegFormTransferirOtra():
     if request.method == 'POST':
-        sigla = request.form.get('sigla')
-        asignatura = request.form.get('asignatura')
-        grado = request.form.get('grado')
+
+        cod_estudiante = request.form.get('cod_estudiante')
+        otro = request.form.get('otro')
+        fecha = request.form.get('fecha')
         carrera = request.form.get('carrera')
         area = request.form.get('area')
-        plan = request.form.get('plan')
         conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
         cursor = conn.cursor()
-        estado = 'activo'
-        pregunta_nuevo = unidecode(asignatura.lower())
-        # Calcular el embedding del texto
-        texto_embedding = model.encode(pregunta_nuevo)
-        # Convertir el embedding a bytes
-        embedding_bytes = texto_embedding.tobytes()
+        estado = 'desactivo'
+        fecha_actual_formateada = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
+        hora_actual = datetime.now().strftime('%H:%M:%S')
         try:
             with conn.cursor() as cursor:
                 # Consulta para verificar si el usuario existe
-                consultas = "insert into asignatura(sigla_asig ,nombre_asig,ht ,hl ,th ,pre_req ,cod_pe ,cod_carrera,cod_grado,cod_area,cod_tp_asig,estado,embedding)values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-                cursor.execute(consultas,(sigla,asignatura,0,0,0,'',plan,carrera,grado,area,1,'activo',embedding_bytes))
+                consultas = ("insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,cod_es,cod_area,cod_carrera,estado)"
+                "values(%s,%s,%s,%s,%s,%s,%s,%s,%s)")
+                cursor.execute(consultas,('si',otro,fecha_actual_formateada,fecha,hora_actual,cod_estudiante,area,carrera,estado))
             conn.commit()
         finally:
             # Cerrar la conexión siempre, incluso si ocurre una excepción
             conn.close()
         return 'correcto'
+#transferencias de otras universidades
+
+@app.route('/FormTranferirD')
+def FormTransferirDEUNiversidad():
+    conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+    cursor = conn.cursor()
+    # Consulta para verificar si el usuario existe
+    consulestu =("SELECT e.cod_es, e.cod_area, e.cod_carrera, e.nombre_es, e.ap_es, e.am_es, c.nombre_carrera, g.nombre_grado "
+                   "FROM estudiante as e "
+                   "INNER JOIN carrera as c ON e.cod_carrera = c.cod_carrera "
+                   "INNER JOIN grado as g ON e.cod_grado = g.cod_grado where e.transferido <> ''")
+
+
+    cursor.execute(consulestu)
+    consultaestu = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+    if 'usuario' in session:
+        return render_template('registroTransferirDEotra.html',usuario=session['usuario'],consultaestu=consultaestu)
+    return render_template('registroTransferirDEotra.html',usuario=None,consultaestu=consultaestu)
+
+@app.route('/RegTransferirD',methods=['POST'])
+def RegFormTransferirDEotra():
+    if request.method == 'POST':
+
+        cod_estudiante = request.form.get('cod_estudiante')
+        otro = request.form.get('otro')
+        fecha = request.form.get('fecha')
+        carrera = request.form.get('carrera')
+        area = request.form.get('area')
+        conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+        cursor = conn.cursor()
+        estado = 'desactivo'
+        fecha_actual_formateada = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
+        hora_actual = datetime.now().strftime('%H:%M:%S')
+        try:
+            with conn.cursor() as cursor:
+                # Consulta para verificar si el usuario existe
+                consultas = ("insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,cod_es,cod_area,cod_carrera,estado)"
+                "values(%s,%s,%s,%s,%s,%s,%s,%s,%s)")
+                cursor.execute(consultas,('si',otro,fecha_actual_formateada,fecha,hora_actual,cod_estudiante,area,carrera,estado))
+            conn.commit()
+        finally:
+            # Cerrar la conexión siempre, incluso si ocurre una excepción
+            conn.close()
+        return 'correcto'
+
+#registra nuevo estudiantes
+
+@app.route('/FormEstudiante')
+def FormEstudiantes():
+    conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+    cursor = conn.cursor()
+
+    # Consulta para verificar si el usuario existe
+    consulcarrera = "SELECT cod_carrera,cod_area,nombre_carrera FROM carrera"
+    cursor.execute(consulcarrera)
+    consultacarrera = cursor.fetchall()
+
+    # Consulta para verificar si el usuario existe
+    consulgrado = "SELECT cod_grado,nombre_grado FROM grado"
+    cursor.execute(consulgrado)
+    consultagrado = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+    if 'usuario' in session:
+        return render_template('registroEstudiante.html',usuario=session['usuario'],consultagrado=consultagrado,consultacarrera=consultacarrera)
+    return render_template('registroEstudiante.html',usuario=None,consultagrado=consultagrado,consultacarrera=consultacarrera)
+
+@app.route('/RegEstudiante',methods=['POST'])
+def RegFormEstudiante():
+    if request.method == 'POST':
+        estudiante = request.form.get('estudiante')
+        paterno = request.form.get('paterno')
+        materno = request.form.get('materno')
+        ci = request.form.get('ci')
+        fecha = request.form.get('fecha')
+        region = request.form.get('region')
+        departamento = request.form.get('departamento')
+        sexo = request.form.get('sexo')
+        carrera = request.form.get('carrera')
+        area = request.form.get('area')
+        grado = request.form.get('grado')
+        transferir = request.form.get('transferir')
+        conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+        cursor = conn.cursor()
+        estado = 'activo'
+        try:
+            with conn.cursor() as cursor:
+                # Consulta para verificar si el usuario existe
+                consultas = ("insert into estudiante(nombre_es,ap_es,am_es,titulo_bachiller,ci,pais_es,departamento,"
+                "provincia,ciudad,region,sexo,cod_area,cod_carrera,cod_grado,estado,fecha,transferido)"
+                "values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)")
+                cursor.execute(consultas,(estudiante,paterno,materno,'si',ci,'Bolivia',departamento,'','',region,sexo,area,carrera,grado,estado,fecha,transferir))
+            conn.commit()
+        finally:
+            # Cerrar la conexión siempre, incluso si ocurre una excepción
+            conn.close()
+        return 'correcto'
+
 
 
 
