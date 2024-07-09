@@ -245,18 +245,19 @@ create table titulado(
 cod_titu int not null auto_increment,
 estado_titu char(20),
 nota_titu int,
-cod_def int,
-cod_es int,
 cod_mt int,
 cod_pe int,
+cod_es int,
 cod_carrera int,
 cod_area int,
 fecha date,
 hora time,
 estado char(15),
-primary key(cod_titu,cod_def,cod_es,cod_mt,cod_pe ,cod_carrera),
-foreign key(cod_def,cod_es,cod_mt,cod_pe ,cod_carrera)references defensa(cod_def,cod_es,cod_mt,cod_pe ,cod_carrera)on delete restrict on update restrict
-,
+primary key(cod_titu),
+foreign key(cod_mt)references modalidad_titulacion(cod_mt)on delete restrict on update restrict,
+foreign key(cod_pe)references plan_de_estudio(cod_pe)on delete restrict on update restrict,
+foreign key(cod_es)references estudiante(cod_es)on delete restrict on update restrict,
+foreign key(cod_carrera)references carrera(cod_carrera)on delete restrict on update restrict,
 foreign key(cod_area)references area(cod_area)on delete restrict on update restrict
 );
 
@@ -2354,14 +2355,36 @@ insert into defensa(estado_def,fecha,hora,cod_es,cod_mt,cod_pe,cod_carrera,cod_a
 'habilitado','2024-02-01','10:00:00',67,18,2,1,1,'activo');
 
 
-insert into titulado(estado_titu,nota_titu,cod_def,cod_es,cod_mt,cod_pe,cod_carrera,cod_area,fecha,hora,estado)values(
-'aprobado',65,1,61,21,2,1,1,'2024-01-02','10:00:00','activo');
-insert into titulado(estado_titu,nota_titu,cod_def,cod_es,cod_mt,cod_pe,cod_carrera,cod_area,fecha,hora,estado)values(
-'en proceso',0,2,63,21,2,1,1,'2022-01-02','10:00:00','activo');
-insert into titulado(estado_titu,nota_titu,cod_def,cod_es,cod_mt,cod_pe,cod_carrera,cod_area,fecha,hora,estado)values(
-'aprobado',80,3,65,18,2,1,1,'2023-01-02','10:00:00','activo');
-insert into titulado(estado_titu,nota_titu,cod_def,cod_es,cod_mt,cod_pe,cod_carrera,cod_area,fecha,hora,estado)values(
-'reprobado',50,4,67,18,2,1,1,'2024-01-02','10:00:00','activo');
+
+
+create table titulado(
+cod_titu int not null auto_increment,
+estado_titu char(20),
+nota_titu int,
+cod_mt int,
+cod_pe int,
+cod_es int,
+cod_carrera int,
+cod_area int,
+fecha date,
+hora time,
+estado char(15),
+primary key(cod_titu),
+foreign key(cod_mt)references modalidad_titulacion(cod_mt)on delete restrict on update restrict,
+foreign key(cod_pe)references plan_de_estudio(cod_pe)on delete restrict on update restrict,
+foreign key(cod_es)references estudiante(cod_es)on delete restrict on update restrict,
+foreign key(cod_carrera)references carrera(cod_carrera)on delete restrict on update restrict,
+foreign key(cod_area)references area(cod_area)on delete restrict on update restrict
+);
+
+insert into titulado(estado_titu,nota_titu,cod_mt,cod_pe,cod_es,cod_carrera,cod_area,fecha,hora,estado)values(
+'aprobado',65,21,2,61,1,1,'2024-01-02','10:00:00','activo');
+insert into titulado(estado_titu,nota_titu,cod_mt,cod_pe,cod_es,cod_carrera,cod_area,fecha,hora,estado)values(
+'en proceso',0,21,2,63,1,1,'2022-01-02','10:00:00','activo');
+insert into titulado(estado_titu,nota_titu,cod_mt,cod_pe,cod_es,cod_carrera,cod_area,fecha,hora,estado)values(
+'aprobado',80,18,2,65,1,1,'2023-01-02','10:00:00','activo');
+insert into titulado(estado_titu,nota_titu,cod_mt,cod_pe,cod_es,cod_carrera,cod_area,fecha,hora,estado)values(
+'reprobado',50,18,2,67,1,1,'2024-01-02','10:00:00','activo');
 
 
 

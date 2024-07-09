@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Flask App</title>
+  <script src="{{ url_for('static', filename='jquery-3.5.1.min.js') }}" charset="utf-8"></script>
+
+  <link href="{{ url_for('static', filename='bootstrap-5.0.2/css/bootstrap.min.css') }}" type="text/css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script></head>
+<body class="cc">
+    {% include 'menu.html' %}
+    <br><br><br>
+    <div class="container mt-5">
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <div id="error">
+
+              </div>
+              <h5 class="card-title text-center mb-4">REGISTRO DE TITULADO</h5>
+
+              <form method="POST">
+                <div class="mb-3">
+                  <label for="estado">Estado de titulado</label>
+                  <select name="estado" id='estado' class="form-control" required>
+                    <option value="">Seleccione estado del titulado</option>
+                    <option value="en proceso">En proceso</option>
+                    <option value="aprobado">Aprobado</option>
+                    <option value="reprobado">Reprobado</option>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label for="Nota" class="form-label">Nota</label>
+                  <input type="number" class="form-control" id="nota" name="nota" required placeholder="ponga la nota de apronación" required value='0'>
+                </div>
+
+                <div class="mb-3">
+                  <label for="fecha" class="form-label">fecha</label>
+                  <input type="date" class="form-control" id="fecha" name="fecha" required placeholder="ponga la fecha" required>
+                </div>
+
+                <div class="mb-3">
+                  <label for="tipo">Tipo de modalidad</label>
+                  <select name="tipo" id='tipo' class="form-control" required>
+                    <option value="">Seleccione el tipo de modalidad</option>
+                      {% for categoria in consultamodalidad %}
+                          <option value="{{ categoria[0] }} | {{ categoria[1] }}" title="{{ categoria[2] }}">
+                            {{ categoria[2]}} - {{ categoria[3]}} - {{ categoria[4] }}
+                          </option>
+                      {% endfor %}
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label for="estudiante">Estudiante</label>
+                  <select name="estudiante" id='estudiante' class="form-control" required>
+                    <option value="">Seleccione al estudiante</option>
+                      {% for categoria in consultaestu %}
+                          <option value="{{ categoria[0] }} |{{ categoria[1] }}|{{ categoria[2] }}" title="{{ categoria[3] }}">
+                            {{ categoria[3]}} {{ categoria[4]}} {{ categoria[5]}} {{ categoria[7]}} - {{ categoria[6]}} - {{ categoria[8]}}
+                          </option>
+                      {% endfor %}
+                  </select>
+                </div>
+
+                <div class="d-grid gap-2">
+                  <button type="button" class="btn btn-primary btn-block" onclick="registrar()">Registrar</button>
+                </div>
+
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='respuesta'>
+
+      </div>
+    </div>
+
+</body>
+</html>
+
+    <script type="text/javascript">
+    function registrar(){
+      var estado = document.getElementById("estado").value;
+      var nota = document.getElementById("nota").value;
+      var fecha = document.getElementById("fecha").value;
+      var tipo = document.getElementById("tipo").value;
+      var estudiante = document.getElementById("estudiante").value;
+      if(estudiante == '' || estado == '' || nota == '' || fecha == '' || tipo==''){
+        $('#error').html("<div class='alert alert-danger'>Algun campo vacion o falta seleccionar</div>");
+        vaciar();
+        return ;
+      }
+      var resultado = separar(tipo)
+      cod_mt = resultado[0];
+      cod_pe = resultado[1];
+      var resultado = separar(estudiante)
+      cod_estudiante = resultado[0];
+      cod_area = resultado[1];
+      cod_carrera = resultado[2];
+      var datos=new  FormData();
+      datos.append("estado",estado);
+      datos.append("nota",nota);
+      datos.append("fecha",fecha);
+      datos.append("cod_mt",cod_mt);
+      datos.append("cod_pe",cod_pe);
+      datos.append("cod_estudiante",cod_estudiante);
+      datos.append("cod_area",cod_area);
+      datos.append("cod_carrera",cod_carrera);
+      $.ajax({
+        type: "POST", //type of submit
+        cache: false, //important or else you might get wrong data returned to you
+        url: "/RegTitulado", //destination
+        datatype: "html", //expected data format from process.php
+        data: datos, //target your form's data and serialize for a POST
+        contentType:false,
+        processData:false,
+        success: function(data){
+          //alert(data);
+          console.log(data);
+          if(data == "correcto"){
+            $('#error').html("<div class='alert alert-success'>Se guardo la información correctamente</div>");
+          }else{
+            $('#error').html("<div class='alert alert-danger'>Sucedio algun problema al registrar</div>");
+          }
+            //retorno1(data);
+          validarError();
+        },
+        error: function() {
+          $('#error').html("<div class='alert alert-danger'>Ocurrio un error Verifique los datos</div>");
+            vaciar();
+        }
+      });
+    }
+    // Ejecutar código después de 1 minuto (60,000 milisegundos)
+    function validarError(){
+      setTimeout(function() {
+        redireccionar();
+      }, 3000);
+    }
+    function vaciar(){
+      setTimeout(function() {
+        $('#error').html("");
+      }, 2000);
+    }
+function redireccionar(){
+  // Redireccionar a una URL específica
+  window.location.href = "/FormTitulado";
+}
+
+function separar(codigos){
+  var split = codigos.split('|');
+  return split;
+}
+</script>
+<script src="{{ url_for('static', filename='bootstrap-5.0.2/js/bootstrap.min.js') }}" charset="utf-8"></script>

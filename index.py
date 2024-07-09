@@ -1238,6 +1238,79 @@ def RegFormModalidad():
             conn.close()
         return 'correcto'
 
+#registro de titulados
+
+@app.route('/FormTitulado')
+def FormTitulados():
+    conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+    cursor = conn.cursor()
+    # Consulta para verificar si el usuario existe
+    consultas = "SELECT cod_area,nombre_area FROM area"
+    cursor.execute(consultas)
+    consulta = cursor.fetchall()
+
+    # Consulta para verificar si el usuario existe
+    consulcarrera = "SELECT cod_carrera,cod_area,nombre_carrera FROM carrera"
+    cursor.execute(consulcarrera)
+    consultacarrera = cursor.fetchall()
+
+
+    # Consulta para verificar si el usuario existe
+    consulmodalidad = "select cod_mt,p.cod_pe,tipo_mt,c.nombre_carrera,p.nombre_pe from modalidad_titulacion as m inner join carrera as c on m.cod_carrera = c.cod_carrera inner join plan_de_estudio as p on m.cod_pe = p.cod_pe where p.cod_pe>=2"
+    cursor.execute(consulmodalidad)
+    consultamodalidad = cursor.fetchall()
+
+    # Consulta para verificar si el usuario existe
+    consulplan = "select p.cod_pe,p.nombre_pe,c.nombre_carrera from carrera as c inner join plan_de_estudio as p where c.cod_carrera = p.cod_carrera"
+    cursor.execute(consulplan)
+    consultaplan = cursor.fetchall()
+
+    # Consulta para verificar si el usuario existe
+    consulestu =("SELECT e.cod_es, e.cod_area, e.cod_carrera, e.nombre_es, e.ap_es, e.am_es, c.nombre_carrera, g.nombre_grado,e.fecha "
+                   "FROM estudiante as e "
+                   "INNER JOIN carrera as c ON e.cod_carrera = c.cod_carrera "
+                   "INNER JOIN grado as g ON e.cod_grado = g.cod_grado where e.cod_grado = 5 order by e.cod_es desc")
+
+
+    cursor.execute(consulestu)
+    consultaestu = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+    if 'usuario' in session:
+        return render_template('registroTitulado.html',usuario=session['usuario'],consulta=consulta,consultacarrera=consultacarrera,consultaplan=consultaplan,consultamodalidad=consultamodalidad,consultaestu=consultaestu)
+    return render_template('registroTitulado.html',usuario=None,consulta=consulta,consultacarrera=consultacarrera,consultaplan=consultaplan,consultamodalidad=consultamodalidad,consultaestu=consultaestu)
+
+@app.route('/RegTitulado',methods=['POST'])
+def RegFormTitulado():
+    if request.method == 'POST':
+        modalidad = request.form.get('modalidad')
+        estado_mt = request.form.get('estado')
+        nota = request.form.get('nota')
+        fecha = request.form.get('fecha')
+        cod_mt = request.form.get('cod_mt')
+        cod_pe = request.form.get('cod_pe')
+        cod_estudiante = request.form.get('cod_estudiante')
+        cod_area = request.form.get('cod_area')
+        cod_carrera = request.form.get('cod_carrera')
+        conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+        cursor = conn.cursor()
+        estado = 'activo'
+
+        try:
+            with conn.cursor() as cursor:
+                # Consulta para verificar si el usuario existe
+                consultas = ("insert into titulado("
+                "estado_titu,nota_titu,cod_mt,cod_pe,cod_es,cod_carrera,cod_area,fecha,hora,estado"
+                ")values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)")
+                cursor.execute(consultas,(estado_mt,nota,cod_mt,cod_pe,cod_estudiante,cod_carrera,cod_area,fecha,'00:00:00',estado))
+            conn.commit()
+        finally:
+            # Cerrar la conexión siempre, incluso si ocurre una excepción
+            conn.close()
+        return 'correcto'
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0',debug=True,port=5003)
 
