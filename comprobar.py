@@ -22,18 +22,26 @@ def obtener_carreras_nombre(texto):
 
     carreras_keywords = ["informatica",
     "mecanica automotriz",
-    "minas",
+    "minas",'contaduria publica','conta','contaduria'
      "electromecanica",
      "mecanica",
+     'mecanica automotris',
      "agronomia",
+     'agro',
      "enfermeria",
      "bioquimica",
      "bio quimica",
+     'biofar',
      "electro mecanica",
      "civil","medicina",
+     'topografia','enfermeria','enfer',
      "minas topografia","derecho","contaduria","contaduria publica",
      "comunicacion social","ciencias de la educacion"
-     ,"laboratorio clinico","odontologia","odonto","infor"]
+     ,"laboratorio clinico","odontologia","odonto","infor",'tecnico superior en radioterapia nuclear','radioterapia nuclear'
+     ,'radioterapia','radio nuclear','tecnico superior en medicina nuclear','medicina nuclear'
+     ,'medi nuclear','tecnico superior radioterapia nuclear','tecnico superior medicina nuclear',
+     'medi nuclear','recursos evaporiticos del litio','evaporiticos del litio','litio','evaporiticos litio'
+     ,'bio medico','biomedico','bioquimica farmacia']
 
     carreras_encontradas = []
     # Convertir el texto a minúsculas y eliminar tildes

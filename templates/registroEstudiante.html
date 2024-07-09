@@ -143,7 +143,8 @@
       var codigos = document.getElementById("carrera").value;
       var grado = document.getElementById("grado").value;
       var transferir = document.getElementById('transferir').value;
-      if(carrera == '' || estudiante == '' || grado == '' || paterno=='' || materno == ''||ci==''||departamento==''||sexo==''||region==''||fecha==''||transferir==''){
+
+      if(codigos == '' || estudiante == '' || grado == '' || paterno=='' || materno == ''||ci==''||departamento==''||sexo==''||region==''||fecha==''||transferir==''){
         $('#error').html("<div class='alert alert-danger'>Algun campo vacio o falta seleccionar</div>");
         vaciar();
         return ;
@@ -168,7 +169,7 @@
       $.ajax({
         type: "POST", //type of submit
         cache: false, //important or else you might get wrong data returned to you
-        url: "/RegDocente", //destination
+        url: "/RegEstudiante", //destination
         datatype: "html", //expected data format from process.php
         data: datos, //target your form's data and serialize for a POST
         contentType:false,
@@ -183,6 +184,10 @@
           }
             //retorno1(data);
           validarError();
+        },
+        error: function() {
+          $('#error').html("<div class='alert alert-danger'>Ocurrio un error Verifique los datos</div>");
+            vaciar();
         }
       });
     }

@@ -14,7 +14,9 @@
     <div class="container mt-5">
       <div class="row justify-content-center">
         <div class="col-md-6">
+<input type="button" name="" value="Registrar estudiante" onclick="registrarEstudian()" class="btn btn-success">
           <div class="card shadow-sm">
+
             <div class="card-body">
               <div id="error">
 
@@ -33,7 +35,7 @@
                         {% if consultaestu %}
                             {% for categoria in consultaestu %}
                                 <option value="{{ categoria[0] }}|{{ categoria[1] }}|{{ categoria[2] }}" title="{{ categoria[6] }}">
-                                    {{ categoria[3] }} {{ categoria[4] }} {{ categoria[5] }} - {{ categoria[7] }} - {{ categoria[6] }}
+                                    {{ categoria[3] }} {{ categoria[4] }} {{ categoria[5] }} - {{ categoria[7] }} - {{ categoria[6] }} - {{ categoria[8] }}
                                 </option>
                             {% endfor %}
                         {% else %}
@@ -89,7 +91,7 @@
       $.ajax({
         type: "POST", //type of submit
         cache: false, //important or else you might get wrong data returned to you
-        url: "/RegTransferirO", //destination
+        url: "/RegTransferirD", //destination
         datatype: "html", //expected data format from process.php
         data: datos, //target your form's data and serialize for a POST
         contentType:false,
@@ -104,6 +106,10 @@
           }
             //retorno1(data);
           validarError();
+        },
+        error: function() {
+          $('#error').html("<div class='alert alert-danger'>Ocurrio un error Verifique los datos</div>");
+            vaciar();
         }
       });
     }
@@ -120,12 +126,15 @@
     }
 function redireccionar(){
   // Redireccionar a una URL específica
-  window.location.href = "/FormTranferirO";
+  window.location.href = "/FormTranferirD";
 }
 
 function separar(codigos){
   var split = codigos.split('|');
   return split;
+}
+function registrarEstudian(){
+  window.location.href = "/FormEstudiante";
 }
 </script>
 <script src="{{ url_for('static', filename='bootstrap-5.0.2/js/bootstrap.min.js') }}" charset="utf-8"></script>

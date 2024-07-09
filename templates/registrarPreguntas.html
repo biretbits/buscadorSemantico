@@ -85,6 +85,10 @@
             $('#error').html("<div class='alert alert-danger'>Ocurrio un problema al insertar los datos</div>");
           }
             //retorno1(data);
+        },
+        error: function() {
+          $('#error').html("<div class='alert alert-danger'>Ocurrio un error Verifique los datos</div>");
+            vaciar();
         }
       });
     }

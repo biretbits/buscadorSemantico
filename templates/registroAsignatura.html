@@ -135,6 +135,10 @@
           }
             //retorno1(data);
           validarError();
+        },
+        error: function() {
+          $('#error').html("<div class='alert alert-danger'>Ocurrio un error Verifique los datos</div>");
+            vaciar();
         }
       });
     }

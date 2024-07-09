@@ -1070,7 +1070,7 @@ def RegFormTransferirOtra():
         area = request.form.get('area')
         conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
         cursor = conn.cursor()
-        estado = 'desactivo'
+        estado = 'sactivo'
         fecha_actual_formateada = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
         hora_actual = datetime.now().strftime('%H:%M:%S')
         try:
@@ -1090,11 +1090,12 @@ def RegFormTransferirOtra():
 def FormTransferirDEUNiversidad():
     conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
     cursor = conn.cursor()
+    año_actual = datetime.now().year
     # Consulta para verificar si el usuario existe
-    consulestu =("SELECT e.cod_es, e.cod_area, e.cod_carrera, e.nombre_es, e.ap_es, e.am_es, c.nombre_carrera, g.nombre_grado "
+    consulestu =("SELECT e.cod_es, e.cod_area, e.cod_carrera, e.nombre_es, e.ap_es, e.am_es, c.nombre_carrera, g.nombre_grado,e.fecha "
                    "FROM estudiante as e "
                    "INNER JOIN carrera as c ON e.cod_carrera = c.cod_carrera "
-                   "INNER JOIN grado as g ON e.cod_grado = g.cod_grado where e.transferido <> ''")
+                   "INNER JOIN grado as g ON e.cod_grado = g.cod_grado where e.transferido = 'si' order by e.cod_es desc")
 
 
     cursor.execute(consulestu)
@@ -1109,7 +1110,6 @@ def FormTransferirDEUNiversidad():
 @app.route('/RegTransferirD',methods=['POST'])
 def RegFormTransferirDEotra():
     if request.method == 'POST':
-
         cod_estudiante = request.form.get('cod_estudiante')
         otro = request.form.get('otro')
         fecha = request.form.get('fecha')
@@ -1117,15 +1117,16 @@ def RegFormTransferirDEotra():
         area = request.form.get('area')
         conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
         cursor = conn.cursor()
-        estado = 'desactivo'
+        estado = 'activo'
         fecha_actual_formateada = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
         hora_actual = datetime.now().strftime('%H:%M:%S')
         try:
             with conn.cursor() as cursor:
                 # Consulta para verificar si el usuario existe
-                consultas = ("insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,cod_es,cod_area,cod_carrera,estado)"
-                "values(%s,%s,%s,%s,%s,%s,%s,%s,%s)")
-                cursor.execute(consultas,('si',otro,fecha_actual_formateada,fecha,hora_actual,cod_estudiante,area,carrera,estado))
+                consultas = ("insert into transferencia("
+                "transferencia,universidad_transferencia,fecha_hora,fecha ,cod_es,cod_area,cod_carrera,estado)"
+                "values(%s,%s,%s,%s,%s,%s,%s,%s)")
+                cursor.execute(consultas,('si',otro,fecha_actual_formateada,fecha,cod_estudiante,area,carrera,estado))
             conn.commit()
         finally:
             # Cerrar la conexión siempre, incluso si ocurre una excepción
@@ -1186,8 +1187,56 @@ def RegFormEstudiante():
             conn.close()
         return 'correcto'
 
+#registrar modalidad de titulados_relacion
 
+@app.route('/FormModalidad')
+def FormModalidad():
+    conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+    cursor = conn.cursor()
+    # Consulta para verificar si el usuario existe
+    consultas = "SELECT cod_area,nombre_area FROM area"
+    cursor.execute(consultas)
+    consulta = cursor.fetchall()
 
+    # Consulta para verificar si el usuario existe
+    consulcarrera = "SELECT cod_carrera,cod_area,nombre_carrera FROM carrera"
+    cursor.execute(consulcarrera)
+    consultacarrera = cursor.fetchall()
+
+    # Consulta para verificar si el usuario existe
+    consulplan = "select p.cod_pe,p.nombre_pe,c.nombre_carrera from carrera as c inner join plan_de_estudio as p where c.cod_carrera = p.cod_carrera"
+    cursor.execute(consulplan)
+    consultaplan = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    if 'usuario' in session:
+        return render_template('registroModalidadTitulacion.html',usuario=session['usuario'],consulta=consulta,consultacarrera=consultacarrera,consultaplan=consultaplan)
+    return render_template('registroModalidadTitulacion.html',usuario=None,consulta=consulta,consultacarrera=consultacarrera,consultaplan=consultaplan)
+
+@app.route('/RegModalidad',methods=['POST'])
+def RegFormModalidad():
+    if request.method == 'POST':
+        modalidad = request.form.get('modalidad')
+        carrera = request.form.get('carrera')
+        area = request.form.get('area')
+        plan = request.form.get('plan')
+
+        conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+        cursor = conn.cursor()
+        estado = 'activo'
+
+        try:
+            with conn.cursor() as cursor:
+                # Consulta para verificar si el usuario existe
+                consultas = ("insert into modalidad_titulacion("
+                "tipo_mt,cod_pe,cod_carrera,cod_area,estado"
+                ")values(%s,%s,%s,%s,%s)")
+                cursor.execute(consultas,(modalidad,plan,carrera,area,estado))
+            conn.commit()
+        finally:
+            # Cerrar la conexión siempre, incluso si ocurre una excepción
+            conn.close()
+        return 'correcto'
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',debug=True,port=5003)
