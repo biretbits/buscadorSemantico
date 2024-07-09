@@ -1310,6 +1310,161 @@ def RegFormTitulado():
             conn.close()
         return 'correcto'
 
+#registro de asignaturas que dicta el docente_
+
+@app.route('/FormDicta')
+def FormDicta():
+    conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+    cursor = conn.cursor()
+    # Consulta para verificar si el usuario existe
+    consultas = "SELECT d.cod_docente,d.nombre_docente,d.ap_docente,d.am_docente,c.nombre_carrera,d.fecha from carrera as c inner join docente as d on c.cod_carrera = d.cod_carrera order by d.cod_docente desc"
+    cursor.execute(consultas)
+    consulta = cursor.fetchall()
+
+    # Consulta para verificar si el usuario existe
+    consulasig = "select a.cod_asig,a.cod_carrera,a.cod_area,a.cod_grado,a.cod_pe,c.nombre_carrera,g.nombre_grado,a.nombre_asig from asignatura as a inner join carrera as c on a.cod_carrera = c.cod_carrera inner join grado as g on a.cod_grado=g.cod_grado"
+    cursor.execute(consulasig)
+    consultaasig = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+    if 'usuario' in session:
+        return render_template('registroDicta.html',usuario=session['usuario'],consulta=consulta,consultaasig=consultaasig)
+    return render_template('registroDicta.html',usuario=None,consulta=consulta,consultaasig=consultaasig)
+
+@app.route('/RegDicta',methods=['POST'])
+def RegFormDicta():
+    if request.method == 'POST':
+        modalidad = request.form.get('modalidad')
+        avance = request.form.get('avance')
+        docente = request.form.get('docente')
+        fecha = request.form.get('fecha')
+        cod_asig = request.form.get('cod_asig')
+        cod_carrera = request.form.get('cod_carrera')
+        cod_area = request.form.get('cod_area')
+        cod_grado = request.form.get('cod_grado')
+        cod_pe = request.form.get('cod_pe')
+        conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+        cursor = conn.cursor()
+        estado = 'activo'
+        fecha_actual = datetime.now().strftime("%Y")
+        try:
+            with conn.cursor() as cursor:
+                # Consulta para verificar si el usuario existe
+                consultas = ("insert into dicta_asignatura("
+                "porcentaje_avance,ano_dicta,cod_docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha"
+                ")values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)")
+                cursor.execute(consultas,(avance,fecha_actual,docente,cod_asig,cod_pe,cod_carrera,cod_grado,cod_area,estado,fecha))
+            conn.commit()
+        finally:
+            # Cerrar la conexión siempre, incluso si ocurre una excepción
+            conn.close()
+        return 'correcto'
+
+#registro de asignaturas del estudiante a pasar
+
+
+@app.route('/FormAsigEst')
+def FormAsigEst():
+    conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+    cursor = conn.cursor()
+    # Consulta para verificar si el usuario existe
+    consultas = "select e.cod_es,e.nombre_es,e.ap_es,e.am_es,nombre_carrera from estudiante as e inner join carrera as c on e.cod_carrera = c.cod_carrera order by e.cod_es desc"
+    cursor.execute(consultas)
+    consulta = cursor.fetchall()
+
+    # Consulta para verificar si el usuario existe
+    consuldicta = "select da.cod_dicta,da.cod_docente,da.cod_asig,da.cod_pe,da.cod_carrera,da.cod_grado,da.cod_area,c.nombre_carrera,a.nombre_asig,g.nombre_grado from carrera as c inner join dicta_asignatura as da on c.cod_carrera = da.cod_carrera inner join asignatura as a on a.cod_asig = da.cod_asig inner join grado as g on g.cod_grado = da.cod_grado order by da.cod_dicta desc"
+    cursor.execute(consuldicta)
+    consultadicta = cursor.fetchall()
+
+    # Consulta para verificar si el usuario existe
+    consulparcial = "SELECT cod_parcial,nombre_parcial from parciales"
+    cursor.execute(consulparcial)
+    consultaparcial = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+    if 'usuario' in session:
+        return render_template('registroAsigEstudiante.html',usuario=session['usuario'],consulta=consulta,consultadicta=consultadicta,consultaparcial=consultaparcial)
+    return render_template('registroAsigEstudiante.html',usuario=None,consulta=consulta,consultadicta=consultadicta,consultaparcial=consultaparcial)
+
+@app.route('/RegAsigEst',methods=['POST'])
+def RegFormAsigEst():
+    if request.method == 'POST':
+        estudiante = request.form.get('estudiante')
+        fecha = request.form.get('fecha').strip()
+        cod_dicta = request.form.get('cod_dicta')
+        cod_docente = request.form.get('cod_docente')
+        cod_asig = request.form.get('cod_asig')
+        cod_pe = request.form.get('cod_pe')
+        cod_carrera = request.form.get('cod_carrera')
+        cod_grado = request.form.get('cod_grado')
+        cod_area = request.form.get('cod_area')
+
+        parcial = request.form.get('parcial')
+        desercion = request.form.get('desercion')
+        teoria = request.form.get('teoria')
+        investigacion = request.form.get('investigacion')
+        extencion = request.form.get('extencion')
+
+        conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+        cursor = conn.cursor()
+        estado = 'activo'
+        fecha_actual = datetime.now().strftime("%Y")
+
+        # Procesar la fecha
+        fecha_obj = datetime.strptime(fecha, "%Y-%m-%d")  # Convertir a objeto datetime
+        ano = fecha_obj.year
+        fecha1 = f"{ano}-01-01"
+        fecha2 = f"{ano}-12-30"
+        try:
+            with conn.cursor() as cursor:
+                # Consulta para verificar si el usuario existe
+                consultas = ("insert into cursa_asignatura("
+                "ano,calificacion,estado_asignatura,desercion,cod_es,cod_dicta,cod_docente,cod_asig,cod_pe,"
+                "cod_carrera,cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,cod_parcial"
+                ")values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)")
+                cursor.execute(consultas,(fecha_actual,0,'',desercion,estudiante,cod_dicta,cod_docente,cod_asig,cod_pe,cod_carrera,
+                cod_grado,cod_area,estado,fecha,teoria,investigacion,extencion,parcial))
+
+                # Consulta de selección
+                consulda = """
+                SELECT teoria, investigacion, extencion, cod_parcial, cod_cursa,cod_asig
+                FROM cursa_asignatura
+                WHERE cod_es = %s and cod_asig = %s AND (fecha >= %s AND fecha <= %s)
+                """
+                cursor.execute(consulda, (estudiante, cod_asig, fecha1, fecha2))
+                consultada = cursor.fetchall()
+
+                # Consulta de selección de parciales
+                consulparcial = "SELECT cod_parcial, nombre_parcial FROM parciales"
+                cursor.execute(consulparcial)
+                consultaparcial = cursor.fetchall()
+
+                # Calcular el total y actualizar la calificación
+                to = 0
+                cod_cursa_primero = 0
+                for par in consultaparcial:
+                    sum = 0
+                    for es in consultada:
+                        if par[0] == es[3]:
+                            sum = (es[0] + es[1] + es[2]) / 3
+                        if es[3] == 1:
+                            cod_cursa_primero = es[4]
+                    if sum > 0:
+                        to += sum
+
+                if to > 0:
+                    to = to / 4
+                    consultas = "UPDATE cursa_asignatura SET calificacion=%s WHERE cod_cursa=%s AND cod_parcial=1"
+                    cursor.execute(consultas, (to, cod_cursa_primero))
+                print("cod_cursa ",cod_cursa_primero)
+            conn.commit()
+        finally:
+            # Cerrar la conexión siempre, incluso si ocurre una excepción
+            conn.close()
+        return 'correcto'
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',debug=True,port=5003)
