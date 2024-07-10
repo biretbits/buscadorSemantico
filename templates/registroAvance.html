@@ -17,18 +17,39 @@
           <div class="card shadow-sm">
             <div class="card-body">
 
-              <h5 class="card-title text-center mb-4">REGISTRO DE CALIFICACIÓN EN ASIGNATURA DEL ESTUDIANTE</h5>
+              <h5 class="card-title text-center mb-4">REGISTRO DE TRANSICIÓN DE CURSO DE ESTUDIANTES</h5>
               <form method="POST">
                 <div class="mb-3">
                   <label for="estudiante">estudiante</label>
                   <select name="estudiante" id='estudiante' class="form-control" required>
-                    <option value="">Seleccione el docente al estudiante a poner calificación</option>
+                    <option value="">Seleccione el estudiante</option>
                       {% for categoria in consulta %}
-                          <option value="{{ categoria[0] }} | {{ categoria[7] }} | {{ categoria[8] }}" title="{{ categoria[1] }}">
-                            {{ categoria[1]}} {{ categoria[2]}} {{ categoria[3] }} - {{ categoria[4]}} - {{ categoria[6]}} - {{ categoria[5]}}
+                          <option value="{{ categoria[0] }}|{{ categoria[1] }}|{{ categoria[2] }}|{{ categoria[3] }}" title="{{ categoria[4] }}">
+                            {{ categoria[4]}} {{ categoria[5]}} {{ categoria[6] }} - {{ categoria[8]}} - {{ categoria[7] }}
                           </option>
                       {% endfor %}
                   </select>
+                </div>
+
+                <div class="mb-3">
+                  <label for="desercion">Dersercion de curso</label>
+                  <select name="desercion" id='desercion' class="form-control" required>
+                    <option value="">Seleccione desercion de estudiante en curso</option>
+                    <option value="si">si</option>
+                    <option value="no">no</option>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label for="abandono">Estado de curso</label>
+                  <select name="abandono" id='abandono' class="form-control" required>
+                    <option value="">Seleccione estado del curso</option>
+                    <option value="aprobado">Aprobado</option>
+                    <option value="reprobado">Reprobado</option>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label for="fecha" class="form-label">fecha</label>
+                  <input type="date" class="form-control" id="fecha" name="fecha" required placeholder="ponga la fecha" required>
                 </div>
 
                 <div id="error">
@@ -53,56 +74,41 @@
 
     <script type="text/javascript">
 
-    function calcular() {
-        var teoria = parseInt(document.getElementById('teoria').value) || 0;
-        var investigacion = parseInt(document.getElementById('investigacion').value) || 0;
-        var extencion = parseInt(document.getElementById('extencion').value) || 0;
-        var total = teoria + investigacion + extencion;
-        var div = parseInt(total/3)
-
-        if(div<=100){
-          document.getElementById('total').value = div;
-        }
-    }
     function registrar(){
       var estudiante = document.getElementById("estudiante").value;
-      var parcial = document.getElementById("parcial").value;
       var desercion = document.getElementById("desercion").value;
-      var teoria = document.getElementById("teoria").value;
-      var investigacion = document.getElementById("investigacion").value;
-      var extencion = document.getElementById("extencion").value;
-      if(estudiante== '' || parcial == ''){
+      var abandono = document.getElementById("abandono").value;
+      var fecha = document.getElementById("fecha").value;
+      if(estudiante== '' || desercion == '' || abandono == '' || fecha == ''){
         $('#error').html("<div class='alert alert-danger'>Algun campo vacion o falta seleccionar</div>");
         vaciar();
         return ;
       }
       //alert(asignatura);
       var resultado = separar(estudiante)
-      var cod_cursa = resultado[0];
-      var cod_estudiante = resultado[1]
-      var fecha = resultado[2]
+      var cod_es = resultado[0];
+      var cod_carrera = resultado[1]
+      var cod_area = resultado[2]
+      var cod_grado = resultado[3]
       //alert("cod_dicta "+cod_dicta+" cod_docente "+cod_docente+" cod_asig "+cod_asig+" cod_pe "+cod_pe+" cod_carrera "+cod_carrera+" cod_grado "+cod_grado+" cod_area "+cod_area)
-      alert(cod_cursa);
+
       var datos=new  FormData();
-      datos.append("estudiante",estudiante);
-      datos.append("parcial",parcial);
-      datos.append("esercion",desercion);
-      datos.append("teoria",teoria);
-      datos.append("investigacion",investigacion);
-      datos.append("extencion",extencion);
-      datos.append("cod_cursa",cod_cursa);
-      datos.append("cod_estudiante",cod_estudiante);
+      datos.append("desercion",desercion);
+      datos.append("abandono",abandono);
       datos.append("fecha",fecha);
+      datos.append("cod_es",cod_es);
+      datos.append("cod_carrera",cod_carrera);
+      datos.append("cod_area",cod_area);
+      datos.append("cod_grado",cod_grado);
       $.ajax({
         type: "POST", //type of submit
         cache: false, //important or else you might get wrong data returned to you
-        url: "/RegCaliEst", //destination
+        url: "/RegAvance", //destination
         datatype: "html", //expected data format from process.php
         data: datos, //target your form's data and serialize for a POST
         contentType:false,
         processData:false,
         success: function(data){
-          alert(data);
           console.log(data);
           if(data == "correcto"){
             $('#error').html("<div class='alert alert-success'>Se guardo la información correctamente</div>");
@@ -131,7 +137,7 @@
     }
 function redireccionar(){
   // Redireccionar a una URL específica
-  window.location.href = "/FormCaliEst";
+  window.location.href = "/FormAvance";
 }
 
 function separar(codigos){

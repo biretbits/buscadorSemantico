@@ -1465,6 +1465,51 @@ def RegFormAsigEst():
             # Cerrar la conexión siempre, incluso si ocurre una excepción
             conn.close()
         return 'correcto'
+#registrar transicion de cursos
+
+@app.route('/FormAvance')
+def FormAvance():
+    conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+    cursor = conn.cursor()
+
+    # Consulta para verificar si el usuario existe
+    consultas = "select e.cod_es,e.cod_carrera,e.cod_area,e.cod_grado,e.nombre_es,e.ap_es,e.am_es,nombre_carrera,g.nombre_grado from estudiante as e inner join carrera as c on e.cod_carrera = c.cod_carrera inner join grado as g on g.cod_grado = e.cod_grado order by e.cod_es desc"
+    cursor.execute(consultas)
+    consulta = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+    if 'usuario' in session:
+        return render_template('registroAvance.html',usuario=session['usuario'],consulta=consulta)
+    return render_template('registroAvance.html',usuario=None,consulta=consulta)
+
+@app.route('/RegAvance',methods=['POST'])
+def RegFormAvance():
+    if request.method == 'POST':
+
+        desercion = request.form.get("desercion")
+        abandono = request.form.get("abandono")
+        fecha = request.form.get("fecha")
+        cod_es = request.form.get("cod_es")
+        cod_carrera = request.form.get("cod_carrera")
+        cod_area = request.form.get("cod_area")
+        cod_grado = request.form.get("cod_grado")
+        conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+        cursor = conn.cursor()
+        estado = 'activo'
+        fecha_actual = datetime.now().strftime("%Y")
+        try:
+            with conn.cursor() as cursor:
+                # Consulta para verificar si el usuario existe
+                consultas = ("insert into estudiante_perdio("
+                "estado_ano,abandono,cod_grado,cod_docente,cod_carrera,cod_es,cod_area,fecha"
+                ")values(%s,%s,%s,%s,%s,%s,%s,%s)")
+                cursor.execute(consultas,(abandono,desercion,cod_grado,1,cod_carrera,cod_es,cod_area,fecha))
+            conn.commit()
+        finally:
+            # Cerrar la conexión siempre, incluso si ocurre una excepción
+            conn.close()
+        return 'correcto'
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',debug=True,port=5003)

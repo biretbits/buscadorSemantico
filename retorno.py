@@ -2510,10 +2510,10 @@ def  retornar_valores(datos,ress):
                     vareas[anoBD][row[12]-1]+=1
 
         for row in titulados_re:
-            if not isinstance(row[9], type(None)) and row[9]>=fecha1 and row[9] <= fecha2:
-                anoBD = int(obtener_ano_de_fecha(row[9].strftime("%Y-%m-%d")))
-                carrerasTitu[anoBD][row[7]-1]+=1
-                vareasTitu[anoBD][row[8]-1]+=1
+            if not isinstance(row[8], type(None)) and row[8]>=fecha1 and row[8] <= fecha2:
+                anoBD = int(obtener_ano_de_fecha(row[8].strftime("%Y-%m-%d")))
+                carrerasTitu[anoBD][row[6]-1]+=1
+                vareasTitu[anoBD][row[7]-1]+=1
 
         if si_car_n == "si_car_n":#esta buscando carreras
             s_dupli = eliminar_dobles(id_car)#si hay doble veces repetido el id lo eliminamos a 1
@@ -3934,11 +3934,11 @@ def  retornar_valores(datos,ress):
         if isinstance(fecha2, str):
             fecha2 = datetime.strptime(fecha2, "%Y-%m-%d").date()
         for row in datos:#recorremos los datos obtenidos de la base de datos
-          if not isinstance(row[9], type(None)) and row[9]>=fecha1 and row[9] <= fecha2:
-              anoBD = int(obtener_ano_de_fecha(row[9].strftime("%Y-%m-%d")))
+          if not isinstance(row[8], type(None)) and row[8]>=fecha1 and row[8] <= fecha2:
+              anoBD = int(obtener_ano_de_fecha(row[8].strftime("%Y-%m-%d")))
               if row[1] == "aprobado":
-                  vare[anoBD][row[8]-1]+=1
-                  vcar[anoBD][row[7]-1]+=1
+                  vare[anoBD][row[7]-1]+=1
+                  vcar[anoBD][row[6]-1]+=1
         if si_car_n == "si_car_n":
             s_dupli = eliminar_dobles(id_car)#si hay doble veces repetido el id lo eliminamos a 1
             if len(s_dupli)==1:
