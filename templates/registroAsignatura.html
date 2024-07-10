@@ -48,8 +48,8 @@
                   <select name="carrera" id='carrera' class="form-control" required>
                     <option value="">Seleccione carrera</option>
                       {% for categoria in consultacarrera %}
-                          <option value="{{ categoria[0] }}" title="{{ categoria[1] }}">
-                            {{ categoria[1] }}
+                          <option value="{{ categoria[0] }}|{{ categoria[1] }}" title="{{ categoria[2] }}">
+                            {{ categoria[2] }}
                           </option>
                       {% endfor %}
                   </select>
@@ -65,18 +65,6 @@
                           </option>
                       {% endfor %}
                   </select>
-                </div>
-                <div class="mb-3">
-                  <label for="area">Área</label>
-                  <select name="area" id='area' class="form-control" required>
-                    <option value="">Seleccione área</option>
-                      {% for categoria in consulta %}
-                          <option value="{{ categoria[0] }}" title="{{ categoria[1] }}">
-                            {{ categoria[1] }}
-                          </option>
-                      {% endfor %}
-                  </select>
-
                 </div>
 
                 <div class="d-grid gap-2">
@@ -100,15 +88,18 @@
     function registrar(){
       var sigla = document.getElementById("sigla").value;
       var asignatura = document.getElementById("asignatura").value;
-      var carrera = document.getElementById("carrera").value;
+      var carreras = document.getElementById("carrera").value;
       var grado = document.getElementById("grado").value;
-      var area = document.getElementById("area").value;
+
       var plan = document.getElementById('plan').value;
-      if(carrera == '' || asignatura == '' || area == '' || grado == '' || sigla=='' || plan == ''){
+      if(carreras == '' || asignatura == '' || grado == '' || sigla=='' || plan == ''){
         $('#error').html("<div class='alert alert-danger'>Algun campo vacion o falta seleccionar</div>");
         vaciar();
         return ;
       }
+      var resultado = separar(carreras)
+      var carrera = resultado[0];
+      var area = resultado[1];
       var datos=new  FormData();
 
       datos.append("carrera",carrera);
@@ -156,6 +147,10 @@
 function redireccionar(){
   // Redireccionar a una URL específica
   window.location.href = "/FormAsig";
+}
+function separar(codigos){
+  var split = codigos.split('|');
+  return split;
 }
 </script>
 <script src="{{ url_for('static', filename='bootstrap-5.0.2/js/bootstrap.min.js') }}" charset="utf-8"></script>

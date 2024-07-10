@@ -935,19 +935,14 @@ def FormDocente():
     conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
     cursor = conn.cursor()
     # Consulta para verificar si el usuario existe
-    consultas = "SELECT cod_area,nombre_area FROM area"
-    cursor.execute(consultas)
-    consulta = cursor.fetchall()
-
-    # Consulta para verificar si el usuario existe
-    consulcarrera = "SELECT cod_carrera,nombre_carrera FROM carrera"
+    consulcarrera = "SELECT cod_carrera,cod_area,nombre_carrera FROM carrera"
     cursor.execute(consulcarrera)
     consultacarrera = cursor.fetchall()
     cursor.close()
     conn.close()
     if 'usuario' in session:
-        return render_template('registroDocente.html',usuario=session['usuario'],consulta=consulta,consultacarrera=consultacarrera)
-    return render_template('registroDocente.html',usuario=None,consulta=consulta,consultacarrera=consultacarrera)
+        return render_template('registroDocente.html',usuario=session['usuario'],consultacarrera=consultacarrera)
+    return render_template('registroDocente.html',usuario=None,consultacarrera=consultacarrera)
 
 @app.route('/RegDocente',methods=['POST'])
 def RegFormDocente():
@@ -986,12 +981,7 @@ def FormAsinagtura():
     conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
     cursor = conn.cursor()
     # Consulta para verificar si el usuario existe
-    consultas = "SELECT cod_area,nombre_area FROM area"
-    cursor.execute(consultas)
-    consulta = cursor.fetchall()
-
-    # Consulta para verificar si el usuario existe
-    consulcarrera = "SELECT cod_carrera,nombre_carrera FROM carrera"
+    consulcarrera = "SELECT cod_carrera,cod_area,nombre_carrera FROM carrera"
     cursor.execute(consulcarrera)
     consultacarrera = cursor.fetchall()
 
@@ -1007,8 +997,8 @@ def FormAsinagtura():
     cursor.close()
     conn.close()
     if 'usuario' in session:
-        return render_template('registroAsignatura.html',usuario=session['usuario'],consulta=consulta,consultacarrera=consultacarrera,consultagrado=consultagrado,consultaplan=consultaplan)
-    return render_template('registroAsignatura.html',usuario=None,consulta=consulta,consultacarrera=consultacarrera,consultagrado=consultagrado,consultaplan=consultaplan)
+        return render_template('registroAsignatura.html',usuario=session['usuario'],consultacarrera=consultacarrera,consultagrado=consultagrado,consultaplan=consultaplan)
+    return render_template('registroAsignatura.html',usuario=None,consultacarrera=consultacarrera,consultagrado=consultagrado,consultaplan=consultaplan)
 
 @app.route('/RegAsignatura',methods=['POST'])
 def RegFormAsignatura():
