@@ -52,6 +52,25 @@
           z-index: -1; /* Coloca el pseudo-elemento detrás del contenido */
            background-repeat: no-repeat;
       }
+      /* Estilos para la animación de carga */
+      .loader {
+                  border: 16px solid #f3f3f3;
+                  border-radius: 50%;
+                  border-top: 16px solid #3498db;
+                  width: 120px;
+                  height: 120px;
+                  animation: spin 2s linear infinite;
+                  display: none;
+                  position: fixed;
+                  top: 50%;
+                  left: 50%;
+                  transform: translate(-50%, -50%);
+                  z-index: 9999;
+              }
+             @keyframes spin {
+                 0% { transform: rotate(0deg); }
+                 100% { transform: rotate(360deg); }
+             }
 
       </style>
     <div class="body1">
@@ -114,8 +133,13 @@
         <br>
       </div>
     </div>
-
+    <div class="loader" align='center' id="loader"></div>
+{% include 'footer.html' %}
     <script type="text/javascript">
+    function Cerrar_animacion() {
+           // Simular un retraso de 3 segundos
+        }
+
     function buscarDatos(){
       var posible_respuesta = document.getElementById("posible_respuesta").value;
       var bus = document.getElementById("buscar").value;
@@ -141,6 +165,7 @@
       var datos=new  FormData();
       datos.append("bus",bus);
       datos.append("posible_respuesta",posible_respuesta);
+      document.getElementById('loader').style.display = 'block';
       $.ajax({
         type: "POST", //type of submit
         cache: false, //important or else you might get wrong data returned to you
@@ -152,11 +177,20 @@
         success: function(data){
           //alert(data);
           console.log(data);
+          if(data!=''){
+            setTimeout(function() {
+                  // Ocultar la animación de carga
+                  document.getElementById('loader').style.display = 'none';
+                  $('#respuesta').html(data);
+                  var select = document.getElementById('posible_respuesta');
+                  select.selectedIndex = 0;
+              }, 1000);
             //retorno1(data);
-              $('#respuesta').html(data);
-            var select = document.getElementById('posible_respuesta');
-            select.selectedIndex = 0;
+          }
         },
+        error: function(data){
+          $('#respuesta').html("Ocurrio un error al buscar la información");
+        }
       });
     }
     document.addEventListener('DOMContentLoaded', function () {

@@ -47,7 +47,7 @@
 
       </div>
     </div>
-
+{% include 'footer.html' %}
 </body>
 </html>
 
@@ -98,7 +98,7 @@ function redireccionar(){
 function verificar_si_tiene_espacios(texto) {
   // Utilizamos una expresión regular que busca espacios
   let tieneEspacios = /[ ]/g.test(texto);
-  
+
   if (tieneEspacios) {
     return "tiene_espacios";
   } else {
