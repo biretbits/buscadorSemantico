@@ -189,7 +189,13 @@
           }
         },
         error: function(data){
-          $('#respuesta').html("Ocurrio un error al buscar la información");
+          setTimeout(function() {
+                // Ocultar la animación de carga
+                document.getElementById('loader').style.display = 'none';
+                $('#respuesta').html("<div class ='alert alert-danger'>Ocurrio un error al buscar la información</div>");
+                var select = document.getElementById('posible_respuesta');
+                select.selectedIndex = 0;
+            }, 1000);
         }
       });
     }

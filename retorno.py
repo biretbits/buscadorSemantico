@@ -8,7 +8,6 @@ from datetime import datetime
 
 
 
-
 ac = {
 0: "Ingenieria Informatica",
 1: "Ingenieria civil",
@@ -150,6 +149,7 @@ def  retornar_valores(datos,ress):
                 index = int(i) - 1#obtenemos el id
                 index1 = int(i)
                 html += "<h5 align='center'>Carrera de "+str(nombre_carrera_retor(index1))+"<h5>"
+                html += "<div class='table-responsive'>"
                 html += "<table class='table table-striped'>"
                 html += "<thead>"
                 html += "<tr>"
@@ -170,6 +170,7 @@ def  retornar_valores(datos,ress):
                         k = k + 1
                 html += "</tbody>"
                 html += "</table>"
+                html +="</div>"
         elif si_ar == 'si_ar':
             html += "Las carreras de la universidad son las siguientes: "
             html += "<h5>Tabla de carreras de la UNSXX</h5>"
@@ -180,6 +181,7 @@ def  retornar_valores(datos,ress):
                 html += "<h5 align='center'>Area "+str(nombre_area_id(index1))+"<h5>"
                 carreras = seleccionarcarrera_id(index1)#buscamos con el id todas las carreras relacionadas con el area
                 if carreras != "no":#si es diferente de no entonces ingresamos
+                    html += "<div class='table-responsive'>"
                     html += "<table class='table table-striped'>"
                     html += "<thead>"
                     html += "<tr>"
@@ -201,11 +203,13 @@ def  retornar_valores(datos,ress):
                                 k = k + 1
                     html += "</tbody>"
                     html += "</table>"
+                    html += '</div>'
                 else:
                     html+="<h6 align='center'>No se encontro información</h6>"
         elif si_car == "si_car":
             html += "Las carreras de la universidad son las siguientes: "
             html += "<h5>Tabla de carreras de la UNSXX</h5>"
+            html += "<div class='table-responsive'>"
             html += "<table class='table table-striped'>"
             html += "<thead>"
             html += "<tr>"
@@ -225,7 +229,7 @@ def  retornar_valores(datos,ress):
                 k = k + 1
             html += "</tbody>"
             html += "</table>"
-
+            html += "</div>"
     if accion1 == "total_de_estudiantes":
         si_car_n = ress[0]
         id_car   = ress[1]
@@ -340,373 +344,6 @@ def  retornar_valores(datos,ress):
                     html += "</div>"
                     html += "</div>"
                 html += "</div>"
-    if accion1 == "total_de_estudiantes_carrera3":
-        if datos == "argumentar_poco_mas":
-            html += "argumentar_poco_mas"
-        else:
-            # Obtener el número de filasp
-            print("la carrera es ",datos[0][13])
-            valor = datos[0][13]
-            print(valor, " kdffasdfasd f sd fas df ",ress)
-            total = len(datos)
-            si_activo = ress[1]
-            si_desactivo = ress[2]
-            si_m = ress[3]
-            si_f = ress[4]
-            si_dep = ress[5]
-            si_prov = ress[6]
-            si_nom = ress[7]
-            si_apell = ress[8]
-            si_apla = ress[10]
-            si_apro = ress[11]
-            si_des = ress[9]
-            si_curso = ress[12]
-            carrera = ""
-            k = 0
-            print(nombre_carrera_retor(datos[0][13]),"no se encuentra a carrera")
-            for row in datos:
-                dep = row[7]
-                provi = row[8]
-                nom = row[1]
-                ap = row[2]
-                am = row[3]
-                grado = grado_Estudiante(row[18])
-                carrera = nombre_carrera_retor(row[13])
-                k = k + 1
-                if k == 1:
-                    break
-            si = "no"
-            if si_nom != "no":
-                mensaje = "El estudiante "
-            else:
-                mensaje = "Los estudiantes "
-
-            retu = verificar(si_activo, si_desactivo, si_m, si_f, si_dep, si_prov, si_nom, si_apell, carrera, dep, provi, nom, ap, am, si, si_apla, si_apro, si_des, si_curso, grado)
-
-            html += "<div class='alert alert-secondary' role='alert'>" + mensaje + " " + retu + " son " + str(total) + "</div>"
-            html += "<div class='alert alert-secondary' role='alert'>Detallamos en la siguiente tabla</div>"
-
-            html += "<h2>Tabla de estudiantes</h2>"
-            html += "<table class='table table-striped'>"
-            html += "<thead>"
-            html += "<tr>"
-            html += "<th>Nro</th>"
-            html += "<th>Nombre</th>"
-            html += "<th>Apellido Paterno</th>"
-            html += "<th>Apellido Materno</th>"
-            html += "<th>Cédula de Identidad</th>"
-            html += "<th>pais</th>"
-            html += "<th>Departamento</th>"
-            html += "<th>provincia</th>"
-            html += "<th>region</th>"
-            html += "<th>sexo</th>"
-            html += "<th>Abandono</th>"
-            html += "<th>Perdio año</th>"
-            html += "<th>Carrera</th>"
-            html += "<th>Curso</th>"
-            html += "</tr>"
-            html += "</thead>"
-            html += "<tbody>"
-            contar = 0
-            k = 0
-            for row in datos:
-                if carrera  == "":
-                    html += "Lo siento, no tengo una respuesta para esa pregunta o puede argumentar un poco mas."
-                else:
-                    html += "<tr>"
-                    html += "<td>" + str(k) + "</td>"
-                    html += "<td>" + row[1] + "</td>"
-                    html += "<td>" + row[2] + "</td>"
-                    html += "<td>" + row[3] + "</td>"
-                    html += "<td>" + str(row[5]) + "</td>"
-                    html += "<td>" + row[6] + "</td>"
-                    html += "<td>" + row[7] + "</td>"
-                    html += "<td>" + row[8] + "</td>"
-                    html += "<td>" + row[10] + "</td>"
-                    html += "<td>" + row[11] + "</td>"
-                    html += "<td>" + row[17] + "</td>"
-                    html += "<td>" + row[16] + "</td>"
-                    html += "<td>" + nombre_carrera_retor(row[13]) + "</td>"
-                    html += "<td>" + grado_Estudiante(row[18]) + "</td>"
-                    html += "</tr>"
-                contar += 1
-                k += 1
-            html += "</tbody>"
-            html += "</table>"
-
-
-    if accion1 == "datos_especificos_estudiante":
-        me = ""
-        if me == "argumentar_poco_mas":
-            html += "<div class='alert alert-secondary' role='alert'> Le pido que argumente un poco mas</div>"
-        else:
-            si_activo = "no"
-            si_desactivo = "no"
-            si_m = "no"
-            si_f = "no"
-            si_dep = "no"
-            si_prov = "no"
-            si_nom = ress[1]
-            si_apell = ""
-            si_apla = "no"
-            si_apro = "no"
-            si_des = "no"
-            si_curso = "no"
-            grado = "no"
-            k = 0
-            for row in datos:
-                carrera = row[10]
-                dep = row[5]
-                provi = row[6]
-                nom = row[0]
-                ap = row[1]
-                am = row[2]
-                if ress[2] != "no":
-                    si_apell = row[2]
-                else:
-                    si_apell = ress[2]
-                k = k + 1
-                if k == 1:
-                    break
-
-            si = "no"
-            mensaje = " Los datos del estudiante "
-            retu = verificar(si_activo, si_desactivo, si_m, si_f, si_dep, si_prov, si_nom, si_apell, carrera, dep, provi, nom, ap, am, si,si_apla, si_apro, si_des, si_curso, grado)
-
-            html += "<div class='alert alert-secondary' role='alert'>"+mensaje+" "+retu+" son los siguientes</div>"
-            html += "<div class='alert alert-secondary' role='alert'>Detallamos en la siguiente tabla</div>"
-
-            html += "<h2>Tabla de estudiantes</h2>"
-            html += "<table class='table table-striped'>"
-            html += "<thead>"
-            html += "<tr>"
-            html += "<th>Nro</th>"
-            html += "<th>Nombre</th>"
-            html += "<th>Apellido Paterno</th>"
-            html += "<th>Apellido Materno</th>"
-            html += "<th>Cédula de Identidad</th>"
-            html += "<th>pais</th>"
-            html += "<th>Departamento</th>"
-            html += "<th>provincia</th>"
-            html += "<th>region</th>"
-            html += "<th>sexo</th>"
-            html += "<th>carrera</th>"
-            html += "<th>Curso</th>"
-            html += "</tr>"
-            html += "</thead>"
-            html += "<tbody>"
-            contar = 0
-            k = 1
-            for row in datos:
-                if row[10] is None or row[10] == "":
-                    html += "Lo siento, no tengo una respuesta para esa pregunta o puede argumentar un poco mas."
-                else:
-                    html += "<tr>"
-                    html += "<td>"+str(k)+"</td>"
-                    html += "<td>"+row[0]+"</td>"
-                    html += "<td>"+row[1]+"</td>"
-                    html += "<td>"+row[2]+"</td>"
-                    html += "<td>"+str(row[3])+"</td>"
-                    html += "<td>"+row[4]+"</td>"
-                    html += "<td>"+row[5]+"</td>"
-                    html += "<td>"+row[6]+"</td>"
-                    html += "<td>"+row[8]+"</td>"
-                    html += "<td>"+row[9]+"</td>"
-                    html += "<td>"+row[10]+"</td>"
-                    html += "<td>"+grado_Estudiante(obtener_datos_de_curso(row[11]))+"</td>"
-
-                    html += "</tr>"
-                contar += 1
-                k += 1
-            html += "</tbody>"
-            html += "</table>"
-
-    if accion1 == "seleccionar_carreras_area":
-
-        # Variables para el bucle for
-        for row in datos:
-            area = row[1]
-            direccion_area = row[6]
-            telefono_area = row[3]
-            nombre_carrera = row[5]
-            direccion_carrera = row[6]
-
-        # Variables adicionales después del bucle
-        c_area = ress[1]
-        si_ar = ress[0]
-        si = "no"
-        mensaje = "El área de "
-        retu = verificar_area(si, area, direccion_area, telefono_area, nombre_carrera, direccion_carrera, si_ar, c_area)
-        html += "<div class='alert alert-secondary' role='alert'>" + mensaje + " " + retu + " tiene las siguientes carreras </div>"
-        html += "<h2>Tabla de carreras</h2>"
-        html += "<table class='table table-striped'>"
-        html += "<thead>"
-        html += "<tr>"
-        html += "<th>Nro</th>"
-        html += "<th>Carrera</th>"
-        html += "<th>Direccion</th>"
-        html += "</tr>"
-        html += "</thead>"
-        html += "<tbody>"
-        contar = 0
-        # Bucle para la tabla de carreras
-        k = 1
-        for row in datos:
-            if row[5] is None or row[5] == "":
-                html += "Lo siento, no tengo una respuesta para esa pregunta o puede argumentar un poco mas."
-            else:
-                html += "<tr>"
-                html += "<td>" + str(k) + "</td>"
-                html += "<td>" + row[5] + "</td>"
-                html += "<td>" + row[6] + "</td>"
-                html += "</tr>"
-            contar += 1
-            k = k + 1
-
-        html += "</tbody>"
-        html += "</table>"
-
-
-    if accion1 == "estudiante_por_area":
-        total = len(datos)
-        si_activo = ress[0]
-        si_desactivo = ress[1]
-        si_m = ress[2]
-        si_f = ress[3]
-        si_dep = ress[5]
-        si_prov = ress[4]
-        si_des = ress[6]
-        si_apla = ress[7]
-        si_apro = ress[8]
-        si_ar = ress[9]
-        c_area = ress[10]
-
-        # Supongo que solo necesitas los datos del primer estudiante
-        k = 0
-        for row in datos:
-            dep = row[7]
-            provi = row[8]
-            k = k+1
-            if k == 1:
-                break
-        si = "no"
-        mensaje = "Los estudiantes "
-        retu = verificar2(si_activo, si_desactivo, si_m, si_f, si_dep, si_prov, dep, provi, si_des, si_apla, si_ar, si_apro, c_area, si)
-
-        html += "<div class='alert alert-secondary' role='alert'>" + mensaje + " " + retu + " son " + str(total) + "</div>"
-        html += "<div class='alert alert-secondary' role='alert'>Detallamos en la siguiente tabla</div>"
-
-        html += "<h2>Tabla de estudiantes</h2>"
-        html += "<table class='table table-striped'>"
-        html += "<thead>"
-        html += "<tr>"
-        html += "<th>Nro</th>"
-        html += "<th>Nombre</th>"
-        html += "<th>Apellido Paterno</th>"
-        html += "<th>Apellido Materno</th>"
-        html += "<th>Cédula de Identidad</th>"
-        html += "<th>País</th>"
-        html += "<th>Departamento</th>"
-        html += "<th>Provincia</th>"
-        html += "<th>Región</th>"
-        html += "<th>Sexo</th>"
-        html += "<th>Abandono</th>"
-        html += "<th>Año perdido</th>"
-        html += "</tr>"
-        html += "</thead>"
-        html += "<tbody>"
-        contar = 0
-        # Bucle para la tabla de estudiantes
-        k = 1
-        for row in datos:
-            html += "<tr>"
-            html += "<td>" + str(k) + "</td>"
-            html += "<td>" + (row[1]) + "</td>"
-            html += "<td>" + row[2] + "</td>"
-            html += "<td>" + row[3] + "</td>"
-            html += "<td>" + str(row[5]) + "</td>"
-            html += "<td>" + row[6] + "</td>"
-            html += "<td>" + row[7] + "</td>"
-            html += "<td>" + row[8] + "</td>"
-            html += "<td>" + row[10] + "</td>"
-            html += "<td>" + row[11] + "</td>"
-            html += "<td>" + row[17] + "</td>"
-            html += "<td>" + row[16] + "</td>"
-            html += "</tr>"
-            k = k+1
-            contar += 1
-
-        html += "</tbody>"
-        html += "</table>"
-
-
-    if accion1 == "seleccionar_asignatura_estudiante":
-        nombres = ""
-        carrera = ""
-        grado = ""
-        mensaje = ""
-        si_hay = "no"
-        nom_apell = ress[4]
-        calif = ress[2]
-        if nom_apell != "no":
-
-            k = 0
-            for row in datos:
-                nombres = obtener_nombre(row[5])
-                carrera = nombre_carrera_retor(row[10])
-                grado = grado_Estudiante(row[11])
-                k=k+1
-                if(k == 1):
-                    break
-            si_car = ress[3]
-            si_curso = ress[5]
-            mensaje = "El estudiante " + nombres
-            si = "no"
-            mensaje += verificar_grado(si_car, si_curso, carrera, grado, si)
-            si_hay = "si"
-        else:
-            nombres = ress[0] + " " + ress[1]
-            mensaje = "No se encontró información del estudiante " + nombres
-
-        html = ""
-
-        if si_hay == "si":
-            if calif != "no":
-                html += "<div class='alert alert-secondary' role='alert'>" + mensaje + " tiene las siguientes calificaciones en las materias</div>"
-            else:
-                html += "<div class='alert alert-secondary' role='alert'>" + mensaje + " tiene las siguientes materias</div>"
-            html += "<h2>Tabla de Asignaturas</h2>"
-            html += "<table class='table table-striped'>"
-            html += "<thead>"
-            html += "<tr>"
-            html += "<th>Nro</th>"
-            html += "<th>Asignatura</th>"
-            html += "<th>Curso</th>"
-            if calif != "no":
-                html += "<th>Calificación</th>"
-            html += "</tr>"
-            html += "</thead>"
-            html += "<tbody>"
-            contar = 0
-            k = 1
-            for row in datos:
-                if row[10] is None or row[10] == "":
-                    html += "Lo siento, no tengo una respuesta para esa pregunta o puede argumentar un poco más."
-                else:
-                    html += "<tr>"
-                    html += "<td>" + str(k) + "</td>"
-                    html += "<td>" + nombre_materia(row[8]) + "</td>"
-                    html += "<td>" + grado_Estudiante(row[11]) + "</td>"
-                    if calif != "no":
-                        html += "<td>" + row[2] + "</td>"
-                    html += "</tr>"
-                contar += 1
-                k  = k + 1
-            html += "</tbody>"
-            html += "</table>"
-            html += "Se tiene " + str(contar) + " asignaturas activas"
-        else:
-            html+="<div class='alert alert-secondary' role='alert'>"+mensaje+"</div>"
     if accion1 == "total_de_estudiantes_estadisticas":
         si_car_n = ress[0]
         id_car   = ress[1]
@@ -784,6 +421,7 @@ def  retornar_valores(datos,ress):
                     html += "<h6 align='center'>Año "+str(anio)+"</h6>"
                     html += "</div>"
                     html += "<div class='panel-body'>"
+                    html += "<div class='table-responsive'>"
                     html +="<table class='table'>"
                     html+= "<thead>"
                     html+="<tr>"
@@ -802,6 +440,7 @@ def  retornar_valores(datos,ress):
                     html += "</div>"
                     html += "</div>"
                     html += "</div>"
+                    html += "</div>"
                     html += "<h6 align='center'>Año "+str(anio)+"</h6>"
                     html += "<div class='row'>"
                     for gra in grado:#recorremos todos los cursos aprobados por año
@@ -812,6 +451,7 @@ def  retornar_valores(datos,ress):
                         html += "Curso "+str(gra[1])
                         html += "</div>"
                         html += "<div class='panel-body'>"
+                        html += "<div class='table-responsive'>"
                         html +="<table class='table'>"
                         html+= "<thead>"
                         html+="<tr>"
@@ -831,8 +471,8 @@ def  retornar_valores(datos,ress):
                         html += "</div>"
                         html += "</div>"
                         html += "</div>"
-
-                html += "</div>"
+                        html += "</div>"
+                    html += "</div>"
         elif si_ar == "si_ar":
             mensaje = "La cantidad de estudiantes reprobados y aprobados en las siguientes areas son"
             html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
@@ -851,6 +491,7 @@ def  retornar_valores(datos,ress):
                     html += "Año "+str(anio)
                     html += "</div>"
                     html += "<div class='panel-body'>"
+                    html += "<div class='table-responsive'>"
                     html +="<table class='table'>"
                     html+= "<thead>"
                     html+="<tr>"
@@ -865,6 +506,7 @@ def  retornar_valores(datos,ress):
                     html+="</tr>"
                     html+="</tbody>"
                     html +="</table>"
+                    html +="</div>"
                     html += "</div>"
                     html += "</div>"
                     html += "</div>"
@@ -887,6 +529,7 @@ def  retornar_valores(datos,ress):
                     html+= "Año "+str(anio)
                     html += "</div>"
                     html += "<div class='panel-body'>"
+                    html += "<div class='table-responsive'>"
                     html +="<table class='table'>"
                     html+= "<thead>"
                     html+="<tr>"
@@ -901,6 +544,7 @@ def  retornar_valores(datos,ress):
                     html+="</tr>"
                     html+="</tbody>"
                     html +="</table>"
+                    html +="</div>"
                     html += "</div>"
                     html += "</div>"
                     html += "</div>"
@@ -921,6 +565,7 @@ def  retornar_valores(datos,ress):
                     html += "<h6 align='center'>Año "+str(anio)+"</h6>"
                     html += "</div>"
                     html += "<div class='panel-body'>"
+                    html += "<div class='table-responsive'>"
                     html +="<table class='table'>"
                     html+= "<thead>"
                     html+="<tr>"
@@ -935,6 +580,7 @@ def  retornar_valores(datos,ress):
                     html+="</tr>"
                     html+="</tbody>"
                     html +="</table>"
+                    html +='</div>'
                     html += "</div>"
                     html += "</div>"
                     html += "</div>"
@@ -949,6 +595,7 @@ def  retornar_valores(datos,ress):
                         html += "Curso "+str(gra[1])
                         html += "</div>"
                         html += "<div class='panel-body'>"
+                        html += "<div class='table-responsive'>"
                         html +="<table class='table'>"
                         html+= "<thead>"
                         html+="<tr>"
@@ -965,6 +612,7 @@ def  retornar_valores(datos,ress):
                         html+="</tr>"
                         html+="</tbody>"
                         html +="</table>"
+                        html +='</div>'
                         html += "</div>"
                         html += "</div>"
                         html += "</div>"
@@ -1397,6 +1045,7 @@ def  retornar_valores(datos,ress):
                             html += "Curso "+str(gra[1])#imprimimos el curso
                             html += "</div>"
                             html += "<div class='panel-body'>"
+                            html += "<div class='table-responsive'>"
                             html += "<table class='table table-striped' style='font-size: smaller;'>"
                             html += "<thead>"
                             html += "<tr>"
@@ -1412,6 +1061,7 @@ def  retornar_valores(datos,ress):
                             #html += menCOncluyeron(vareasApro[i],vareasApla[i])
                             html += "<tbody>"
                             html += "</table>"
+                            html+='</div>'
                             html += "</div>"
                             html += "</div>"
                             html += "</div>"
@@ -1444,6 +1094,7 @@ def  retornar_valores(datos,ress):
                         html += "Año "+str(anio)
                         html += "</div>"
                         html += "<div class='panel-body'>"
+                        html += "<div class='table-responsive'>"
                         html += "<table class='table table-striped' style='font-size: smaller;'>"
                         html += "<thead>"
                         html += "<tr>"
@@ -1465,6 +1116,7 @@ def  retornar_valores(datos,ress):
                             html+="<tr><td colspan='3'>No se encontro información</td></tr>"
                         html += "<tbody>"
                         html += "</table>"
+                        html += '</div>'
                         html += "</div>"
                         html += "</div>"
                         html += "</div>"
@@ -1496,6 +1148,7 @@ def  retornar_valores(datos,ress):
                         html += "Año "+str(anio)
                         html += "</div>"
                         html += "<div class='panel-body'>"
+                        html += "<div class='table-responsive'>"
                         html += "<table class='table table-striped' style='font-size: smaller;'>"
                         html += "<thead>"
                         html += "<tr>"
@@ -1517,6 +1170,7 @@ def  retornar_valores(datos,ress):
                                     #html += "<td>"+str(nombre_carrera(vareasT[i+1][asi[0]].get(1)))+"</td></tr>"
                         html += "<tbody>"
                         html += "</table>"
+                        html +='</div>'
                         html += "</div>"
                         html += "</div>"
                         html += "</div>"
@@ -1541,6 +1195,7 @@ def  retornar_valores(datos,ress):
                             html += "Curso "+str(gra[1])#imprimimos el curso
                             html += "</div>"
                             html += "<div class='panel-body'>"
+                            html += "<div class='table-responsive'>"
                             html += "<table class='table table-striped' style='font-size: smaller;'>"
                             html += "<thead>"
                             html += "<tr>"
@@ -1556,6 +1211,7 @@ def  retornar_valores(datos,ress):
                             #html += menCOncluyeron(vareasApro[i],vareasApla[i])
                             html += "<tbody>"
                             html += "</table>"
+                            html += "</div>"
                             html += "</div>"
                             html += "</div>"
                             html += "</div>"
@@ -1630,6 +1286,7 @@ def  retornar_valores(datos,ress):
                     html += "Año "+str(anio)
                     html += "</div>"
                     html += "<div class='panel-body'>"
+                    html += "<div class='table-responsive'>"
                     html += "<table class='table table-striped' style='font-size: smaller;'>"
                     html += "<thead>"
                     html += "<tr>"
@@ -1644,6 +1301,7 @@ def  retornar_valores(datos,ress):
                                       #html += menCOncluyeron(vareasApro[i],vareasApla[i])
                     html += "<tbody>"
                     html += "</table>"
+                    html += '</div>'
                     html += "</div>"
                     html += "</div>"
                     html += "</div>"
@@ -1668,6 +1326,7 @@ def  retornar_valores(datos,ress):
                     html += "Año "+str(anio)
                     html += "</div>"
                     html += "<div class='panel-body'>"
+                    html += "<div class='table-responsive'>"
                     html += "<table class='table table-striped' style='font-size: smaller;'>"
                     html += "<thead>"
                     html += "<tr>"
@@ -1680,6 +1339,7 @@ def  retornar_valores(datos,ress):
                     html += "<td>"+str(vareasr[anio][index])+"</td></tr>"
                     html += "<tbody>"
                     html += "</table>"
+                    html +='</div>'
                     html += "</div>"
                     html += "</div>"
                     html += "</div>"
@@ -1705,6 +1365,7 @@ def  retornar_valores(datos,ress):
                     html += "Año "+str(anio)
                     html += "</div>"
                     html += "<div class='panel-body'>"
+                    html += "<div class='table-responsive'>"
                     html += "<table class='table table-striped' style='font-size: smaller;'>"
                     html += "<thead>"
                     html += "<tr>"
@@ -1717,6 +1378,7 @@ def  retornar_valores(datos,ress):
                     html += "<td>"+str(vareasr[anio][are[0]-1])+"</td></tr>"
                     html += "<tbody>"
                     html += "</table>"
+                    html += '</div>'
                     html += "</div>"
                     html += "</div>"
                     html += "</div>"
@@ -1735,6 +1397,7 @@ def  retornar_valores(datos,ress):
                     html += "Año "+str(anio)
                     html += "</div>"
                     html += "<div class='panel-body'>"
+                    html += "<div class='table-responsive'>"
                     html += "<table class='table table-striped' style='font-size: smaller;'>"
                     html += "<thead>"
                     html += "<tr>"
@@ -1749,6 +1412,7 @@ def  retornar_valores(datos,ress):
                                       #html += menCOncluyeron(vareasApro[i],vareasApla[i])
                     html += "<tbody>"
                     html += "</table>"
+                    html += '</div>'
                     html += "</div>"
                     html += "</div>"
                     html += "</div>"
@@ -2085,7 +1749,6 @@ def  retornar_valores(datos,ress):
                 index1 = int(i)
                 #seleccionamos las asingturas con el cod de area
                 html += "<h6 align='center'>Área "+nombre_area_id(index1)+"</h6>"
-                html += "<div class='row'style = 'border: 1px solid black;'>"
                 html += "<div class = 'row'>"
                 for anio in range(a1, a2 + (1)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
                     html += "<div class='col-lg-4'>"
@@ -2103,7 +1766,7 @@ def  retornar_valores(datos,ress):
 
             mensaje = "La información cuantos inscritos existen por áreas y carreras lo detallamos en los siguientes cuadros"
             html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
-            html += "<button onclick='generar()'>Generar</button>"
+            """html += "<button onclick='generar()'>Generar</button>"
             html += "<script>"
             html += "function generar(){"
             html +="const formulario = document.createElement('form');"
@@ -2118,7 +1781,7 @@ def  retornar_valores(datos,ress):
             html +="document.body.appendChild(formulario);"
             html +="formulario.submit();"
             html += "}"
-            html += "</script>"
+            html += "</script>"""
             #crear ara areas
             html += "<h6 align='center'>Áreas</h6>"
             k1 = 1
@@ -2126,7 +1789,6 @@ def  retornar_valores(datos,ress):
             for ar in areas:#recorremos todo los id de areas
                 #seleccionamos las asingturas con el cod de area
                 html += "<h6 align='center'>Área "+nombre_area_id(ar[0])+"</h6>"
-                html += "<div class='row'style = 'border: 1px solid black;'>"
                 html += "<div class = 'row'>"
                 for anio in range(a1, a2 + (1)):#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
                     html += "<div class='col-lg-4'>"
@@ -2190,6 +1852,7 @@ def  retornar_valores(datos,ress):
                 html += "<h5 align = 'center'>Carrera "+str(nombre_carrera_retor(index1))+"</h5>"
                 html += "</div>"
                 html += "<div class='panel-body'>"
+                html += "<div class='table-responsive'>"
                 html+= "<table class='table'>"
                 html+= "<thead>"
                 html+="<tr>"
@@ -2213,6 +1876,7 @@ def  retornar_valores(datos,ress):
                         html+="</tr>"
                 html+="</tbody>"
                 html+= "</table>"
+                html += '</div>'
                 html += "</div>"
                 html += "</div>"
                 html += "</div>"
@@ -2241,6 +1905,7 @@ def  retornar_valores(datos,ress):
                     html += "<h6 align = 'center'>Carrera "+str(nombre_carrera_retor(car[0]))+"</h6>"
                     html += "</div>"
                     html += "<div class='panel-body'>"
+                    html += "<div class='table-responsive'>"
                     html+= "<table class='table'>"
                     html+= "<thead>"
                     html+="<tr>"
@@ -2264,6 +1929,7 @@ def  retornar_valores(datos,ress):
                             html+="</tr>"
                     html+="</tbody>"
                     html+= "</table>"
+                    html += "</div>"
                     html += "</div>"
                     html += "</div>"
                     html += "</div>"
@@ -2301,6 +1967,7 @@ def  retornar_valores(datos,ress):
                     html += "<h6 align='center'>Carrera "+nombre_carrera_retor(car[0])+"</h6>"
                     html += "</div>"
                     html += "<div class='panel-body'>"
+                    html += "<div class='table-responsive'>"
                     html+= "<table class='table'>"
                     html+= "<thead>"
                     html+="<tr>"
@@ -2325,6 +1992,7 @@ def  retornar_valores(datos,ress):
                             html+="</tr>"
                     html+="</tbody>"
                     html+= "</table>"
+                    html += '</div>'
                     html += "</div>"
                     html += "</div>"
                     html += "</div>"
@@ -2536,6 +2204,7 @@ def  retornar_valores(datos,ress):
                     html += "<h6 align='center'style='color:black'>"+str(anio)+"</h6>"
                     html += "</div>"
                     html += "<div class='panel-body'>"
+                    html += "<div class='table-responsive'>"
                     html+= "<table class='table'>"
                     html+= "<thead>"
                     html+="<tr>"
@@ -2550,6 +2219,7 @@ def  retornar_valores(datos,ress):
                     html+="</tr>"
                     html+="</tbody>"
                     html+= "</table>"
+                    html+='</div>'
                     html += "</div>"
                     html += "</div>"
                     html += "</div>"
@@ -2578,6 +2248,7 @@ def  retornar_valores(datos,ress):
                     html += "<h6 align='center'style='color:black'>"+str(anio)+"</h6>"
                     html += "</div>"
                     html += "<div class='panel-body'>"
+                    html += "<div class='table-responsive'>"
                     html+= "<table class='table'>"
                     html+= "<thead>"
                     html+="<tr>"
@@ -2592,6 +2263,7 @@ def  retornar_valores(datos,ress):
                     html+="</tr>"
                     html+="</tbody>"
                     html+= "</table>"
+                    html+='</div>'
                     html += "</div>"
                     html += "</div>"
                     html += "</div>"
@@ -2617,6 +2289,7 @@ def  retornar_valores(datos,ress):
                     html += "<h6 align='center'style='color:black'>"+str(anio)+"</h6>"
                     html += "</div>"
                     html += "<div class='panel-body'>"
+                    html += "<div class='table-responsive'>"
                     html+= "<table class='table'>"
                     html+= "<thead>"
                     html+="<tr>"
@@ -2631,6 +2304,7 @@ def  retornar_valores(datos,ress):
                     html+="</tr>"
                     html+="</tbody>"
                     html+= "</table>"
+                    html+='</div>'
                     html += "</div>"
                     html += "</div>"
                     html += "</div>"
@@ -2650,6 +2324,7 @@ def  retornar_valores(datos,ress):
                     html += "<h6 align='center'style='color:black'>"+str(anio)+"</h6>"
                     html += "</div>"
                     html += "<div class='panel-body'>"
+                    html += "<div class='table-responsive'>"
                     html+= "<table class='table'>"
                     html+= "<thead>"
                     html+="<tr>"
@@ -2664,6 +2339,7 @@ def  retornar_valores(datos,ress):
                     html+="</tr>"
                     html+="</tbody>"
                     html+= "</table>"
+                    html+='</div>'
                     html += "</div>"
                     html += "</div>"
                     html += "</div>"
@@ -2996,6 +2672,7 @@ def  retornar_valores(datos,ress):
                                 html += "Curso "+str(gra[1])
                                 html += "</div>"
                                 html += "<div class='panel-body'>"
+                                html += "<div class='table-responsive'>"
                                 html+= "<table class='table' style='font-size: 12px'>"
                                 html+= "<thead>"
                                 html+="<tr>"
@@ -3016,6 +2693,7 @@ def  retornar_valores(datos,ress):
                                     html+="</tr>"
                                 html+="</tbody>"
                                 html+= "</table>"
+                                html+='</div>'
                                 html += "</div>"
                                 html += "</div>"
                                 html += "</div>"
@@ -3029,6 +2707,7 @@ def  retornar_valores(datos,ress):
                             html += "<div class='panel-heading'>"
                             html += "</div>"
                             html += "<div class='panel-body'>"
+                            html += "<div class='table-responsive'>"
                             html+= "<table class='table' style='font-size:12px'>"
                             html+= "<thead>"
                             html+="<tr>"
@@ -3045,6 +2724,7 @@ def  retornar_valores(datos,ress):
                                 html+="</tr>"
                             html+="</tbody>"
                             html+= "</table>"
+                            html+='</div>'
                             html += "</div>"
                             html += "</div>"
                             html += "</div>"
@@ -3072,6 +2752,7 @@ def  retornar_valores(datos,ress):
                         html +="Curso "+str(gra[1])
                         html += "</div>"
                         html += "<div class='panel-body'>"
+                        html += "<div class='table-responsive'>"
                         html+= "<table class='table' style='font-size: 12px'>"
                         html+= "<thead>"
                         html+="<tr>"
@@ -3092,6 +2773,7 @@ def  retornar_valores(datos,ress):
                             html+="</tr>"
                         html+="</tbody>"
                         html+= "</table>"
+                        html+='</div>'
                         html += "</div>"
                         html += "</div>"
                         html += "</div>"
@@ -3107,6 +2789,7 @@ def  retornar_valores(datos,ress):
                     html += "<div class='panel-heading'>"
                     html += "</div>"
                     html += "<div class='panel-body'>"
+                    html += "<div class='table-responsive'>"
                     html+= "<table class='table' style='font-size:12px'>"
                     html+= "<thead>"
                     html+="<tr>"
@@ -3123,6 +2806,7 @@ def  retornar_valores(datos,ress):
                         html+="</tr>"
                     html+="</tbody>"
                     html+= "</table>"
+                    html+='</div>'
                     html += "</div>"
                     html += "</div>"
                     html += "</div>"
@@ -3152,6 +2836,7 @@ def  retornar_valores(datos,ress):
                                 html += "Curso "+str(gra[1])
                                 html += "</div>"
                                 html += "<div class='panel-body'>"
+                                html += "<div class='table-responsive'>"
                                 html+= "<table class='table' style='font-size: 12px'>"
                                 html+= "<thead>"
                                 html+="<tr>"
@@ -3172,6 +2857,7 @@ def  retornar_valores(datos,ress):
                                     html+="</tr>"
                                 html+="</tbody>"
                                 html+= "</table>"
+                                html+='</div>'
                                 html += "</div>"
                                 html += "</div>"
                                 html += "</div>"
@@ -3185,6 +2871,7 @@ def  retornar_valores(datos,ress):
                             html += "<div class='panel-heading'>"
                             html += "</div>"
                             html += "<div class='panel-body'>"
+                            html += "<div class='table-responsive'>"
                             html+= "<table class='table' style='font-size:12px'>"
                             html+= "<thead>"
                             html+="<tr>"
@@ -3201,6 +2888,7 @@ def  retornar_valores(datos,ress):
                                 html+="</tr>"
                             html+="</tbody>"
                             html+= "</table>"
+                            html+='</div>'
                             html += "</div>"
                             html += "</div>"
                             html += "</div>"
@@ -3281,6 +2969,7 @@ def  retornar_valores(datos,ress):
                                     html += str(gra[1])
                                     html += "</div>"
                                     html += "<div class='panel-body'>"
+                                    html += "<div class='table-responsive'>"
                                     html+= "<table class='table' style='font-size:12px'>"
                                     html+= "<thead>"
                                     html+="<tr>"
@@ -3297,6 +2986,7 @@ def  retornar_valores(datos,ress):
 
                                     html+="</tbody>"
                                     html+= "</table>"
+                                    html+='</div>'
                                     html += "</div>"
                                     html += "</div>"
                                     html += "</div>"
@@ -3335,6 +3025,7 @@ def  retornar_valores(datos,ress):
                             html += "Curso "+str(gra[1])
                             html += "</div>"
                             html += "<div class='panel-body'>"
+                            html += "<div class='table-responsive'>"
                             html+= "<table class='table' style='font-size:12px'>"
                             html+= "<thead>"
                             html+="<tr>"
@@ -3351,6 +3042,7 @@ def  retornar_valores(datos,ress):
 
                             html+="</tbody>"
                             html+= "</table>"
+                            html+='</div>'
                             html += "</div>"
                             html += "</div>"
                             html += "</div>"
@@ -3387,6 +3079,7 @@ def  retornar_valores(datos,ress):
                                     html += gra[1]
                                     html += "</div>"
                                     html += "<div class='panel-body'>"
+                                    html += "<div class='table-responsive'>"
                                     html+= "<table class='table' style='font-size:12px'>"
                                     html+= "<thead>"
                                     html+="<tr>"
@@ -3403,6 +3096,7 @@ def  retornar_valores(datos,ress):
 
                                     html+="</tbody>"
                                     html+= "</table>"
+                                    html+='</div>'
                                     html += "</div>"
                                     html += "</div>"
                                     html += "</div>"
@@ -3453,6 +3147,7 @@ def  retornar_valores(datos,ress):
                         html += " Curso "+str(NOmbredeGrado_por_id(id))
                         html += "</div>"
                         html += "<div class='panel-body'>"
+                        html += "<div class='table-responsive'>"
                         html+= "<table class='table' style='font-size:12px'>"
                         html+= "<thead>"
                         html+="<tr>"
@@ -3472,6 +3167,7 @@ def  retornar_valores(datos,ress):
                             html+="</tr>"
                         html+="</tbody>"
                         html+= "</table>"
+                        html+='</div>'
                         html += "</div>"
                         html += "</div>"
                         html += "</div>"
@@ -3502,6 +3198,7 @@ def  retornar_valores(datos,ress):
                                 html += " Curso "+str(cur[1])
                                 html += "</div>"
                                 html += "<div class='panel-body'>"
+                                html += "<div class='table-responsive'>"
                                 html+= "<table class='table' style='font-size:12px'>"
                                 html+= "<thead>"
                                 html+="<tr>"
@@ -3521,6 +3218,7 @@ def  retornar_valores(datos,ress):
                                     html+="</tr>"
                                 html+="</tbody>"
                                 html+= "</table>"
+                                html+='</div>'
                                 html += "</div>"
                                 html += "</div>"
                                 html += "</div>"
@@ -3552,6 +3250,7 @@ def  retornar_valores(datos,ress):
                                 html += " Curso "+str(cur[1])
                                 html += "</div>"
                                 html += "<div class='panel-body'>"
+                                html += "<div class='table-responsive'>"
                                 html+= "<table class='table' style='font-size:12px'>"
                                 html+= "<thead>"
                                 html+="<tr>"
@@ -3571,6 +3270,7 @@ def  retornar_valores(datos,ress):
                                     html+="</tr>"
                                 html+="</tbody>"
                                 html+= "</table>"
+                                html+='</div>'
                                 html += "</div>"
                                 html += "</div>"
                                 html += "</div>"
@@ -3771,6 +3471,7 @@ def  retornar_valores(datos,ress):
                             html += " Curso "+str(cur[1])
                             html += "</div>"
                             html += "<div class='panel-body'>"
+                            html += "<div class='table-responsive'>"
                             html+= "<table class='table' style='font-size:12px'>"
                             html+= "<thead>"
                             html+="<tr>"
@@ -3790,6 +3491,7 @@ def  retornar_valores(datos,ress):
                                 html+="</tr>"
                             html+="</tbody>"
                             html+= "</table>"
+                            html+='</div>'
                             html += "</div>"
                             html += "</div>"
                             html += "</div>"
@@ -3827,6 +3529,8 @@ def  retornar_valores(datos,ress):
                                 html += " Curso "+str(cur[1])
                                 html += "</div>"
                                 html += "<div class='panel-body'>"
+                                html += "<div class='table-responsive'>"
+
                                 html+= "<table class='table' style='font-size:12px'>"
                                 html+= "<thead>"
                                 html+="<tr>"
@@ -3846,6 +3550,7 @@ def  retornar_valores(datos,ress):
                                     html+="</tr>"
                                 html+="</tbody>"
                                 html+= "</table>"
+                                html+='</div>'
                                 html += "</div>"
                                 html += "</div>"
                                 html += "</div>"
@@ -3879,6 +3584,7 @@ def  retornar_valores(datos,ress):
                                 html += " Curso "+str(cur[1])
                                 html += "</div>"
                                 html += "<div class='panel-body'>"
+                                html += "<div class='table-responsive'>"
                                 html+= "<table class='table' style='font-size:12px'>"
                                 html+= "<thead>"
                                 html+="<tr>"
@@ -3898,6 +3604,7 @@ def  retornar_valores(datos,ress):
                                     html+="</tr>"
                                 html+="</tbody>"
                                 html+= "</table>"
+                                html+='</div>'
                                 html += "</div>"
                                 html += "</div>"
                                 html += "</div>"
@@ -4216,6 +3923,7 @@ def  retornar_valores(datos,ress):
                     html += "Año "+str(anio)
                     html += "</div>"
                     html += "<div class='panel-body'>"
+                    html += "<div class='table-responsive'>"
                     html+= "<table class='table' style='font-size:12px'>"
                     html+= "<thead>"
                     html+="<tr>"
@@ -4230,6 +3938,7 @@ def  retornar_valores(datos,ress):
                     html+="</tr>"
                     html+="</tbody>"
                     html+= "</table>"
+                    html+="</div>"
                     html += "</div>"
                     html += "</div>"
                     html += "</div>"
@@ -4253,6 +3962,7 @@ def  retornar_valores(datos,ress):
                     html += "Año "+str(anio)
                     html += "</div>"
                     html += "<div class='panel-body'>"
+                    html += "<div class='table-responsive'>"
                     html+= "<table class='table' style='font-size:12px'>"
                     html+= "<thead>"
                     html+="<tr>"
@@ -4267,6 +3977,7 @@ def  retornar_valores(datos,ress):
                     html+="</tr>"
                     html+="</tbody>"
                     html+= "</table>"
+                    html+='</div>'
                     html += "</div>"
                     html += "</div>"
                     html += "</div>"
@@ -4287,6 +3998,7 @@ def  retornar_valores(datos,ress):
                     html += "Año "+str(anio)
                     html += "</div>"
                     html += "<div class='panel-body'>"
+                    html += "<div class='table-responsive'>"
                     html+= "<table class='table' style='font-size:12px'>"
                     html+= "<thead>"
                     html+="<tr>"
@@ -4301,6 +4013,7 @@ def  retornar_valores(datos,ress):
                     html+="</tr>"
                     html+="</tbody>"
                     html+= "</table>"
+                    html+='</div>'
                     html += "</div>"
                     html += "</div>"
                     html += "</div>"
@@ -4319,6 +4032,7 @@ def  retornar_valores(datos,ress):
                     html += "Año "+str(anio)
                     html += "</div>"
                     html += "<div class='panel-body'>"
+                    html += "<div class='table-responsive'>"
                     html+= "<table class='table' style='font-size:12px'>"
                     html+= "<thead>"
                     html+="<tr>"
@@ -4333,6 +4047,7 @@ def  retornar_valores(datos,ress):
                     html+="</tr>"
                     html+="</tbody>"
                     html+= "</table>"
+                    html+='</div>'
                     html += "</div>"
                     html += "</div>"
                     html += "</div>"
@@ -4401,6 +4116,7 @@ def  retornar_valores(datos,ress):
                     html += "Año "+str(anio)
                     html += "</div>"
                     html += "<div class='panel-body'>"
+                    html += "<div class='table-responsive'>"
                     html+= "<table class='table' style='font-size:12px'>"
                     html+= "<thead>"
                     html+="<tr>"
@@ -4416,6 +4132,7 @@ def  retornar_valores(datos,ress):
                         html+="</tr>"
                     html+="</tbody>"
                     html+= "</table>"
+                    html+='</div>'
                     html += "</div>"
                     html += "</div>"
                     html += "</div>"
@@ -4439,6 +4156,7 @@ def  retornar_valores(datos,ress):
                     html += "Año "+str(anio)
                     html += "</div>"
                     html += "<div class='panel-body'>"
+                    html += "<div class='table-responsive'>"
                     html+= "<table class='table' style='font-size:12px'>"
                     html+= "<thead>"
                     html+="<tr>"
@@ -4454,6 +4172,7 @@ def  retornar_valores(datos,ress):
                         html+="</tr>"
                     html+="</tbody>"
                     html+= "</table>"
+                    html+='</div>'
                     html += "</div>"
                     html += "</div>"
                     html += "</div>"
@@ -4474,6 +4193,7 @@ def  retornar_valores(datos,ress):
                     html += "Año "+str(anio)
                     html += "</div>"
                     html += "<div class='panel-body'>"
+                    html += "<div class='table-responsive'>"
                     html+= "<table class='table' style='font-size:12px'>"
                     html+= "<thead>"
                     html+="<tr>"
@@ -4489,6 +4209,7 @@ def  retornar_valores(datos,ress):
                         html+="</tr>"
                     html+="</tbody>"
                     html+= "</table>"
+                    html+='</div>'
                     html += "</div>"
                     html += "</div>"
                     html += "</div>"
@@ -4507,6 +4228,7 @@ def  retornar_valores(datos,ress):
                     html += "Año "+str(anio)
                     html += "</div>"
                     html += "<div class='panel-body'>"
+                    html += "<div class='table-responsive'>"
                     html+= "<table class='table' style='font-size:12px'>"
                     html+= "<thead>"
                     html+="<tr>"
@@ -4522,6 +4244,7 @@ def  retornar_valores(datos,ress):
                         html+="</tr>"
                     html+="</tbody>"
                     html+= "</table>"
+                    html+='</div>'
                     html += "</div>"
                     html += "</div>"
                     html += "</div>"
@@ -4547,6 +4270,7 @@ def  retornar_valores(datos,ress):
                 (index1))+"</h6>"
                 html += "</div>"
                 html += "<div class='panel-body'>"
+                html += "<div class='table-responsive'>"
                 html+= "<table class='table' style='font-size:12px'>"
                 html+= "<thead>"
                 html+="<tr>"
@@ -4563,6 +4287,7 @@ def  retornar_valores(datos,ress):
                         html+="</tr>"
                 html+="</tbody>"
                 html+= "</table>"
+                html+='</div>'
                 html += "</div>"
                 html += "</div>"
                 html += "</div>"
@@ -4587,6 +4312,7 @@ def  retornar_valores(datos,ress):
                 html += "<h6 align='center'>Área "+ str(nombre_area_id(index1))+"</h6>"
                 html += "</div>"
                 html += "<div class='panel-body'>"
+                html += "<div class='table-responsive'>"
                 html+= "<table class='table' style='font-size:12px'>"
                 html+= "<thead>"
                 html+="<tr>"
@@ -4605,6 +4331,7 @@ def  retornar_valores(datos,ress):
                         html+="</tr>"
                 html+="</tbody>"
                 html+= "</table>"
+                html+='</div>'
                 html += "</div>"
                 html += "</div>"
                 html += "</div>"
@@ -4618,6 +4345,7 @@ def  retornar_valores(datos,ress):
         html += "<h6 align='center'>Áreas</h6>"
         html += "</div>"
         html += "<div class='panel-body'>"
+        html += "<div class='table-responsive'>"
         html+= "<table class='table' style='font-size:12px'>"
         html+= "<thead>"
         html+="<tr>"
@@ -4635,6 +4363,7 @@ def  retornar_valores(datos,ress):
             html+="</tr>"
         html+="</tbody>"
         html+= "</table>"
+        html+='</div>'
         html += "</div>"
         html += "</div>"
         html += "</div>"
@@ -4818,6 +4547,7 @@ def  retornar_valores(datos,ress):
                             html += " Curso "+str(NOmbredeGrado_por_id(id))
                             html += "</div>"
                             html += "<div class='panel-body'>"
+                            html += "<div class='table-responsive'>"
                             html+= "<table class='table' style='font-size:12px'>"
                             html+= "<thead>"
                             html+="<tr>"
@@ -4839,6 +4569,7 @@ def  retornar_valores(datos,ress):
                                     html+="</tr>"
                             html+="</tbody>"
                             html+= "</table>"
+                            html+='</div>'
                             html += "</div>"
                             html += "</div>"
                             html += "</div>"
@@ -4873,6 +4604,7 @@ def  retornar_valores(datos,ress):
                                 html += " Curso "+str(NOmbredeGrado_por_id(id))
                                 html += "</div>"
                                 html += "<div class='panel-body'>"
+                                html += "<div class='table-responsive'>"
                                 html+= "<table class='table' style='font-size:12px'>"
                                 html+= "<thead>"
                                 html+="<tr>"
@@ -4895,6 +4627,7 @@ def  retornar_valores(datos,ress):
                                         html+="</tr>"
                                 html+="</tbody>"
                                 html+= "</table>"
+                                html+='</div>'
                                 html += "</div>"
                                 html += "</div>"
                                 html += "</div>"
@@ -4928,6 +4661,7 @@ def  retornar_valores(datos,ress):
                                 html += " Curso "+str(NOmbredeGrado_por_id(id))
                                 html += "</div>"
                                 html += "<div class='panel-body'>"
+                                html += "<div class='table-responsive'>"
                                 html+= "<table class='table' style='font-size:12px'>"
                                 html+= "<thead>"
                                 html+="<tr>"
@@ -4950,6 +4684,7 @@ def  retornar_valores(datos,ress):
                                         html+="</tr>"
                                 html+="</tbody>"
                                 html+= "</table>"
+                                html+='</div>'
                                 html += "</div>"
                                 html += "</div>"
                                 html += "</div>"
@@ -5399,8 +5134,124 @@ def  retornar_valores(datos,ress):
                     else:#materia de un area completo
                         html+="<div class='alert alert-secondary'>La asignatura de "+nombre_asignatura(index)+" del area de "+nombre_area_id(vcar[index][anio]['area'])+" tiene "+str(vcar[index][anio]['aprobado'])+" desertores y "+str(vcar[index][anio]['reprobado'])+" que siguen del año "+str(anio)+"</div>"
 
+    if accion1 == "materia_total_datos":
+        si_mat = ress[0]
+        id_mat = ress[1]
+        si_car_n = ress[2]
+        id_car   = ress[3]
+        si_ar = ress[4]
+        id_ar  = ress[5]
+        si_total = ress[6]
+        fecha1 = ress[7]
+        fecha2 = ress[8]
+        if fecha1>fecha2:
+            aux = fecha1
+            fecha1 = fecha2
+            fecha2 = aux
+        fecha11 = fecha1
+        fecha22 = fecha2
+        vcar = {}
+        vare = {}
+        a11 = int(obtener_ano_de_fecha(fecha1))
+        a22 = int(obtener_ano_de_fecha(fecha2))
+        a1 = int(obtener_ano_de_fecha(fecha1))
+        a2 = int(obtener_ano_de_fecha(fecha2))
+        id_materias = eliminar_dobles(id_mat)
+        for mat in id_materias:
+            index = int(mat)
+            vcar[index] = {}
+            dat = seleccionar_asignatura_porID(index)
+            for anio in range(a1, a2 + 1):
+                vcar[index][anio] = {
+                    'aprobado': 0,
+                    'reprobado': 0,
+                    'desercion':0,
+                    'regulares':0,
+                    'inscritos':0,
+                    'avance':0,
+                    'tipo_asignatura': dat[11],
+                    'area':dat[10],
+                    'carrera':dat[8]
+                }
+
+        if isinstance(fecha1, str):
+            fecha1 = datetime.strptime(fecha1, "%Y-%m-%d").date()
+        if isinstance(fecha2, str):
+            fecha2 = datetime.strptime(fecha2, "%Y-%m-%d").date()
+        for row in datos:#recorremos los datos obtenidos de la base de datos
+          if not isinstance(row[7], type(None)) and row[7]>=fecha1 and row[7] <= fecha2:
+              anoBD = int(obtener_ano_de_fecha(row[7].strftime("%Y-%m-%d")))
+              if row[1]>50:
+                  vcar[row[4]][anoBD]['aprobado']+=1
+              elif row[1]<51:
+                  vcar[row[4]][anoBD]['reprobado']+=1
+              if row[3] == 'si':
+                  vcar[row[4]][anoBD]['desercion']+=1
+              if row[2] == 'activo':
+                  vcar[row[4]][anoBD]['regulares']+=1
+
+              vcar[row[4]][anoBD]['inscritos']+=1
+              vcar[row[4]][anoBD]['avance']=row[0]
+
+
+        html+="<div class='alert alert-secondary'>El resumen estadistico es lo siguiente</div>"
+        for mat in id_materias:
+            index = int(mat)
+            for anio in range(a1, a2 + 1):
+                if si_car_n == "si_car_n":
+                    carreras = eliminar_dobles(id_car)
+                    for car in carreras:
+                        ind = int(car)
+                        if ind == vcar[index][anio]['carrera']:
+                            html+="<div class='alert alert-secondary'>La asignatura de "+nombre_asignatura(index)+" de la carrera de "+nombre_carrera_retor(ind)+" del año "+str(anio)+"</div>"
+                            html+=tabla(vcar[index][anio]['avance'],vcar[index][anio]['inscritos'],vcar[index][anio]['desercion'],vcar[index][anio]['regulares'],vcar[index][anio]['aprobado'],vcar[index][anio]['reprobado'])
+                elif si_ar == "si_ar":
+                    areas = eliminar_dobles(id_ar)
+                    if vcar[index][anio]['tipo_asignatura'] == 2:#estamos en lo correcto es asignatura de todo el area
+                        for are in areas:
+                            ind = int(are)
+                            if ind == vcar[index][anio]['area']:
+                                html+="<div class='alert alert-secondary'>La asignatura de "+nombre_asignatura(index)+" del area del año "+str(anio)+"</div>"
+                                html+=tabla(vcar[index][anio]['avance'],vcar[index][anio]['inscritos'],vcar[index][anio]['desercion'],vcar[index][anio]['regulares'],vcar[index][anio]['aprobado'],vcar[index][anio]['reprobado'])
+                    else:
+                        html+="<div class='alert alert-secondary'>La asignatura de "+nombre_asignatura(index)+" de la carrera de "+nombre_carrera_retor(vcar[index][anio]['carrera'])+" del año "+str(anio)+"</div>"
+                        html+=tabla(vcar[index][anio]['avance'],vcar[index][anio]['inscritos'],vcar[index][anio]['desercion'],vcar[index][anio]['regulares'],vcar[index][anio]['aprobado'],vcar[index][anio]['reprobado'])
+                else:
+                    if vcar[index][anio]['tipo_asignatura'] == 1:#normal
+                        html+="<div class='alert alert-secondary'>La asignatura de "+nombre_asignatura(index)+" de la carrera de "+nombre_carrera_retor(vcar[index][anio]['carrera'])+" del año "+str(anio)+"</div>"
+                        html+=tabla(vcar[index][anio]['avance'],vcar[index][anio]['inscritos'],vcar[index][anio]['desercion'],vcar[index][anio]['regulares'],vcar[index][anio]['aprobado'],vcar[index][anio]['reprobado'])
+                    else:#materia de un area completo
+                        html+="<div class='alert alert-secondary'>La asignatura de "+nombre_asignatura(index)+" del area de "+nombre_area_id(vcar[index][anio]['area'])+" del año "+str(anio)+"</div>"
+                        html+=tabla(vcar[index][anio]['avance'],vcar[index][anio]['inscritos'],vcar[index][anio]['desercion'],vcar[index][anio]['regulares'],vcar[index][anio]['aprobado'],vcar[index][anio]['reprobado'])
     html += "</container>"
 
+    return html
+def tabla(avance,inscritos,desercion,regular,aprobados,reprobados):
+    html = ''
+    html += "<div class='table-responsive'>"
+    html += "<table class='table table-striped'>"
+    html += "<thead>"
+    html += "<tr>"
+    html += "<th>Avance</th>"
+    html += "<th>Inscritos</th>"
+    html += "<th>Deserción</th>"
+    html += "<th>Regulares</th>"
+    html += "<th>Aprobados</th>"
+    html += "<th>Reprobados</th>"
+    html += "</tr>"
+    html += "</thead>"
+    html += "<tbody>"
+    html += "<tr>"
+    html += "<td>" + str(avance) + "%</td>"
+    html += "<td>" + str(inscritos) + "</td>"
+    html += "<td>" + str(desercion) + "</td>"
+    html += "<td>" + str(regular) + "</td>"
+    html += "<td>" + str(aprobados) + "</td>"
+    html += "<td>" + str(reprobados) + "</td>"
+    html += "</tr>"
+    html += "</tbody>"
+    html += "</table>"
+    html += "</div>"
     return html
 
 def eliminar_dobles(cadena):
@@ -5462,212 +5313,3 @@ def verificar_area(si, area, direccion_area, telefono_area, nombre_carrera, dire
         elif si == "si":
             me += ", " + ab[int(par[i])-1]
     return me
-
-def verificar2(si_activo, si_desactivo, si_m, si_f, si_dep, si_prov, dep, provi, si_des, si_apla, si_ar, si_apro, c_area, si):
-    men = ""
-
-    if si_activo != "no" and si == "no":
-        men += " activos "
-        si = "si"
-
-    if si_desactivo != "no" and si == "no":
-        men += " desactivos "
-        si = "si"
-    elif si_desactivo != "no" and si == "si":
-        men += ", desactivos"
-
-    if si_m != "no" and si == "no":
-        men += " varones "
-        si = "si"
-    elif si_m != "no" and si == "si":
-        men += ", varones"
-
-    if si_f != "no" and si == "no":
-        men += " mujeres "
-        si = "si"
-    elif si_f != "no" and si == "no":
-        men += " , mujeres"
-
-    if si_dep != "no" and si == "no":
-        men += " del departamento " + dep + " "
-        si = "si"
-    elif si_dep != "no" and si == "si":
-        men += " , departamento de " + dep
-
-    if si_prov != "no" and si == "no":
-        men += " de la provincia de " + provi + " "
-        si = "si"
-    elif si_prov != "no" and si == "si":
-        men += " , provincia de " + provi
-
-    if si_des != "no" and si == "no":
-        men += " desertores "
-        si = "si"
-    elif si_des != "no" and si == "si":
-        men += ", desertores"
-        si = "si"
-
-    if si_apla != "no" and si == "no":
-        men += " reprobados "
-        si = "si"
-    elif si_apla != "no" and si == "si":
-        men += ", reprobados"
-        si = "si"
-
-    if si_apro != "no" and si == "no":
-        men += " aprobados "
-        si = "si"
-    elif si_apro != "no" and si == "si":
-        men += ", aprobados"
-        si = "si"
-
-    si1 = "no"
-    if si_ar != "no" and si == "si":
-        par = c_area.split("|")
-        for i in range(len(par)-1):
-            if si1 == "no" and si == "si":
-                men += " del area " + ab[int(par[i])-1]
-                si1 = "si"
-            elif si1 == "si":
-                men += ", del area " + ab[int(par[i])-1]
-        si = "si"
-
-    return men
-
-def verificarUNSXX(si_activo, si_desactivo, si_m, si_f, si_dep, si_prov, si_nom, si_apell, dep, provi, nom, ap, am, si):
-    men = ""
-
-    if si_activo != "no" and si == "no":
-        men += " activos "
-        si = "si"
-
-    if si_desactivo != "no" and si == "no":
-        men += " desactivos "
-        si = "si"
-    elif si_desactivo != "no" and si == "si":
-        men += ", desactivos"
-
-    if si_m != "no" and si == "no":
-        men += " varones "
-        si = "si"
-    elif si_m != "no" and si == "si":
-        men += ", varones"
-
-    if si_f != "no" and si == "no":
-        men += " mujeres "
-        si = "si"
-    elif si_f != "no" and si == "no":
-        men += " , mujeres"
-
-    if si_dep != "no" and si == "no":
-        men += " del departamento " + dep + " "
-        si = "si"
-    elif si_dep != "no" and si == "si":
-        men += " , departamento de " + dep
-
-    if si_prov != "no" and si == "no":
-        men += " de la provincia de " + provi + " "
-        si = "si"
-    elif si_prov != "no" and si == "si":
-        men += " , provincia de " + provi
-
-    hay = "no"
-    if si_nom != "no" and si == "no":
-        men += " con el nombre de " + nom
-        si = "si"
-        hay = "si"
-    elif si_nom != "no" and si == "si":
-        men += " , con el nombre de " + nom
-        hay = "si"
-
-    if si_apell != "no" and si == "no" and hay == "si":
-        if ap != "":
-            men += " " + ap
-        if am != "":
-            men += " " + am
-        si = "si"
-    elif si_apell != "no" and si == "si" and hay == "si":
-        if ap != "":
-            men += " " + ap
-        if am != "":
-            men += " " + am
-
-    men += " en la Universidad"
-    return men
-
-def verificar(si_activo, si_desactivo, si_m, si_f, si_dep, si_prov, si_nom, si_apell, carrera, dep, provi, nom, ap, am, si, si_apla, si_apro, si_des, si_curso, grado):
-    men = ""
-
-    if si_activo != "no" and si == "no":
-        men += " activos "
-        si = "si"
-    if si_desactivo != "no" and si == "no":
-        men += " desactivos "
-        si = "si"
-    elif si_desactivo != "no" and si == "si":
-        men += ", desactivos"
-    if si_m != "no" and si == "no":
-        men += " varones "
-        si = "si"
-    elif si_m != "no" and si == "si":
-        men += ", varones"
-    if si_f != "no" and si == "no":
-        men += " mujeres "
-        si = "si"
-    elif si_f != "no" and si == "si":
-        men += " , mujeres"
-    if si_dep != "no" and si == "no":
-        men += " del departamento " + dep + " "
-        si = "si"
-    elif si_dep != "no" and si == "si":
-        men += " , departamento de " + dep
-    if si_prov != "no" and si == "no":
-        men += " de la provincia de " + provi + " "
-        si = "si"
-    elif si_prov != "no" and si == "si":
-        men += " , provincia de " + provi
-    hay = "no"
-    if si_nom != "no" and si == "no":
-        men += " con el nombre de " + nom + ""
-        si = "si"
-        hay = "si"
-    elif si_nom != "no" and si == "si":
-        men += " , con el nombre de " + nom + ""
-        hay = "si"
-    if si_apell != "no" and si == "no" and hay == "si":
-        if ap != "":
-            men += " " + ap
-        if am != "":
-            men += " " + am
-        si = "si"
-    elif si_apell != "no" and si == "si" and hay == "si":
-        if ap != "":
-            men += " " + ap
-        if am != "":
-            men += " " + am
-    if si_des != "no" and si == "no":
-        men += " desertores "
-        si = "si"
-    elif si_des != "no" and si == "si":
-        men += ", desertores"
-        si = "si"
-    if si_apla != "no" and si == "no":
-        men += " reprobados "
-        si = "si"
-    elif si_apla != "no" and si == "si":
-        men += ", reprobados"
-        si = "si"
-    if si_apro != "no" and si == "no":
-        men += " aprobados "
-        si = "si"
-    elif si_apro != "no" and si == "si":
-        men += ", aprobados"
-        si = "si"
-    if si_curso != "no" and si == "no":
-        men += " del curso " + grado
-        si = "si"
-    elif si_curso != "no" and si == "si":
-        men += ", del curso " + grado
-        si = "si"
-    men += " de la carrera de " + carrera
-    return men
