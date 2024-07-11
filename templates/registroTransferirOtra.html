@@ -30,11 +30,15 @@
                       <label for="cod_es">Estudiante</label>
                       <select name="cod_es" id="cod_es" class="form-control" required>
                           <option value="">Seleccione al estudiante</option>
-                          {% for categoria in consultaestu %}
-                              <option value="{{ categoria[0] }}|{{ categoria[1] }}|{{ categoria[2] }}" title="{{ categoria[6] }}">
-                                  {{ categoria[3] }} {{ categoria[4] }} {{ categoria[5] }} - {{ categoria[7]}} - {{categoria[6]}}
-                              </option>
-                          {% endfor %}
+                          {% if consultaestu %}
+                            {% for categoria in consultaestu %}
+                                <option value="{{ categoria[0] }}|{{ categoria[1] }}|{{ categoria[2] }}" title="{{ categoria[6] }}">
+                                    {{ categoria[3] }} {{ categoria[4] }} {{ categoria[5] }} - {{ categoria[7]}} - {{categoria[6]}}
+                                </option>
+                              {% endfor %}
+                          {% else %}
+                              <option value="">No se encontraron Estudiantes transferidos</option>
+                          {% endif %}
                       </select>
                   </div>
                   <div class="mb-3">

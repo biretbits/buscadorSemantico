@@ -139,7 +139,12 @@
     function Cerrar_animacion() {
            // Simular un retraso de 3 segundos
         }
-
+        document.getElementById('buscar').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+              event.preventDefault();
+              buscarDatos();
+            }
+        });
     function buscarDatos(){
       var posible_respuesta = document.getElementById("posible_respuesta").value;
       var bus = document.getElementById("buscar").value;

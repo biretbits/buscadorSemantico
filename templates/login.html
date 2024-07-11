@@ -22,7 +22,11 @@
                  <img src="{{ url_for('static', filename='imagenes/user.png') }}" height="100px" width="100px"class="img-circle img-fluid d-block mx-auto">
                </div>
              </div>
+
               <form method="POST" action="{{ url_for('login') }}">
+                <div id='respuesta'>
+
+                </div>
                 <div class="mb-3">
                   <label for="usuario" class="form-label">Usuario</label>
                   <input type="text" class="form-control" id="usuario" name="usuario" required>
@@ -39,15 +43,25 @@
           </div>
         </div>
       </div>
-      <div id='respuesta'>
 
-      </div>
     </div>
 {% include 'footer.html' %}
 </body>
 </html>
 
     <script type="text/javascript">
+    document.getElementById('usuario').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+          validar();
+        }
+    });
+    document.getElementById('password').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+          validar();
+        }
+    });
+
+
     function validar(){
       var usuario=document.getElementById("usuario").value;
       var password=document.getElementById("password").value;
@@ -70,6 +84,7 @@
           }else{
             $('#respuesta').html("<div class='alert alert-danger'>Ocurrio un problema al Iniciar sesión</div>");
           }
+          vaciar();
             //retorno1(data);
         }
       });
@@ -77,7 +92,16 @@
 
 function redireccionar(){
   // Redireccionar a una URL específica
+  $('#respuesta').html("<div class='alert alert-success'>Inicio de sesión correcto</div>");
+  setTimeout(function() {
   window.location.href = "/";
+  }, 2000);
+}
+
+function vaciar(){
+  setTimeout(function() {
+    $('#respuesta').html("");
+  }, 2000);
 }
 
 </script>
