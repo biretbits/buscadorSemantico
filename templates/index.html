@@ -167,10 +167,13 @@
           }
         }
       }
+      document.getElementById('buscar').disabled = true;
+      document.getElementById('posible_respuesta').disabled=true;
       var datos=new  FormData();
       datos.append("bus",bus);
       datos.append("posible_respuesta",posible_respuesta);
       document.getElementById('loader').style.display = 'block';
+
       $.ajax({
         type: "POST", //type of submit
         cache: false, //important or else you might get wrong data returned to you
@@ -189,6 +192,8 @@
                   $('#respuesta').html(data);
                   var select = document.getElementById('posible_respuesta');
                   select.selectedIndex = 0;
+                  document.getElementById('buscar').disabled = false;
+                  document.getElementById('posible_respuesta').disabled=false;
               }, 1000);
             //retorno1(data);
           }
@@ -200,6 +205,8 @@
                 $('#respuesta').html("<div class ='alert alert-danger'>Ocurrio un error al buscar la información</div>");
                 var select = document.getElementById('posible_respuesta');
                 select.selectedIndex = 0;
+                document.getElementById('buscar').disabled = false;
+                document.getElementById('posible_respuesta').disabled=false;
             }, 1000);
         }
       });

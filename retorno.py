@@ -474,14 +474,14 @@ def  retornar_valores(datos,ress):
                         html += "</div>"
                     html += "</div>"
         elif si_ar == "si_ar":
-            mensaje = "La cantidad de estudiantes reprobados y aprobados en las siguientes areas son"
+            mensaje = "La cantidad de estudiantes reprobados y aprobados en las siguientes áreas son"
             html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
             s_dupli = eliminar_dobles(id_ar)#si hay doble veces repetido el id lo eliminamos a 1
             print(s_dupli,"vector ")
             for i in s_dupli:#recorremos todo los id de areas
                 index = int(i) - 1#obtenemos el id
                 index1 = int(i)
-                html += "<h6 align='center'>Area "+str(nombre_area_id(index1))+"<h6>"
+                html += "<h6 align='center'>Área "+str(nombre_area_id(index1))+"<h6>"
                 html += "<div class='row'>"
                 for anio in range(a1, a2 + 1):
 
@@ -515,12 +515,12 @@ def  retornar_valores(datos,ress):
             mensaje = "La cantidad de Estudiantes reprobados y aprobados "
             mensaje += " es lo siguiente por área y carreras"
             html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
-            html += "<h4 align='center'>Areas</h4>"
+            html += "<h4 align='center'>Áreas</h4>"
             areas = seleccionarAreas()
             for are in areas:#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
                 index = are[0] - 1#obtenemos el id
                 index1 = are[0]
-                html += "<h6 align='center'>Area "+str(nombre_area_id(index1))+"<h6>"
+                html += "<h6 align='center'>Área "+str(nombre_area_id(index1))+"<h6>"
                 html += "<div class='row'>"
                 for anio in range(a1, a2 + 1):
                     html += "<div class='col-lg-4' style = 'background-color:khaki;border: 1px solid black;'>"
@@ -666,14 +666,14 @@ def  retornar_valores(datos,ress):
             if not isinstance(row[8], type(None)) and row[8]>=fecha1 and row[8] <= fecha2:#la fecha obtenidad tiene que estar en ese rango
                 anoBD = int(obtener_ano_de_fecha(row[8].strftime("%Y-%m-%d")))
                 if row[2] == "no":#no abandonaron
-                    vare[row[7]][anoBD][row[2]]=+1
-                    vcar[row[5]][anoBD][row[2]]=+1
-                    vcarCur[row[5]][anoBD][row[3]][row[2]]=+1
+                    vare[row[7]][anoBD]['no']+=1
+                    vcar[row[5]][anoBD]['no']+=1
+                    vcarCur[row[5]][anoBD][row[3]]['no']+=1
                 elif row[2] == "si":#si abandonaron
-                    vare[row[7]][anoBD][row[2]]=+1
-                    vcar[row[5]][anoBD][row[2]]=+1
-                    vcarCur[row[5]][anoBD][row[3]][row[2]]=+1
-
+                    vare[row[7]][anoBD]['si']+=1
+                    vcar[row[5]][anoBD]['si']+=1
+                    vcarCur[row[5]][anoBD][row[3]]['si']+=1
+        grado = seleccionarGrado()
         if si_car_n == "si_car_n":#esta buscando carreras
             mensaje = "La cantidad de estudiantes que desertaron en las siguientes carreras son"
             html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
@@ -700,6 +700,7 @@ def  retornar_valores(datos,ress):
                     html += "<br>"
                     html += "<h6 align='center'>Año "+str(anio)+"</h6>"
                     html += "<div class='row'>"
+
                     for gra in grado:#recorremos todos los cursos aprobados por año
 
                         html += "<div class='col-lg-3' style = 'background-color:khaki;border: 1px solid black;'>"
@@ -745,12 +746,12 @@ def  retornar_valores(datos,ress):
             html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
             #crear para areas
 
-            html += "<h4 align='center'>Areas</h4>"
+            html += "<h4 align='center'>Áreas</h4>"
 
             for are in areas:#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
                 index = are[0] - 1#obtenemos el id
                 index1 = are[0]
-                html += "<h5 align='center'>Area "+str(nombre_area_id(index1))+"<h5>"
+                html += "<h5 align='center'>Área "+str(nombre_area_id(index1))+"<h5>"
                 html += "<div class='row'>"
                 for anio in range(a1, a2 + 1):#recorremos las fechas
                     html += "<div class='col-lg-4' style = 'background-color:khaki;border: 1px solid black;'>"
@@ -890,7 +891,7 @@ def  retornar_valores(datos,ress):
             for i in s_dupli:#recorremos todo los id de areas
                 index = int(i) - 1#obtenemos el id
                 index1 = int(i)
-                html += "<h5 align='center'>Area "+str(nombre_area_id(index1))+"<h5>"
+                html += "<h5 align='center'>Área "+str(nombre_area_id(index1))+"<h5>"
                 html += "<div class='row'>"
                 for anio in range(a1, a2 + 1):#recorremos las fechas
                     html += "<div class='col-lg-4' style = 'border: 1px solid black;'>"
@@ -1578,8 +1579,8 @@ def  retornar_valores(datos,ress):
         for row in datos:#recorremos los datos obtenidos de la base de datos
             if not isinstance(row[4], type(None)) and row[4]>=fecha1 and row[4] <= fecha2:
                 anoBD = int(obtener_ano_de_fecha(row[4].strftime("%Y-%m-%d")))
-                vanio[anoBD][row[14]-1] +=1
-                vcaranio[anoBD][row[12]-1] +=1
+                vanio[anoBD][row[7]-1] +=1
+                vcaranio[anoBD][row[8]-1] +=1
         if si_car_n == "si_car_n":#esta buscando carreras
             s_dupli = eliminar_dobles(id_car)#si hay doble veces repetido el id lo eliminamos a 1
             if len(s_dupli)==1:
@@ -4336,38 +4337,39 @@ def  retornar_valores(datos,ress):
                 html += "</div>"
                 html += "</div>"
                 html += "</div>"
-    if accion1 == 'areas_unsxx':
-        html+="<div align='center' class='alert alert-secondary'>La Universidad tiene las siguientes Áreas</div>"
-        html += "<div class='row'>"
-        html += "<div class='col-lg-12'>"
-        html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
-        html += "<div class='panel-heading'>"
-        html += "<h6 align='center'>Áreas</h6>"
-        html += "</div>"
-        html += "<div class='panel-body'>"
-        html += "<div class='table-responsive'>"
-        html+= "<table class='table' style='font-size:12px'>"
-        html+= "<thead>"
-        html+="<tr>"
-        html+="<td>Dirección</td>"
-        html+="<td>Área</td>"
-        html+="<td>Telefono área</td>"
-        html+="</tr>"
-        html+="</thead>"
-        html+="<tbody>"
-        for row in datos:#recorremos todo los id de areas
+        else:
+            html+="<div align='center' class='alert alert-secondary'>La Universidad tiene las siguientes Áreas</div>"
+            html += "<div class='row'>"
+            html += "<div class='col-lg-12'>"
+            html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+            html += "<div class='panel-heading'>"
+            html += "<h6 align='center'>Áreas</h6>"
+            html += "</div>"
+            html += "<div class='panel-body'>"
+            html += "<div class='table-responsive'>"
+            html+= "<table class='table' style='font-size:12px'>"
+            html+= "<thead>"
             html+="<tr>"
-            html+="<td>"+str(row[2])+"</td>"
-            html+="<td>"+str(row[1])+"</td>"
-            html+="<td>"+str((row[3]))+"</td>"
+            html+="<td>Dirección</td>"
+            html+="<td>Área</td>"
+            html+="<td>Telefono área</td>"
             html+="</tr>"
-        html+="</tbody>"
-        html+= "</table>"
-        html+='</div>'
-        html += "</div>"
-        html += "</div>"
-        html += "</div>"
-        html += "</div>"
+            html+="</thead>"
+            html+="<tbody>"
+            for row in datos:#recorremos todo los id de areas
+                html+="<tr>"
+                html+="<td>"+str(row[2])+"</td>"
+                html+="<td>"+str(row[1])+"</td>"
+                html+="<td>"+str((row[3]))+"</td>"
+                html+="</tr>"
+            html+="</tbody>"
+            html+= "</table>"
+            html+='</div>'
+            html += "</div>"
+            html += "</div>"
+            html += "</div>"
+            html += "</div>"
+
     if accion1 == "materias_aprobados":
         si_mat = ress[0]
         id_mat = ress[1]

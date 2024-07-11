@@ -790,7 +790,9 @@ def buscarDatosArea(texto,respuesta,consultas_sql):
         vec1.append(nombre_posicion_sql)
         vec1.append(response)
     else:
-        vec1.append("argumentar_poco_mas")
+        response = sql
+        vec1.append(nombre_posicion_sql)
+        vec1.append(response)
     return vec1
 
 #funcion para construir consulta sql con carreras y grados y obtener_areas_id

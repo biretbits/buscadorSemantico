@@ -1052,7 +1052,6 @@ def FormTransferirOtraUNiversidad():
 @app.route('/RegTransferirO',methods=['POST'])
 def RegFormTransferirOtra():
     if request.method == 'POST':
-
         cod_estudiante = request.form.get('cod_estudiante')
         otro = request.form.get('otro')
         fecha = request.form.get('fecha')
@@ -1060,20 +1059,22 @@ def RegFormTransferirOtra():
         area = request.form.get('area')
         conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
         cursor = conn.cursor()
-        estado = 'sactivo'
+        estado = 'activo'
         fecha_actual_formateada = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
         hora_actual = datetime.now().strftime('%H:%M:%S')
         try:
             with conn.cursor() as cursor:
                 # Consulta para verificar si el usuario existe
-                consultas = ("insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,cod_es,cod_area,cod_carrera,estado)"
-                "values(%s,%s,%s,%s,%s,%s,%s,%s,%s)")
-                cursor.execute(consultas,('si',otro,fecha_actual_formateada,fecha,hora_actual,cod_estudiante,area,carrera,estado))
+                consultas = ("insert into transferencia("
+                "transferencia,universidad_transferencia,fecha_hora,fecha,cod_es,cod_area,cod_carrera,estado)"
+                "values(%s,%s,%s,%s,%s,%s,%s,%s)")
+                cursor.execute(consultas,('si',otro,fecha_actual_formateada,fecha,cod_estudiante,area,carrera,estado))
             conn.commit()
         finally:
             # Cerrar la conexión siempre, incluso si ocurre una excepción
             conn.close()
         return 'correcto'
+
 #transferencias de otras universidades
 
 @app.route('/FormTranferirD')
@@ -1107,16 +1108,15 @@ def RegFormTransferirDEotra():
         area = request.form.get('area')
         conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
         cursor = conn.cursor()
-        estado = 'activo'
+        estado = 'sactivo'
         fecha_actual_formateada = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
         hora_actual = datetime.now().strftime('%H:%M:%S')
         try:
             with conn.cursor() as cursor:
                 # Consulta para verificar si el usuario existe
-                consultas = ("insert into transferencia("
-                "transferencia,universidad_transferencia,fecha_hora,fecha ,cod_es,cod_area,cod_carrera,estado)"
-                "values(%s,%s,%s,%s,%s,%s,%s,%s)")
-                cursor.execute(consultas,('si',otro,fecha_actual_formateada,fecha,cod_estudiante,area,carrera,estado))
+                consultas = ("insert into transferir(transferir,universidad_trans,fecha_hora,fecha,hora,cod_es,cod_area,cod_carrera,estado)"
+                "values(%s,%s,%s,%s,%s,%s,%s,%s,%s)")
+                cursor.execute(consultas,('si',otro,fecha_actual_formateada,fecha,hora_actual,cod_estudiante,area,carrera,estado))
             conn.commit()
         finally:
             # Cerrar la conexión siempre, incluso si ocurre una excepción
