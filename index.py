@@ -1501,6 +1501,48 @@ def RegFormAvance():
             conn.close()
         return 'correcto'
 
+#funcion para registrar  plan de estudios
+
+@app.route('/FormPlan')
+def FormPLanDE():
+    conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+    cursor = conn.cursor()
+
+    # Consulta para verificar si el usuario existe
+    consultas = "select cod_carrera,cod_area,nombre_carrera from carrera order by cod_carrera desc"
+    cursor.execute(consultas)
+    consulta = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+    if 'usuario' in session:
+        return render_template('registroPlanEstudio.html',usuario=session['usuario'],consulta=consulta)
+    return render_template('registroPlanEstudio.html',usuario=None,consulta=consulta)
+
+@app.route('/RegPlan',methods=['POST'])
+def RegFormPlan():
+    if request.method == 'POST':
+        nombre_plan = request.form.get("nombre_plan")
+        cod_carrera = request.form.get("carrera")
+        cod_area = request.form.get("area")
+        conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+        cursor = conn.cursor()
+        estado = 'activo'
+        fecha_actual = datetime.now().strftime("%Y")
+        fecha_actual_formateada = datetime.now().strftime("%Y-%m-%d")
+        try:
+            with conn.cursor() as cursor:
+                # Consulta para verificar si el usuario existe
+                consultas = ("insert into plan_de_estudio("
+                "nombre_pe,ano_pe,fecha_pe,cod_carrera,cod_area,estado"
+                ")values(%s,%s,%s,%s,%s,%s)")
+                cursor.execute(consultas,(nombre_plan,fecha_actual,fecha_actual_formateada,cod_carrera,cod_area,estado))
+            conn.commit()
+        finally:
+            # Cerrar la conexión siempre, incluso si ocurre una excepción
+            conn.close()
+        return 'correcto'
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0',debug=True,port=5003)
 
