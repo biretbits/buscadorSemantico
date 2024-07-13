@@ -86,7 +86,7 @@
                     <h4 class="text-center mb-1 text-primary" style='font-style: italic;'>Buscador semantico</h4>
                     <div class="mb-3" style="position: relative;">
                         <textarea class="form-control mb-2 border-primary" rows="2" id='buscar' name='buscar'></textarea>
-                        <button type="button" class="btn btn-sm" style="position: absolute; bottom: 2px; right: 2px;background-color:RGBA(200,200,210,0.8)" onclick="buscarDatos()" title='Buscar'>
+                        <button type="button" id='btn'class="btn btn-sm" style="position: absolute; bottom: 2px; right: 2px;background-color:RGBA(200,200,210,0.8)" onclick="buscarDatos()" title='Buscar'>
                           <img src="{{ url_for('static', filename='imagenes/buscar.png') }}" height="22px" width="22px"class="img-circle">
                         </button>
                     </div>
@@ -169,6 +169,7 @@
       }
       document.getElementById('buscar').disabled = true;
       document.getElementById('posible_respuesta').disabled=true;
+      document.getElementById('btn').disabled=true;
       var datos=new  FormData();
       datos.append("bus",bus);
       datos.append("posible_respuesta",posible_respuesta);
@@ -194,6 +195,7 @@
                   select.selectedIndex = 0;
                   document.getElementById('buscar').disabled = false;
                   document.getElementById('posible_respuesta').disabled=false;
+                  document.getElementById('btn').disabled=false;
               }, 1000);
             //retorno1(data);
           }
@@ -207,6 +209,7 @@
                 select.selectedIndex = 0;
                 document.getElementById('buscar').disabled = false;
                 document.getElementById('posible_respuesta').disabled=false;
+                document.getElementById('btn').disabled=false;            
             }, 1000);
         }
       });
