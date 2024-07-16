@@ -50,6 +50,10 @@ echo "instalacion completada"
 echo "instalando spacy"
 sudo pip install spacy
 
+echo "Instalar nltk"
+pip install nltk
+
+
 echo "descargando modelos"
 python3 -m spacy download es_core_news_sm
 

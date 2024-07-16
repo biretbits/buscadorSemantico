@@ -41,7 +41,7 @@ def obtener_carreras_nombre(texto):
      ,'radioterapia','radio nuclear','tecnico superior en medicina nuclear','medicina nuclear'
      ,'medi nuclear','tecnico superior radioterapia nuclear','tecnico superior medicina nuclear',
      'medi nuclear','recursos evaporiticos del litio','evaporiticos del litio','litio','evaporiticos litio'
-     ,'bio medico','biomedico','bioquimica farmacia']
+     ,'bio medico','biomedico','bioquimica farmacia','electro','informati','bio','automotriz','automotris','auto']
 
     carreras_encontradas = []
     # Convertir el texto a minúsculas y eliminar tildes
