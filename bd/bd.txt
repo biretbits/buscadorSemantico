@@ -303,6 +303,12 @@ nombre_parcial char(45),
 estado char(10) DEFAULT 'activo'
 );
 
+create table claves(
+cod_clave int not null auto_increment primary key,
+palabra_clave char(50),
+embedding LONGBLOB DEFAULT '',
+);
+
 
 insert into parciales(nombre_parcial)values('1er parcial');
 insert into parciales(nombre_parcial)values('2do parcial');

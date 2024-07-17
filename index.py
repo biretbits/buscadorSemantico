@@ -1543,6 +1543,179 @@ def RegFormPlan():
             conn.close()
         return 'correcto'
 
+#registro de palabras claves
+@app.route("/Clave")
+def tablaClave():
+    #return render_template("index.html")
+    # Verificar si existe la sesión de usuario
+    conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+    cursor = conn.cursor()
+    listarDeCuanto = 5
+    pagina = 1
+    # Consulta para verificar si el usuario existe
+    consulta_s = "SELECT COUNT(*) FROM claves"
+    cursor.execute(consulta_s)
+    num_filas_total = cursor.fetchone()[0]
+    TotalPaginas = ceil(num_filas_total / listarDeCuanto)
+    inicioList = (pagina - 1) * listarDeCuanto
+    consulta = "SELECT * FROM claves order by cod_clave desc LIMIT %s, %s"
+    cursor.execute(consulta, (inicioList, listarDeCuanto))
+    sql_consulta = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    adjacents = 1
+    anterior = "Anterior"
+    siguiente = "Siguiente"
+    start = max(pagina - adjacents, 1)
+    end = min(pagina + adjacents + 1, TotalPaginas + 1)
+    if 'usuario' in session:
+        # Renderizar el menú para usuario autenticado
+        return render_template('tablaClave.html', usuario=session['usuario'], consulta =sql_consulta, TotalPaginas=TotalPaginas,pagina=pagina,listarDeCuanto=listarDeCuanto
+        , start=start,
+        end=end,
+        anterior=anterior,
+        siguiente=siguiente,
+        adjacents=adjacents,
+        num_filas_total=num_filas_total)
+    # Si no existe la sesión de usuario, renderizar un menú básico
+    return render_template('tablaClave.html', usuario=None)
+
+
+
+@app.route('/tablaClave', methods=['POST'])
+def tablaClavess():
+    if request.method == 'POST':
+        # Obtener los datos enviados mediante Ajax
+        pagina = int(request.form.get('pagina'))
+        listarDeCuanto = int(request.form.get('listarDeCuanto'))
+        buscar = request.form.get('buscar')
+        sql1 = "select count(*) from claves"
+        sql = "select * from claves"
+        if buscar != '':
+            sql+=" where lower(palabra_clave) like '%"+buscar+"%' "
+            sql1+=" where lower(palabra_clave) like '%"+buscar+"%' "
+
+        #return render_template("index.html")
+        # Verificar si existe la sesión de usuario
+        conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+        cursor = conn.cursor()
+        cursor.execute(sql1)
+        num_filas_total = cursor.fetchone()[0]
+        TotalPaginas = ceil(num_filas_total / listarDeCuanto)
+        inicioList = (pagina - 1) * listarDeCuanto
+        sql+= " LIMIT "+str(inicioList)+" ,"+str(listarDeCuanto)+""
+        cursor.execute(sql)
+        sql_consulta = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        adjacents = 1
+        anterior = "Anterior"
+        siguiente = "Siguiente"
+        start = max(pagina - adjacents, 1)
+        end = min(pagina + adjacents + 1, TotalPaginas + 1)
+        html = ''
+        html += '''
+<div class='table-responsive'>
+    <table class='table table-bordered table-hover'>
+        <thead class='thead-dark'>
+            <tr>
+                <th>palabra clave</th>
+                <th>Acción</th>
+
+            </tr>
+        </thead>
+        <tbody>'''
+        for row in sql_consulta:
+            html+="<tr>"
+            html+="<td>"+str(row[1])+"</td>"
+            html+="<td>"
+            html+="<div class='btn-group' role='group' aria-label='Basic mixed styles example'>"
+            html+="<button type='button' class='btn btn-info' title='Editar' onclick='editaras("+str(row[0])+",\""+str(row[1])+"\")'>Editar</button>"
+            html+="</div>"
+            html+="</td>"
+
+        html+='''</tbody>
+    </table>
+</div>
+
+<div class='row'>
+    <div class='col'>
+        <div class='d-flex flex-wrap flex-sm-row justify-content-between'>
+            <ul class='pagination'>'''
+        html+="<li class='page-item active'>Página "+str(pagina)+" de "+str(TotalPaginas)+" de "+str(num_filas_total)+" registros</li>"
+        html+="</ul>"
+
+        html+="<ul class='pagination d-flex flex-wrap'>"
+
+        if pagina != 1:
+            html+="<li class='page-item'><a class='page-link' onclick='buscarpor("+str(pagina-1)+")'>"+anterior+"</a></li>"
+        else:
+            html+="<li class='page-item'><span class='page-link text-muted' >"+anterior+"</span></li>"
+
+
+        if pagina > (adjacents + 1):
+            html+="<li class='page-item'><a class='page-link' onclick='buscarpor(1)'>1</a></li>"
+
+        if pagina > (adjacents + 2):
+            html+="<li class='page-item'><span class='page-link'>...</span></li>"
+        for i in range(start, end):
+            if i == pagina:
+                html+="<li class='page-item active'><span class='page-link'>"+str(i)+"</span></li>"
+            else:
+                html+="<li class='page-item'><a class='page-link' onclick='buscarpor("+str(i)+")'>"+str(i)+"</a></li>"
+
+        if pagina < (TotalPaginas - adjacents - 1):
+            html+="<li class='page-item'><span class='page-link'>...</span></li>"
+
+        if pagina < (TotalPaginas - adjacents):
+            html+="<li class='page-item'><a class='page-link' onclick='buscarpor("+str(TotalPaginas)+")'>"+str(TotalPaginas)+"</a></li>"
+
+        if pagina < TotalPaginas:
+            html+="<li class='page-item'><a class='page-link' onclick='buscarpor("+str(pagina+1)+")'>"+siguiente+"</a></li>"
+        else:
+            html+="<li class='page-item'><span class='page-link text-muted'>"+siguiente+"</span></li>"
+
+        html+='''</ul>
+        </div>
+    </div>
+'''
+
+    return html
+@app.route("/RegClave",methods = ['POST'])
+def RegistrarClaves():
+
+    if request.method == 'POST':
+        # Obtener los datos enviados mediante Ajax
+        clave = request.form.get('clave')
+        va = request.form.get("id_clave")
+        if va:
+            id_clave = int(request.form.get('id_clave'))
+        else:
+            id_clave = ''
+        clave_nuevo = unidecode(clave.lower())
+        # Conectar a la base de datos
+        conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+        estado = 'activo'
+        try:
+            with conn.cursor() as cursor:
+                # Consulta parametrizada para insertar datos
+                if id_clave:
+                    sql_insert = "update claves set palabra_clave = %s where cod_clave = %s"
+                    cursor.execute(sql_insert, (clave_nuevo,id_clave))
+                else:
+                    sql_insert = "INSERT INTO claves(palabra_clave) VALUES (%s)"
+                    cursor.execute(sql_insert, (clave_nuevo))
+
+            # Confirmar la transacción
+            conn.commit()
+
+        finally:
+            # Cerrar la conexión siempre, incluso si ocurre una excepción
+            conn.close()
+
+        return 'correcto'
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0',debug=True,port=5003)
 

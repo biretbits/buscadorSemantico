@@ -1,11 +1,12 @@
-
+import spacy
+import nltk
 import pymysql
 from comprobar import obtener_carreras_nombre,detectar_numeros_delimiter,contiene_palabras_activas,contiene_palabras_desactivas,contiene_palabras_sexo_varon,contiene_palabras_sexo_mujer
 from comprobar import palabras_departamento,palabras_provincia,encontrar_nombre,encontrar_apellido,obtener_area,palabra_desercion
 from comprobar import palabra_aplazaron,palabra_aprobados,palabra_curso,obtener_que_curso_quiere
 from comprobar import palabra_nota,fechas,obtener_ano,obtener_areas_id,obtener_id_materia
 from comprobar import seleccionar_si_quiere_por_area_o_carrera
-from sql import seleccionar_estudiante1,seleccionar_consultasEmbeddings,seleccionar_respuesta_y_consulta
+from sql import seleccionar_estudiante1,seleccionar_consultasEmbeddings,seleccionar_respuesta_y_consulta,seleccionarTodoPalabraClaves
 from sentence_transformers import SentenceTransformer, util
 import numpy as np
 from datetime import datetime
@@ -13,8 +14,11 @@ from comprobar import obtener_ano_de_fecha
 from sklearn.metrics.pairwise import cosine_similarity
 
 from unidecode import unidecode
+from nltk.corpus import wordnet as wn
+
 # Cargar el modelo pre-entrenado
 model = SentenceTransformer('all-MiniLM-L6-v1')
+nlp = spacy.load("es_core_news_sm")
 #model = SentenceTransformer('paraphrase-MiniLM-L6-v2')
 #e.estado = 'desactivo' or e.cod_area = 3 and e.sexo = 'femenino' or  e.sexo = 'masculino';"
 consultas_aux= {"activo_es" :" e.estado = 'activo'",
@@ -87,10 +91,8 @@ def obtener_embedding(texto,posible_respuesta):
         result = cursor.fetchone()
         embedding_str = result[0]
         codigo = result[1]
-        print("el id es ",codigo)
         # Convertir la cadena de texto del embedding a un array numpy
-
-        print(posible_respuesta," posible res")
+        #print(posible_respuesta," posible res")
         try:
             with conn.cursor() as cursor:
                 if posible_respuesta:
@@ -126,24 +128,73 @@ def seleccionarEmbeddinBd():
 
     cursor = conn.cursor()
     # Consulta SQL para obtener el embedding
-    sql_consulta = "SELECT cod_respuesta,embedding FROM embeddings WHERE cod_respuesta is not null"
+    sql_consulta = "SELECT cod_respuesta,embedding,texto FROM embeddings WHERE cod_respuesta is not null"
     # Ejecutar la consulta SQL
     cursor.execute(sql_consulta)
     embeddings = []
     codigos = []
+    texto = []
     # Obtener todos los embeddings y códigos de asignatura
     for row in cursor.fetchall():
         codigos.append(row[0])
         embeddings.append(np.frombuffer(row[1], dtype=np.float32))  # Convertir el blob a un array numpy
-    return codigos,embeddings
+        texto.append(row[2])
+    return codigos,embeddings,texto
 
 
 def eliminar_tildes(texto):
     return unidecode(texto)
 
+carreras_no_tomar = ["informatica",
+    "mecanica automotriz","minas",'contaduria publica','conta','contaduria',"electromecanica","mecanica",
+     'mecanica automotris',"agronomia",'agro',"enfermeria","bioquimica","bio quimica",'biofar',"electro mecanica","civil","medicina",'topografia','enfermeria','enfer',"minas topografia","derecho","contaduria","contaduria publica",
+     "comunicacion social","ciencias de la educacion"
+     ,"laboratorio clinico","odontologia","odonto","infor",'tecnico superior en radioterapia nuclear','radioterapia nuclear'
+     ,'radioterapia','radio nuclear','tecnico superior en medicina nuclear','medicina nuclear'
+     ,'medi nuclear','tecnico superior radioterapia nuclear','tecnico superior medicina nuclear',
+     'medi nuclear','recursos evaporiticos del litio','evaporiticos del litio','litio','evaporiticos litio'
+     ,'bio medico','biomedico','bioquimica farmacia','electro','informati','bio','automotriz','automotris','auto']
+
+areas_no_tomar = ['tecnologia','salud','social','tecnologi','salu','sociales','sal','tecnolog','socia','sociale','tecnolo','tecnol','tecno','soci']
+tambien_no_tomar = ['año','ano','gestion','gestio','gesti']
+otros_no_tomar = ['area','are','ar','areas','carrera','carreras','carrer','carre','unsxx','universidad','nacional','siglo','xx','universi','naciona']
+def filtrar(texto):
+    doc = nlp(texto)
+    palabras_filtradas = [token.text for token in doc if not token.is_stop and (not token.text.isdigit() and not isinstance(token.text, int)) and not token.text in tambien_no_tomar and not token.text in carreras_no_tomar  and not token.text in areas_no_tomar and not token.text in otros_no_tomar and not token.is_space]
+    return palabras_filtradas
+
+def sinonimos(palabra):
+    doc = nlp(palabra)
+    raiz = doc[0].lemma_
+    sinonimos = set()
+    # Buscar sinónimos en WordNet
+    for synset in wn.synsets(palabra, lang='spa'):
+        for lemma in synset.lemmas(lang='spa'):
+            sinonimos.add(lemma.name())
+
+    # Agregar variantes flexionadas (ejemplo: de "aprobar" a "aprobaron", "aprobados", etc.)
+    derivaciones = set()
+    derivaciones.add(palabra)  # Agregar la palabra original
+    derivar = ['dos','on','do','damente','as','an','iamos','ias','ia','e','is','iais','ais','mos']
+    # Agregar variantes flexionadas basadas en reglas simples (puedes expandir estas reglas según tus necesidades)
+    for sino in sinonimos:
+        for de in derivar:
+            derivaciones.add(sino + de)
+
+    if raiz:
+        derivaciones.add(raiz)
+        for de in derivar:
+            derivaciones.add(raiz + de)
+        # Agregar más formas flexionadas según las reglas
+    # Combinar sinónimos y variantes flexionadas
+    resultado = list(sinonimos.union(derivaciones))
+    return resultado
+
 def buscar(texto,posible_respuesta):
-    print(posible_respuesta,"respuenndndndnnnnnnnnnnn")
     texto = eliminar_tildes(texto.lower())
+
+    # Filtrar las palabras no deseadas (palabras de apoyo como conjunciones, preposiciones, etc.)
+    palabras_filtradas = filtrar(texto)
     #print(texto)
     consulta = ""
     response = "argumentar_poco_mas"
@@ -153,22 +204,81 @@ def buscar(texto,posible_respuesta):
     # Inicializar lista para almacenar los resultados de la similitud del coseno
     coseno_salida = []
     # Calcular la similitud coseno entre la consulta y todas las oraciones
-    codigos,embedding = seleccionarEmbeddinBd()#seleccionar embedding de base de dtos
+    codigos,embedding,text_new = seleccionarEmbeddinBd()#seleccionar embedding de base de dtos
     embe = np.array(embedding)
     similitudes = cosine_similarity([texto_embedding], embe)
-    indice_max_coseno = similitudes.argmax()
-    max_coseno = similitudes[0, indice_max_coseno]
-    codigo_respuesta = codigos[indice_max_coseno]
-    respuesta_bd = seleccionar_respuesta_y_consulta(codigo_respuesta)
-    consultas_sql={}
-    if respuesta_bd != "no":
-        response = respuesta_bd[1]
-        consultas_sql[response] = respuesta_bd[2]
+    #indice_max_coseno = similitudes.argmax()
+
+    # Obtener los índices de las similitudes ordenadas de mayor a menor
+    indices_ordenados = np.argsort(similitudes[0])[::-1]
+
+    # Seleccionar los 10 máximos
+    top_10_indices = indices_ordenados[:10]
+    # Obtener los códigos y respuestas asociadas a los 10 máximos
+    top_10_textos = [text_new[idx] for idx in top_10_indices]
+    top_10_codigos = [codigos[idx] for idx in top_10_indices]
+    #top_10_respuestas = [seleccionar_respuesta_y_consulta(codigos[idx]) for idx in top_10_indices]
+    vec_suma = [0]*10
+    vec_id = [0]*10
+    # Imprimir los resultados o hacer lo que necesites con ellos
+    id = 0
+    maxx = 0
+    palabras_claves = seleccionarTodoPalabraClaves()
+    j = 0
+    #recorremos las 10 semejansas semanticas
+    print(palabras_filtradas," principal")
+    for res in top_10_textos:
+        #obtenemos los token pero filtradas de palabras que no nos interesan
+        palabras_fil_res = filtrar(res)
+        #recorremos los tokens de uno en uno de las similitudes semanticas
+        for pal in palabras_fil_res:
+            contar_palabras_filtradas=0
+            descartar = 0
+            seguir = 0
+            #recorremos los tokens filtrados de lo que ingreso el usuario en el buscador
+            for pa in palabras_filtradas:
+                sino = sinonimos(pa)#obtenemos de cada token sus derivaciones y si hay sus
+                #preguntamos si la primera palabra existe en los sinonimos
+                if pal in sino:
+                    #i hay contamos mas 1
+                    contar_palabras_filtradas+=1
+                    seguir = 1
+                    break
+                else:
+                    seguir = 0
+            if seguir == 0:
+                if pal in palabras_claves:
+                    descartar = 1
+            print(palabras_fil_res,"   contar   ",contar_palabras_filtradas," descartar ",descartar)
+            if contar_palabras_filtradas > 0 and descartar == 0:
+                id_max = top_10_codigos[j]
+                vec_suma[j]+=contar_palabras_filtradas
+                vec_id[j]=id_max
+            elif descartar == 1:
+                vec_suma[j] = 0
+                vec_id[j] = 0
+                break
+        j += 1
+
+    maximo = 0
+    print(vec_suma,"   ",vec_id)
+    maximo = max(vec_suma)
+    if maximo > 0:
+        posicion = vec_suma.index(maximo)
+        id_max = vec_id[posicion]
+        ##max_coseno = similitudes[0, indice_max_coseno]
+        #codigo_respuesta = codigos[indice_max_coseno]
+        respuesta_bd = seleccionar_respuesta_y_consulta(id_max)
+        consultas_sql={}
+        if respuesta_bd != "no":
+            response = respuesta_bd[1]
+            consultas_sql[response] = respuesta_bd[2]
     # Ordenar las oraciones según la similitud
     #resultados = zip(range(len(cosine_scores)), cosine_scores)
     #sorted_results = sorted(resultados, key=lambda x: x[1], reverse=True)
     #resultado_tensor = sorted_results[0][1]
-    print(response)
+    print(response,"  repuesta")
+
     if response:
         vec1=[]
         if response == "ver_carreras":
@@ -472,6 +582,9 @@ def buscar(texto,posible_respuesta):
             res = construir_consulta_materia_datos(texto,"materia_total_datos",consultas_sql)
             for r in res:
                 vec1.append(r)
+        if response == 'argumentar_poco_mas':
+            vec1 = []
+            vec1.append(response)
         return vec1
     else:
         vec1=[]
@@ -790,7 +903,9 @@ def buscarDatosArea(texto,respuesta,consultas_sql):
         vec1.append(nombre_posicion_sql)
         vec1.append(response)
     else:
-        vec1.append("argumentar_poco_mas")
+        response = sql
+        vec1.append(nombre_posicion_sql)
+        vec1.append(response)
     return vec1
 
 #funcion para construir consulta sql con carreras y grados y obtener_areas_id
@@ -964,7 +1079,7 @@ def construir_consulta_materia(texto,respuesta,consultas_sql):
         for mat in materias:
             idd+=str(mat)+","
             if si == "no":
-                response+=" where cod_asig = "+str(mat)
+                response+=" where cod_parcial = 1 and cod_asig = "+str(mat)
                 si = "si"
             elif si == "si":
                 response+= " or cod_asig = "+str(mat)

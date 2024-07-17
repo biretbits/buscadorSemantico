@@ -6,7 +6,7 @@ from comprobar import palabras_departamento,palabras_provincia,encontrar_nombre,
 from comprobar import palabra_aplazaron,palabra_aprobados,palabra_curso,obtener_que_curso_quiere
 from comprobar import palabra_nota,fechas,obtener_ano,obtener_areas_id,obtener_id_materia
 from comprobar import seleccionar_si_quiere_por_area_o_carrera
-from sql import seleccionar_estudiante1,seleccionar_consultasEmbeddings,seleccionar_respuesta_y_consulta
+from sql import seleccionar_estudiante1,seleccionar_consultasEmbeddings,seleccionar_respuesta_y_consulta,seleccionarTodoPalabraClaves
 from sentence_transformers import SentenceTransformer, util
 import numpy as np
 from datetime import datetime
@@ -16,7 +16,6 @@ from sklearn.metrics.pairwise import cosine_similarity
 from unidecode import unidecode
 from nltk.corpus import wordnet as wn
 
-nltk.download('omw-1.4')
 # Cargar el modelo pre-entrenado
 model = SentenceTransformer('all-MiniLM-L6-v1')
 nlp = spacy.load("es_core_news_sm")
@@ -93,8 +92,7 @@ def obtener_embedding(texto,posible_respuesta):
         embedding_str = result[0]
         codigo = result[1]
         # Convertir la cadena de texto del embedding a un array numpy
-
-        print(posible_respuesta," posible res")
+        #print(posible_respuesta," posible res")
         try:
             with conn.cursor() as cursor:
                 if posible_respuesta:
@@ -162,7 +160,7 @@ tambien_no_tomar = ['año','ano','gestion','gestio','gesti']
 otros_no_tomar = ['area','are','ar','areas','carrera','carreras','carrer','carre','unsxx','universidad','nacional','siglo','xx','universi','naciona']
 def filtrar(texto):
     doc = nlp(texto)
-    palabras_filtradas = [token.text for token in doc if not token.is_stop and (not token.text.isdigit() and not isinstance(token.text, int)) and not token.text in tambien_no_tomar and not token.text in carreras_no_tomar  and not token.text in areas_no_tomar and not token.text in otros_no_tomar and not token.is_space]
+    palabras_filtradas = [token.text for token in doc if not token.is_stop and (not token.text.isdigit() and not isinstance(token.text, int)) and not token.text in tambien_no_tomar and not token.text in carreras_no_tomar  and not token.text in areas_no_tomar and not token.text in otros_no_tomar and not token.is_space and not token.is_punct]
     return palabras_filtradas
 
 def sinonimos(palabra):
@@ -189,6 +187,8 @@ def sinonimos(palabra):
             derivaciones.add(raiz + de)
         # Agregar más formas flexionadas según las reglas
     # Combinar sinónimos y variantes flexionadas
+    for i in range(1, len(palabra)):
+        derivaciones.add(palabra[:-i])
     resultado = list(sinonimos.union(derivaciones))
     return resultado
 
@@ -225,35 +225,67 @@ def buscar(texto,posible_respuesta):
     # Imprimir los resultados o hacer lo que necesites con ellos
     id = 0
     maxx = 0
-    print("esto es   ",palabras_filtradas)
-    for pal in palabras_filtradas:#cual es la cantidad de aprobados
-        sino = sinonimos(pal)#aproabado aprobaron apr
-        max_pal = 0
-        id_max = 0
-        j = 0
+    palabras_claves = seleccionarTodoPalabraClaves()
+    j = 0
+    #recorremos las 10 semejansas semanticas
+    print(palabras_filtradas," principal")
+    diccionario = {}
+    for pa in palabras_filtradas:
+        sino = sinonimos(pa)
+        for si in sino:
+            diccionario[si] = [0]*10
 
-        for res in top_10_textos:
-            palabras_fil_res = filtrar(res)
-            contar_palabras_filtradas = sum(1 for pa in palabras_fil_res if pa in sino)
-            print(j,"   ",palabras_fil_res,"  si ", contar_palabras_filtradas)
-            if contar_palabras_filtradas > 0:
-                max_pal = contar_palabras_filtradas
-                id_max = top_10_codigos[j]
-                vec_suma[j]+=contar_palabras_filtradas
-                vec_id[j]=id_max
-            j += 1
+    k = 0
+    for res in top_10_textos:
+        #obtenemos los token pero filtradas de palabras que no nos interesan
+        palabras_fil_res = filtrar(res)
+        seguir = 0
+        existe = 0
+        for pal in palabras_fil_res:
+            if pal in diccionario:
+                diccionario[pal][k]=1
+                if pal in palabras_claves:
+                    existe = 1
+            else:
+                if pal in palabras_claves:
+                    seguir = 1
+        #print(palabras_fil_res,"  se  ",seguir,"   existe   ",existe)
+        if existe == 0 and seguir == 1:
+            for pal in palabras_fil_res:
+                if pal in diccionario:
+                    diccionario[pal][k] = 0
+        elif existe == 1 and seguir == 1:
+            if len(palabras_filtradas) < len(palabras_fil_res):
+                for pal in palabras_fil_res:
+                    if pal in diccionario:
+                        diccionario[pal][k] = 0
+        k = k + 1
+    k = 0
+    for res in top_10_textos:
+        #obtenemos los token pero filtradas de palabras que no nos interesan
+        palabras_fil_res = filtrar(res)
+        suma = 0
+        for pal in palabras_fil_res:
+            if pal in diccionario:
+                suma+= diccionario[pal][k]
+        vec_suma[k] = suma
+        k = k + 1
     maximo = 0
-    print(vec_suma,"   ",vec_id)
+    print(vec_suma,"   ")
     maximo = max(vec_suma)
-    posicion = vec_suma.index(maximo)
-    id_max = vec_id[posicion]
-    ##max_coseno = similitudes[0, indice_max_coseno]
-    #codigo_respuesta = codigos[indice_max_coseno]
-    respuesta_bd = seleccionar_respuesta_y_consulta(id_max)
-    consultas_sql={}
-    if respuesta_bd != "no":
-        response = respuesta_bd[1]
-        consultas_sql[response] = respuesta_bd[2]
+    print(maximo)
+    if maximo > 0:
+        posicion = vec_suma.index(maximo)
+        print(posicion,"   posicion")
+        id_max = top_10_codigos[posicion]
+        ##max_coseno = similitudes[0, indice_max_coseno]
+        #codigo_respuesta = codigos[indice_max_coseno]
+        respuesta_bd = seleccionar_respuesta_y_consulta(id_max)
+        consultas_sql={}
+        if respuesta_bd != "no":
+            response = respuesta_bd[1]
+            consultas_sql[response] = respuesta_bd[2]
+
     # Ordenar las oraciones según la similitud
     #resultados = zip(range(len(cosine_scores)), cosine_scores)
     #sorted_results = sorted(resultados, key=lambda x: x[1], reverse=True)

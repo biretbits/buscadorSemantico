@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Flask App</title>
+  <script src="{{ url_for('static', filename='jquery-3.5.1.min.js') }}" charset="utf-8"></script>
+
+  <link href="{{ url_for('static', filename='bootstrap-5.0.2/css/bootstrap.min.css') }}" type="text/css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script></head>
+<body class="cc">
+    {% include 'menu.html' %}
+    <br>
+    <div class="container mt-5">
+        <h4 class="my-4" align='right'>Tabla de Palabras claves</h4>
+      <div class="row">
+        <div id="erroro">
+
+        </div>
+        <div class="col-4">
+          <input type="text" name="clave" id='clave'class="form-control" placeholder="Ingrese su nueva palabra clave">
+        </div>
+        <div class="col-4">
+          <button type="button" class='btn btn-primary' onclick='registrarEditar()'name="button">Registrar palabra clave</button>
+        </div>
+        <div class="col-4">
+          <input type="hidden" name="id_clave" id='id_clave' value="">
+        </div>
+      </div>
+      <br>
+
+      <input type="hidden" name="page" id="page" value="{{ pagina if pagina else '' }}">
+      <div class="row">
+        <div class="col-4">
+          <select name="categorias" id='listar' class="form-control" onchange="buscarpor(1)">
+            <option value="">Seleccione listar</option>
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="200">200</option>
+          </select>
+        </div>
+        <div class="col-4">
+
+        </div>
+        <div class="col-4">
+          <input type="text" name=""id='buscar' value="" onkeyup='buscarpor(1)'class='form-control' placeholder="Buscar.....">
+        </div>
+      </div><br>
+      <div class="row">
+        <hr>
+      </div>
+      <div id="ver_tabla">
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>palabra clave</th>
+                        <th>Acción</th>
+                          <!-- Ajusta según los campos que tengas en tu consulta -->
+                        <!-- Agrega más <th> según sea necesario -->
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in consulta %}
+                    <tr>
+                        <td>{{ row[1] }}</td>  <!-- Ajusta el índice según el orden de campos de tu consulta -->
+
+                        <td>
+                          <div class='btn-group' role='group' aria-label='Basic mixed styles example'>
+                            <button align='center'type='button' class='btn btn-info' title='Editar' onclick='editaras({{ row[0] }},"{{row[1] }}")'>Editar</button>
+                          </div>
+                        </td>
+                      <!-- Agrega más <td> según sea necesario -->
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="d-flex flex-wrap flex-sm-row justify-content-between">
+                    <ul class="pagination">
+                        <li class="page-item active">Página {{ pagina }} de {{ TotalPaginas }} de {{ num_filas_total }} registros</li>
+                    </ul>
+
+                    <ul class="pagination d-flex flex-wrap">
+                        <!-- Botón anterior -->
+                        {% if pagina != 1 %}
+                            <li class="page-item"><a class="page-link" onclick="buscarpor({{pagina-1}})">{{ anterior}}</a></li>
+                        {% else %}
+                            <li class="page-item"><span class="page-link text-muted" >{{ anterior }}</span></li>
+                        {% endif %}
+
+                        <!-- Primer página -->
+                        {% if pagina > (adjacents + 1) %}
+                            <li class="page-item"><a class="page-link" onclick="buscarpor({{1}})">1</a></li>
+                        {% endif %}
+
+                        <!-- Intervalo -->
+                        {% if pagina > (adjacents + 2) %}
+                            <li class="page-item"><span class="page-link">...</span></li>
+                        {% endif %}
+
+                        <!-- Páginas -->
+                        {% for i in range(start, end) %}
+                            {% if i == pagina %}
+                                <li class="page-item active"><span class="page-link">{{ i }}</span></li>
+                            {% else %}
+                                <li class="page-item"><a class="page-link" onclick="buscarpor({{i}})">{{ i }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+
+                        <!-- Intervalo -->
+                        {% if pagina < (TotalPaginas - adjacents - 1) %}
+                            <li class="page-item"><span class="page-link">...</span></li>
+                        {% endif %}
+
+                        <!-- Última página -->
+                        {% if pagina < (TotalPaginas - adjacents) %}
+                            <li class="page-item"><a class="page-link" onclick="buscarpor({{TotalPaginas}})">{{ TotalPaginas }}</a></li>
+                        {% endif %}
+
+                        <!-- Botón siguiente -->
+                        {% if pagina < TotalPaginas %}
+                            <li class="page-item"><a class="page-link" onclick="buscarpor({{pagina+1}})">{{ siguiente}}</a></li>
+                        {% else %}
+                            <li class="page-item"><span class="page-link text-muted">{{ siguiente }}</span></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+  function buscarpor(pagina){
+    var listarDeCuanto = document.getElementById("listar").value;
+    var listarDeCuanto = listar(listarDeCuanto);
+    var buscar = document.getElementById("buscar").value;
+    document.getElementById("page").value=pagina;
+    var datos=new  FormData();
+    datos.append("pagina",pagina);
+    datos.append("listarDeCuanto",listarDeCuanto);
+    datos.append("buscar",buscar);
+    //alert(buscar);
+
+    $.ajax({
+      type: "POST", //type of submit
+      cache: false, //important or else you might get wrong data returned to you
+      url: "/tablaClave", //destination
+      datatype: "html", //expected data format from process.php
+      data: datos, //target your form's data and serialize for a POST
+      contentType:false,
+      processData:false,
+      success: function(data){
+       //alert(data);
+        $('#ver_tabla').html(data);
+      }
+    });
+  }
+
+  function listar(listarDeCuanto){
+    if(listarDeCuanto == ''){
+      listarDeCuanto = 5;
+    }
+    return listarDeCuanto;
+  }
+  function editaras(id,clave){
+    document.getElementById("clave").value=clave;
+    document.getElementById("id_clave").value=id;
+  }
+
+  function registrarEditar(pagina){
+    var clave = document.getElementById("clave").value;
+    var id_clave = document.getElementById("id_clave").value;
+    var pa = document.getElementById("page").value;
+    if(pa!=''){
+      pagina = pa;
+    }
+    var datos=new  FormData();
+    datos.append("clave",clave);
+    datos.append("id_clave",id_clave);
+    //alert(buscar);
+
+    $.ajax({
+      type: "POST", //type of submit
+      cache: false, //important or else you might get wrong data returned to you
+      url: "/RegClave", //destination
+      datatype: "html", //expected data format from process.php
+      data: datos, //target your form's data and serialize for a POST
+      contentType:false,
+      processData:false,
+      success: function(data){
+        //alert(data);
+        if(data == 'correcto'){
+            $('#erroro').html("<div class='alert alert-success'>La acción se realizon con éxito</div>");
+        }else{
+            $('#erroro').html("<div class='alert alert-danger'>Ocurio un error al realizar la acción</div>");
+        }
+        vaciar();
+         redire(pagina);
+      },
+      error: function(data){
+          $('#erroro').html("<div class='alert alert-danger'>Ocurio un error</div>");
+          vaciar();
+      }
+    });
+  }
+
+  function redire(pagina){
+    document.getElementById("clave").value='';
+    document.getElementById("id_clave").value='';
+    buscarpor(pagina);
+  }
+
+  function vaciar(){
+    setTimeout(function() {
+      $('#erroro').html("");
+    }, 2000);
+  }
+
+
+</script>
+
+<script src="{{ url_for('static', filename='bootstrap-5.0.2/js/bootstrap.min.js') }}" charset="utf-8"></script>

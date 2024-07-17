@@ -52,8 +52,8 @@ sudo pip install spacy
 
 echo "Instalar nltk"
 pip install nltk
-
-
+echo "Descargando librerias de nltk"
+python3 nltk_recursos.py
 echo "descargando modelos"
 python3 -m spacy download es_core_news_sm
 
