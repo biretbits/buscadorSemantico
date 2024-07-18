@@ -157,10 +157,10 @@ carreras_no_tomar = ["informatica",
 
 areas_no_tomar = ['tecnologia','salud','social','tecnologi','salu','sociales','sal','tecnolog','socia','sociale','tecnolo','tecnol','tecno','soci']
 tambien_no_tomar = ['año','ano','gestion','gestio','gesti']
-otros_no_tomar = ['area','are','ar','areas','carrera','carreras','carrer','carre','unsxx','universidad','nacional','siglo','xx','universi','naciona']
+otros_no_tomar = ['unsxx','universidad','nacional','siglo','xx','universi','naciona']
 def filtrar(texto):
     doc = nlp(texto)
-    palabras_filtradas = [token.text for token in doc if not token.is_stop and (not token.text.isdigit() and not isinstance(token.text, int)) and not token.text in tambien_no_tomar and not token.text in carreras_no_tomar  and not token.text in areas_no_tomar and not token.text in otros_no_tomar and not token.is_space]
+    palabras_filtradas = [token.text for token in doc if not token.is_stop and (not token.text.isdigit() and not isinstance(token.text, int)) and not token.text in tambien_no_tomar and not token.text in carreras_no_tomar  and not token.text in areas_no_tomar and not token.text in otros_no_tomar and not token.is_space and not token.is_punct]
     return palabras_filtradas
 
 def sinonimos(palabra):
@@ -175,7 +175,7 @@ def sinonimos(palabra):
     # Agregar variantes flexionadas (ejemplo: de "aprobar" a "aprobaron", "aprobados", etc.)
     derivaciones = set()
     derivaciones.add(palabra)  # Agregar la palabra original
-    derivar = ['dos','on','do','damente','as','an','iamos','ias','ia','e','is','iais','ais','mos']
+    derivar = ['dos','on','do','damente','as','an','iamos','ias','ia','e','is','iais','ais','mos','s']
     # Agregar variantes flexionadas basadas en reglas simples (puedes expandir estas reglas según tus necesidades)
     for sino in sinonimos:
         for de in derivar:
@@ -187,6 +187,8 @@ def sinonimos(palabra):
             derivaciones.add(raiz + de)
         # Agregar más formas flexionadas según las reglas
     # Combinar sinónimos y variantes flexionadas
+    for i in range(1, len(palabra)):
+        derivaciones.add(palabra[:-i])
     resultado = list(sinonimos.union(derivaciones))
     return resultado
 
@@ -227,45 +229,71 @@ def buscar(texto,posible_respuesta):
     j = 0
     #recorremos las 10 semejansas semanticas
     print(palabras_filtradas," principal")
+    diccionario = {}
+    for pa in palabras_filtradas:
+        sino = sinonimos(pa)
+        for si in sino:
+            diccionario[si] = [0]*10
+
+    k = 0
     for res in top_10_textos:
         #obtenemos los token pero filtradas de palabras que no nos interesan
         palabras_fil_res = filtrar(res)
-        #recorremos los tokens de uno en uno de las similitudes semanticas
+        seguir = 0
+        existe = 0
+        contar_existe = 0
         for pal in palabras_fil_res:
-            contar_palabras_filtradas=0
-            descartar = 0
-            seguir = 0
-            #recorremos los tokens filtrados de lo que ingreso el usuario en el buscador
-            for pa in palabras_filtradas:
-                sino = sinonimos(pa)#obtenemos de cada token sus derivaciones y si hay sus
-                #preguntamos si la primera palabra existe en los sinonimos
-                if pal in sino:
-                    #i hay contamos mas 1
-                    contar_palabras_filtradas+=1
-                    seguir = 1
-                    break
-                else:
-                    seguir = 0
-            if seguir == 0:
+            if pal in diccionario:
+                contar_existe+=1
+                diccionario[pal][k]=1
                 if pal in palabras_claves:
-                    descartar = 1
-            print(palabras_fil_res,"   contar   ",contar_palabras_filtradas," descartar ",descartar)
-            if contar_palabras_filtradas > 0 and descartar == 0:
-                id_max = top_10_codigos[j]
-                vec_suma[j]+=contar_palabras_filtradas
-                vec_id[j]=id_max
-            elif descartar == 1:
-                vec_suma[j] = 0
-                vec_id[j] = 0
-                break
-        j += 1
+                    existe = 1
+            else:
+                if pal in palabras_claves:
+                    seguir = 1
+        print(palabras_fil_res,"  se  ",seguir,"   existe   ",existe)
+        if existe == 0 and seguir == 1:
+            for pal in palabras_fil_res:
+                if pal in diccionario:
+                    diccionario[pal][k] = 0
+        elif existe == 1 and seguir == 1:
+            if len(palabras_fil_res) < len(palabras_filtradas):
+                for pal in palabras_fil_res:
+                    if pal in diccionario:
+                        diccionario[pal][k] = 0
+            elif len(palabras_fil_res) == len(palabras_filtradas) and len(palabras_filtradas) != contar_existe:
+                for pal in palabras_fil_res:
+                    if pal in diccionario:
+                        diccionario[pal][k] = 0
 
+        elif existe == 1 and seguir == 0:
+            if len(palabras_fil_res)  < len(palabras_filtradas):
+                for pal in palabras_fil_res:
+                    if pal in diccionario:
+                        diccionario[pal][k] = 0
+            elif len(palabras_fil_res) == len(palabras_filtradas) and len(palabras_filtradas) != contar_existe:
+                for pal in palabras_fil_res:
+                    if pal in diccionario:
+                        diccionario[pal][k] = 0
+        k = k + 1
+    k = 0
+    for res in top_10_textos:
+        #obtenemos los token pero filtradas de palabras que no nos interesan
+        palabras_fil_res = filtrar(res)
+        suma = 0
+        for pal in palabras_fil_res:
+            if pal in diccionario:
+                suma+= diccionario[pal][k]
+        vec_suma[k] = suma
+        k = k + 1
     maximo = 0
-    print(vec_suma,"   ",vec_id)
+    print(vec_suma,"   ")
     maximo = max(vec_suma)
+    print(maximo)
     if maximo > 0:
         posicion = vec_suma.index(maximo)
-        id_max = vec_id[posicion]
+        print(posicion,"   posicion")
+        id_max = top_10_codigos[posicion]
         ##max_coseno = similitudes[0, indice_max_coseno]
         #codigo_respuesta = codigos[indice_max_coseno]
         respuesta_bd = seleccionar_respuesta_y_consulta(id_max)
@@ -273,6 +301,7 @@ def buscar(texto,posible_respuesta):
         if respuesta_bd != "no":
             response = respuesta_bd[1]
             consultas_sql[response] = respuesta_bd[2]
+
     # Ordenar las oraciones según la similitud
     #resultados = zip(range(len(cosine_scores)), cosine_scores)
     #sorted_results = sorted(resultados, key=lambda x: x[1], reverse=True)
@@ -1358,7 +1387,6 @@ def construir_consulta(texto,respuesta,consultas_sql):
     vec1.append(nombre_posicion_sql)
     vec1.append(response)
     return vec1
-
 textoo = "informacion sobre el total de datos en la materia de fisica i"
 re = buscar(textoo,'')
 

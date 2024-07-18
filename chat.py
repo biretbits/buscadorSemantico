@@ -16,6 +16,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 from unidecode import unidecode
 from nltk.corpus import wordnet as wn
 
+#nltk.download('omw-1.4')
 # Cargar el modelo pre-entrenado
 model = SentenceTransformer('all-MiniLM-L6-v1')
 nlp = spacy.load("es_core_news_sm")
@@ -92,7 +93,8 @@ def obtener_embedding(texto,posible_respuesta):
         embedding_str = result[0]
         codigo = result[1]
         # Convertir la cadena de texto del embedding a un array numpy
-        #print(posible_respuesta," posible res")
+
+        print(posible_respuesta," posible res")
         try:
             with conn.cursor() as cursor:
                 if posible_respuesta:
@@ -157,10 +159,10 @@ carreras_no_tomar = ["informatica",
 
 areas_no_tomar = ['tecnologia','salud','social','tecnologi','salu','sociales','sal','tecnolog','socia','sociale','tecnolo','tecnol','tecno','soci']
 tambien_no_tomar = ['año','ano','gestion','gestio','gesti']
-otros_no_tomar = ['area','are','ar','areas','carrera','carreras','carrer','carre','unsxx','universidad','nacional','siglo','xx','universi','naciona']
+otros_no_tomar = ['unsxx','universidad','nacional','siglo','xx','universi','naciona']
 def filtrar(texto):
     doc = nlp(texto)
-    palabras_filtradas = [token.text for token in doc if not token.is_stop and (not token.text.isdigit() and not isinstance(token.text, int)) and not token.text in tambien_no_tomar and not token.text in carreras_no_tomar  and not token.text in areas_no_tomar and not token.text in otros_no_tomar and not token.is_space and not token.is_punct]
+    palabras_filtradas = [token.text for token in doc if not token.is_stop and (not token.text.isdigit() and not isinstance(token.text, int)) and not token.text in tambien_no_tomar and not token.text in carreras_no_tomar  and not token.text in areas_no_tomar and not token.text in otros_no_tomar and not token.is_space]
     return palabras_filtradas
 
 def sinonimos(palabra):
@@ -175,7 +177,7 @@ def sinonimos(palabra):
     # Agregar variantes flexionadas (ejemplo: de "aprobar" a "aprobaron", "aprobados", etc.)
     derivaciones = set()
     derivaciones.add(palabra)  # Agregar la palabra original
-    derivar = ['dos','on','do','damente','as','an','iamos','ias','ia','e','is','iais','ais','mos']
+    derivar = ['dos','on','do','damente','as','an','iamos','ias','ia','e','is','iais','ais','mos','s']
     # Agregar variantes flexionadas basadas en reglas simples (puedes expandir estas reglas según tus necesidades)
     for sino in sinonimos:
         for de in derivar:
@@ -192,6 +194,29 @@ def sinonimos(palabra):
     resultado = list(sinonimos.union(derivaciones))
     return resultado
 
+def clasificando(palabras_filtradas,top_10_textos,top_10_codigos):
+    vec_suma = [0]*len(top_10_textos)
+    vec_id = [0]*len(top_10_textos)
+    # Imprimir los resultados o hacer lo que necesites con ellos
+    id = 0
+    maxx = 0
+    print("esto es   ",palabras_filtradas)
+    for pal in palabras_filtradas:#cual es la cantidad de aprobados
+        sino = sinonimos(pal)#aproabado aprobaron apr
+        max_pal = 0
+        id_max = 0
+        j = 0
+        for res in top_10_textos:
+            palabras_fil_res = filtrar(res)
+            contar_palabras_filtradas = sum(1 for pa in palabras_fil_res if pa in sino)
+            print(j,"   ",palabras_fil_res,"  si ", contar_palabras_filtradas)
+            if contar_palabras_filtradas > 0:
+                max_pal = contar_palabras_filtradas
+                id_max = top_10_codigos[j]
+                vec_suma[j]+=contar_palabras_filtradas
+                vec_id[j]=id_max
+            j += 1
+    return vec_suma,vec_id
 def buscar(texto,posible_respuesta):
     texto = eliminar_tildes(texto.lower())
 
@@ -220,76 +245,64 @@ def buscar(texto,posible_respuesta):
     top_10_textos = [text_new[idx] for idx in top_10_indices]
     top_10_codigos = [codigos[idx] for idx in top_10_indices]
     #top_10_respuestas = [seleccionar_respuesta_y_consulta(codigos[idx]) for idx in top_10_indices]
-    vec_suma = [0]*10
-    vec_id = [0]*10
+    vec_suma = []
+    vec_id = []
     # Imprimir los resultados o hacer lo que necesites con ellos
     id = 0
     maxx = 0
-    palabras_claves = seleccionarTodoPalabraClaves()
-    j = 0
-    #recorremos las 10 semejansas semanticas
-    print(palabras_filtradas," principal")
-    diccionario = {}
-    for pa in palabras_filtradas:
-        sino = sinonimos(pa)
-        for si in sino:
-            diccionario[si] = [0]*10
+    print("esto es   ",palabras_filtradas)
+    vec_suma,vec_id = clasificando(palabras_filtradas,top_10_textos,top_10_codigos)
+    maximo1 = 0
+    if len(vec_suma)>0:
+        maximo1 = max(vec_suma)
+        posicion1 = vec_suma.index(maximo1)
+        id_max1 = vec_id[posicion1]
 
-    k = 0
-    for res in top_10_textos:
-        #obtenemos los token pero filtradas de palabras que no nos interesan
-        palabras_fil_res = filtrar(res)
-        seguir = 0
-        existe = 0
-        for pal in palabras_fil_res:
-            if pal in diccionario:
-                diccionario[pal][k]=1
-                if pal in palabras_claves:
-                    existe = 1
-            else:
-                if pal in palabras_claves:
-                    seguir = 1
-        #print(palabras_fil_res,"  se  ",seguir,"   existe   ",existe)
-        if existe == 0 and seguir == 1:
-            for pal in palabras_fil_res:
-                if pal in diccionario:
-                    diccionario[pal][k] = 0
-        elif existe == 1 and seguir == 1:
-            if len(palabras_filtradas) < len(palabras_fil_res):
-                for pal in palabras_fil_res:
-                    if pal in diccionario:
-                        diccionario[pal][k] = 0
-        k = k + 1
-    k = 0
-    for res in top_10_textos:
-        #obtenemos los token pero filtradas de palabras que no nos interesan
-        palabras_fil_res = filtrar(res)
-        suma = 0
-        for pal in palabras_fil_res:
-            if pal in diccionario:
-                suma+= diccionario[pal][k]
-        vec_suma[k] = suma
-        k = k + 1
+    print("esto es   ",palabras_filtradas)
+
+    print(vec_suma,"   ",vec_id)
+    """
+    nuevo_pal_usuario = []
+    palabras_claves = seleccionarTodoPalabraClaves()
+
+    for pala in palabras_filtradas:
+        if pala in palabras_claves:
+            nuevo_pal_usuario.append(pala)
+    print(nuevo_pal_usuario,"   nuevo palabras")
+    vec_nuevo = []
+    vec_nuevo_id = []
+    for ma in vec_suma:
+        if ma != 0:
+            posi=vec_suma.index(ma)
+            vec_nuevo.append(top_10_textos[posi])
+            vec_nuevo_id.append(top_10_codigos[posi])
+
+    vec_suma,vec_id = clasificando(nuevo_pal_usuario,vec_nuevo,vec_nuevo_id)
+
+    print(vec_suma,"  ",vec_id)
     maximo = 0
-    print(vec_suma,"   ")
-    maximo = max(vec_suma)
-    print(maximo)
-    if maximo > 0:
+    if len(vec_suma)>0:
+        maximo = max(vec_suma)
+    print(maximo,"   = =   ",len(nuevo_pal_usuario))
+    posicion = 0
+    id_max = 0
+    if maximo >= len(nuevo_pal_usuario) and maximo !=0:
         posicion = vec_suma.index(maximo)
-        print(posicion,"   posicion")
-        id_max = top_10_codigos[posicion]
-        ##max_coseno = similitudes[0, indice_max_coseno]
-        #codigo_respuesta = codigos[indice_max_coseno]
+        id_max = vec_id[posicion]
+    else:
+        """
+    posicion = posicion1
+    id_max = id_max1
+    if id_max != 0:
         respuesta_bd = seleccionar_respuesta_y_consulta(id_max)
         consultas_sql={}
         if respuesta_bd != "no":
             response = respuesta_bd[1]
             consultas_sql[response] = respuesta_bd[2]
-
-    # Ordenar las oraciones según la similitud
-    #resultados = zip(range(len(cosine_scores)), cosine_scores)
-    #sorted_results = sorted(resultados, key=lambda x: x[1], reverse=True)
-    #resultado_tensor = sorted_results[0][1]
+            # Ordenar las oraciones según la similitud
+            #resultados = zip(range(len(cosine_scores)), cosine_scores)
+            #sorted_results = sorted(resultados, key=lambda x: x[1], reverse=True)
+            #resultado_tensor = sorted_results[0][1]
     print(response,"  repuesta")
 
     if response:
