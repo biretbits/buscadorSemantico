@@ -40,6 +40,7 @@ pip install weasyprint || error_exit "Error al instalar weasyprint"
 apt update || error_exit "Error al actualizar el sistema"
 pip install flask-session || error_exit "Error al instalar flask-session"
 pip install unidecode || error_exit "Error al instalar unidecode"
+pip install cryptography || error_exit "Error al instalar cryptography"
 
 echo "Instalando PyMySQL..."
 pip install PyMySQL || error_exit "Error al instalar PyMySQL"
