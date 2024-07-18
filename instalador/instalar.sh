@@ -29,9 +29,6 @@ sudo apt install pipx
 echo "verificar pipx"
 python3 -m pipx ensurepath
 
-
-sudo apt install python3-pipx || error_exit "Error al instalar pipx"
-
 echo "Instalando flask"
 sudo pipx install Flask || error_exit "Error al instalar flask"
 
