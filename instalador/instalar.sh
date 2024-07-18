@@ -36,7 +36,6 @@ pip install Flask || error_exit "Error al instalar Flask"
 echo "Instalando dependencias de Flask"
 pip install weasyprint || error_exit "Error al instalar weasyprint"
 apt update || error_exit "Error al actualizar el sistema"
-apt install -y libpango1.0-0 || error_exit "Error al instalar libpango1.0-0"
 pip install flask-session || error_exit "Error al instalar flask-session"
 pip install unidecode || error_exit "Error al instalar unidecode"
 
