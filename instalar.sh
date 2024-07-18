@@ -55,7 +55,7 @@ pip install spacy || error_exit "Error al instalar spaCy"
 echo "Instalando nltk"
 pip install nltk || error_exit "Error al instalar nltk"
 echo "Descargando recursos de nltk"
-python3 -c "import nltk; nltk.download('all')" || error_exit "Error al descargar recursos de nltk"
+python3 -c "import nltk; nltk.download('omw-1.4')" || error_exit "Error al descargar recursos de nltk"
 #comando para descargar todos las librerias de nltk
 #python3 -c "import nltk; nltk.download('all')" || error_exit "Error al descargar recursos de nltk"
 
