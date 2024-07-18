@@ -24,14 +24,11 @@ echo "Instalando git"
 apt install -y git || error_exit "Error al instalar git"
 
 echo "Instalando Python3 y venv"
-apt install -y python3 python3-venv || error_exit "Error al instalar Python3 y venv"
+apt install -y python3 python3-venv python3-pip || error_exit "Error al instalar Python3, venv y pip"
 
 echo "Creando y activando entorno virtual"
 python3 -m venv myprojectenv || error_exit "Error al crear el entorno virtual"
 source myprojectenv/bin/activate || error_exit "Error al activar el entorno virtual"
-
-echo "Instalando pip"
-apt install -y python3-pip || error_exit "Error al instalar pip"
 
 echo "Instalando Flask"
 pip install Flask || error_exit "Error al instalar Flask"
