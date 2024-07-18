@@ -166,57 +166,59 @@ def filtrar(texto):
     return palabras_filtradas
 
 def sinonimos(palabra):
-    doc = nlp(palabra)
-    raiz = doc[0].lemma_
-    sinonimos = set()
-    # Buscar sinónimos en WordNet
-    for synset in wn.synsets(palabra, lang='spa'):
-        for lemma in synset.lemmas(lang='spa'):
-            sinonimos.add(lemma.name())
-
-    # Agregar variantes flexionadas (ejemplo: de "aprobar" a "aprobaron", "aprobados", etc.)
-    derivaciones = set()
-    derivaciones.add(palabra)  # Agregar la palabra original
+    nuevo = []
     derivar = ['dos','on','do','damente','as','an','iamos','ias','ia','e','is','iais','ais','mos','s']
-    # Agregar variantes flexionadas basadas en reglas simples (puedes expandir estas reglas según tus necesidades)
-    for sino in sinonimos:
-        for de in derivar:
-            derivaciones.add(sino + de)
+    sinonimos = []
+    for pa in palabra:
+        doc = nlp(pa)
+        raiz = doc[0].lemma_
+        # Buscar sinónimos en WordNet
+        for synset in wn.synsets(pa, lang='spa'):
+            for lemma in synset.lemmas(lang='spa'):
+                nuevo.append(lemma.name())
+                sinonimos.append(lemma.name())
+        # Agregar variantes flexionadas basadas en reglas simples (puedes expandir estas reglas según tus necesidades)
+        for sino in sinonimos:
+            for de in derivar:
+                nuevo.append(sino + de)
 
-    if raiz:
-        derivaciones.add(raiz)
-        for de in derivar:
-            derivaciones.add(raiz + de)
+        if raiz:
+            nuevo.append(raiz)
+            for de in derivar:
+                nuevo.append(raiz + de)
         # Agregar más formas flexionadas según las reglas
-    # Combinar sinónimos y variantes flexionadas
-    for i in range(1, len(palabra)):
-        derivaciones.add(palabra[:-i])
-    resultado = list(sinonimos.union(derivaciones))
-    return resultado
+        # Combinar sinónimos y variantes flexionadas
 
-def clasificando(palabras_filtradas,top_10_textos,top_10_codigos):
+        for i in range(1, len(pa)):
+            nuevo.append(pa[:-i])
+    return nuevo
+
+def clasificando(diccionario,top_10_textos,top_10_codigos,sino,claves):
     vec_suma = [0]*len(top_10_textos)
     vec_id = [0]*len(top_10_textos)
     # Imprimir los resultados o hacer lo que necesites con ellos
-    id = 0
-    maxx = 0
-    print("esto es   ",palabras_filtradas)
-    for pal in palabras_filtradas:#cual es la cantidad de aprobados
-        sino = sinonimos(pal)#aproabado aprobaron apr
-        max_pal = 0
-        id_max = 0
-        j = 0
-        for res in top_10_textos:
-            palabras_fil_res = filtrar(res)
-            contar_palabras_filtradas = sum(1 for pa in palabras_fil_res if pa in sino)
-            print(j,"   ",palabras_fil_res,"  si ", contar_palabras_filtradas)
-            if contar_palabras_filtradas > 0:
-                max_pal = contar_palabras_filtradas
-                id_max = top_10_codigos[j]
-                vec_suma[j]+=contar_palabras_filtradas
-                vec_id[j]=id_max
-            j += 1
+    j = 0
+    for pal in diccionario:
+        descartar = []
+        contar_cor = 0
+        contar_des = 0
+        print(pal,'    pal')
+        for pa in pal:
+            if pa in sino:
+                contar_cor+=1
+            else:
+                descartar.append(pa)
+        if len(descartar)>0:
+            for des in descartar:
+                if des in claves:
+                    contar_des+=1
+        if contar_cor > 0 and contar_des == 0:
+            id_max = top_10_codigos[j]
+            vec_suma[j]+=contar_cor
+            vec_id[j]=id_max
+        j += 1
     return vec_suma,vec_id
+
 def buscar(texto,posible_respuesta):
     texto = eliminar_tildes(texto.lower())
 
@@ -245,54 +247,20 @@ def buscar(texto,posible_respuesta):
     top_10_textos = [text_new[idx] for idx in top_10_indices]
     top_10_codigos = [codigos[idx] for idx in top_10_indices]
     #top_10_respuestas = [seleccionar_respuesta_y_consulta(codigos[idx]) for idx in top_10_indices]
-    vec_suma = []
-    vec_id = []
-    # Imprimir los resultados o hacer lo que necesites con ellos
-    id = 0
-    maxx = 0
-    print("esto es   ",palabras_filtradas)
-    vec_suma,vec_id = clasificando(palabras_filtradas,top_10_textos,top_10_codigos)
-    maximo1 = 0
-    if len(vec_suma)>0:
-        maximo1 = max(vec_suma)
-        posicion1 = vec_suma.index(maximo1)
-        id_max1 = vec_id[posicion1]
-
-    print("esto es   ",palabras_filtradas)
-
+    diccionario = []
+    for res in top_10_textos:
+        diccionario.append(filtrar(res))
+    sino = sinonimos(palabras_filtradas)#aproabado aprobaron apr
+    #print(sino)
+    claves = seleccionarTodoPalabraClaves()
+    vec_suma,vec_id = clasificando(diccionario,top_10_textos,top_10_codigos,sino,claves)
     print(vec_suma,"   ",vec_id)
-    """
-    nuevo_pal_usuario = []
-    palabras_claves = seleccionarTodoPalabraClaves()
-
-    for pala in palabras_filtradas:
-        if pala in palabras_claves:
-            nuevo_pal_usuario.append(pala)
-    print(nuevo_pal_usuario,"   nuevo palabras")
-    vec_nuevo = []
-    vec_nuevo_id = []
-    for ma in vec_suma:
-        if ma != 0:
-            posi=vec_suma.index(ma)
-            vec_nuevo.append(top_10_textos[posi])
-            vec_nuevo_id.append(top_10_codigos[posi])
-
-    vec_suma,vec_id = clasificando(nuevo_pal_usuario,vec_nuevo,vec_nuevo_id)
-
-    print(vec_suma,"  ",vec_id)
     maximo = 0
     if len(vec_suma)>0:
         maximo = max(vec_suma)
-    print(maximo,"   = =   ",len(nuevo_pal_usuario))
-    posicion = 0
-    id_max = 0
-    if maximo >= len(nuevo_pal_usuario) and maximo !=0:
         posicion = vec_suma.index(maximo)
         id_max = vec_id[posicion]
-    else:
-        """
-    posicion = posicion1
-    id_max = id_max1
+
     if id_max != 0:
         respuesta_bd = seleccionar_respuesta_y_consulta(id_max)
         consultas_sql={}
@@ -303,6 +271,7 @@ def buscar(texto,posible_respuesta):
             #resultados = zip(range(len(cosine_scores)), cosine_scores)
             #sorted_results = sorted(resultados, key=lambda x: x[1], reverse=True)
             #resultado_tensor = sorted_results[0][1]
+
     print(response,"  repuesta")
 
     if response:
