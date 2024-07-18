@@ -32,6 +32,8 @@ source myprojectenv/bin/activate || error_exit "Error al activar el entorno virt
 
 echo "Instalando Flask"
 pip install Flask || error_exit "Error al instalar Flask"
+echo "Instalando libpango1.0-0..."
+apt install libpango1.0-dev -y || error_exit "Error al instalar libpango1.0-0"
 
 echo "Instalando dependencias de Flask"
 pip install weasyprint || error_exit "Error al instalar weasyprint"
