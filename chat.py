@@ -14,6 +14,7 @@ from comprobar import obtener_ano_de_fecha
 from sklearn.metrics.pairwise import cosine_similarity
 
 from unidecode import unidecode
+from nltk.corpus import wordnet as wn
 
 #nltk.download('omw-1.4')
 # Cargar el modelo pre-entrenado
