@@ -40,7 +40,7 @@ pipx install unidecode
 
 # Instalar PyMySQL
 echo "Instalando PyMySQL..."
-sudo pipx install PyMySQL || error_exit "Error al instalar PyMySQL"
+sudo pip install PyMySQL || error_exit "Error al instalar PyMySQL"
 echo "Instalación completada con éxito"
 
 echo "instalando mysql server"
