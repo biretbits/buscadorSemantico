@@ -24,42 +24,44 @@ sudo apt install git
 
 echo "instalando python3"
 sudo apt install -y python3 || error_exit "Error al instalar python3"
+echo "Instalando pipx"
+sudo apt install pipx
+echo "verificar pipx"
+python3 -m pipx ensurepath
 
 
-
-echo "Instalando pip"
-sudo apt install python3-pip || error_exit "Error al instalar pip"
+sudo apt install python3-pipx || error_exit "Error al instalar pipx"
 
 echo "Instalando flask"
-sudo pip3 install Flask || error_exit "Error al instalar flask"
+sudo pipx install Flask || error_exit "Error al instalar flask"
 
-pip install weasyprint
+pipx install weasyprint
 sudo apt update
 sudo apt install libpango1.0-0
-pip install flask-session
-pip install unidecode
+pipx install flask-session
+pipx install unidecode
 
 # Instalar PyMySQL
 echo "Instalando PyMySQL..."
-sudo pip3 install PyMySQL || error_exit "Error al instalar PyMySQL"
+sudo pipx install PyMySQL || error_exit "Error al instalar PyMySQL"
 echo "Instalación completada con éxito"
 
 echo "instalando mysql server"
 sudo apt install mysql-server
 echo "instalacion completada"
 echo "instalando spacy"
-sudo pip install spacy
+sudo pipx install spacy
 
 echo "Instalar nltk"
-pip install nltk
+pipx install nltk
 echo "Descargando librerias de nltk"
 python3 nltk_recursos.py
 echo "descargando modelos"
 python3 -m spacy download es_core_news_sm
 
 echo "instalando numpy"
-sudo pip install numpy
+sudo pipx install numpy
 
 echo "Instalando sentence-transformers"
-pip install sentence-transformers
+pipx install sentence-transformers
 echo "instalacion finalizada"
