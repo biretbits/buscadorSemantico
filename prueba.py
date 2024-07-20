@@ -1432,3 +1432,62 @@ vv = [
 
 
 print("impirmiendo posicion   ", vv[0][1][3])
+
+0    posicion
+estudiantes_regulares_en_materia   repuesta
+en la materia de fisic i y de taller de programacion i cual es el total de estudiantes regulares en esta gestion     =     estudiantes_regulares_en_materia
+usuario es   ['materia', 'fisic', 'i', 'taller', 'programacion', 'i', 'estudiantes', 'regulares',
+ 'gestion']
+['algebra', 'algebr', 'algeb', 'alge', 'superior', 'superio', 'superi', 'super', 'supe', 'lineal', 'linea', 'line']    contar    0
+['analisis', 'analisi', 'analis', 'anali', 'anal', 'matematicos', 'matematico', 'matematic', 'matemati', 'matemat', 'matema', 'matem', 'mate']    contar    0
+['fisica', 'fisic', 'fisi', 'i']    contar    3
+['metodologia', 'metodologi', 'metodolog', 'metodolo', 'metodol', 'metodo', 'metod', 'meto', 'programacion', 'programacio', 'programaci', 'programac', 'programa', 'program', 'progra', 'progr', 'prog']    contar    1
+['arquitectura', 'arquitectur', 'arquitectu', 'arquitect', 'arquitec', 'arquite', 'arquit', 'arqui', 'arqu', 'computadoras', 'computadora', 'computador', 'computado', 'computad', 'computa', 'comput', 'compu', 'comp', 'dispositivos', 'dispositivo', 'dispositiv', 'dispositi', 'disposit', 'disposi', 'dispos', 'dispo', 'disp', 'moviles', 'movile', 'movil', 'movi']    contar    0
+['contabilidad', 'contabilida', 'contabilid', 'contabili', 'contabil', 'contabi', 'contab', 'conta', 'cont', 'basica', 'basic', 'basi', 'administracion', 'administracio', 'administraci', 'administrac', 'administra', 'administr', 'administ', 'adminis', 'admini', 'admin', 'admi', 'general', 'genera', 'gener', 'gene']    contar    0
+['taller', 'talle', 'tall', 'programacion', 'programacio', 'programaci', 'programac', 'programa', 'program', 'progra', 'progr', 'prog', 'i']    contar    4
+['metodologia', 'metodologi', 'metodolog', 'metodolo', 'metodol', 'metodo', 'metod', 'meto', 'investigacion', 'investigacio', 'investigaci', 'investigac', 'investiga', 'investig', 'investi', 'invest', 'inves', 'inve']    contar    0
+['analisis', 'analisi', 'analis', 'anali', 'anal', 'matematico', 'matematic', 'matemati', 'matemat', 'matema', 'matem', 'mate', 'ii']    contar    0
+['fisica', 'fisic', 'fisi', 'ii']    contar    1
+['desarrollo', 'desarroll', 'desarrol', 'desarro', 'desarr', 'desar', 'desa', 'web']    contar    0
+['diseno', 'disen', 'dise', 'administracion', 'administracio', 'administraci', 'administrac', 'administra', 'administr', 'administ', 'adminis', 'admini', 'admin', 'admi', 'base', 'datos', 'dato']    contar    0
+['taller', 'talle', 'tall', 'desarrollo', 'desarroll', 'desarrol', 'desarro', 'desarr', 'desar', 'desa', 'software', 'softwar', 'softwa', 'softw', 'soft']    contar    1
+['sistemas', 'sistema', 'sistem', 'siste', 'sist', 'operativos', 'operativo', 'operativ', 'operati', 'operat', 'opera', 'oper']    contar    0
+['estructura', 'estructur', 'estructu', 'estruct', 'estruc', 'estru', 'estr', 'datos', 'dato']    contar    0
+['estadistica', 'estadistic', 'estadisti', 'estadist', 'estadis', 'estadi', 'estad', 'esta', 'probabilidad', 'probabilida', 'probabilid', 'probabili', 'probabil', 'probabi', 'probab', 'proba', 'prob']    contar    0
+['analisis', 'analisi', 'analis', 'anali', 'anal', 'diseno', 'disen', 'dise', 'sistemas', 'sistema', 'sistem', 'siste', 'sist']    contar    0
+['investigacion', 'investigacio', 'investigaci', 'investigac', 'investiga', 'investig', 'investi', 'invest', 'inves', 'inve', 'operativa', 'operativ', 'operati', 'operat', 'opera', 'oper']    contar    0
+['simulacion', 'simulacio', 'simulaci', 'simulac', 'simula', 'simul', 'simu', 'sistemas', 'sistema', 'sistem', 'siste', 'sist']    contar    0
+['redes', 'rede', 'i']    contar    2
+['microprocesadores', 'microprocesadore', 'microprocesador', 'microprocesado', 'microprocesad', 'microprocesa', 'microproces', 'microproce', 'microproc', 'micropro', 'micropr', 'microp', 'micro', 'micr', 'microcontroladores', 'microcontroladore', 'microcontrolador', 'microcontrolado', 'microcontrolad', 'microcontrola', 'microcontrol', 'microcontro', 'microcontr', 'microcont', 'microcon', 'microco', 'microc', 'micro', 'micr']    contar    0
+['tecnologias', 'tecnologia', 'tecnologi', 'tecnolog', 'tecnolo', 'tecnol', 'tecno', 'tecn', 'emergentes', 'emergente', 'emergent', 'emergen', 'emerge', 'emerg', 'emer']    contar    0
+['telecomunicaciones', 'telecomunicacione', 'telecomunicacion', 'telecomunicacio', 'telecomunicaci', 'telecomunicac', 'telecomunica', 'telecomunic', 'telecomuni', 'telecomun', 'telecomu', 'telecom', 'teleco', 'telec', 'tele']    contar    0
+['programacion', 'programacio', 'programaci', 'programac', 'programa', 'program', 'progra', 'progr', 'prog', 'dispositivos', 'dispositivo', 'dispositiv', 'dispositi', 'disposit', 'disposi', 'dispos', 'dispo', 'disp', 'moviles', 'movile', 'movil', 'movi']    contar    1
+['desarrollo', 'desarroll', 'desarrol', 'desarro', 'desarr', 'desar', 'desa', 'video', 'vide', 'juegos', 'juego', 'jueg', 'dispositivos', 'dispositivo', 'dispositiv', 'dispositi', 'disposit', 'disposi', 'dispos', 'dispo', 'disp', 'moviles', 'movile', 'movil', 'movi']    contar    0
+['redes', 'rede', 'moviles', 'movile', 'movil', 'movi', 'clud', 'computing', 'computin', 'computi', 'comput', 'compu', 'comp']    contar    0
+['desarrollo', 'desarroll', 'desarrol', 'desarro', 'desarr', 'desar', 'desa', 'aplicaciones', 'aplicacione', 'aplicacion', 'aplicacio', 'aplicaci', 'aplicac', 'aplica', 'aplic', 'apli', 'moviles', 'movile', 'movil', 'movi', 'geolocalizacion', 'geolocalizacio', 'geolocalizaci', 'geolocalizac', 'geolocaliza', 'geolocaliz', 'geolocali', 'geolocal', 'geoloca', 'geoloc', 'geolo', 'geol']    contar    0
+['criptografia', 'criptografi', 'criptograf', 'criptogra', 'criptogr', 'criptog', 'cripto', 'cript', 'crip', 'esteganografia', 'esteganografi', 'esteganograf', 'esteganogra', 'esteganogr', 'esteganog', 'estegano', 'estegan', 'estega', 'esteg', 'este']    contar    0
+['servidores', 'servidore', 'servidor', 'servido', 'servid', 'servi', 'serv', 'seguridad', 'segurida', 'segurid', 'seguri', 'segur', 'segu', 'redes', 'rede']    contar    0
+['seguridad', 'segurida', 'segurid', 'seguri', 'segur', 'segu', 'sistemas', 'sistema', 'sistem', 'siste', 'sist', 'informacion', 'informacio', 'informaci', 'informac', 'informa', 'inform', 'infor', 'info', 'base', 'datos', 'dato']    contar    0
+['ingenieria', 'ingenieri', 'ingenier', 'ingenie', 'ingeni', 'ingen', 'inge', 'software', 'softwar', 'softwa', 'softw', 'soft']    contar    0
+['inteligencia', 'inteligenci', 'inteligenc', 'inteligen', 'intelige', 'intelig', 'inteli', 'intel', 'inte', 'artificial', 'artificia', 'artifici', 'artific', 'artifi', 'artif', 'arti']    contar    0
+['ingenieria', 'ingenieri', 'ingenier', 'ingenie', 'ingeni', 'ingen', 'inge', 'sistemas', 'sistema', 'sistem', 'siste', 'sist']    contar    0
+['programacion', 'programacio', 'programaci', 'programac', 'programa', 'program', 'progra', 'progr', 'prog', 'grafica', 'grafic', 'grafi', 'graf']    contar    1
+['electiva', 'electiv', 'electi', 'elect', 'elec', 'i']    contar    2
+['realidad', 'realida', 'realid', 'reali', 'real', 'virtual', 'virtua', 'virtu', 'virt', 'aumentada', 'aumentad', 'aumenta', 'aument', 'aumen', 'aume']    contar    0
+['taller', 'talle', 'tall', 'desarrollo', 'desarroll', 'desarrol', 'desarro', 'desarr', 'desar', 'desa', 'aplicaciones', 'aplicacione', 'aplicacion', 'aplicacio', 'aplicaci', 'aplicac', 'aplica', 'aplic', 'apli', 'dispositivos', 'dispositivo', 'dispositiv', 'dispositi', 'disposit', 'disposi', 'dispos', 'dispo', 'disp', 'moviles', 'movile', 'movil', 'movi']    contar    1
+['internet', 'interne', 'intern', 'inter', 'inte', 'cosas', 'cosa']    contar    0
+['vision', 'visio', 'visi', 'artificial', 'artificia', 'artifici', 'artific', 'artifi', 'artif', 'arti', 'dispositivos', 'dispositivo', 'dispositiv', 'dispositi', 'disposit', 'disposi', 'dispos', 'dispo', 'disp', 'moviles', 'movile', 'movil', 'movi']    contar    0
+['informatica', 'informatic', 'informati', 'informat', 'informa', 'inform', 'infor', 'info', 'forense', 'forens', 'foren', 'fore']    contar    0
+['inteligencia', 'inteligenci', 'inteligenc', 'inteligen', 'intelige', 'intelig', 'inteli', 'intel', 'inte', 'amenazas', 'amenaza', 'amenaz', 'amena', 'amen', 'ethical', 'ethica', 'ethic', 'ethi', 'hacking', 'hackin', 'hacki', 'hack']    contar    0
+['sistemas', 'sistema', 'sistem', 'siste', 'sist', 'gestion', 'gestio', 'gesti', 'gest', 'seguridad', 'segurida', 'segurid', 'seguri', 'segur', 'segu', 'tecnologias', 'tecnologia', 'tecnologi', 'tecnolog', 'tecnolo', 'tecnol', 'tecno', 'tecn', 'informacion', 'informacio', 'informaci', 'informac', 'informa', 'inform', 'infor', 'info']    contar    1
+['auditoria', 'auditori', 'auditor', 'audito', 'audit', 'audi', 'informatica', 'informatic', 'informati', 'informat', 'informa', 'inform', 'infor', 'info']    contar    0
+['taller', 'talle', 'tall', 'graduacion', 'graduacio', 'graduaci', 'graduac', 'gradua', 'gradu', 'grad']    contar    1
+['practicas', 'practica', 'practic', 'practi', 'pract', 'prac', 'profesionales', 'profesionale', 'profesional', 'profesiona', 'profesion', 'profesio', 'profesi', 'profes', 'profe', 'prof']    contar    0
+['emprendimiento', 'emprendimient', 'emprendimien', 'emprendimie', 'emprendimi', 'emprendim',
+ 'emprendi', 'emprend', 'empren', 'empre', 'empr', ',', 'preparacion', 'preparacio',
+.  'preparaci', 'preparac', 'prepara', 'prepar', 'prepa', 'prep', ','
+  , 'evaluacion', 'evaluacio', 'evaluaci', 'evaluac', 'evalua',
+   'evalu', 'eval', 'gestion', 'gestio', 'gesti', 'gest', 'proyectos', 'proyecto', 'proyect',
+    'proyec', 'proye', 'proy', 'alta', 'gerencia', 'gerenci', 'gerenc', 'geren',
+     'gere']    contar    1
+['electiva', 'electiv', 'electi', 'elect', 'elec', 'ii']

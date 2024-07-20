@@ -17,18 +17,32 @@
         <div id="erroro">
 
         </div>
-        <div class="col-4">
+        <div class="col-3">
           <input type="text" name="clave" id='clave'class="form-control" placeholder="Ingrese su nueva palabra clave">
         </div>
-        <div class="col-4">
-          <button type="button" class='btn btn-primary' onclick='registrarEditar()'name="button">Registrar palabra clave</button>
+
+        <div class="col-3">
+          <input type="text" name="agrupar" id='agrupar'class="form-control" placeholder="palabra con que se quiere agrupar">
         </div>
-        <div class="col-4">
+        <div class="col-3">
+          <select name="categorias" id='tipo_agrupar' class="form-control">
+            <option value="">Seleccione tipo de agrupamiento</option>
+              {% for categoria in con_res %}
+                  <option value="{{ categoria[0] }}">
+                      <abbr title="{{ categoria[1] }}">{{ categoria[1] }}</abbr>
+                  </option>
+              {% endfor %}
+          </select>
           <input type="hidden" name="id_clave" id='id_clave' value="">
+        </div>
+        <div class="col-3">
+          <button type="button" class='btn btn-primary' onclick='registrarEditar()'name="button">Registrar palabra clave</button>
         </div>
       </div>
       <br>
-
+      <div class="row">
+        <hr>
+      </div>
       <input type="hidden" name="page" id="page" value="{{ pagina if pagina else '' }}">
       <div class="row">
         <div class="col-4">
@@ -42,7 +56,14 @@
           </select>
         </div>
         <div class="col-4">
-
+            <select name="categorias" id='respuesta' onchange="buscarpor(1)" class="form-control">
+              <option value="">Busqueda por agrupar</option>
+                {% for categoria in con_res %}
+                    <option value="{{ categoria[0] }}" >
+                        <abbr title="{{ categoria[1] }}">{{ categoria[1] }}</abbr>
+                    </option>
+                {% endfor %}
+            </select>
         </div>
         <div class="col-4">
           <input type="text" name=""id='buscar' value="" onkeyup='buscarpor(1)'class='form-control' placeholder="Buscar.....">
@@ -58,6 +79,7 @@
                 <thead class="thead-dark">
                     <tr>
                         <th>palabra clave</th>
+                        <th>palabra Agrupado en</th>
                         <th>Acción</th>
                           <!-- Ajusta según los campos que tengas en tu consulta -->
                         <!-- Agrega más <th> según sea necesario -->
@@ -67,10 +89,13 @@
                     {% for row in consulta %}
                     <tr>
                         <td>{{ row[1] }}</td>  <!-- Ajusta el índice según el orden de campos de tu consulta -->
+                        <td>{{ row[4] }}</td>  <!-- Ajusta el índice según el orden de campos de tu consulta -->
 
                         <td>
                           <div class='btn-group' role='group' aria-label='Basic mixed styles example'>
-                            <button align='center'type='button' class='btn btn-info' title='Editar' onclick='editaras({{ row[0] }},"{{row[1] }}")'>Editar</button>
+                            <button align='center'type='button' class='btn btn-info' title='Editar' onclick='editaras({{ row[0] }},"{{row[1] }}",{{ row[2] }})'>Editar</button>
+                            <button align='center'type='button' class='btn btn-danger' title='Eliminar' onclick='Eliminar({{ row[0] }})'>Eliminar</button>
+
                           </div>
                         </td>
                       <!-- Agrega más <td> según sea necesario -->
@@ -143,11 +168,13 @@
     var listarDeCuanto = document.getElementById("listar").value;
     var listarDeCuanto = listar(listarDeCuanto);
     var buscar = document.getElementById("buscar").value;
+    var respuesta = document.getElementById("respuesta").value;
     document.getElementById("page").value=pagina;
     var datos=new  FormData();
     datos.append("pagina",pagina);
     datos.append("listarDeCuanto",listarDeCuanto);
     datos.append("buscar",buscar);
+    datos.append("respuesta",respuesta);
     //alert(buscar);
 
     $.ajax({
@@ -171,14 +198,24 @@
     }
     return listarDeCuanto;
   }
-  function editaras(id,clave){
+  function editaras(id,clave,respuesta){
     document.getElementById("clave").value=clave;
     document.getElementById("id_clave").value=id;
+    // Establecer el valor seleccionado en el <select>
+    var select = document.getElementById('tipo_agrupar');
+    select.value = respuesta;
   }
 
   function registrarEditar(pagina){
     var clave = document.getElementById("clave").value;
     var id_clave = document.getElementById("id_clave").value;
+    var tipo_agrupar = document.getElementById("tipo_agrupar").value;
+    var agrupar = document.getElementById("agrupar").value;
+    if(tipo_agrupar != '' && agrupar != ''){
+      $('#erroro').html("<div class='alert alert-danger'>Solo puede agrupar en uno solo, elimine del campo o campo de selección</div>");
+      vaciar();
+      return;
+    }
     var pa = document.getElementById("page").value;
     if(pa!=''){
       pagina = pa;
@@ -186,12 +223,66 @@
     var datos=new  FormData();
     datos.append("clave",clave);
     datos.append("id_clave",id_clave);
+    datos.append("tipo_respuesta",tipo_agrupar);
+    datos.append("agrupar",agrupar);
+    //alert(buscar);
+    $.ajax({
+      type: "POST", //type of submit
+      cache: false, //important or else you might get wrong data returned to you
+      url: "/RegClave", //destination
+      datatype: "html", //expected data format from process.php
+      data: datos, //target your form's data and serialize for a POST
+      contentType:false,
+      processData:false,
+      success: function(data){
+        //alert(data);
+        if(data == 'correcto'){
+            $('#erroro').html("<div class='alert alert-success'>La acción se realizon con éxito</div>");
+        }else if(data == "ya_existe"){
+          $('#erroro').html("<div class='alert alert-danger'>La palabra para agrupar ya existe en la base de datos</div>");
+        }else{
+            $('#erroro').html("<div class='alert alert-danger'>Ocurio un error al realizar la acción</div>");
+        }
+        vaciar();
+         redireccionar(pagina);
+      },
+      error: function(data){
+          $('#erroro').html("<div class='alert alert-danger'>Ocurio un error</div>");
+          vaciar();
+      }
+    });
+  }
+
+  function redireccionar(){
+    window.location.href = "/Clave";
+  }
+  function redire(pagina){
+    document.getElementById("clave").value='';
+    document.getElementById("id_clave").value='';
+    document.getElementById("tipo_agrupar").value='';
+    document.getElementById("agrupar").value='';
+    buscarpor(pagina);
+  }
+
+  function vaciar(){
+    setTimeout(function() {
+      $('#erroro').html("");
+    }, 2000);
+  }
+
+  function Eliminar(id){
+    var pa = document.getElementById("page").value;
+    if(pa!=''){
+      pagina = pa;
+    }
+    var datos=new  FormData();
+    datos.append("id",id);
     //alert(buscar);
 
     $.ajax({
       type: "POST", //type of submit
       cache: false, //important or else you might get wrong data returned to you
-      url: "/RegClave", //destination
+      url: "/RegELiminarClave", //destination
       datatype: "html", //expected data format from process.php
       data: datos, //target your form's data and serialize for a POST
       contentType:false,
@@ -212,19 +303,6 @@
       }
     });
   }
-
-  function redire(pagina){
-    document.getElementById("clave").value='';
-    document.getElementById("id_clave").value='';
-    buscarpor(pagina);
-  }
-
-  function vaciar(){
-    setTimeout(function() {
-      $('#erroro').html("");
-    }, 2000);
-  }
-
 
 </script>
 

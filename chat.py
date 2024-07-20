@@ -6,7 +6,8 @@ from comprobar import palabras_departamento,palabras_provincia,encontrar_nombre,
 from comprobar import palabra_aplazaron,palabra_aprobados,palabra_curso,obtener_que_curso_quiere
 from comprobar import palabra_nota,fechas,obtener_ano,obtener_areas_id,obtener_id_materia
 from comprobar import seleccionar_si_quiere_por_area_o_carrera
-from sql import seleccionar_estudiante1,seleccionar_consultasEmbeddings,seleccionar_respuesta_y_consulta,seleccionarTodoPalabraClaves
+from sql import seleccionar_estudiante1,seleccionar_consultasEmbeddings,seleccionar_respuesta_y_consulta,seleccionarTodoPalabraClaves,seleccionarAsignaturaTodos
+from sql import seleccionarTodoClaves,seleccionarTodoPalabraClaves_id
 from sentence_transformers import SentenceTransformer, util
 import numpy as np
 from datetime import datetime
@@ -147,6 +148,14 @@ def seleccionarEmbeddinBd():
 def eliminar_tildes(texto):
     return unidecode(texto)
 
+def seleccionarMaterias():
+    resul = seleccionarAsignaturaTodos()
+    vec = []
+    for fila in resul:
+        pal = eliminar_tildes(fila[1].lower())
+        palabras = pal.split()
+        vec.extend(palabras)
+    return vec
 carreras_no_tomar = ["informatica",
     "mecanica automotriz","minas",'contaduria publica','conta','contaduria',"electromecanica","mecanica",
      'mecanica automotris',"agronomia",'agro',"enfermeria","bioquimica","bio quimica",'biofar',"electro mecanica","civil","medicina",'topografia','enfermeria','enfer',"minas topografia","derecho","contaduria","contaduria publica",
@@ -160,49 +169,73 @@ carreras_no_tomar = ["informatica",
 areas_no_tomar = ['tecnologia','salud','social','tecnologi','salu','sociales','sal','tecnolog','socia','sociale','tecnolo','tecnol','tecno','soci']
 tambien_no_tomar = ['año','ano','gestion','gestio','gesti']
 otros_no_tomar = ['unsxx','universidad','nacional','siglo','xx','universi','naciona']
+
 def filtrar(texto):
+    materias = seleccionarMaterias()
+    #print(materias)
     doc = nlp(texto)
-    palabras_filtradas = [token.text for token in doc if not token.is_stop and (not token.text.isdigit() and not isinstance(token.text, int)) and not token.text in tambien_no_tomar and not token.text in carreras_no_tomar  and not token.text in areas_no_tomar and not token.text in otros_no_tomar and not token.is_space]
+    palabras_filtradas = [token.text for token in doc if not token.is_stop and (not token.text.isdigit() and not isinstance(token.text, int)) and not token.text in tambien_no_tomar and not token.text in carreras_no_tomar  and not token.text in areas_no_tomar and not token.text in otros_no_tomar and not token.is_space and not token.text in materias]
     return palabras_filtradas
 
 def sinonimos(palabra):
+    claves,cod_agrupar = seleccionarTodoClaves()
     nuevo = []
+    otro = []
     derivar = ['dos','on','do','damente','as','an','iamos','ias','ia','e','is','iais','ais','mos','s']
-    sinonimos = []
     for pa in palabra:
-        doc = nlp(pa)
-        raiz = doc[0].lemma_
         # Buscar sinónimos en WordNet
+        nuevo1 = []
+        sinonimos = []
+        if pa in claves:#existe la palabra en las claves si o no
+            posicion = claves.index(pa)
+            # Obtener el valor correspondiente en el vector valores usando la posición
+            id = cod_agrupar[posicion]
+            pal_claves = seleccionarTodoPalabraClaves_id(id)
+            for p_c in pal_claves:
+                nuevo.append(p_c)
+                nuevo1.append(p_c)
+        nuevo.append(pa)
+        nuevo1.append(pa)
         for synset in wn.synsets(pa, lang='spa'):
             for lemma in synset.lemmas(lang='spa'):
                 nuevo.append(lemma.name())
+                nuevo1.append(lemma.name())
                 sinonimos.append(lemma.name())
         # Agregar variantes flexionadas basadas en reglas simples (puedes expandir estas reglas según tus necesidades)
+        #print(sinonimos,"      ",pa)
         for sino in sinonimos:
             for de in derivar:
                 nuevo.append(sino + de)
+                nuevo1.append(sino + de)
 
+        doc = nlp(pa)
+        raiz = doc[0].lemma_
         if raiz:
             nuevo.append(raiz)
             for de in derivar:
                 nuevo.append(raiz + de)
+                nuevo1.append(raiz + de)
         # Agregar más formas flexionadas según las reglas
         # Combinar sinónimos y variantes flexionadas
-
-        for i in range(1, len(pa)):
-            nuevo.append(pa[:-i])
-    return nuevo
+        if len(pa)>=4:
+            for i in range(1, len(pa)):
+                if len(pa)==3:
+                    break;
+                nuevo.append(pa[:-i])
+                nuevo1.append(pa[:-i])
+        otro.append(nuevo1)
+    return nuevo,otro
 
 def clasificando(diccionario,top_10_textos,top_10_codigos,sino,claves):
     vec_suma = [0]*len(top_10_textos)
-    vec_id = [0]*len(top_10_textos)
+    #vec_id = [0]*len(top_10_textos)
     # Imprimir los resultados o hacer lo que necesites con ellos
     j = 0
     for pal in diccionario:
         descartar = []
         contar_cor = 0
         contar_des = 0
-        print(pal,'    pal')
+        print(j, "  =  ",pal,'    pal')
         for pa in pal:
             if pa in sino:
                 contar_cor+=1
@@ -213,11 +246,42 @@ def clasificando(diccionario,top_10_textos,top_10_codigos,sino,claves):
                 if des in claves:
                     contar_des+=1
         if contar_cor > 0 and contar_des == 0:
-            id_max = top_10_codigos[j]
+            #id_max = top_10_codigos[j]
             vec_suma[j]+=contar_cor
-            vec_id[j]=id_max
+            #vec_id[j]=id_max
         j += 1
-    return vec_suma,vec_id
+    return vec_suma
+
+def clasificacando_por_segunda_ves(vec_new_id,vec_new_text,otro,claves,palabras_filtradas):
+    posiciones = []
+    k = 0
+    #recorremos las palabras filtradas del usuario
+    for pa in palabras_filtradas:
+        if pa in claves:#verificamos si la palabra existe en palabras claves
+            posiciones.append(k)#si existe guardamos la posicion de la coencidencia
+        k=k+1
+    #creamos dos nuevos vectores para un nuevo recorrido
+    vec_contar = [0]*len(vec_new_text)
+    vec_new_ids = [0]*len(vec_new_text)
+    #recorremo las posiciones obtenidas
+    resultado = []
+    #al recorrer obtenemos de la posicion obtenida las derivaciones y sinonimos de la palabra encontrado en palabras claves
+    for posi in posiciones:
+        resultado.extend(otro[posi])
+    kk = 0
+    print("posiciones  ",posiciones)
+    for palabra in vec_new_text:
+        contar = 0
+        print(palabra)
+        for pa in palabra:
+            if pa in resultado:
+                contar=contar+1
+        print(palabra," contar  ",contar)
+        if contar > 0:
+            vec_contar[kk] +=contar
+            vec_new_ids[kk] = vec_new_id[kk]
+        kk+=1
+    return vec_contar,vec_new_ids
 
 def buscar(texto,posible_respuesta):
     texto = eliminar_tildes(texto.lower())
@@ -241,26 +305,57 @@ def buscar(texto,posible_respuesta):
     # Obtener los índices de las similitudes ordenadas de mayor a menor
     indices_ordenados = np.argsort(similitudes[0])[::-1]
 
-    # Seleccionar los 10 máximos
-    top_10_indices = indices_ordenados[:10]
+    # Seleccionar los 10 máximos o mas
+    top_10_indices = indices_ordenados[:20]
     # Obtener los códigos y respuestas asociadas a los 10 máximos
     top_10_textos = [text_new[idx] for idx in top_10_indices]
     top_10_codigos = [codigos[idx] for idx in top_10_indices]
-    #top_10_respuestas = [seleccionar_respuesta_y_consulta(codigos[idx]) for idx in top_10_indices]
+    #top_10_respuestas = [seleccionar_respesta_y_consulta(codigos[idx]) for idx in top_10_indices]
+    claves = seleccionarTodoPalabraClaves()
     diccionario = []
     for res in top_10_textos:
         diccionario.append(filtrar(res))
-    sino = sinonimos(palabras_filtradas)#aproabado aprobaron apr
+    sino,otro = sinonimos(palabras_filtradas)#aproabado aprobaron apr
     #print(sino)
-    claves = seleccionarTodoPalabraClaves()
-    vec_suma,vec_id = clasificando(diccionario,top_10_textos,top_10_codigos,sino,claves)
-    print(vec_suma,"   ",vec_id)
-    maximo = 0
+    print(palabras_filtradas," palabras filtradas")
+    vec_suma= clasificando(diccionario,top_10_textos,top_10_codigos,sino,claves)
+    vec_new_id = []
+    vec_new_text = []
+    k = 0
+    print(vec_suma)
     if len(vec_suma)>0:
+        for da in vec_suma:
+            if da != 0:
+                vec_new_id.append(top_10_codigos[k])
+                vec_new_text.append(diccionario[k])
+            k+=1
+    print(vec_new_id,"    ",vec_new_text)
+    print(palabras_filtradas," palabras filtradas")
+
+    vec_contar,vec_ids = clasificacando_por_segunda_ves(vec_new_id,vec_new_text,otro,claves,palabras_filtradas)
+    print(vec_contar,"    ",vec_ids)
+    maximo = 0
+    id_max = 0
+    contar_cero = 0
+    for cero in vec_contar:
+        if cero == 0:
+            contar_cero+=1
+    contar_cero_primero = 0
+    for cero in vec_suma:
+        if cero == 0:
+            contar_cero_primero+=1
+
+    if len(vec_contar) != contar_cero:
+        print("llego")
+        maximo = max(vec_contar)
+        posicion = vec_contar.index(maximo)
+        print(posicion,"   posicion")
+        id_max = vec_ids[posicion]
+    elif len(vec_suma) != contar_cero_primero:
         maximo = max(vec_suma)
         posicion = vec_suma.index(maximo)
-        id_max = vec_id[posicion]
-
+        print(posicion,"   posicion")
+        id_max = top_10_codigos[posicion]
     if id_max != 0:
         respuesta_bd = seleccionar_respuesta_y_consulta(id_max)
         consultas_sql={}

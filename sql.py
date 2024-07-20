@@ -781,3 +781,51 @@ def seleccionarTodoPalabraClaves():
     else:
         # Si no hay resultados, devolver un mensaje indicando que no se encontró el estudiante
         return "no"
+
+def seleccionarTodoClaves():
+    # Consulta SQL para seleccionar un estudiante por su ID
+    sql_consulta = "SELECT palabra_clave,cod_agrupar FROM claves"
+    conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+    # Crear un cursor para ejecutar consultas
+    cursor = conn.cursor()
+    # Ejecutar la consulta SQL con el ID proporcionado como parámetro
+    cursor.execute(sql_consulta)
+    # Verificar si hay algún resultado antes de obtenerlos
+    if cursor.rowcount > 0:
+        # Si hay resultados, obtener los datos de la consulta
+        estudiante = cursor.fetchall()
+        # Cerrar el cursor y la conexión
+        cursor.close()
+        conn.close()
+        claves = []
+        cod_agrupar = []
+        for est in estudiante:
+            claves.append(est[0])
+            cod_agrupar.append(est[1])
+        return claves,cod_agrupar
+    else:
+        # Si no hay resultados, devolver un mensaje indicando que no se encontró el estudiante
+        return "no"
+
+def seleccionarTodoPalabraClaves_id(id):
+    # Consulta SQL para seleccionar un estudiante por su ID
+    sql_consulta = "SELECT palabra_clave FROM claves where cod_agrupar = %s"
+    conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+    # Crear un cursor para ejecutar consultas
+    cursor = conn.cursor()
+    # Ejecutar la consulta SQL con el ID proporcionado como parámetro
+    cursor.execute(sql_consulta,(id))
+    # Verificar si hay algún resultado antes de obtenerlos
+    if cursor.rowcount > 0:
+        # Si hay resultados, obtener los datos de la consulta
+        estudiante = cursor.fetchall()
+        # Cerrar el cursor y la conexión
+        cursor.close()
+        conn.close()
+        claves = []
+        for est in estudiante:
+            claves.append(est[0])
+        return claves
+    else:
+        # Si no hay resultados, devolver un mensaje indicando que no se encontró el estudiante
+        return "no"

@@ -1553,14 +1553,18 @@ def tablaClave():
     listarDeCuanto = 5
     pagina = 1
     # Consulta para verificar si el usuario existe
-    consulta_s = "SELECT COUNT(*) FROM claves"
+    consulta_s = "SELECT COUNT(*) FROM claves as c inner join agrupar as r on c.cod_agrupar = r.cod_agrupar"
     cursor.execute(consulta_s)
     num_filas_total = cursor.fetchone()[0]
     TotalPaginas = ceil(num_filas_total / listarDeCuanto)
     inicioList = (pagina - 1) * listarDeCuanto
-    consulta = "SELECT * FROM claves order by cod_clave desc LIMIT %s, %s"
+    consulta = "SELECT * FROM claves as c inner join agrupar as r on c.cod_agrupar = r.cod_agrupar order by c.cod_clave desc LIMIT %s, %s"
     cursor.execute(consulta, (inicioList, listarDeCuanto))
     sql_consulta = cursor.fetchall()
+    consulta_res = "SELECT * FROM agrupar"
+    cursor.execute(consulta_res)
+    con_res = cursor.fetchall()
+
     cursor.close()
     conn.close()
     adjacents = 1
@@ -1576,7 +1580,8 @@ def tablaClave():
         anterior=anterior,
         siguiente=siguiente,
         adjacents=adjacents,
-        num_filas_total=num_filas_total)
+        num_filas_total=num_filas_total,
+        con_res=con_res)
     # Si no existe la sesión de usuario, renderizar un menú básico
     return render_template('tablaClave.html', usuario=None)
 
@@ -1589,11 +1594,17 @@ def tablaClavess():
         pagina = int(request.form.get('pagina'))
         listarDeCuanto = int(request.form.get('listarDeCuanto'))
         buscar = request.form.get('buscar')
-        sql1 = "select count(*) from claves"
-        sql = "select * from claves"
+        respuesta = (request.form.get('respuesta'))
+        sql1 = "select count(*) from claves as c inner join agrupar as r where c.cod_agrupar=r.cod_agrupar"
+        sql = "select * from claves as c inner join agrupar as r where c.cod_agrupar=r.cod_agrupar"
         if buscar != '':
-            sql+=" where lower(palabra_clave) like '%"+buscar+"%' "
-            sql1+=" where lower(palabra_clave) like '%"+buscar+"%' "
+            sql+=" and lower(c.palabra_clave) like '%"+buscar+"%' "
+            sql1+=" and lower(c.palabra_clave) like '%"+buscar+"%' "
+
+        if  respuesta!='':
+            respuesta = int(respuesta)
+            sql+=" and c.cod_agrupar =  "+str(respuesta)
+            sql1+=" and c.cod_agrupar = "+str(respuesta)
 
         #return render_template("index.html")
         # Verificar si existe la sesión de usuario
@@ -1603,7 +1614,8 @@ def tablaClavess():
         num_filas_total = cursor.fetchone()[0]
         TotalPaginas = ceil(num_filas_total / listarDeCuanto)
         inicioList = (pagina - 1) * listarDeCuanto
-        sql+= " LIMIT "+str(inicioList)+" ,"+str(listarDeCuanto)+""
+        sql+= " order by c.cod_clave desc LIMIT "+str(inicioList)+" ,"+str(listarDeCuanto)+" "
+        print(sql)
         cursor.execute(sql)
         sql_consulta = cursor.fetchall()
         cursor.close()
@@ -1620,6 +1632,7 @@ def tablaClavess():
         <thead class='thead-dark'>
             <tr>
                 <th>palabra clave</th>
+                <th>palabra Agrupado en</th>
                 <th>Acción</th>
 
             </tr>
@@ -1628,9 +1641,11 @@ def tablaClavess():
         for row in sql_consulta:
             html+="<tr>"
             html+="<td>"+str(row[1])+"</td>"
+            html+="<td>"+str(row[4])+"</td>"
             html+="<td>"
             html+="<div class='btn-group' role='group' aria-label='Basic mixed styles example'>"
-            html+="<button type='button' class='btn btn-info' title='Editar' onclick='editaras("+str(row[0])+",\""+str(row[1])+"\")'>Editar</button>"
+            html+="<button type='button' class='btn btn-info' title='Editar' onclick='editaras("+str(row[0])+",\""+str(row[1])+"\","+str(row[2])+")'>Editar</button>"
+            html+="<button align='center'type='button' class='btn btn-danger' title='Eliminar' onclick='Eliminar("+str(row[0])+")'>Eliminar</button>"
             html+="</div>"
             html+="</td>"
 
@@ -1683,28 +1698,52 @@ def tablaClavess():
     return html
 @app.route("/RegClave",methods = ['POST'])
 def RegistrarClaves():
-
     if request.method == 'POST':
+        mensaje = 'correcto'
         # Obtener los datos enviados mediante Ajax
         clave = request.form.get('clave')
         va = request.form.get("id_clave")
+        tipo_respuesta = (request.form.get("tipo_respuesta"))
+        agrupar = (request.form.get("agrupar"))
         if va:
-            id_clave = int(request.form.get('id_clave'))
+            id_clave = int(va)
         else:
             id_clave = ''
+        if tipo_respuesta != '':
+            tipo_respuesta = int(tipo_respuesta)
         clave_nuevo = unidecode(clave.lower())
         # Conectar a la base de datos
         conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
         estado = 'activo'
         try:
             with conn.cursor() as cursor:
+                #si hay agrupar entonces hay que verificar que la palabra no se repita
+                if agrupar != '':
+                    print("agrupar es  ",agrupar)
+                    select = "select count(*) from agrupar where palabra_agrupar = %s"
+                    cursor.execute(select, (agrupar))
+                    filas = cursor.fetchone()[0]
+                    print("fila ",filas)
+                    if filas > 0:
+                        mensaje = 'ya_existe'
+                    elif filas == 0:
+                        #si filas es igual a cero insertamos
+                        sql_insert = "INSERT INTO agrupar(palabra_agrupar) VALUES (%s)"
+                        cursor.execute(sql_insert, (agrupar))
+                        select1 = "select cod_agrupar from agrupar where palabra_agrupar = %s"
+                        cursor.execute(select1, (agrupar))
+                        cod_agrupar = cursor.fetchone()[0]
+
                 # Consulta parametrizada para insertar datos
-                if id_clave:
-                    sql_insert = "update claves set palabra_clave = %s where cod_clave = %s"
-                    cursor.execute(sql_insert, (clave_nuevo,id_clave))
-                else:
-                    sql_insert = "INSERT INTO claves(palabra_clave) VALUES (%s)"
-                    cursor.execute(sql_insert, (clave_nuevo))
+                if mensaje != "ya_existe":
+                    if tipo_respuesta == '':
+                        tipo_respuesta = cod_agrupar
+                    if id_clave:
+                        sql_insert = "update claves set palabra_clave = %s,cod_agrupar=%s where cod_clave = %s"
+                        cursor.execute(sql_insert, (clave_nuevo,tipo_respuesta,id_clave))
+                    else:
+                        sql_insert = "INSERT INTO claves(palabra_clave,cod_agrupar) VALUES (%s,%s)"
+                        cursor.execute(sql_insert, (clave_nuevo,tipo_respuesta))
 
             # Confirmar la transacción
             conn.commit()
@@ -1713,8 +1752,27 @@ def RegistrarClaves():
             # Cerrar la conexión siempre, incluso si ocurre una excepción
             conn.close()
 
-        return 'correcto'
+        return mensaje
 
+@app.route("/RegELiminarClave",methods = ['POST'])
+def RegistrarEliminarClave():
+    if request.method == 'POST':
+        # Obtener los datos enviados mediante Ajax
+        id = int(request.form.get('id'))
+        conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+        estado = 'activo'
+        try:
+            with conn.cursor() as cursor:
+                sql_insert = "delete from claves where cod_clave = %s"
+                cursor.execute(sql_insert, (id))
+            # Confirmar la transacción
+            conn.commit()
+
+        finally:
+            # Cerrar la conexión siempre, incluso si ocurre una excepción
+            conn.close()
+
+        return 'correcto'
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',debug=True,port=5003)

@@ -415,57 +415,79 @@ def obtener_areas_id(texto):
 
     return new_areas
 
-
+def seleccionarMateriasTodo_Partido():
+    resul = seleccionarAsignaturaTodos()
+    vec = []
+    codigos = []
+    otro = []
+    for fila in resul:
+        vec1 = []
+        pal = unidecode(fila[1].lower())
+        palabras = filtraremos(pal)
+        for pala in palabras:
+            vec1.append(pala)
+            if len(pala)>=4:
+                for i in range(1, len(pala)):
+                    if len(pala[:-i]) == 3:
+                        break;
+                    vec1.append(pala[:-i])
+        vec.append(vec1)
+        otro.append(palabras)
+        codigos.append(fila[0])
+    return vec,codigos,otro
+#print(materias)
+def filtraremos(pal):
+    doc = nlp(pal)
+    palabras_filtradas = [token.text for token in doc if not token.is_stop and not token.is_space ]
+    return palabras_filtradas
 
 def obtener_id_materia(texto):
-    codigos, asignaturas_obtenidos = obtener_asignaturas_embeddign(modelo)
     nuevo = []
-    doc = nlp(texto.lower())  # Convertir a minúsculas y procesar con spaCy
-    asignaturas_mencionadas = [entidad.text for entidad in doc]
-    secuencias = []
-
-    for longitud in range(1, len(asignaturas_mencionadas) + 1):
-        for i in range(len(asignaturas_mencionadas) - longitud + 1):
-            subsecuencia = ' '.join(asignaturas_mencionadas[i:i + longitud])
-            secuencias.append(subsecuencia)
-
-    for asig in secuencias:
-        embeddings_texto = obtener_embeddings_ahora(asig, modelo)
-        nuevo.append(embeddings_texto)
-
-    embe = np.array(nuevo)
-    embe_asig = np.array(asignaturas_obtenidos)
-
-    # Capturar advertencias
-    similitudes = cosine_similarity(embe, embe_asig)
-
-    umbral_similitud = 0.95
+    vec,codigos,otro  = seleccionarMateriasTodo_Partido()
+    usuario = filtraremos(texto)
+    print("usuario es  ",usuario)
+    contar_vec =[0]*len(vec)
+    k = 0
+    #print(vec)
+    elejidos_materias_derivacion = []
+    elejidos_materias = []
+    #recorremos todas las materias
+    for materia in vec:
+        contar = 0#inicializamos una variable para contar
+        for palabra in usuario:#recorremos las palabras del usuario
+            if palabra in materia:#preguntamos si palabra hay en materia
+                contar+=1#si hay contamos
+        #print(materia,"   contar   ",contar)
+        if contar>0:#si contar es mayor a cero guardamos
+            contar_vec[k]=contar#almacenamos el contador
+        k = k +1
+    #print(contar_vec)
+    maximo = 0
+    codigos_asign = []
+    j = 0
+    for rec in contar_vec:
+        if rec != 0:
+            codigos_asign.append(codigos[j])
+            elejidos_materias_derivacion.append(vec[j])
+            elejidos_materias.append(otro[j])
+        j = j + 1
+    #print(elejidos_materias_derivacion)
+    i = 0
+    vec_final = []
     codigos_asignaturas = []
-    maximos_cosenos = []
+    for mater in elejidos_materias_derivacion:
+        con = 0
+        for mat in mater:
+            if mat in usuario:
+                con+=1
+        print(mater,"    ",con)
+        if con > 0 and con >= len(elejidos_materias[i]):
+            vec_final.append(con)
+            codigos_asignaturas.append(codigos_asign[i])
+        i = i + 1
+    print(vec_final,"   final   ")
+    #print(elejidos_materias_derivacion)
 
-    for i, palabra in enumerate(secuencias):
-        indices_superan_umbral = np.where(similitudes[i] >= umbral_similitud)[0]
-
-        if len(indices_superan_umbral) > 0:
-            indice_max_coseno = indices_superan_umbral[np.argmax(similitudes[i, indices_superan_umbral])]
-            codigo_asignatura = codigos[indice_max_coseno]
-            max_coseno = similitudes[i, indice_max_coseno]
-
-            codigos_asignaturas.append(codigo_asignatura)
-            maximos_cosenos.append(max_coseno)
-        else:
-            codigos_asignaturas.append("")
-            maximos_cosenos.append(0.0)
-
-    #for i, palabra in enumerate(secuencias):
-        #print(f"Para la palabra '{palabra}':")
-        #print(f"Código de asignatura: {codigos_asignaturas[i]}")
-        #print(f"Coseno máximo: {maximos_cosenos[i]}")
-        #print()
-    #eliminar vacios
-    codigos_asignaturas = [codigo for codigo in codigos_asignaturas if codigo != "N/A" and codigo != ""]
-    #eliminar dobles datos
-    codigos_asignaturas = list(set(codigos_asignaturas))
     return codigos_asignaturas
 
 
