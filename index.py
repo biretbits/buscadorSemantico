@@ -205,7 +205,7 @@ def respuesta():
                 return retornar_valores(sql_consulta,respuesta)
             else:
                 # Si no hay resultados, realiza alguna acción adecuada
-                return "<div class = 'alert alert-secondary'>Lo siento, no tengo una respuesta para esa pregunta o puede argumentar un poco mas</div>";
+                return "<div class = 'alert alert-secondary'>Lo siento, no tengo una respuesta para esa pregunta, no cuento con la suficiente información para responder a su pregunta. puede argumentar un poco mas y tratare de responderle.</div>";
 
         else:
             return ("<div class = 'alert alert-secondary'>Lo siento, no tengo una respuesta para esa pregunta o puede argumentar un poco mas</div>")

@@ -306,9 +306,14 @@ estado char(10) DEFAULT 'activo'
 create table claves(
 cod_clave int not null auto_increment primary key,
 palabra_clave char(50),
-embedding LONGBLOB DEFAULT '',
+cod_agrupar int,
+foreign key(cod_agrupar)references agrupar(cod_agrupar)on delete restrict on update restrict
 );
 
+create table agrupar(
+cod_agrupar int NOT NULL auto_increment primary key,
+palabra_agrupar char(50)
+)
 
 insert into parciales(nombre_parcial)values('1er parcial');
 insert into parciales(nombre_parcial)values('2do parcial');

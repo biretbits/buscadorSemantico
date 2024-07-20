@@ -164,7 +164,7 @@ carreras_no_tomar = ["informatica",
      ,'radioterapia','radio nuclear','tecnico superior en medicina nuclear','medicina nuclear'
      ,'medi nuclear','tecnico superior radioterapia nuclear','tecnico superior medicina nuclear',
      'medi nuclear','recursos evaporiticos del litio','evaporiticos del litio','litio','evaporiticos litio'
-     ,'bio medico','biomedico','bioquimica farmacia','electro','informati','bio','automotriz','automotris','auto']
+     ,'bio medico','biomedico','bioquimica farmacia','electro','informati','bio','automotriz','automotris','auto','agronomica']
 
 areas_no_tomar = ['tecnologia','salud','social','tecnologi','salu','sociales','sal','tecnolog','socia','sociale','tecnolo','tecnol','tecno','soci']
 tambien_no_tomar = ['año','ano','gestion','gestio','gesti']

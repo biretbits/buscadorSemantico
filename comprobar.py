@@ -41,7 +41,7 @@ def obtener_carreras_nombre(texto):
      ,'radioterapia','radio nuclear','tecnico superior en medicina nuclear','medicina nuclear'
      ,'medi nuclear','tecnico superior radioterapia nuclear','tecnico superior medicina nuclear',
      'medi nuclear','recursos evaporiticos del litio','evaporiticos del litio','litio','evaporiticos litio'
-     ,'bio medico','biomedico','bioquimica farmacia','electro','informati','bio','automotriz','automotris','auto']
+     ,'bio medico','biomedico','bioquimica farmacia','electro','informati','bio','automotriz','automotris','auto','agronomica']
 
     carreras_encontradas = []
     # Convertir el texto a minúsculas y eliminar tildes
@@ -415,7 +415,7 @@ def obtener_areas_id(texto):
 
     return new_areas
 
-def seleccionarMateriasTodo_Partido():
+def seleccionarMateriasTodo_Partido(limit):
     resul = seleccionarAsignaturaTodos()
     vec = []
     codigos = []
@@ -428,7 +428,7 @@ def seleccionarMateriasTodo_Partido():
             vec1.append(pala)
             if len(pala)>=4:
                 for i in range(1, len(pala)):
-                    if len(pala[:-i]) == 3:
+                    if len(pala[:-i]) == limit:
                         break;
                     vec1.append(pala[:-i])
         vec.append(vec1)
@@ -436,58 +436,106 @@ def seleccionarMateriasTodo_Partido():
         codigos.append(fila[0])
     return vec,codigos,otro
 #print(materias)
+#funcion para filtrar eliminando del el las los la de etc
 def filtraremos(pal):
     doc = nlp(pal)
     palabras_filtradas = [token.text for token in doc if not token.is_stop and not token.is_space ]
     return palabras_filtradas
 
+def clasificar(vec,codigos,otro,usuario,limit):
+    elejidos_materias = []
+    elejidos_cod = []
+    k = 0
+    for materia in vec:
+        contar = 0#inicializamos una variable para contar
+        new_pos = []#inicializamos un nuevo vector por cada materia para guardar posiciones
+        new_mat = []#vector para guardar palabras encontrado de una materia
+        for mat in materia:#recorrer todas las materias
+            if mat in usuario:#recorremos materia por materia que hay en cada fial ['taller','i']['fisica','i']
+                if not mat in new_mat:#preguntamos si ya se guarda, si ya se guardo no guardamos por que ya esta guardado
+                    c1 = 0#iniciamos dos variables
+                    c2 = 0
+                    vec_con = [0]*len(new_mat)#creamos un vector con el mismo tamaño de la materia encontrado en la fila
+                    print(mat," mat   ",new_mat)
+                    #en aqui puede haver estas dos coencidencias
+                    #mat fisica    vect = [fisic,i]
+                    #vec = [fisica,i] mat=fisic
+                    #buscamod si las derivaciones de la palabra ya se registro
+                    for i in range(1, len(mat)):
+                        if len(mat[:-i]) == limit:#si llego al limit se cortara
+                            break;
+                        if mat[:-i] in new_mat:#verificar si la palabra de la materia existe en new_mat
+                            c1 = 1
+                    #esto lo hacemos con el proposito de no guardar repetidos por mas que tenga variaciones
+                    #ejemplo fisica es igual a fisic solo falta la "a"
+                    for pa_guardado in new_mat:#recorremos las coencidencias en la fila
+                        print('palabra guardado ',pa_guardado)
+                        for i in range(1, len(pa_guardado)):
+                            if len(pa_guardado[:-i]) == limit:
+                                break;
+                            if pa_guardado[:-i] in mat:#si se encontro la derivacion en materias
+                                c2 = 1
+                        if c2 == 1:
+                            vec_con.append(1)
+
+                    c2 = verificar_si_el_vector_es_todo_vacio(vec_con)
+                    if c1 == 0 and c2 == 0:
+                        posicion = usuario.index(mat)
+                        new_pos.append(posicion)
+                        new_mat.append(mat)
+                        contar+=1#si hay contamos
+        print('--------------------------------------------------------------------')
+        n = otro[k]
+        #print(n,"   ",len(n),"   ",contar)
+        if len(n) == contar:
+            codig,unir = eliminar_Materia(codigos,new_mat,k)
+            usuario = eliminar_posiciones(new_pos,usuario)
+            elejidos_materias.append(unir)
+            elejidos_cod.append(codig)
+        else:
+            if len(n)-1 == contar:
+                if len(n) > 2:
+                    if len(n)/2 == contar:
+                        codig,unir = eliminar_Materia(codigos,new_mat,k)
+                        usuario = eliminar_posiciones(new_pos,usuario)
+                        elejidos_materias.append(unir)
+                        elejidos_cod.append(codig)
+            else:
+                if len(n) > 2:
+                    if len(n)/2 == contar:
+                        codig,unir = eliminar_Materia(codigos,new_mat,k)
+                        usuario = eliminar_posiciones(new_pos,usuario)
+                        elejidos_materias.append(unir)
+                        elejidos_cod.append(codig)
+        k = k + 1
+    print(elejidos_materias,"   ",elejidos_cod)
+    return elejidos_materias,elejidos_cod
+
+def verificar_si_el_vector_es_todo_vacio(vector):
+    c2 = 0
+    for pos in vector:
+        if pos!=0:
+            c2=1
+            break
+    return c2
+def eliminar_Materia(codigos,new_mat,k):
+    unir = ''
+    for p in new_mat:
+        unir = unir+" "+p
+    return codigos[k],unir
+
+def eliminar_posiciones(posiciones,usuario):
+    usuario1 = [item for idx, item in enumerate(usuario) if idx not in posiciones]
+    return usuario1
+
 def obtener_id_materia(texto):
-    nuevo = []
-    vec,codigos,otro  = seleccionarMateriasTodo_Partido()
+    limite_derivacion = 3#ejemplo si tengo 1=fisica 2=fisic,3=fisi
+    vec,codigos,otro  = seleccionarMateriasTodo_Partido(limite_derivacion)
     usuario = filtraremos(texto)
     print("usuario es  ",usuario)
     contar_vec =[0]*len(vec)
-    k = 0
-    #print(vec)
-    elejidos_materias_derivacion = []
-    elejidos_materias = []
-    #recorremos todas las materias
-    for materia in vec:
-        contar = 0#inicializamos una variable para contar
-        for palabra in usuario:#recorremos las palabras del usuario
-            if palabra in materia:#preguntamos si palabra hay en materia
-                contar+=1#si hay contamos
-        #print(materia,"   contar   ",contar)
-        if contar>0:#si contar es mayor a cero guardamos
-            contar_vec[k]=contar#almacenamos el contador
-        k = k +1
-    #print(contar_vec)
-    maximo = 0
-    codigos_asign = []
-    j = 0
-    for rec in contar_vec:
-        if rec != 0:
-            codigos_asign.append(codigos[j])
-            elejidos_materias_derivacion.append(vec[j])
-            elejidos_materias.append(otro[j])
-        j = j + 1
-    #print(elejidos_materias_derivacion)
-    i = 0
-    vec_final = []
-    codigos_asignaturas = []
-    for mater in elejidos_materias_derivacion:
-        con = 0
-        for mat in mater:
-            if mat in usuario:
-                con+=1
-        print(mater,"    ",con)
-        if con > 0 and con >= len(elejidos_materias[i]):
-            vec_final.append(con)
-            codigos_asignaturas.append(codigos_asign[i])
-        i = i + 1
-    print(vec_final,"   final   ")
-    #print(elejidos_materias_derivacion)
-
+    #clasificar materias
+    ejejidos_materias,codigos_asignaturas=clasificar(vec,codigos,otro,usuario,limite_derivacion)
     return codigos_asignaturas
 
 
