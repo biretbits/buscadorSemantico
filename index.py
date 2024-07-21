@@ -66,9 +66,9 @@ def principala():
     # Verificar si existe la sesión de usuario
     if 'usuario' in session:
         # Renderizar el menú para usuario autenticado
-        return render_template('index.html', usuario=session['usuario'],consulta = sql_consulta)
+        return render_template('index.html', usuario=session['usuario'],consulta = sql_consulta,admin = session['user'])
     # Si no existe la sesión de usuario, renderizar un menú básico
-    return render_template('index.html', usuario=None)
+    return render_template('index.html', usuario=None,admin = None)
 #permite visualizar tabla de respuesta_bd
 
 @app.route("/login")
@@ -98,8 +98,8 @@ def preguntasREg():
 @app.route("/resp")
 def RespuestaREg():
     if 'usuario' in session:
-        return render_template('registrarRespuesta.html',usuario=session['usuario'])
-    return render_template('registrarRespuesta.html',usuario=None)
+        return render_template('registrarRespuesta.html',usuario=session['usuario'],admin = session['user'])
+    return render_template('registrarRespuesta.html',usuario=None,admin = session['user'])
 
 
 @app.route("/regResp",methods = ['POST'])
@@ -173,6 +173,7 @@ def validar():
 
         if usuariod:
             session['usuario'] = usuariod[2]+" "+usuariod[3]
+            session['user'] = usuariod[1]
             return "si"
             # Aquí podrías devolver algún indicador de éxito o permitir el acceso
         else:
@@ -322,9 +323,9 @@ def tablaPregunta():
         siguiente=siguiente,
         adjacents=adjacents,
         con_res=con_res,
-        num_filas_total=num_filas_total)
+        num_filas_total=num_filas_total,admin = session['user'])
     # Si no existe la sesión de usuario, renderizar un menú básico
-    return render_template('tablaPreguntas.html', usuario=None)
+    return render_template('tablaPreguntas.html', usuario=None,admin = None)
 
 
 @app.route('/tpre', methods=['POST'])
@@ -468,8 +469,8 @@ def formulariopreguntasREg():
             buscar=buscar,
             tipo_respuesta=tipo_respuesta,
             pagina=pagina,
-            sql_co=sql_co)
-        return render_template('EditarPreguntas.html',consulta = sql_consulta,usuario=None)
+            sql_co=sql_co,admin = session['user'])
+        return render_template('EditarPreguntas.html',consulta = sql_consulta,usuario=None,admin = None)
 
 
 @app.route("/ActPreg",methods = ['POST'])
@@ -580,9 +581,9 @@ def TablaPreguntadespuesDeActualizar():
             siguiente=siguiente,
             adjacents=adjacents,
             con_res=con_res,
-            num_filas_total=num_filas_total)
+            num_filas_total=num_filas_total,admin = session['user'])
         # Si no existe la sesión de usuario, renderizar un menú básico
-        return render_template('tablaPreguntas.html', usuario=None)
+        return render_template('tablaPreguntas.html', usuario=None,admin = None)
 
 #tabla de respuestas visualizar
 
@@ -622,9 +623,9 @@ def tablaRespuesta():
         siguiente=siguiente,
         adjacents=adjacents,
         con_res=con_res,
-        num_filas_total=num_filas_total)
+        num_filas_total=num_filas_total,admin = session['user'])
     # Si no existe la sesión de usuario, renderizar un menú básico
-    return render_template('tablaRespuesta.html', usuario=None)
+    return render_template('tablaRespuesta.html', usuario=None,admin = None)
 
 
 @app.route('/trespues', methods=['POST'])
@@ -765,8 +766,8 @@ def formularioRespuestas():
             buscar=buscar,
             tipo_respuesta=tipo_respuesta,
             pagina=pagina,
-            sql_co=sql_co)
-        return render_template('EditarRespuesta.html',consulta = sql_consulta,usuario=None)
+            sql_co=sql_co,admin = session['user'])
+        return render_template('EditarRespuesta.html',consulta = sql_consulta,usuario=None,admin = None)
 
 
 @app.route("/ActResp",methods = ['POST'])
@@ -865,9 +866,9 @@ def tablaRespuesta3():
             siguiente=siguiente,
             adjacents=adjacents,
             con_res=con_res,
-            num_filas_total=num_filas_total)
+            num_filas_total=num_filas_total,admin = session['user'])
         # Si no existe la sesión de usuario, renderizar un menú básico
-        return render_template('tablaRespuesta.html', usuario=None)
+        return render_template('tablaRespuesta.html', usuario=None,admin = None)
 
 @app.route('/backup')
 def backup():
@@ -905,8 +906,8 @@ def FormCarrera():
     cursor.close()
     conn.close()
     if 'usuario' in session:
-        return render_template('registroCarrera.html',usuario=session['usuario'],consulta=consulta)
-    return render_template('registroCarrera.html',usuario=None,consulta=consulta)
+        return render_template('registroCarrera.html',usuario=session['usuario'],consulta=consulta,admin = session['user'])
+    return render_template('registroCarrera.html',usuario=None,consulta=consulta,admin = None)
 
 @app.route('/RegCarrera',methods=['POST'])
 def RegFormCarrera():
@@ -941,8 +942,8 @@ def FormDocente():
     cursor.close()
     conn.close()
     if 'usuario' in session:
-        return render_template('registroDocente.html',usuario=session['usuario'],consultacarrera=consultacarrera)
-    return render_template('registroDocente.html',usuario=None,consultacarrera=consultacarrera)
+        return render_template('registroDocente.html',usuario=session['usuario'],consultacarrera=consultacarrera,admin = session['user'])
+    return render_template('registroDocente.html',usuario=None,consultacarrera=consultacarrera,admin = None)
 
 @app.route('/RegDocente',methods=['POST'])
 def RegFormDocente():
@@ -997,8 +998,8 @@ def FormAsinagtura():
     cursor.close()
     conn.close()
     if 'usuario' in session:
-        return render_template('registroAsignatura.html',usuario=session['usuario'],consultacarrera=consultacarrera,consultagrado=consultagrado,consultaplan=consultaplan)
-    return render_template('registroAsignatura.html',usuario=None,consultacarrera=consultacarrera,consultagrado=consultagrado,consultaplan=consultaplan)
+        return render_template('registroAsignatura.html',usuario=session['usuario'],consultacarrera=consultacarrera,consultagrado=consultagrado,consultaplan=consultaplan,admin = session['user'])
+    return render_template('registroAsignatura.html',usuario=None,consultacarrera=consultacarrera,consultagrado=consultagrado,consultaplan=consultaplan,admin = None)
 
 @app.route('/RegAsignatura',methods=['POST'])
 def RegFormAsignatura():
@@ -1046,8 +1047,8 @@ def FormTransferirOtraUNiversidad():
     cursor.close()
     conn.close()
     if 'usuario' in session:
-        return render_template('registroTransferirOtra.html',usuario=session['usuario'],consultaestu=consultaestu)
-    return render_template('registroTransferirOtra.html',usuario=None,consultaestu=consultaestu)
+        return render_template('registroTransferirOtra.html',usuario=session['usuario'],consultaestu=consultaestu,admin = session['user'])
+    return render_template('registroTransferirOtra.html',usuario=None,consultaestu=consultaestu,admin = None)
 
 @app.route('/RegTransferirO',methods=['POST'])
 def RegFormTransferirOtra():
@@ -1095,8 +1096,8 @@ def FormTransferirDEUNiversidad():
     cursor.close()
     conn.close()
     if 'usuario' in session:
-        return render_template('registroTransferirDEotra.html',usuario=session['usuario'],consultaestu=consultaestu)
-    return render_template('registroTransferirDEotra.html',usuario=None,consultaestu=consultaestu)
+        return render_template('registroTransferirDEotra.html',usuario=session['usuario'],consultaestu=consultaestu,admin = session['user'])
+    return render_template('registroTransferirDEotra.html',usuario=None,consultaestu=consultaestu,admin = None)
 
 @app.route('/RegTransferirD',methods=['POST'])
 def RegFormTransferirDEotra():
@@ -1143,8 +1144,8 @@ def FormEstudiantes():
     cursor.close()
     conn.close()
     if 'usuario' in session:
-        return render_template('registroEstudiante.html',usuario=session['usuario'],consultagrado=consultagrado,consultacarrera=consultacarrera)
-    return render_template('registroEstudiante.html',usuario=None,consultagrado=consultagrado,consultacarrera=consultacarrera)
+        return render_template('registroEstudiante.html',usuario=session['usuario'],consultagrado=consultagrado,consultacarrera=consultacarrera,admin = session['user'])
+    return render_template('registroEstudiante.html',usuario=None,consultagrado=consultagrado,consultacarrera=consultacarrera,admin = None)
 
 @app.route('/RegEstudiante',methods=['POST'])
 def RegFormEstudiante():
@@ -1200,8 +1201,8 @@ def FormModalidad():
     cursor.close()
     conn.close()
     if 'usuario' in session:
-        return render_template('registroModalidadTitulacion.html',usuario=session['usuario'],consulta=consulta,consultacarrera=consultacarrera,consultaplan=consultaplan)
-    return render_template('registroModalidadTitulacion.html',usuario=None,consulta=consulta,consultacarrera=consultacarrera,consultaplan=consultaplan)
+        return render_template('registroModalidadTitulacion.html',usuario=session['usuario'],consulta=consulta,consultacarrera=consultacarrera,consultaplan=consultaplan,admin = session['user'])
+    return render_template('registroModalidadTitulacion.html',usuario=None,consulta=consulta,consultacarrera=consultacarrera,consultaplan=consultaplan,admin = None)
 
 @app.route('/RegModalidad',methods=['POST'])
 def RegFormModalidad():
@@ -1268,8 +1269,8 @@ def FormTitulados():
     cursor.close()
     conn.close()
     if 'usuario' in session:
-        return render_template('registroTitulado.html',usuario=session['usuario'],consulta=consulta,consultacarrera=consultacarrera,consultaplan=consultaplan,consultamodalidad=consultamodalidad,consultaestu=consultaestu)
-    return render_template('registroTitulado.html',usuario=None,consulta=consulta,consultacarrera=consultacarrera,consultaplan=consultaplan,consultamodalidad=consultamodalidad,consultaestu=consultaestu)
+        return render_template('registroTitulado.html',usuario=session['usuario'],consulta=consulta,consultacarrera=consultacarrera,consultaplan=consultaplan,consultamodalidad=consultamodalidad,consultaestu=consultaestu,admin = session['user'])
+    return render_template('registroTitulado.html',usuario=None,consulta=consulta,consultacarrera=consultacarrera,consultaplan=consultaplan,consultamodalidad=consultamodalidad,consultaestu=consultaestu,admin = None)
 
 @app.route('/RegTitulado',methods=['POST'])
 def RegFormTitulado():
@@ -1319,8 +1320,8 @@ def FormDicta():
     cursor.close()
     conn.close()
     if 'usuario' in session:
-        return render_template('registroDicta.html',usuario=session['usuario'],consulta=consulta,consultaasig=consultaasig)
-    return render_template('registroDicta.html',usuario=None,consulta=consulta,consultaasig=consultaasig)
+        return render_template('registroDicta.html',usuario=session['usuario'],consulta=consulta,consultaasig=consultaasig,admin = session['user'])
+    return render_template('registroDicta.html',usuario=None,consulta=consulta,consultaasig=consultaasig,admin = None)
 
 @app.route('/RegDicta',methods=['POST'])
 def RegFormDicta():
@@ -1376,8 +1377,8 @@ def FormAsigEst():
     cursor.close()
     conn.close()
     if 'usuario' in session:
-        return render_template('registroAsigEstudiante.html',usuario=session['usuario'],consulta=consulta,consultadicta=consultadicta,consultaparcial=consultaparcial)
-    return render_template('registroAsigEstudiante.html',usuario=None,consulta=consulta,consultadicta=consultadicta,consultaparcial=consultaparcial)
+        return render_template('registroAsigEstudiante.html',usuario=session['usuario'],consulta=consulta,consultadicta=consultadicta,consultaparcial=consultaparcial,admin = session['user'])
+    return render_template('registroAsigEstudiante.html',usuario=None,consulta=consulta,consultadicta=consultadicta,consultaparcial=consultaparcial,admin = None)
 
 @app.route('/RegAsigEst',methods=['POST'])
 def RegFormAsigEst():
@@ -1470,8 +1471,8 @@ def FormAvance():
     cursor.close()
     conn.close()
     if 'usuario' in session:
-        return render_template('registroAvance.html',usuario=session['usuario'],consulta=consulta)
-    return render_template('registroAvance.html',usuario=None,consulta=consulta)
+        return render_template('registroAvance.html',usuario=session['usuario'],consulta=consulta,admin = session['user'])
+    return render_template('registroAvance.html',usuario=None,consulta=consulta,admin = None)
 
 @app.route('/RegAvance',methods=['POST'])
 def RegFormAvance():
@@ -1516,8 +1517,8 @@ def FormPLanDE():
     cursor.close()
     conn.close()
     if 'usuario' in session:
-        return render_template('registroPlanEstudio.html',usuario=session['usuario'],consulta=consulta)
-    return render_template('registroPlanEstudio.html',usuario=None,consulta=consulta)
+        return render_template('registroPlanEstudio.html',usuario=session['usuario'],consulta=consulta,admin = session['user'])
+    return render_template('registroPlanEstudio.html',usuario=None,consulta=consulta,admin = None)
 
 @app.route('/RegPlan',methods=['POST'])
 def RegFormPlan():
@@ -1581,9 +1582,9 @@ def tablaClave():
         siguiente=siguiente,
         adjacents=adjacents,
         num_filas_total=num_filas_total,
-        con_res=con_res)
+        con_res=con_res,admin = session['user'])
     # Si no existe la sesión de usuario, renderizar un menú básico
-    return render_template('tablaClave.html', usuario=None)
+    return render_template('tablaClave.html', usuario=None,admin = None)
 
 
 

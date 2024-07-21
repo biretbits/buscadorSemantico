@@ -675,9 +675,27 @@ def  retornar_valores(datos,ress):
                     vcarCur[row[5]][anoBD][row[3]]['si']+=1
         grado = seleccionarGrado()
         if si_car_n == "si_car_n":#esta buscando carreras
-            mensaje = "La cantidad de estudiantes que desertaron en las siguientes carreras son"
-            html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
             s_dupli = eliminar_dobles(id_car)#si hay doble veces repetido el id lo eliminamos a 1
+            if len(s_dupli)==1:
+                mensaje = "El numero de estudiantes desertores de la carrera de "
+                for i in s_dupli:
+                    index1 = int(i)#obtenemos el id
+                    mensaje += str(nombre_carrera_retor(index1))+", se detallara en la siguiente tabla"
+            else:
+                mensaje = "El numero de estudiantes desertores en las siguientes carreras de "
+                k = 0
+                for i in s_dupli:
+                    index1 = int(i)#obtenemos el id
+                    if k == 0:
+                        mensaje += str(nombre_carrera_retor(index1))
+                    else:
+                        if k == len(s_dupli)-1:
+                            mensaje += " y "+str(nombre_carrera_retor(index1))+" se detallara en las siguientes tablas"
+                        else:
+                            mensaje += ", "+str(nombre_carrera_retor(index1))
+                    k = k +1
+            html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
+
             for i in s_dupli:#recorremos todo los id carreras puede ser 12,1,9
                 index = int(i) - 1#obtenemos el id
                 index1 = int(i)
@@ -717,10 +735,26 @@ def  retornar_valores(datos,ress):
                     html += "</div>"
                     html += "<br>"
         elif si_ar == "si_ar":
-            mensaje = "La cantidad de estudiantes que desertaron por areas son lo siguiente"
-            html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
             s_dupli = eliminar_dobles(id_ar)#si hay doble veces repetido el id lo eliminamos a 1
-            print(s_dupli,"vector ")
+            if len(s_dupli)==1:
+                mensaje = "El numero de estudiantes desertores del área de "
+                for i in s_dupli:
+                    index1 = int(i)#obtenemos el id
+                    mensaje += str(nombre_area_id(index1))+", se detallara en la siguiente tabla"
+            else:
+                mensaje = "El numero de estudiantes desertores en las siguientes áreas de "
+                k = 0
+                for i in s_dupli:
+                    index1 = int(i)#obtenemos el id
+                    if k == 0:
+                        mensaje += str(nombre_area_id(index1))
+                    else:
+                        if k == len(s_dupli)-1:
+                            mensaje += " y "+str(nombre_area_id(index1))+" se detallara en las siguientes tablas"
+                        else:
+                            mensaje += ", "+str(nombre_area_id(index1))
+                    k = k +1
+            html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
             for i in s_dupli:#recorremos todo los id de areas
                 index = int(i) - 1#obtenemos el id
                 index1 = int(i)
@@ -741,8 +775,8 @@ def  retornar_valores(datos,ress):
                 html += "</div>"
                 html += "<br>"
         else:
-            mensaje = "La cantidad de estudiantes que desertaron "
-            mensaje += "es lo siguiente por área y carreras"
+            mensaje = "La cantidad de estudiantes que desertaron por areas y carreras"
+            mensaje += " se mostraran en las siguientes tablas"
             html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
             #crear para areas
 
@@ -1271,9 +1305,26 @@ def  retornar_valores(datos,ress):
 
         colorr ={0:'beige',1:'Gainsboro',2:'Khaki',3:'Lavender',4:'LightYellow'}
         if si_car_n == "si_car_n":#esta buscando carreras
-            mensaje = "La cantidad de estudiantes clasificado por varones y mujeres de las siguientes carreras son"
-            html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
             s_dupli = eliminar_dobles(id_car)#si hay doble veces repetido el id lo eliminamos a 1
+            if len(s_dupli)==1:
+                mensaje = "El número de estudiantes clasificado por sexo de la carrera de "
+                for i in s_dupli:
+                    index1 = int(i)#obtenemos el id
+                    mensaje += str(nombre_carrera_retor(index1))+", se detallara en el cuadro siguiente"
+            else:
+                mensaje = "El número de estudiantes clasificados por sexo de las carreras de "
+                k = 0
+                for i in s_dupli:
+                    index1 = int(i)#obtenemos el id
+                    if k == 0:
+                        mensaje += str(nombre_carrera_retor(index1))
+                    else:
+                        if k == len(s_dupli)-1:
+                            mensaje += " y "+str(nombre_carrera_retor(index1))+" se detallara en los cuadros siguientes"
+                        else:
+                            mensaje += ", "+str(nombre_carrera_retor(index1))
+                    k = k +1
+            html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
             for i in s_dupli:#recorremos todo los id carreras puede ser 12,1,9
                 index = int(i) - 1#obtenemos el id
                 index1 = int(i)
@@ -1310,9 +1361,26 @@ def  retornar_valores(datos,ress):
                 html += "</div>"
                 html += "<br>"
         elif si_ar == "si_ar":
-            mensaje = "La cantidad de estudiantes clasificado por varones y mujeres de las siguientes áreas son"
+            s_dupli = eliminar_dobles(id_ar)#si hay doble veces repetido el id lo eliminamos a 1
+            if len(s_dupli)==1:
+                mensaje = "El numero de estudiantes clasificado por sexo del área de "
+                for i in s_dupli:
+                    index1 = int(i)#obtenemos el id
+                    mensaje += str(nombre_area_id(index1))+", se detallara en el cuadro siguiente"
+            else:
+                mensaje = "El numero de estudiantes clasificados por sexo de las áreas "
+                k = 0
+                for i in s_dupli:
+                    index1 = int(i)#obtenemos el id
+                    if k == 0:
+                        mensaje += str(nombre_area_id(index1))
+                    else:
+                        if k == len(s_dupli)-1:
+                            mensaje += " y "+str(nombre_area_id(index1))+" se detallara en los cuadros siguientes"
+                        else:
+                            mensaje += ", "+str(nombre_area_id(index1))
+                    k = k +1
             html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
-            s_dupli = eliminar_dobles(id_ar)#
             for i in s_dupli:#recorremos todo los id de areas
                 index = int(i) - 1#obtenemos el id
                 index1 = int(i)
@@ -1347,11 +1415,10 @@ def  retornar_valores(datos,ress):
                 html += "</div>"
                 html += "<br>"
         else:
-            mensaje = "La cantidad de estudiantes clasificado por varones y mujeres"
-            mensaje += " detallamos en los siguientes cuadros por áreas y carreras"
+            mensaje = "La cantidad de estudiantes clasificados por sexo en areas y carreras"
+            mensaje += "se detallara en los siguientes cuadros"
             html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
             # Crear el gráfico de torta
-
             #crear para areas
 
             html += "<h5 align='center'>Áreas</h5>"
@@ -1455,11 +1522,32 @@ def  retornar_valores(datos,ress):
         if si_car_n == "si_car_n":#esta buscando carreras
             s_dupli = eliminar_dobles(id_car)#si hay doble veces repetido el id lo eliminamos a 1
             if len(s_dupli)==1:
-                mensaje = "La cantidad de estudiantes que realizaron transferencias a otras universidades desde el año "+str(a1)+" al año "+str(a2)+" son "+str(total)+" de la siguiente carrera"
-            else:
-                mensaje = "La cantidad de estudiantes que realizaron transferencias a otras universidades desde el año "+str(a1)+" al año "+str(a2)+" son "+str(total)+" de las siguientes carreras"
+                if a1 == a2:
+                    mensaje = "La cantidad de estudiantes que realizaron transferencias a otras universidades en el año "+str(a1)+" de la carrera de "
+                else:
+                    mensaje = "La cantidad de estudiantes que realizaron transferencias a otras universidades desde el año "+str(a1)+" al año "+str(a2)+" de la carrera de "
 
+                for i in s_dupli:
+                    index1 = int(i)#obtenemos el id
+                    mensaje += str(nombre_carrera_retor(index1))+" se detallara en el siguiente cuadro"
+            else:
+                if a1 == a2:
+                    mensaje = "La cantidad de estudiantes que realizaron transferencias a otras universidades en el año "+str(a1)+" de las carreras de "
+                else:
+                    mensaje = "La cantidad de estudiantes que realizaron transferencias a otras universidades desde el año "+str(a1)+" al año "+str(a2)+" de las carreras de "
+                k = 0
+                for i in s_dupli:
+                    index1 = int(i)#obtenemos el id
+                    if k == 0:
+                        mensaje += str(nombre_carrera_retor(index1))
+                    else:
+                        if k == len(s_dupli)-1:
+                            mensaje += " y "+str(nombre_carrera_retor(index1))+" se detallara en las siguientes cuadros"
+                        else:
+                            mensaje += ", "+str(nombre_carrera_retor(index1))
+                    k = k +1
             html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
+
             for i in s_dupli:#recorremos todo los id carreras puede ser 12,1,9
                 index = int(i) - 1#obtenemos el id
                 index1 = int(i)
@@ -1479,14 +1567,33 @@ def  retornar_valores(datos,ress):
                     html += "</div>"
                 html += "</div>"
         elif si_ar == "si_ar":
-
             s_dupli = eliminar_dobles(id_ar)#si hay doble veces repetido el id lo eliminamos a 1
             if len(s_dupli)==1:
-                mensaje = "La cantidad de estudiantes que realizaron transferencias a otras universidades desde el año "+str(a1)+" al año "+str(a2)+" son "+str(total)+" de la siguiente área"
+                if a1 == a2:
+                    mensaje = "La cantidad de estudiantes que realizaron transferencias a otras universidades en el año "+str(a1)+" en el área de "
+                else:
+                    mensaje = "La cantidad de estudiantes que realizaron transferencias a otras universidades desde el año "+str(a1)+" al año "+str(a2)+" en el área de "
+
+                for i in s_dupli:
+                    index1 = int(i)#obtenemos el id
+                    mensaje += str(nombre_area_id(index1))+" se detallara en el siguiente cuadro"
             else:
-                mensaje = "La cantidad de estudiantes que realizaron transferencias a otras universidades desde el año "+str(a1)+" al año "+str(a2)+" son "+str(total)+" de las siguientes áreas"
+                if a1 == a2:
+                    mensaje = "La cantidad de estudiantes que realizaron transferencias a otras universidades en el año "+str(a1)+" en los áreas de "
+                else:
+                    mensaje = "La cantidad de estudiantes que realizaron transferencias a otras universidades desde el año "+str(a1)+" al año "+str(a2)+" en los áreas de "
+                k = 0
+                for i in s_dupli:
+                    index1 = int(i)#obtenemos el id
+                    if k == 0:
+                        mensaje += str(nombre_area_id(index1))
+                    else:
+                        if k == len(s_dupli)-1:
+                            mensaje += " y "+str(nombre_area_id(index1))+" se detallara en las siguientes cuadros"
+                        else:
+                            mensaje += ", "+str(nombre_area_id(index1))
+                    k = k +1
             html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
-            print(s_dupli,"vector ")
             for i in s_dupli:#recorremos todo los id de areas
                 index = int(i) - 1#obtenemos el id
                 index1 = int(i)
@@ -1506,7 +1613,11 @@ def  retornar_valores(datos,ress):
                     html += "</div>"
                 html += "</div>"
         else:
-            mensaje = "La cantidad de estudiantes que realizaron transferencias a otras universidades desde el año "+str(a1)+" al año "+str(a2)+" son "+str(total)
+            if a1 == a2:
+                mensaje = "La cantidad de estudiantes que realizaron transferencias a otras universidades en el año "+str(a1)+" por áreas y carreras se detallara en los siguientes cuadros"
+            else:
+                mensaje = "La cantidad de estudiantes que realizaron transferencias a otras universidades desde el año "+str(a1)+" al año "+str(a2)+" por áreas y carreras se detallara en los siguientes cuadros"
+
             html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
                 # Crear el gráfico de torta
 
@@ -2430,10 +2541,23 @@ def  retornar_valores(datos,ress):
         if si_car_n == "si_car_n":#esta buscando carreras
             s_dupli = eliminar_dobles(id_car)#si hay doble veces repetido el id lo eliminamos a 1
             if len(s_dupli)==1:
-                mensaje = "La cantidad de estudiantes clasificados por departamentos y regiones de la carrera son"
+                mensaje = "Los estudiantes clasificados pos regiones y departamentos de la carrera de "
+                for i in s_dupli:
+                    index1 = int(i)#obtenemos el id
+                    mensaje += str(nombre_carrera_retor(index1))+", es lo siguiente"
             else:
-                mensaje = "La cantidad de estudiantes clasificados por departamentos y regiones de las carreras son"
-
+                mensaje = "Los estudiantes clasificados pos regiones y departamentos de las carreras de "
+                k = 0
+                for i in s_dupli:
+                    index1 = int(i)#obtenemos el id
+                    if k == 0:
+                        mensaje += str(nombre_carrera_retor(index1))
+                    else:
+                        if k == len(s_dupli)-1:
+                            mensaje += " y "+str(nombre_carrera_retor(index1))+" son los siguientes"
+                        else:
+                            mensaje += ", "+str(nombre_carrera_retor(index1))
+                    k = k +1
             html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
             html += "<div class='alert alert-secondary'>Regiones</div>"
             for i in s_dupli:#recorremos todo los id carreras puede ser 12,1,9
@@ -2484,11 +2608,25 @@ def  retornar_valores(datos,ress):
         elif si_ar == "si_ar":
             s_dupli = eliminar_dobles(id_ar)#si hay doble veces repetido el id lo eliminamos a 1
             if len(s_dupli)==1:
-                mensaje = "La cantidad de estudiantes clasificados por departamentos y regiones del área son"
+                mensaje = "Los estudiantes clasificados pos regiones y departamentos del área de "
+                for i in s_dupli:
+                    index1 = int(i)#obtenemos el id
+                    mensaje += str(nombre_area_id(index1))+", es lo siguiente"
             else:
-                mensaje = "La cantidad de estudiantes clasificados por departamentos y regiones de los áreas son"
-
+                mensaje = "Los estudiantes clasificados pos regiones y departamentos de las áreas de "
+                k = 0
+                for i in s_dupli:
+                    index1 = int(i)#obtenemos el id
+                    if k == 0:
+                        mensaje += str(nombre_area_id(index1))
+                    else:
+                        if k == len(s_dupli)-1:
+                            mensaje += " y "+str(nombre_area_id(index1))+" son los siguientes"
+                        else:
+                            mensaje += ", "+str(nombre_area_id(index1))
+                    k = k +1
             html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
+
             html += "<div class='alert alert-secondary'>Regiones</div>"
             for i in s_dupli:#recorremos todo los id de areas
                 index = int(i) - 1#obtenemos el id
@@ -5225,9 +5363,202 @@ def  retornar_valores(datos,ress):
                     else:#materia de un area completo
                         html+="<div class='alert alert-secondary'>La asignatura de "+nombre_asignatura(index)+" del area de "+nombre_area_id(vcar[index][anio]['area'])+" del año "+str(anio)+"</div>"
                         html+=tabla(vcar[index][anio]['avance'],vcar[index][anio]['inscritos'],vcar[index][anio]['desercion'],vcar[index][anio]['regulares'],vcar[index][anio]['aprobado'],vcar[index][anio]['reprobado'])
+    if accion1 == "culminacion_estudios":
+        si_car_n = ress[0]
+        id_car   = ress[1]
+        si_ar = ress[2]
+        id_ar  = ress[3]
+        si_total = ress[4]
+        fecha1 = ress[5]
+        fecha2 = ress[6]
+        if fecha1>fecha2:
+            aux = fecha1
+            fecha1 = fecha2
+            fecha2 = aux
+        vapro = {}
+        vaplaz = {}
+        vareasApro = {}
+        vareasApla = {}
+        caplaz = 0
+        cdes = 0
+        cndes = 0
+        total = 0
+        ctec = 0
+        csal = 0
+        csoc = 0
+        a11 = int(obtener_ano_de_fecha(fecha1))
+        a22 = int(obtener_ano_de_fecha(fecha2))
+        a1 = int(obtener_ano_de_fecha(fecha1))
+        a2 = int(obtener_ano_de_fecha(fecha2))
+        for anio in range(a1, a2 + (1)):
+            vareasApla[anio]=[0]*n_are
+            vaplaz[anio] = [0] * n_car
+
+        #carreras_a= [carreraa[0] for carreraa in ro]#aqui tengo todas las carreras pero sus id
+
+        if isinstance(fecha1, str):
+            fecha1 = datetime.strptime(fecha1, "%Y-%m-%d").date()
+        if isinstance(fecha2, str):
+            fecha2 = datetime.strptime(fecha2, "%Y-%m-%d").date()
+        for row in datos:
+            if not isinstance(row[8], type(None)) and row[8]>=fecha1 and row[8] <= fecha2:#la fecha obtenidad tiene que estar en ese rango
+                anoBD = int(obtener_ano_de_fecha(row[8].strftime("%Y-%m-%d")))
+                if row[3] == 5 and row[1] == "aprobado":#contar los de 5to añp
+                    caplaz += 1
+                    vaplaz[anoBD][row[5]-1] += 1
+                    vareasApla[anoBD][row[7]-1] += 1
+        if si_car_n == "si_car_n":#esta buscando carreras
+            s_dupli = eliminar_dobles(id_car)#si hay doble veces repetido el id lo eliminamos a 1
+            if len(s_dupli)==1:
+                mensaje = "La cantidad de estudiantes que concluyeron sus estudios en la carrera de "
+                for i in s_dupli:
+                    index1 = int(i)#obtenemos el id
+                    mensaje += str(nombre_carrera_retor(index1))+" se detallara en las siguiente tabla"
+            else:
+                mensaje = "La cantidad de estudiantes que concluyeron sus estudios en las carreras de "
+                k = 0
+                for i in s_dupli:
+                    index1 = int(i)#obtenemos el id
+                    if k == 0:
+                        mensaje += str(nombre_carrera_retor(index1))
+                    else:
+                        if k == len(s_dupli)-1:
+                            mensaje += " y "+str(nombre_carrera_retor(index1))+" se detallara en las siguientes tablas"
+                        else:
+                            mensaje += ", "+str(nombre_carrera_retor(index1))
+                    k = k +1
+            html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
+            for i in s_dupli:#recorremos todo los id carreras puede ser 12,1,9
+                index = int(i) - 1#obtenemos el id
+                index1 = int(i)
+                html += "<h5 align = 'center'>Carrera</h5>"
+                html += "<h5 align = 'center'>"+str(nombre_carrera_retor(index1))+"</h5>"
+                k = 0
+                html += "<div class='row'>"
+                for anio in range(a1, a2 + 1):#recorremos las fechas
+                    html += "<div class='col-lg-4 p-4' style = 'border: 1px solid black;background-color:RGBA(255, 250, 0, 0.5)'>"
+                    html += "<div class='panel panel-default text-center'>"
+                    html += "<div class='panel-heading'>"
+                    html += "<h6 align='center'>Año "+str(anio)+"<h6>"
+                    html += "</div>"
+                    html += "<div class='panel-body'>"
+                    html += "<center><h6>se encontro "+str(vaplaz[anio][index])+" "+decir_conclucion(vaplaz[anio][index])+"</h6></center>"
+                    html += "</div>"
+                    html += "</div>"
+                    html += "</div>"
+                html += "</div>"
+        elif si_ar == "si_ar":
+            s_dupli = eliminar_dobles(id_ar)#si hay doble veces repetido el id lo eliminamos a 1
+            if len(s_dupli)==1:
+                mensaje = "La cantidad de estudiantes que concluyenron sus estudios en el área de "
+                for i in s_dupli:
+                    index1 = int(i)#obtenemos el id
+                    mensaje += str(nombre_area_id(index1))+" se detallara en las siguiente tabla"
+            else:
+                mensaje = "La cantidad de estudiantes que concluyenron sus estudios en las áreas de "
+                k = 0
+                for i in s_dupli:
+                    index1 = int(i)#obtenemos el id
+                    if k == 0:
+                        mensaje += str(nombre_carrera_retor(index1))
+                    else:
+                        if k == len(s_dupli)-1:
+                            mensaje += " y "+str(nombre_carrera_retor(index1))+" se detallara en las siguientes tablas"
+                        else:
+                            mensaje += ", "+str(nombre_carrera_retor(index1))
+                    k = k +1
+                for i in s_dupli:
+                    index1 = int(i)#obtenemos el id
+                    if k == 0:
+                        mensaje += str(nombre_area_id(index1))+""
+                    if k == len(s_dupli)-1:
+                        mensaje += " y "+str(nombre_area_id(index1))+" se detallara en las siguientes tablas"
+                    else:
+                        mensaje += ", "+str(nombre_area_id(index1))
+            for i in s_dupli:#recorremos todo los id de areas
+                index = int(i) - 1#obtenemos el id
+                index1 = int(i)
+                html += "<h5 align='center'>Área "+str(nombre_area_id(index1))+"<h5>"
+                html += "<div class='row'>"
+                for anio in range(a1, a2 + 1):#recorremos las fechas
+                    html += "<div class='col-lg-4' style = 'border: 1px solid black;'>"
+                    html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                    html += "<div class='panel-heading'>"
+                    html += "Año "+str(anio)
+                    html += "</div>"
+                    html += "<div class='panel-body'>"
+                    html += "<center><h6>se encontro "+str(vareasApla[anio][index])+" "+decir_conclucion(vareasApla[anio][index])+"</h6></center>"
+                    html += "</div>"
+                    html += "</div>"
+                    html += "</div>"
+                html += "</div>"
+                html += "<br>"
+        else:
+            mensaje = "La cantidad de estudiantes que concluyeron sus estudios"
+            mensaje += " por áreas y carreras, detallamos en los siguientes tablas"
+            html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
+            # Crear el gráfico de torta
+            html += "<div class='row bg-warning'style = 'border: 1px solid black;'>"
+            html += "<h5 align='center'>Total</h5>"
+            html += "<div class='col-lg-12'>"
+            html += "<div class='panel panel-default text-center bg-light' style = 'border: 1px solid black;'>"
+            html += "<div class='panel-heading'>"
+            html += "</div>"
+            html += "<div class='panel-body'>"
+            html += "<center><h6>se encontro "+str(caplaz)+" estudiantes que concluyeron sus estudios</h6></center>"
+            html += "</div>"
+            html += "</div>"
+            html += "</div>"
+            html += "</div>"
+            html += "<br>"
+            #crear para areas
+
+            html += "<h5 align='center'>Áreas</h5>"
+            areas = seleccionarAreas()
+            for are in areas:#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
+                html += "<h6 align='center'>Área "+str(nombre_area_id(are[0]))+"</h6>"
+                html += "<div class='row'>"
+                for anio in range(a1, a2 + 1):#recorremos las fechas
+                    html += "<div class='col-lg-4' style='border: 1px solid black;'>"
+                    html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                    html += "<div class='panel-heading'>"
+                    html += "Año "+str(anio)
+                    html += "</div>"
+                    html += "<div class='panel-body'>"
+                    html += "<center><h6>se encontro "+str(vareasApla[anio][are[0]-1])+" "+decir_conclucion(vareasApla[anio][are[0]-1])+"</h6></center>"
+                    html += "</div>"
+                    html += "</div>"
+                    html += "</div>"
+                html += "</div>"
+                html += "<br>"
+            h = 1
+            carreras = seleccionarCarrerasTodo()
+            for car in carreras:#recorremos con un for las 17 carrerasy creamos un canvas para cada carrera
+                html += "<h6 align = 'center'>Carrera</h6>"
+                html += "<h6 align = 'center'>"+str(nombre_carrera_retor(car[0]))+"</h6>"
+                html += "<div class='row' style = 'border: 1px solid black;'>"
+                for anio in range(a1, a2 + 1):#recorremos las fechas
+                    html += "<div class='col-lg-4 p-4' style = 'border: 1px solid black;background-color:RGBA(255, 250, 0, 0.5)'>"
+                    html += "<div class='panel panel-default text-center'>"
+                    html += "<div class='panel-heading'>"
+                    html += "Año "+str(anio)
+                    html += "</div>"
+                    html += "<div class='panel-body'>"
+                    html += "<center><h6>se encontro "+str(vaplaz[anio][car[0]-1])+" "+decir_conclucion(vaplaz[anio][car[0]-1])+"</h6></center>"
+                    html += "</div>"
+                    html += "</div>"
+                    html += "</div>"
+                html += "</div><br>"
+
     html += "</container>"
 
     return html
+
+def decir_conclucion(cantidad):
+    if cantidad == 1:
+        return "estudiante que concluyo su estudio"
+    else:
+        return "estudiates que concluyeron sus estudios"
 def tabla(avance,inscritos,desercion,regular,aprobados,reprobados):
     html = ''
     html += "<div class='table-responsive'>"

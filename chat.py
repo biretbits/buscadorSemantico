@@ -169,12 +169,26 @@ carreras_no_tomar = ["informatica",
 areas_no_tomar = ['tecnologia','salud','social','tecnologi','salu','sociales','sal','tecnolog','socia','sociale','tecnolo','tecnol','tecno','soci']
 tambien_no_tomar = ['año','ano','gestion','gestio','gesti']
 otros_no_tomar = ['unsxx','universidad','nacional','siglo','xx','universi','naciona']
-
+palabras_tomar_encuenta = ['a','de']
 def filtrar(texto):
     materias = seleccionarMaterias()
     #print(materias)
     doc = nlp(texto)
-    palabras_filtradas = [token.text for token in doc if not token.is_stop and (not token.text.isdigit() and not isinstance(token.text, int)) and not token.text in tambien_no_tomar and not token.text in carreras_no_tomar  and not token.text in areas_no_tomar and not token.text in otros_no_tomar and not token.is_space and not token.text in materias]
+    palabras_filtradas = [
+        token.text for token in doc
+        if not token.is_stop and
+           not token.text.isdigit() and
+           not isinstance(token.text, int) and
+           token.text not in tambien_no_tomar and
+           token.text not in carreras_no_tomar and
+           token.text not in areas_no_tomar and
+           token.text not in otros_no_tomar and
+           not token.is_space and
+           token.text not in materias]
+    for palabra in palabras_tomar_encuenta:
+        if palabra in texto.split():
+            palabras_filtradas.append(palabra)
+
     return palabras_filtradas
 
 def sinonimos(palabra):
@@ -267,7 +281,7 @@ def clasificacando_por_segunda_ves(vec_new_id,vec_new_text,otro,claves,palabras_
     resultado = []
     #al recorrer obtenemos de la posicion obtenida las derivaciones y sinonimos de la palabra encontrado en palabras claves
     for posi in posiciones:
-        resultado.extend(otro[posi])
+        resultado.extend(otro[posi])#guardamos todos las derivaciones de la palabra clave que se encontro en el texto del usuario
     kk = 0
     print("posiciones  ",posiciones)
     for palabra in vec_new_text:
@@ -675,6 +689,11 @@ def buscar(texto,posible_respuesta):
         if response == 'argumentar_poco_mas':
             vec1 = []
             vec1.append(response)
+        if response == "culminacion_estudios":
+            vec1=[]
+            res = busqueda(texto,"culminacion_estudios",consultas_sql)
+            for r in res:
+                vec1.append(r)
         return vec1
     else:
         vec1=[]

@@ -12,99 +12,101 @@
             <a class='nav-link btn btn-outline-secondary text-primary' href='/'>Inicio</a>
           </li>
           {% if usuario %}
-            <li class='nav-item dropdown' title='Registros'>
-            <a class='nav-link dropdown-toggle btn btn-outline-secondary text-primary' href='#' id='navbarDropdown2' role='button' data-bs-toggle='dropdown' aria-expanded='false'>
-              Registro entrenamiento <!-- Mostrar nombre de usuario -->
-            </a>
-            <ul class='dropdown-menu' aria-labelledby='navbarDropdown2'>
-              <li class='nav-item' title='Registro nuevo de carrera' style='color:green'>
-                  <a class='nav-link text-primary btn btn-outline-info' href='/tpreg'>Preguntas</a>
+            {% if admin == "admin" %}
+              <li class='nav-item' title='Registro de respuesta'>
+                <a class='nav-link btn btn-outline-secondary text-primary' href='/tresp'>Respuestas</a>
               </li>
-              <li class='nav-item' title='Registro palabras de clave' style='color:green'>
-                  <a class='nav-link text-primary btn btn-outline-info' href='/Clave'>Palabras claves</a>
-              </li>
-
-            </ul>
-            </li>
-
-            <!--<li class='nav-item' title='Registro de respuesta'>
-              <a class='nav-link btn btn-outline-secondary text-primary' href='/tresp'>Respuestas</a>
-            </li>-->
-            <li class='nav-item' title='backup de la base de datos'>
-              <a class='nav-link btn btn-outline-secondary text-primary' href='/backup'>Backup</a>
-            </li>
-
-            <li class='nav-item dropdown' title='Registros'>
+            {% else %}
+              <li class='nav-item dropdown' title='Registros'>
               <a class='nav-link dropdown-toggle btn btn-outline-secondary text-primary' href='#' id='navbarDropdown2' role='button' data-bs-toggle='dropdown' aria-expanded='false'>
-                Registros <!-- Mostrar nombre de usuario -->
+                Registro entrenamiento <!-- Mostrar nombre de usuario -->
               </a>
               <ul class='dropdown-menu' aria-labelledby='navbarDropdown2'>
-                <li><hr class='dropdown-divider'></li>
                 <li class='nav-item' title='Registro nuevo de carrera' style='color:green'>
-                  <a class='nav-link text-primary btn btn-outline-info' href='/FormCarrera'style='color:green;font-size:12px'>
-                    Registrar Carrera
-                  </a>
+                    <a class='nav-link text-primary btn btn-outline-info' href='/tpreg'>Preguntas</a>
                 </li>
-                <li class='nav-item' title='Registro de estudiante' style='color:green'>
-                  <a class='nav-link text-primary btn btn-outline-info' href='/FormEstudiante'style='color:green;font-size:12px'>
-                    Reg. Estudiante
-                  </a>
-                </li>
-                <li class='nav-item' title='Registro nuevo plan curricular' style='color:green'style='color:green;font-size:12px'>
-                  <a class='nav-link text-primary btn btn-outline-info' href='/FormPlan'style='color:green;font-size:12px'>
-                    Registrar plan de estudio
-                  </a>
-                </li>
-                <li class='nav-item' title='Registro nuevo docente' style='color:green'>
-                  <a class='nav-link text-primary btn btn-outline-info' href='/FormDocente'style='color:green;font-size:12px'>
-                    Reg. de Docente
-                  </a>
-                </li>
-                <li class='nav-item' title='Registro nueva asignatura' style='color:green'>
-                  <a class='nav-link text-primary btn btn-outline-info' href='/FormAsig'style='color:green;font-size:12px'>
-                    Reg. Asignatura
-                  </a>
+                <li class='nav-item' title='Registro palabras de clave' style='color:green'>
+                    <a class='nav-link text-primary btn btn-outline-info' href='/Clave'>Palabras claves</a>
                 </li>
 
-                <li class='nav-item' title='Registro de modalidad de titulación' style='color:green'>
-                  <a class='nav-link text-primary btn btn-outline-info' href='/FormModalidad'style='color:green;font-size:12px'>
-                    Reg. modalidad de titulación
-                  </a>
-                </li>
-                <li class='nav-item' title='Registro de nuevo titulado' style='color:green'>
-                  <a class='nav-link text-primary btn btn-outline-info' href='/FormTitulado'style='color:green;font-size:12px'>
-                    Reg. Titulados
-                  </a>
-                </li>
+              </ul>
+              </li>
 
-                <li class='nav-item' title='Registro de docente que asignaturas dictara' style='color:green'>
-                  <a class='nav-link text-primary btn btn-outline-info' href='/FormDicta'style='color:green;font-size:12px'>
-                    Reg. Docente dicta materias
-                  </a>
-                </li>
+              <li class='nav-item' title='backup de la base de datos'>
+                <a class='nav-link btn btn-outline-secondary text-primary' href='/backup'>Backup</a>
+              </li>
 
-                <li class='nav-item' title='Registro de asignatura a llevar por el estudiante' style='color:green'>
-                  <a class='nav-link text-primary btn btn-outline-info' href='/FormAsigEst'style='color:green;font-size:12px'>
-                    Reg. asignaturas del estudiante
-                  </a>
-                </li>
-                <li class='nav-item' title='Registrar Transición de Curso' style='color:green'>
-                  <a class='nav-link text-primary btn btn-outline-info' href='/FormAvance'style='color:green;font-size:12px'>
-                    Reg. vencido de año
-                  </a>
-                </li>
-                <li class='nav-item' title='Registro nueva transferencia a otra universidad' >
-                  <a class='nav-link text-primary btn btn-outline-info' href='/FormTranferirO'style='color:green;font-size:12px'>
-                    Reg. transferencia a otra universidad
-                  </a>
-                </li>
+              <li class='nav-item dropdown' title='Registros'>
+                <a class='nav-link dropdown-toggle btn btn-outline-secondary text-primary' href='#' id='navbarDropdown2' role='button' data-bs-toggle='dropdown' aria-expanded='false'>
+                  Registros <!-- Mostrar nombre de usuario -->
+                </a>
+                <ul class='dropdown-menu' aria-labelledby='navbarDropdown2'>
+                  <li><hr class='dropdown-divider'></li>
+                  <li class='nav-item' title='Registro nuevo de carrera' style='color:green'>
+                    <a class='nav-link text-primary btn btn-outline-info' href='/FormCarrera'style='color:green;font-size:12px'>
+                      Registrar Carrera
+                    </a>
+                  </li>
+                  <li class='nav-item' title='Registro de estudiante' style='color:green'>
+                    <a class='nav-link text-primary btn btn-outline-info' href='/FormEstudiante'style='color:green;font-size:12px'>
+                      Reg. Estudiante
+                    </a>
+                  </li>
+                  <li class='nav-item' title='Registro nuevo plan curricular' style='color:green'style='color:green;font-size:12px'>
+                    <a class='nav-link text-primary btn btn-outline-info' href='/FormPlan'style='color:green;font-size:12px'>
+                      Registrar plan de estudio
+                    </a>
+                  </li>
+                  <li class='nav-item' title='Registro nuevo docente' style='color:green'>
+                    <a class='nav-link text-primary btn btn-outline-info' href='/FormDocente'style='color:green;font-size:12px'>
+                      Reg. de Docente
+                    </a>
+                  </li>
+                  <li class='nav-item' title='Registro nueva asignatura' style='color:green'>
+                    <a class='nav-link text-primary btn btn-outline-info' href='/FormAsig'style='color:green;font-size:12px'>
+                      Reg. Asignatura
+                    </a>
+                  </li>
 
-                <li class='nav-item' title='Registro nueva transferencia de otra universidad' style='color:green'>
-                  <a class='nav-link text-primary btn btn-outline-info' href='/FormTranferirD'style='color:green;font-size:12px'>
-                    Reg. transferencia de otra universidade
-                  </a>
-                </li>
+                  <li class='nav-item' title='Registro de modalidad de titulación' style='color:green'>
+                    <a class='nav-link text-primary btn btn-outline-info' href='/FormModalidad'style='color:green;font-size:12px'>
+                      Reg. modalidad de titulación
+                    </a>
+                  </li>
+                  <li class='nav-item' title='Registro de nuevo titulado' style='color:green'>
+                    <a class='nav-link text-primary btn btn-outline-info' href='/FormTitulado'style='color:green;font-size:12px'>
+                      Reg. Titulados
+                    </a>
+                  </li>
 
+                  <li class='nav-item' title='Registro de docente que asignaturas dictara' style='color:green'>
+                    <a class='nav-link text-primary btn btn-outline-info' href='/FormDicta'style='color:green;font-size:12px'>
+                      Reg. Docente dicta materias
+                    </a>
+                  </li>
+
+                  <li class='nav-item' title='Registro de asignatura a llevar por el estudiante' style='color:green'>
+                    <a class='nav-link text-primary btn btn-outline-info' href='/FormAsigEst'style='color:green;font-size:12px'>
+                      Reg. asignaturas del estudiante
+                    </a>
+                  </li>
+                  <li class='nav-item' title='Registrar Transición de Curso' style='color:green'>
+                    <a class='nav-link text-primary btn btn-outline-info' href='/FormAvance'style='color:green;font-size:12px'>
+                      Reg. vencido de año
+                    </a>
+                  </li>
+                  <li class='nav-item' title='Registro nueva transferencia a otra universidad' >
+                    <a class='nav-link text-primary btn btn-outline-info' href='/FormTranferirO'style='color:green;font-size:12px'>
+                      Reg. transferencia a otra universidad
+                    </a>
+                  </li>
+
+                  <li class='nav-item' title='Registro nueva transferencia de otra universidad' style='color:green'>
+                    <a class='nav-link text-primary btn btn-outline-info' href='/FormTranferirD'style='color:green;font-size:12px'>
+                      Reg. transferencia de otra universidade
+                    </a>
+                  </li>
+                  {% endif %}
               </ul>
             </li>
           {% endif %}
