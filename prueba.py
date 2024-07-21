@@ -1491,3 +1491,22 @@ usuario es   ['materia', 'fisic', 'i', 'taller', 'programacion', 'i', 'estudiant
     'proyec', 'proye', 'proy', 'alta', 'gerencia', 'gerenci', 'gerenc', 'geren',
      'gere']    contar    1
 ['electiva', 'electiv', 'electi', 'elect', 'elec', 'ii']
+
+
+
+['estudiantes', 'reprobados', 'carrera', 'area', 'de']  palabras filtradas
+2   =   ['numero', 'estudiantes', 'carrera', 'area', 'de'] 4    pal
+15   =   ['carrera', 'area', 'reprobados', 'de']     pal
+[0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0]
+[2, 6]      [['numero', 'estudiantes', 'carrera', 'area', 'de'],
+['carrera', 'area', 'reprobados', 'de']]
+['estudiantes', 'reprobados', 'carrera', 'area', 'de']  palabras filtradas
+posiciones   [1, 4]
+['numero', 'estudiantes', 'carrera', 'area', 'de']
+['numero', 'estudiantes', 'carrera', 'area', 'de']  contar   1
+['carrera', 'area', 'reprobados', 'de']
+['carrera', 'area', 'reprobados', 'de']  contar   2
+[1, 2]      [2, 6]
+llego
+1    posicion
+total_de_estudiantes_estadisticas   repuesta

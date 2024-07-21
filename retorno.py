@@ -5549,11 +5549,190 @@ def  retornar_valores(datos,ress):
                     html += "</div>"
                     html += "</div>"
                 html += "</div><br>"
+    if accion1 == "aprobechamiento":
+        si_car_n = ress[0]
+        id_car   = ress[1]
+        si_ar = ress[2]
+        id_ar  = ress[3]
+        si_total = ress[4]
+        fecha1 = ress[5]
+        fecha2 = ress[6]
+        if fecha1>fecha2:
+            aux = fecha1
+            fecha1 = fecha2
+            fecha2 = aux
+
+        caplaz = 0
+        cdes = 0
+        cndes = 0
+        total = 0
+        ctec = 0
+        csal = 0
+        csoc = 0
+        a11 = int(obtener_ano_de_fecha(fecha1))
+        a22 = int(obtener_ano_de_fecha(fecha2))
+        a1 = int(obtener_ano_de_fecha(fecha1))
+        a2 = int(obtener_ano_de_fecha(fecha2))
+        vareasApro = {}
+        vareasApla = {}
+        vaplaz = {}
+        vatotal = {'aprobechamiento':0,'desercion':0}
+
+        for anio in range(a1, a2 + (1)):
+            vareasApla[anio]={'aprobado':[0]*n_are,'reprobado':[0]*n_are,'si':[0]*n_are,'no':[0]*n_are}
+            vaplaz[anio] = {'aprobado':[0]*n_car,'reprobado':[0]*n_car,'si':[0]*n_car,'no':[0]*n_car}
+        #carreras_a= [carreraa[0] for carreraa in ro]#aqui tengo todas las carreras pero sus id
+
+        if isinstance(fecha1, str):
+            fecha1 = datetime.strptime(fecha1, "%Y-%m-%d").date()
+        if isinstance(fecha2, str):
+            fecha2 = datetime.strptime(fecha2, "%Y-%m-%d").date()
+        for row in datos:
+            if not isinstance(row[8], type(None)) and row[8]>=fecha1 and row[8] <= fecha2:#la fecha obtenidad tiene que estar en ese rango
+                anoBD = int(obtener_ano_de_fecha(row[8].strftime("%Y-%m-%d")))
+                if row[1] == 'aprobado':#contar los de 5to añp
+                    vaplaz[anoBD]['aprobado'][row[5]-1]+= 1
+                    vareasApla[anoBD]['aprobado'][row[7]-1]+= 1
+                elif row[1] == 'reprobado':
+                    vaplaz[anoBD]['reprobado'][row[5]-1] += 1
+                    vareasApla[anoBD]['reprobado'][row[7]-1] += 1
+                if row[2] == 'si':#contar los de 5to añp
+                    vaplaz[anoBD]['si'][row[5]-1] += 1
+                    vareasApla[anoBD]['si'][row[7]-1] += 1
+                elif row[2] == 'no':
+                    vaplaz[anoBD]['no'][row[5]-1] += 1
+                    vareasApla[anoBD]['no'][row[7]-1] += 1
+        if si_car_n == "si_car_n":#esta buscando carreras
+            s_dupli = eliminar_dobles(id_car)#si hay doble veces repetido el id lo eliminamos a 1
+            print(s_dupli,"  carreras mencionadas")
+            if len(s_dupli)==1:
+                mensaje = "EL aprovechamiento academico en la carrera de "
+                for i in s_dupli:
+                    index1 = int(i)#obtenemos el id
+                    mensaje += str(nombre_carrera_retor(index1))+" es lo siguiente: "
+            else:
+                mensaje = "El aprovechamiento academico en las carreras de "
+                k = 0
+                for i in s_dupli:
+                    index1 = int(i)#obtenemos el id
+                    if k == 0:
+                        mensaje += str(nombre_carrera_retor(index1))
+                    else:
+                        if k == len(s_dupli)-1:
+                            mensaje += " y "+str(nombre_carrera_retor(index1))+" son los siguientes:"
+                        else:
+                            mensaje += ", "+str(nombre_carrera_retor(index1))
+                    k = k +1
+            j = 0
+            for i in s_dupli:#recorremos todo los id carreras puede ser 12,1,9
+                index = int(i) - 1#obtenemos el id
+                index1 = int(i)
+                if  j == 0:
+                    mensaje += " la carrera de "+str(nombre_carrera_retor(index1))+""
+                else:
+                    if j == len(s_dupli)-1:
+                        mensaje += " y la carrera de "+str(nombre_carrera_retor(index1))+""
+                    else:
+                        mensaje += ", la carrera de "+str(nombre_carrera_retor(index1))+" tambien"
+                k = 0
+                for anio in range(a1, a2 + 1):#recorremos las fechas
+                    mensaje+= " en el año "+str(anio)+" tubo un aprovechamiento de un "
+                    mensaje+= apro(vaplaz[anio]['aprobado'][index]+vaplaz[anio]['reprobado'][index],vaplaz[anio]['aprobado'][index])+"% "
+                    mensaje+= " y a la vez un desaprobechamiento de "+apro(vaplaz[anio]['aprobado'][index]+vaplaz[anio]['reprobado'][index],vaplaz[anio]['reprobado'][index])+"% de la carrera ya mencionada, "
+                    mensaje+=desapro(vaplaz[anio]['aprobado'][index],vaplaz[anio]['reprobado'][index])
+                j = j + 1
+        elif si_ar == "si_ar":
+            s_dupli = eliminar_dobles(id_ar)#si hay doble veces repetido el id lo eliminamos a 1
+            if len(s_dupli)==1:
+                mensaje = "EL aprovechamiento academico en el área de "
+                for i in s_dupli:
+                    index1 = int(i)#obtenemos el id
+                    mensaje += str(nombre_area_id(index1))+" es lo siguiente: "
+            else:
+                mensaje = "El aprovechamiento academico en las áreas de "
+                k = 0
+                for i in s_dupli:
+                    index1 = int(i)#obtenemos el id
+                    if k == 0:
+                        mensaje += str(nombre_area_id(index1))
+                    else:
+                        if k == len(s_dupli)-1:
+                            mensaje += " y "+str(nombre_area_id(index1))+" son los siguientes:"
+                        else:
+                            mensaje += ", "+str(nombre_area_id(index1))
+                    k = k +1
+            j = 0
+            for i in s_dupli:#recorremos todo los id carreras puede ser 12,1,9
+                index = int(i) - 1#obtenemos el id
+                index1 = int(i)
+                if  j == 0:
+                    mensaje += " el área de "+str(nombre_area_id(index1))+""
+                else:
+                    if j == len(s_dupli)-1:
+                        mensaje += " y el área de "+str(nombre_area_id(index1))+""
+                    else:
+                        mensaje += ", el área de "+str(nombre_area_id(index1))+" tambien"
+                k = 0
+                for anio in range(a1, a2 + 1):#recorremos las fechas
+                    mensaje+= " en el año "+str(anio)+" tubo un aprovechamiento de un "
+                    mensaje+= apro(vareasApla[anio]['aprobado'][index]+vareasApla[anio]['reprobado'][index],vareasApla[anio]['aprobado'][index])+"% "
+                    mensaje+= " y a la vez un desaprobechamiento de "+apro(vareasApla[anio]['aprobado'][index]+vareasApla[anio]['reprobado'][index],vaplaz[anio]['reprobado'][index])+"% del área ya mencionada, "
+                    mensaje+=desapro(vareasApla[anio]['aprobado'][index],vareasApla[anio]['reprobado'][index])
+                j = j + 1
+        else:
+            mensaje= "El aprovechamiento academico por areas y carreras son los siguientes"
+            mensaje+="<br>Áreas:<br>"
+            s_dupli = seleccionarAreas()
+            j = 0
+            for i in s_dupli:#recorremos todo los id carreras puede ser 12,1,9
+                index = int(i[0]) - 1#obtenemos el id
+                index1 = int(i[0])
+                if  j == 0:
+                    mensaje += " El área de "+str(nombre_area_id(index1))+""
+                else:
+                    if j == len(s_dupli)-1:
+                        mensaje += " y el área de "+str(nombre_area_id(index1))+""
+                    else:
+                        mensaje += ", el área de "+str(nombre_area_id(index1))+" tambien"
+                k = 0
+                for anio in range(a1, a2 + 1):#recorremos las fechas
+                    mensaje+= " en el año "+str(anio)+" tubo un aprovechamiento de un "
+                    mensaje+= apro(vareasApla[anio]['aprobado'][index]+vareasApla[anio]['reprobado'][index],vareasApla[anio]['aprobado'][index])+"% "
+                    mensaje+= " y a la vez un desaprobechamiento de "+apro(vareasApla[anio]['aprobado'][index]+vareasApla[anio]['reprobado'][index],vaplaz[anio]['reprobado'][index])+"% del área ya mencionada, "
+                    mensaje+=desapro(vareasApla[anio]['aprobado'][index],vareasApla[anio]['reprobado'][index])
+                j = j + 1
+
+            mensaje+="<br>Carreras:<br>"
+            s_dupli = seleccionarCarrerasTodo()
+            j = 0
+            for i in s_dupli:#recorremos todo los id carreras puede ser 12,1,9
+                index = int(i[0]) - 1#obtenemos el id
+                index1 = int(i[0])
+                if  j == 0:
+                    mensaje += " La carrera de "+str(nombre_carrera_retor(index1))+""
+                else:
+                    if j == len(s_dupli)-1:
+                        mensaje += " y la carrera de "+str(nombre_carrera_retor(index1))+""
+                    else:
+                        mensaje += ", la carrera de "+str(nombre_carrera_retor(index1))+" tambien"
+                k = 0
+                for anio in range(a1, a2 + 1):#recorremos las fechas
+                    mensaje+= " en el año "+str(anio)+" tubo un aprovechamiento de un "
+                    mensaje+= apro(vaplaz[anio]['aprobado'][index]+vaplaz[anio]['reprobado'][index],vaplaz[anio]['aprobado'][index])+"% "
+                    mensaje+= " y a la vez un desaprobechamiento de "+apro(vaplaz[anio]['aprobado'][index]+vaplaz[anio]['reprobado'][index],vaplaz[anio]['reprobado'][index])+"% de la carrera ya mencionada, "
+                    mensaje+=desapro(vaplaz[anio]['aprobado'][index],vaplaz[anio]['reprobado'][index])
+                j = j + 1
+        html += "<div class='alert alert-secondary' role='alert'>" + mensaje + "</div>"
 
     html += "</container>"
 
     return html
 
+def apro(total,valor):
+    if valor == 0:
+        return '0'
+    else:
+        return str(round((valor/total)*100,2))
 def decir_conclucion(cantidad):
     if cantidad == 1:
         return "estudiante que concluyo su estudio"
@@ -5607,6 +5786,18 @@ def menCOncluyeron(a,b):
         return "<h6>hay menos estudiantes que concluyen sus estudios con relación a 1er año</h6>"
     elif a < b:
         return "<h6>existe mas estudiantes que concluyen sus estudios con relación a 1er año</h6>"
+
+
+def desapro(a,b):
+    if a==0 and b == 0:
+        return " en conlusion no se tiene mucha información de la área o carrera mencionada."
+    else:
+        if a == b:
+            return " en conlusion en el año ya mencionado, fue un año parejo"
+        elif a > b:
+            return " en conclusion  en el año ya mencionado, fue un año positivo"
+        elif a < b:
+            return " en conlusion en el año ya mencionado, no fue un año muy positivo"
 
 def generar_reporte():
     # Llamar al script de reporte.py

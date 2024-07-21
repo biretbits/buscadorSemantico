@@ -1485,6 +1485,7 @@ def RegFormAvance():
         cod_carrera = request.form.get("cod_carrera")
         cod_area = request.form.get("cod_area")
         cod_grado = request.form.get("cod_grado")
+        nota = request.form.get("nota")
         conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
         cursor = conn.cursor()
         estado = 'activo'
@@ -1493,15 +1494,14 @@ def RegFormAvance():
             with conn.cursor() as cursor:
                 # Consulta para verificar si el usuario existe
                 consultas = ("insert into estudiante_perdio("
-                "estado_ano,abandono,cod_grado,cod_docente,cod_carrera,cod_es,cod_area,fecha"
-                ")values(%s,%s,%s,%s,%s,%s,%s,%s)")
-                cursor.execute(consultas,(abandono,desercion,cod_grado,1,cod_carrera,cod_es,cod_area,fecha))
+                "estado_ano,abandono,cod_grado,cod_docente,cod_carrera,cod_es,cod_area,fecha,nota"
+                ")values(%s,%s,%s,%s,%s,%s,%s,%s,%s)")
+                cursor.execute(consultas,(abandono,desercion,cod_grado,1,cod_carrera,cod_es,cod_area,fecha,nota))
             conn.commit()
         finally:
             # Cerrar la conexión siempre, incluso si ocurre una excepción
             conn.close()
         return 'correcto'
-
 #funcion para registrar  plan de estudios
 
 @app.route('/FormPlan')

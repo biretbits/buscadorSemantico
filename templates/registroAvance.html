@@ -47,6 +47,11 @@
                     <option value="reprobado">Reprobado</option>
                   </select>
                 </div>
+
+                <div class="mb-3">
+                  <label for="Nota final" class="form-label">Nota final</label>
+                  <input type="number" class="form-control" id="nota" name="nota" required placeholder="ponga la calificación final del año" required>
+                </div>
                 <div class="mb-3">
                   <label for="fecha" class="form-label">fecha</label>
                   <input type="date" class="form-control" id="fecha" name="fecha" required placeholder="ponga la fecha" required>
@@ -79,7 +84,8 @@
       var desercion = document.getElementById("desercion").value;
       var abandono = document.getElementById("abandono").value;
       var fecha = document.getElementById("fecha").value;
-      if(estudiante== '' || desercion == '' || abandono == '' || fecha == ''){
+      var nota = document.getElementById("nota").value;
+      if(estudiante== '' || desercion == '' || abandono == '' || fecha == ''|| nota == ''){
         $('#error').html("<div class='alert alert-danger'>Algun campo vacion o falta seleccionar</div>");
         vaciar();
         return ;
@@ -100,6 +106,7 @@
       datos.append("cod_carrera",cod_carrera);
       datos.append("cod_area",cod_area);
       datos.append("cod_grado",cod_grado);
+      datos.append("nota",nota);
       $.ajax({
         type: "POST", //type of submit
         cache: false, //important or else you might get wrong data returned to you

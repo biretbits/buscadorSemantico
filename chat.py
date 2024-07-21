@@ -694,6 +694,11 @@ def buscar(texto,posible_respuesta):
             res = busqueda(texto,"culminacion_estudios",consultas_sql)
             for r in res:
                 vec1.append(r)
+        if response == "aprobechamiento":
+            vec1=[]
+            res = busqueda(texto,"aprobechamiento",consultas_sql)
+            for r in res:
+                vec1.append(r)
         return vec1
     else:
         vec1=[]

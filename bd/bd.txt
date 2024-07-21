@@ -26,6 +26,8 @@ estado char(15),
 foreign key(cod_area)references area(cod_area)on delete restrict on update restrict
 );
 
+UPDATE estudiante_perdio
+SET nota = IF(estado = 'aprobado', 80, nota);
 
 
 create table estudiante_perdio(
@@ -38,6 +40,7 @@ cod_carrera int,
 cod_es int,
 cod_area int,
 fecha date,
+nota int DEFAULT 0,
 primary key(cod_p),
 foreign key(cod_grado)references grado(cod_grado)on delete restrict on update restrict,
 foreign key(cod_docente)references docente(cod_docente)on delete restrict on update restrict,
