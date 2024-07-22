@@ -169,7 +169,9 @@ carreras_no_tomar = ["informatica",
 areas_no_tomar = ['tecnologia','salud','social','tecnologi','salu','sociales','sal','tecnolog','socia','sociale','tecnolo','tecnol','tecno','soci']
 tambien_no_tomar = ['año','ano','gestion','gestio','gesti']
 otros_no_tomar = ['unsxx','universidad','nacional','siglo','xx','universi','naciona']
-palabras_tomar_encuenta = ['a','de']
+palabras_tomar_encuenta = ['a','de']#antes de eliminar tambien estas palabras de apoyo se toma como palabras claves
+no_afecta_al_texto = ['a','de']#existen en palabras claves ya que ayuda a otros
+#textos a mejorar sus respuesta, pero ademas en otros textos no afecta
 def filtrar(texto):
     materias = seleccionarMaterias()
     #print(materias)
@@ -205,6 +207,7 @@ def sinonimos(palabra):
             # Obtener el valor correspondiente en el vector valores usando la posición
             id = cod_agrupar[posicion]
             pal_claves = seleccionarTodoPalabraClaves_id(id)
+            print(pal_claves)
             for p_c in pal_claves:
                 nuevo.append(p_c)
                 nuevo1.append(p_c)
@@ -241,33 +244,47 @@ def sinonimos(palabra):
         otro.append(nuevo1)
     return nuevo,otro
 
-def clasificando(diccionario,top_10_textos,top_10_codigos,sino,claves):
+def clasificando(diccionario,top_10_textos,top_10_codigos,sino,claves,posiciones):
     vec_suma = [0]*len(top_10_textos)
     #vec_id = [0]*len(top_10_textos)
     # Imprimir los resultados o hacer lo que necesites con ellos
     j = 0
     for pal in diccionario:
         descartar = []
+        encontrados = []
         contar_cor = 0
         contar_des = 0
-        print(j, "  =  ",pal,'    pal')
         for pa in pal:
             if pa in sino:
                 contar_cor+=1
+                if pa in claves:
+                    encontrados.append(pa)
             else:
-                descartar.append(pa)
-        if len(descartar)>0:
-            for des in descartar:
-                if des in claves:
-                    contar_des+=1
-        if contar_cor > 0 and contar_des == 0:
+                if pa in claves:
+                    descartar.append(pa)
+        print(j, "  =  ",pal,'pal',contar_cor," contar",len(descartar)," = des")
+        if contar_cor > 0 and len(descartar) == 0:
+            print("llego 1")
             #id_max = top_10_codigos[j]
             vec_suma[j]+=contar_cor
-            #vec_id[j]=id_max
+        else:
+            #si en el pal que es de los 20 semanticas ['cantidad','estudiantes','de'] si hay palabras claves
+            #al recorrer las 20 similitudes, ademas de contar si tienes palabras similares y no similares con el texto del usuario
+            #tambien contamos y guardamos las palabras similares si existe en palabras claves y se fuarda en encontrados
+            if len(encontrados) == len(posiciones):#si son iguales
+                if len(descartar) > 0:
+                    for des in descartar:
+                        if des in no_afecta_al_texto:#palabra clave descartar hay en palabras claves que no afectan
+                            contar_des+=1
+                if contar_des > 0:
+                    vec_suma[j]+=contar_cor
+                    print('llego')
+                print("llego 2")
         j += 1
     return vec_suma
 
-def clasificacando_por_segunda_ves(vec_new_id,vec_new_text,otro,claves,palabras_filtradas):
+
+def obtener_palabras_claves_del_texto_usuario(otro,palabras_filtradas,claves):
     posiciones = []
     k = 0
     #recorremos las palabras filtradas del usuario
@@ -275,16 +292,20 @@ def clasificacando_por_segunda_ves(vec_new_id,vec_new_text,otro,claves,palabras_
         if pa in claves:#verificamos si la palabra existe en palabras claves
             posiciones.append(k)#si existe guardamos la posicion de la coencidencia
         k=k+1
-    #creamos dos nuevos vectores para un nuevo recorrido
-    vec_contar = [0]*len(vec_new_text)
-    vec_new_ids = [0]*len(vec_new_text)
+        #creamos dos nuevos vectores para un nuevo recorrido
     #recorremo las posiciones obtenidas
     resultado = []
     #al recorrer obtenemos de la posicion obtenida las derivaciones y sinonimos de la palabra encontrado en palabras claves
     for posi in posiciones:
         resultado.extend(otro[posi])#guardamos todos las derivaciones de la palabra clave que se encontro en el texto del usuario
+
+    return resultado,posiciones
+
+def clasificacando_por_segunda_ves(vec_new_id,vec_new_text,otro,claves,palabras_filtradas,resultado):
+
+    vec_contar = [0]*len(vec_new_text)
+    vec_new_ids = [0]*len(vec_new_text)
     kk = 0
-    print("posiciones  ",posiciones)
     for palabra in vec_new_text:
         contar = 0
         print(palabra)
@@ -332,8 +353,10 @@ def buscar(texto,posible_respuesta):
         diccionario.append(filtrar(res))
     sino,otro = sinonimos(palabras_filtradas)#aproabado aprobaron apr
     #print(sino)
+    resultado,posiciones = obtener_palabras_claves_del_texto_usuario(otro,palabras_filtradas,claves)
+
     print(palabras_filtradas," palabras filtradas")
-    vec_suma= clasificando(diccionario,top_10_textos,top_10_codigos,sino,claves)
+    vec_suma= clasificando(diccionario,top_10_textos,top_10_codigos,sino,claves,posiciones)
     vec_new_id = []
     vec_new_text = []
     k = 0
@@ -347,7 +370,7 @@ def buscar(texto,posible_respuesta):
     print(vec_new_id,"    ",vec_new_text)
     print(palabras_filtradas," palabras filtradas")
 
-    vec_contar,vec_ids = clasificacando_por_segunda_ves(vec_new_id,vec_new_text,otro,claves,palabras_filtradas)
+    vec_contar,vec_ids = clasificacando_por_segunda_ves(vec_new_id,vec_new_text,otro,claves,palabras_filtradas,resultado)
     print(vec_contar,"    ",vec_ids)
     maximo = 0
     id_max = 0
