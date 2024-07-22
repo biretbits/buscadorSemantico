@@ -233,10 +233,11 @@ def sinonimos(palabra):
         # Combinar sinónimos y variantes flexionadas
         if len(pa)>=4:
             for i in range(1, len(pa)):
-                if len(pa)==3:
-                    break;
                 nuevo.append(pa[:-i])
                 nuevo1.append(pa[:-i])
+                if len(pa[:-i])==4:
+                    break
+
         otro.append(nuevo1)
     return nuevo,otro
 
@@ -320,7 +321,7 @@ def buscar(texto,posible_respuesta):
     indices_ordenados = np.argsort(similitudes[0])[::-1]
 
     # Seleccionar los 10 máximos o mas
-    top_10_indices = indices_ordenados[:20]
+    top_10_indices = indices_ordenados[:25]
     # Obtener los códigos y respuestas asociadas a los 10 máximos
     top_10_textos = [text_new[idx] for idx in top_10_indices]
     top_10_codigos = [codigos[idx] for idx in top_10_indices]

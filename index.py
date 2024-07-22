@@ -301,7 +301,7 @@ def tablaPregunta():
     num_filas_total = cursor.fetchone()[0]
     TotalPaginas = ceil(num_filas_total / listarDeCuanto)
     inicioList = (pagina - 1) * listarDeCuanto
-    consulta = "SELECT * FROM respuesta AS r INNER JOIN embeddings AS e ON r.cod_respuesta = e.cod_respuesta WHERE e.cod_respuesta IS NOT NULL LIMIT %s, %s"
+    consulta = "SELECT * FROM respuesta AS r INNER JOIN embeddings AS e ON r.cod_respuesta = e.cod_respuesta WHERE e.cod_respuesta  IS NOT NULL order by e.id desc LIMIT %s, %s "
     cursor.execute(consulta, (inicioList, listarDeCuanto))
     sql_consulta = cursor.fetchall()
     consulta_res = "SELECT * FROM respuesta where estado='activo'"
