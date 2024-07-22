@@ -495,14 +495,14 @@ def clasificar(vec,codigos,otro,usuario,limit):
         else:
             if len(n)-1 == contar:
                 if len(n) > 2:
-                    if len(n)/2 == contar:
+                    if (len(n)/2)+1 == contar:
                         codig,unir = eliminar_Materia(codigos,new_mat,k)
                         usuario = eliminar_posiciones(new_pos,usuario)
                         elejidos_materias.append(unir)
                         elejidos_cod.append(codig)
             else:
                 if len(n) > 2:
-                    if len(n)/2 == contar:
+                    if (len(n)/2)+1 == contar:
                         codig,unir = eliminar_Materia(codigos,new_mat,k)
                         usuario = eliminar_posiciones(new_pos,usuario)
                         elejidos_materias.append(unir)
