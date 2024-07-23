@@ -9,6 +9,8 @@ import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 from unidecode import unidecode
 from sql import obtener_embeddings_ahora
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 
 import warnings
 # Cargar el modelo de lenguaje en español
@@ -414,7 +416,6 @@ def obtener_areas_id(texto):
             new_areas.append(id_areas[index])
 
     return new_areas
-
 def seleccionarMateriasTodo_Partido(limit):
     resul = seleccionarAsignaturaTodos()
     vec = []
@@ -422,8 +423,8 @@ def seleccionarMateriasTodo_Partido(limit):
     otro = []
     for fila in resul:
         vec1 = []
-        pal = unidecode(fila[1].lower())
-        palabras = filtraremos(pal)
+        pal = unidecode(fila[1].lower())#convertir a minuscula y quitar tildes
+        palabras = filtraremos(pal)#filtramos
         for pala in palabras:
             vec1.append(pala)
             if len(pala)>=4:
@@ -435,6 +436,27 @@ def seleccionarMateriasTodo_Partido(limit):
         otro.append(palabras)
         codigos.append(fila[0])
     return vec,codigos,otro
+
+def seleccionarMateriasTodo_Partido_otro(limit):
+    resul = seleccionarAsignaturaTodos()
+    vec = []
+    codigos = []
+    otro = []
+    for fila in resul:
+        vec1 = []
+        pal = unidecode(fila[1].lower())  # convertir a minúscula y quitar tildes
+        palabras = filtraremos(pal)  # filtramos
+        for pala in palabras:
+            vec1.append(pala)
+            if len(pala) >= 4:
+                for i in range(1, len(pala)):
+                    if len(pala[:-i]) == limit:
+                        break
+                    vec1.append(pala[:-i])
+        vec.append(vec1)
+        otro.append(palabras)
+        codigos.append(fila[0])
+    return vec, codigos, otro
 #print(materias)
 #funcion para filtrar eliminando del el las los la de etc
 def filtraremos(pal):
@@ -442,101 +464,41 @@ def filtraremos(pal):
     palabras_filtradas = [token.text for token in doc if not token.is_stop and not token.is_space ]
     return palabras_filtradas
 
-def clasificar(vec,codigos,otro,usuario,limit):
-    elejidos_materias = []
-    elejidos_cod = []
-    k = 0
-    for materia in vec:
-        contar = 0#inicializamos una variable para contar
-        new_pos = []#inicializamos un nuevo vector por cada materia para guardar posiciones
-        new_mat = []#vector para guardar palabras encontrado de una materia
-        for mat in materia:#recorrer todas las materias
-            if mat in usuario:#recorremos materia por materia que hay en cada fial ['taller','i']['fisica','i']
-                if not mat in new_mat:#preguntamos si ya se guarda, si ya se guardo no guardamos por que ya esta guardado
-                    c1 = 0#iniciamos dos variables
-                    c2 = 0
-                    vec_con = [0]*len(new_mat)#creamos un vector con el mismo tamaño de la materia encontrado en la fila
-                    print(mat," mat   ",new_mat)
-                    #en aqui puede haver estas dos coencidencias
-                    #mat fisica    vect = [fisic,i]
-                    #vec = [fisica,i] mat=fisic
-                    #buscamod si las derivaciones de la palabra ya se registro
-                    for i in range(1, len(mat)):
-                        if len(mat[:-i]) == limit:#si llego al limit se cortara
-                            break;
-                        if mat[:-i] in new_mat:#verificar si la palabra de la materia existe en new_mat
-                            c1 = 1
-                    #esto lo hacemos con el proposito de no guardar repetidos por mas que tenga variaciones
-                    #ejemplo fisica es igual a fisic solo falta la "a"
-                    for pa_guardado in new_mat:#recorremos las coencidencias en la fila
-                        print('palabra guardado ',pa_guardado)
-                        for i in range(1, len(pa_guardado)):
-                            if len(pa_guardado[:-i]) == limit:
-                                break;
-                            if pa_guardado[:-i] in mat:#si se encontro la derivacion en materias
-                                c2 = 1
-                        if c2 == 1:
-                            vec_con.append(1)
-
-                    c2 = verificar_si_el_vector_es_todo_vacio(vec_con)
-                    if c1 == 0 and c2 == 0:
-                        posicion = usuario.index(mat)
-                        new_pos.append(posicion)
-                        new_mat.append(mat)
-                        contar+=1#si hay contamos
-        print('--------------------------------------------------------------------')
-        n = otro[k]
-        #print(n,"   ",len(n),"   ",contar)
-        if len(n) == contar:
-            codig,unir = eliminar_Materia(codigos,new_mat,k)
-            usuario = eliminar_posiciones(new_pos,usuario)
-            elejidos_materias.append(unir)
-            elejidos_cod.append(codig)
-        else:
-            if len(n)-1 == contar:
-                if len(n) > 2:
-                    if (len(n)/2)+1 == contar:
-                        codig,unir = eliminar_Materia(codigos,new_mat,k)
-                        usuario = eliminar_posiciones(new_pos,usuario)
-                        elejidos_materias.append(unir)
-                        elejidos_cod.append(codig)
-            else:
-                if len(n) > 2:
-                    if (len(n)/2)+1 == contar:
-                        codig,unir = eliminar_Materia(codigos,new_mat,k)
-                        usuario = eliminar_posiciones(new_pos,usuario)
-                        elejidos_materias.append(unir)
-                        elejidos_cod.append(codig)
-        k = k + 1
-    print(elejidos_materias,"   ",elejidos_cod)
-    return elejidos_materias,elejidos_cod
-
-def verificar_si_el_vector_es_todo_vacio(vector):
-    c2 = 0
-    for pos in vector:
-        if pos!=0:
-            c2=1
-            break
-    return c2
-def eliminar_Materia(codigos,new_mat,k):
-    unir = ''
-    for p in new_mat:
-        unir = unir+" "+p
-    return codigos[k],unir
-
 def eliminar_posiciones(posiciones,usuario):
     usuario1 = [item for idx, item in enumerate(usuario) if idx not in posiciones]
     return usuario1
 
 def obtener_id_materia(texto):
-    limite_derivacion = 3#ejemplo si tengo 1=fisica 2=fisic,3=fisi
-    vec,codigos,otro  = seleccionarMateriasTodo_Partido(limite_derivacion)
-    usuario = filtraremos(texto)
-    print("usuario es  ",usuario)
-    contar_vec =[0]*len(vec)
-    #clasificar materias
-    ejejidos_materias,codigos_asignaturas=clasificar(vec,codigos,otro,usuario,limite_derivacion)
-    return codigos_asignaturas
+    limite_derivacion = 3  # ejemplo si tengo 1=fisica 2=fisic,3=fisi
+    vec, codigos, otro = seleccionarMateriasTodo_Partido(limite_derivacion)
+    palabras_claves = filtraremos(texto)
+    asignaturas = otro
+
+    # Convertir las listas de palabras en cadenas de texto
+    asignaturas_texto = [' '.join(asignatura) for asignatura in asignaturas]
+
+    # Agregar el texto del usuario a las asignaturas
+    documentos = asignaturas_texto + [' '.join(palabras_claves)]
+
+    # Calcular la matriz TF-IDF
+    vectorizer = TfidfVectorizer().fit_transform(documentos)
+    similitudes = cosine_similarity(vectorizer[-1], vectorizer[:-1])
+
+    # Ordenar las asignaturas por similitud
+    asignaturas_ordenadas = sorted(zip(codigos, asignaturas, similitudes[0]), key=lambda x: x[2], reverse=True)
+    umbral = 0.2
+    asignaturas_mencionadas = []
+    for codigo, asignatura, similitud in asignaturas_ordenadas:
+        # Si la similitud es mayor que un umbral, considera que la asignatura está mencionada
+        if similitud >=umbral:  # Ajusta este umbral según sea necesario
+            asignaturas_mencionadas.append((codigo, ' '.join(asignatura), similitud))
+
+    # Imprimir todas las asignaturas mencionadas
+    codigos_encontrado = []
+    for codigo, asignatura, similitud in asignaturas_mencionadas:
+        print(f"Código: {codigo}, Asignatura: {asignatura}, Similitud: {similitud:.2f}")
+        codigos_encontrado.append(codigo)
+    return codigos_encontrado  # Suponiendo que los índices coinciden con los códigos
 
 
 def seleccionar_si_quiere_por_area_o_carrera(texto):
