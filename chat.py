@@ -17,6 +17,9 @@ from sklearn.metrics.pairwise import cosine_similarity
 from unidecode import unidecode
 from nltk.corpus import wordnet as wn
 
+
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 #nltk.download('omw-1.4')
 # Cargar el modelo pre-entrenado
 model = SentenceTransformer('all-MiniLM-L6-v1')
@@ -319,6 +322,34 @@ def clasificacando_por_segunda_ves(vec_new_id,vec_new_text,otro,claves,palabras_
         kk+=1
     return vec_contar,vec_new_ids
 
+
+def coseno_de_similitud_buscar(bd_texto,documentos,top_10_codigos,top_10_textos):
+
+    # Calcular la matriz TF-IDF
+    vectorizer = TfidfVectorizer().fit_transform(documentos)
+    similitudes = cosine_similarity(vectorizer[-1], vectorizer[:-1])
+
+    # Ordenar las asignaturas por similitud
+    texto_ordenadas = sorted(zip(top_10_codigos, top_10_textos, similitudes[0]), key=lambda x: x[2], reverse=True)
+    umbral = 0.2
+    texto_similar = []
+    for codigo, asignatura, similitud in texto_ordenadas:
+        # Si la similitud es mayor que un umbral, considera que la asignatura está mencionada
+        if similitud >=umbral:  # Ajusta este umbral según sea necesario
+            texto_similar.append((codigo, ''.join(asignatura), similitud))
+
+    # Imprimir todas las asignaturas mencionadas
+    codigos_encontrado = []
+    texto_encontrados = []
+    print("¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿")
+    k = 0
+    for codigo, es_texto, similitud in texto_similar:
+        print(k,f"Código: {codigo}, texto: {es_texto}, Similitud: {similitud:.2f}")
+        codigos_encontrado.append(codigo)
+        texto_encontrados.append(es_texto)
+        k = k +1
+    print("¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿")
+    return texto_encontrados,codigos_encontrado
 def buscar(texto,posible_respuesta):
     texto = eliminar_tildes(texto.lower())
 
@@ -351,7 +382,18 @@ def buscar(texto,posible_respuesta):
     diccionario = []
     for res in top_10_textos:
         diccionario.append(filtrar(res))
+    bd_texto = [' '.join(tokens) for tokens in diccionario]
+    documentos = bd_texto + [' '.join(palabras_filtradas)]
+    texto_encontrados,codigos_encontrado = coseno_de_similitud_buscar(bd_texto,documentos,top_10_codigos,top_10_textos)
+    diccionario = []
+    #print("-----------------------------------------------------------")
+    #print(texto_encontrados," === ",codigos_encontrado)
+    for res in texto_encontrados:
+        diccionario.append(filtrar(res))
+    top_10_codigos = [idx for idx in codigos_encontrado]
+    top_10_textos = [idx for idx in texto_encontrados]
     sino,otro = sinonimos(palabras_filtradas)#aproabado aprobaron apr
+
     #print(sino)
     resultado,posiciones = obtener_palabras_claves_del_texto_usuario(otro,palabras_filtradas,claves)
 
