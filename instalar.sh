@@ -49,7 +49,6 @@ echo "Instalación completada con éxito"
 echo "Instalando MySQL Server"
 apt install -y mysql-server || error_exit "Error al instalar MySQL Server"
 echo "Instalación de MySQL Server completada"
-
 echo "Instalando spaCy"
 pip install spacy || error_exit "Error al instalar spaCy"
 echo "Instalando nltk"
@@ -64,6 +63,9 @@ python3 -c "import nltk; nltk.download('wordnet')" || error_exit "Error al desca
 
 echo "Descargando modelos de spaCy"
 python3 -m spacy download es_core_news_sm || error_exit "Error al descargar modelos de spaCy"
+
+echo "Instalar extencion de mb25 de id-ft"
+pip install rank_bm25
 
 echo "Instalando numpy"
 pip install numpy || error_exit "Error al instalar numpy"

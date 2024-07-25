@@ -445,7 +445,7 @@ def seleccionarMateriasTodo_Partido_otro(limit):
     for fila in resul:
         vec1 = []
         pal = unidecode(fila[1].lower())  # convertir a minúscula y quitar tildes
-        palabras = filtraremos(pal)  # filtramos
+        palabras = tokenizar(pal)  # filtramos
         for pala in palabras:
             vec1.append(pala)
             if len(pala) >= 4:
@@ -463,17 +463,49 @@ def filtraremos(pal):
     doc = nlp(pal)
     palabras_filtradas = [token.text for token in doc if not token.is_stop and not token.is_space ]
     return palabras_filtradas
+# Cargar el modelo de spaCy
+nlp = spacy.load("es_core_news_sm")
+carreras_no_tomar = ["informatica",
+    "mecanica automotriz","minas",'contaduria publica','conta','contaduria',"electromecanica","mecanica",
+     'mecanica automotris',"agronomia",'agro',"enfermeria","bioquimica","bio quimica",'biofar',"electro mecanica","civil","medicina",'topografia','enfermeria','enfer',"minas topografia","derecho","contaduria","contaduria publica",
+     "comunicacion social","ciencias de la educacion"
+     ,"laboratorio clinico","odontologia","odonto","infor",'tecnico superior en radioterapia nuclear','radioterapia nuclear'
+     ,'radioterapia','radio nuclear','tecnico superior en medicina nuclear','medicina nuclear'
+     ,'medi nuclear','tecnico superior radioterapia nuclear','tecnico superior medicina nuclear',
+     'medi nuclear','recursos evaporiticos del litio','evaporiticos del litio','litio','evaporiticos litio'
+     ,'bio medico','biomedico','bioquimica farmacia','electro','informati','bio','automotriz','automotris','auto','agronomica']
+areas_no_tomar = ['tecnologia','salud','social','tecnologi','salu','sociales','sal','tecnolog','socia','sociale','tecnolo','tecnol','tecno','soci']
+otros_no_tomar = ['unsxx','universidad','nacional','siglo','xx','universi','naciona','informacion']
+
+def tokenizar(texto,texto_sin_nada):
+    #print(materias)
+    doc = nlp(texto)
+    palabras_filtradas = [
+        token.text for token in doc
+        if not token.is_stop and
+           not token.text.isdigit() and
+           not isinstance(token.text, int) and
+           token.text not in carreras_no_tomar and
+           token.text not in areas_no_tomar and
+           token.text not in otros_no_tomar and
+            token.text not in texto_sin_nada and
+           not token.is_space]
+
+    return palabras_filtradas
 
 def eliminar_posiciones(posiciones,usuario):
     usuario1 = [item for idx, item in enumerate(usuario) if idx not in posiciones]
     return usuario1
 
-def obtener_id_materia(texto):
+def obtener_id_materia(texto,texto_sin_nada):
     limite_derivacion = 3  # ejemplo si tengo 1=fisica 2=fisic,3=fisi
     vec, codigos, otro = seleccionarMateriasTodo_Partido(limite_derivacion)
-    palabras_claves = filtraremos(texto)
+    palabras_claves = tokenizar(texto,texto_sin_nada)
     asignaturas = otro
-
+    #print("palabras claves =================================")
+    #print(palabras_claves)
+    #print("===================================")
+    #print(asignaturas)
     # Convertir las listas de palabras en cadenas de texto
     asignaturas_texto = [' '.join(asignatura) for asignatura in asignaturas]
 
@@ -486,7 +518,7 @@ def obtener_id_materia(texto):
 
     # Ordenar las asignaturas por similitud
     asignaturas_ordenadas = sorted(zip(codigos, asignaturas, similitudes[0]), key=lambda x: x[2], reverse=True)
-    umbral = 0.2
+    umbral = 0.5
     asignaturas_mencionadas = []
     for codigo, asignatura, similitud in asignaturas_ordenadas:
         # Si la similitud es mayor que un umbral, considera que la asignatura está mencionada

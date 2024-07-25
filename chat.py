@@ -247,7 +247,7 @@ def sinonimos(palabra):
         otro.append(nuevo1)
     return nuevo,otro
 
-def clasificando(diccionario,top_10_textos,top_10_codigos,sino,claves,posiciones):
+def clasificando(diccionario,top_10_textos,top_10_codigos,sino,claves,posiciones,materias_user):
     vec_suma = [0]*len(top_10_textos)
     #vec_id = [0]*len(top_10_textos)
     # Imprimir los resultados o hacer lo que necesites con ellos
@@ -266,10 +266,15 @@ def clasificando(diccionario,top_10_textos,top_10_codigos,sino,claves,posiciones
                 if pa in claves:
                     descartar.append(pa)
         print(j, "  =  ",pal,'pal',contar_cor," contar",len(descartar)," = des")
+        
         if contar_cor > 0 and len(descartar) == 0:
             print("llego 1")
-            #id_max = top_10_codigos[j]
-            vec_suma[j]+=contar_cor
+            if(len(materias_user)>0):
+                si_mater = obtener_id_materia(top_10_textos[j],pal)
+                if(len(si_mater)>0):
+                    vec_suma[j]+=contar_cor 
+            else:
+                vec_suma[j]+=contar_cor
         else:
             #si en el pal que es de los 20 semanticas ['cantidad','estudiantes','de'] si hay palabras claves
             #al recorrer las 20 similitudes, ademas de contar si tienes palabras similares y no similares con el texto del usuario
@@ -280,7 +285,12 @@ def clasificando(diccionario,top_10_textos,top_10_codigos,sino,claves,posiciones
                         if des in no_afecta_al_texto:#palabra clave descartar hay en palabras claves que no afectan
                             contar_des+=1
                 if contar_des > 0:
-                    vec_suma[j]+=contar_cor
+                    if(len(materias_user)>0):
+                        si_mater = obtener_id_materia(top_10_textos[j],pal)
+                        if(len(si_mater)>0):
+                            vec_suma[j]+=contar_cor 
+                    else:
+                        vec_suma[j]+=contar_cor
                     print('llego')
                 print("llego 2")
         j += 1
@@ -350,11 +360,15 @@ def coseno_de_similitud_buscar(bd_texto,documentos,top_10_codigos,top_10_textos)
         k = k +1
     print("¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿")
     return texto_encontrados,codigos_encontrado
+
+
+
 def buscar(texto,posible_respuesta):
     texto = eliminar_tildes(texto.lower())
 
     # Filtrar las palabras no deseadas (palabras de apoyo como conjunciones, preposiciones, etc.)
     palabras_filtradas = filtrar(texto)
+    si_hay_materias = obtener_id_materia(texto,palabras_filtradas)#verificar si hay alguna materia en el texto
     #print(texto)
     consulta = ""
     response = "argumentar_poco_mas"
@@ -398,7 +412,7 @@ def buscar(texto,posible_respuesta):
     resultado,posiciones = obtener_palabras_claves_del_texto_usuario(otro,palabras_filtradas,claves)
 
     print(palabras_filtradas," palabras filtradas")
-    vec_suma= clasificando(diccionario,top_10_textos,top_10_codigos,sino,claves,posiciones)
+    vec_suma= clasificando(diccionario,top_10_textos,top_10_codigos,sino,claves,posiciones,si_hay_materias)
     vec_new_id = []
     vec_new_text = []
     k = 0
@@ -712,7 +726,7 @@ def buscar(texto,posible_respuesta):
             vec1.append(consultas_sql['areas_unsxx'])
         if response == 'materias_aprobados':
             vec1=[]
-            res = construir_consulta_materia(texto,"materias_aprobados",consultas_sql)
+            res = construir_consulta_materia(texto,"materias_aprobados",consultas_sql,si_hay_materias)
             for r in res:
                 vec1.append(r)
         if response == "datos_asignaturas":
@@ -739,17 +753,17 @@ def buscar(texto,posible_respuesta):
                 vec1.append(r)
         if response == 'estudiantes_regulares_en_materia':
             vec1=[]
-            res = construir_consulta_materia(texto,"estudiantes_regulares_en_materia",consultas_sql)
+            res = construir_consulta_materia(texto,"estudiantes_regulares_en_materia",consultas_sql,si_hay_materias)
             for r in res:
                 vec1.append(r)
         if response == 'estudiantes_desercion_en_materia':
             vec1=[]
-            res = construir_consulta_materia(texto,"estudiantes_desercion_en_materia",consultas_sql)
+            res = construir_consulta_materia(texto,"estudiantes_desercion_en_materia",consultas_sql,si_hay_materias)
             for r in res:
                 vec1.append(r)
         if response == 'materia_total_datos':
             vec1=[]
-            res = construir_consulta_materia_datos(texto,"materia_total_datos",consultas_sql)
+            res = construir_consulta_materia_datos(texto,"materia_total_datos",consultas_sql,si_hay_materias)
             for r in res:
                 vec1.append(r)
         if response == 'argumentar_poco_mas':
@@ -773,7 +787,7 @@ def buscar(texto,posible_respuesta):
 
 #construyendo consulta sql de materiasss
 
-def construir_consulta_materia_datos(texto,respuesta,consultas_sql):
+def construir_consulta_materia_datos(texto,respuesta,consultas_sql,materias):
     print(texto,"   =    ",respuesta)
     vec = []
     vec1 = []
@@ -803,7 +817,7 @@ def construir_consulta_materia_datos(texto,respuesta,consultas_sql):
         fecha2 = anio+"-12-30"
     response2 = ''
     existe = 'si'
-    materias = obtener_id_materia(texto)
+  
     response = " where c.cod_parcial = 1 and "
     if materias:
         vec1.append("si_mat")
@@ -1219,7 +1233,7 @@ def consulta_buscar(texto,respuesta,consultas_sql):
     vec1.append(response)
     return vec1
 
-def construir_consulta_materia(texto,respuesta,consultas_sql):
+def construir_consulta_materia(texto,respuesta,consultas_sql,materias):
     print(texto,"   =    ",respuesta)
     vec = []
     vec1 = []
@@ -1249,7 +1263,6 @@ def construir_consulta_materia(texto,respuesta,consultas_sql):
         fecha2 = anio+"-12-30"
     response2 = ''
     existe = 'si'
-    materias = obtener_id_materia(texto)
     print(materias,"llego")
     if materias:
         vec1.append("si_mat")
