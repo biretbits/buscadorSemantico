@@ -40,7 +40,6 @@ pip install weasyprint || error_exit "Error al instalar weasyprint"
 apt update || error_exit "Error al actualizar el sistema"
 pip install flask-session || error_exit "Error al instalar flask-session"
 pip install unidecode || error_exit "Error al instalar unidecode"
-pip install cryptography || error_exit "Error al instalar cryptography"
 
 echo "Instalando PyMySQL..."
 pip install PyMySQL || error_exit "Error al instalar PyMySQL"
@@ -49,15 +48,13 @@ echo "Instalación completada con éxito"
 echo "Instalando MySQL Server"
 apt install -y mysql-server || error_exit "Error al instalar MySQL Server"
 echo "Instalación de MySQL Server completada"
+
 echo "Instalando spaCy"
 pip install spacy || error_exit "Error al instalar spaCy"
 echo "Instalando nltk"
 pip install nltk || error_exit "Error al instalar nltk"
 echo "Descargando recursos de nltk"
 python3 -c "import nltk; nltk.download('omw-1.4')" || error_exit "Error al descargar recursos de nltk"
-
-python3 -c "import nltk; nltk.download('wordnet')" || error_exit "Error al descargar recursos de nltk"
-
 #comando para descargar todos las librerias de nltk
 #python3 -c "import nltk; nltk.download('all')" || error_exit "Error al descargar recursos de nltk"
 
