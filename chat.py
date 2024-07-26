@@ -20,6 +20,10 @@ from nltk.corpus import wordnet as wn
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+import requests
+from bs4 import BeautifulSoup as b
+from urllib.parse import urljoin, parse_qs, urlparse
+
 #nltk.download('omw-1.4')
 # Cargar el modelo pre-entrenado
 model = SentenceTransformer('all-MiniLM-L6-v1')
@@ -321,7 +325,7 @@ def clasificacando_por_segunda_ves(vec_new_id,vec_new_text,otro,claves,palabras_
     kk = 0
     for palabra in vec_new_text:
         contar = 0
-        print(palabra)
+        #print(palabra)
         for pa in palabra:
             if pa in resultado:
                 contar=contar+1
@@ -361,8 +365,15 @@ def coseno_de_similitud_buscar(bd_texto,documentos,top_10_codigos,top_10_textos)
     print("¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿")
     return texto_encontrados,codigos_encontrado
 
-
-
+def filtrar_datos(texto):
+    #print(materias)
+    doc = nlp(texto)
+    palabras_filtradas = [
+        token.text for token in doc
+        if not token.is_stop and
+           not token.text.isdigit() and
+           not isinstance(token.text, int)]
+    return palabras_filtradas
 def buscar(texto,posible_respuesta):
     texto = eliminar_tildes(texto.lower())
 
@@ -438,6 +449,8 @@ def buscar(texto,posible_respuesta):
     for cero in vec_suma:
         if cero == 0:
             contar_cero_primero+=1
+    texto_tomar = ""
+    nuevo = filtrar_datos(texto)
 
     if len(vec_contar) != contar_cero:
         print("llego")
@@ -445,11 +458,21 @@ def buscar(texto,posible_respuesta):
         posicion = vec_contar.index(maximo)
         print(posicion,"   posicion")
         id_max = vec_ids[posicion]
+        for nu in nuevo:
+            texto_tomar +=' '+nu
+        texto_tomar+=' unsxx'    
     elif len(vec_suma) != contar_cero_primero:
         maximo = max(vec_suma)
         posicion = vec_suma.index(maximo)
         print(posicion,"   posicion")
         id_max = top_10_codigos[posicion]
+        for nu in nuevo:
+            texto_tomar +=' '+nu
+        texto_tomar+=' unsxx' 
+    else:
+        for nu in nuevo:
+            texto_tomar +=' '+nu
+        texto_tomar+=' unsxx' 
     if id_max != 0:
         respuesta_bd = seleccionar_respuesta_y_consulta(id_max)
         consultas_sql={}
@@ -460,11 +483,13 @@ def buscar(texto,posible_respuesta):
             #resultados = zip(range(len(cosine_scores)), cosine_scores)
             #sorted_results = sorted(resultados, key=lambda x: x[1], reverse=True)
             #resultado_tensor = sorted_results[0][1]
-
-    print(response,"  repuesta")
-
+    resultados_busqueda = ''
+    
+    resultados_busqueda = search_google(texto_tomar)
+    
     if response:
         vec1=[]
+        print(response,"  repuesta")
         if response == "ver_carreras":
             response = ""
             areas = obtener_areas_id(texto)#obtener las areas
@@ -779,11 +804,23 @@ def buscar(texto,posible_respuesta):
             res = busqueda(texto,"aprobechamiento",consultas_sql)
             for r in res:
                 vec1.append(r)
-        return vec1
+        if response == 'inscritos_en_materia_especifico':
+            print(response," llego aqui pero no se")
+            vec1=[]
+            res = construir_consulta_materia(texto,"inscritos_en_materia_especifico",consultas_sql,si_hay_materias)
+            for r in res:
+                vec1.append(r)
+        if response == "estudiantes_regulares":
+            vec1=[]
+            res = busqueda(texto,"estudiantes_regulares",consultas_sql)
+            for r in res:
+                vec1.append(r)
+        
+        return vec1,resultados_busqueda
     else:
         vec1=[]
         vec1.append("argumentar_poco_mas")
-        return vect1
+        return vect1,resultados_busqueda
 
 #construyendo consulta sql de materiasss
 
@@ -1044,10 +1081,10 @@ def consulta_pasaron(texto,respuesta,consultas_sql):
             response = response+" "+response3
             vec1.append(nombre_posicion_sql)
             vec1.append(response)
-        return vec1
+        return vec1,resultados_busqueda
     else:
         vec1.append("argumentar_poco_mas")
-        return vec1
+        return vec1,resultados_busqueda
 
 def buscarDatosCarrera(texto,respuesta,consultas_sql):
     vec1 = []
@@ -1263,7 +1300,7 @@ def construir_consulta_materia(texto,respuesta,consultas_sql,materias):
         fecha2 = anio+"-12-30"
     response2 = ''
     existe = 'si'
-    print(materias,"llego")
+    print(materias,"llego o no llego")
     if materias:
         vec1.append("si_mat")
         # Obtener la primera carrera encontrada
@@ -1551,3 +1588,31 @@ def construir_consulta(texto,respuesta,consultas_sql):
     vec1.append(nombre_posicion_sql)
     vec1.append(response)
     return vec1
+
+
+def search_google(query):
+    print("query  ",query)
+    response = requests.get(f'https://www.google.com/search?q={query}')
+    results = []
+    soup = b(response.text, 'html.parser')
+    # Encuentra todos los enlaces
+    #links = soup.find_all('a')
+    # Extrae y muestra los enlaces
+   
+    for a in soup.find_all('a', href=True):
+        href = a['href']
+        if href.startswith('/url?q='):
+            real_url = parse_qs(urlparse(href).query).get('q')
+            if real_url:
+                url = real_url[0]
+                # Obtener título y descripción
+                title = a.get_text() or "No se encontro titulo"
+                description = a.find_next('span', class_='aCOpRe').get_text() if a.find_next('span', class_='aCOpRe') else "No se encontro una descripcion"
+                results.append({'url': url, 'title': title, 'description': description})
+    
+    return results[:10]
+    
+if __name__ == "__main__":
+    user_query = input("Introduce el texto para buscar: ")
+    search_results = search_google(user_query)
+  

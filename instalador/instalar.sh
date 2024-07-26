@@ -58,12 +58,13 @@ python3 -c "import nltk; nltk.download('omw-1.4')" || error_exit "Error al desca
 #comando para descargar todos las librerias de nltk
 #python3 -c "import nltk; nltk.download('all')" || error_exit "Error al descargar recursos de nltk"
 
-echo "Descargando modelos de spaCy"
 python3 -m spacy download es_core_news_sm || error_exit "Error al descargar modelos de spaCy"
 
 echo "Instalando numpy"
 pip install numpy || error_exit "Error al instalar numpy"
-
+echo "Instalar requests y beautifulsoup4"
+pip install requests beautifulsoup4
+echo "Descargando modelos de spaCy"
 echo "Instalando sentence-transformers"
 pip install sentence-transformers || error_exit "Error al instalar sentence-transformers"
 echo "Instalación finalizada"
