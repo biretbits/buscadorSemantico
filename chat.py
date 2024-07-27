@@ -1590,15 +1590,10 @@ def construir_consulta(texto,respuesta,consultas_sql):
     return vec1
 
 
-def search_google(query):
-    print("query  ",query)
-    response = requests.get(f'https://www.google.com/search?q={query}')
+def buscando_google(consulta):
+    response = requests.get(f'https://www.google.com/search?q={consulta}')
     results = []
     soup = b(response.text, 'html.parser')
-    # Encuentra todos los enlaces
-    #links = soup.find_all('a')
-    # Extrae y muestra los enlaces
-   
     for a in soup.find_all('a', href=True):
         href = a['href']
         if href.startswith('/url?q='):
@@ -1608,11 +1603,58 @@ def search_google(query):
                 # Obtener título y descripción
                 title = a.get_text() or "No se encontro titulo"
                 description = a.find_next('span', class_='aCOpRe').get_text() if a.find_next('span', class_='aCOpRe') else "No se encontro una descripcion"
-                results.append({'url': url, 'title': title, 'description': description})
+                results.append({'url':url,'titulo':title})
     
     return results[:10]
+
+def get_title_and_description(url):
+    try:
+        print(url)
+        url1 = url['url']
+        titulo = url['titulo']
+        print(url1)
+        response = requests.get(url1, timeout=10)
+        response.raise_for_status()  # Verifica si la solicitud fue exitosa
+        soup = b(response.text, 'html.parser')
+        #texto = soup.get_text() if soup.get_text() else 'No se encontró título'
+        # Obtener la descripción
+        description = ''
+        if soup.find('meta', attrs={'name': 'description'}):
+            description = soup.find('meta', attrs={'name': 'description'}).get('content', '')
+        elif soup.find('meta', attrs={'property': 'og:description'}):
+            description = soup.find('meta', attrs={'property': 'og:description'}).get('content', '')
+        else:
+            # Intentar obtener la descripción desde los primeros párrafos o encabezados
+            paragraphs = soup.find_all('p')
+            headers = soup.find_all(['h1', 'h2', 'h3'])
+            
+            # Combinar textos de párrafos y encabezados en una lista de candidatos
+            candidates = [p.get_text() for p in paragraphs] + [h.get_text() for h in headers]
+            if candidates:
+                # Tomar el primer candidato no vacío
+                description = next((text for text in candidates if text.strip()), 'No se encontró descripción')
+        #print("titulosssssssssssssssssssssssssssssssssssssss")
+        #print('titulo: ',titulo," descripcion ", description)
+        return url1,titulo,description
+    except Exception as e:
+        return 'Error', str(e)  
+
+def search_google(consulta):
+    vector = []
+    si = detectar_internet()
+    print(si," si tiene o no")
+    if si:
+        resultados = buscando_google(consulta)
+        if resultados:
+            for re in resultados:
+                url,titulo,descripcion = (get_title_and_description(re))
+                vector.append({'url':url,'description':descripcion,'title':titulo})
     
-if __name__ == "__main__":
-    user_query = input("Introduce el texto para buscar: ")
-    search_results = search_google(user_query)
-  
+    return vector
+
+def detectar_internet():
+    try:
+        response = requests.get('https://www.google.com', timeout=5)
+        return True
+    except requests.ConnectionError:
+        return False

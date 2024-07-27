@@ -6020,7 +6020,7 @@ def busqueda_enlaces(resultados_busqueda):
                 break  
                     #html+= (f'<a href="{link}" target="_blank">{link}</a><br>')
             html+=(f'''
-            <div class="result">
+            <div class="result p-1">
                 <h6><a href="{link['url']}" target="_blank">{link['title']}</a></h6>
                  <p>{link['description']}</p>
              </div>''')
