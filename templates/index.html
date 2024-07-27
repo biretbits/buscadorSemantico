@@ -24,9 +24,10 @@
           font-size: 16px; /* Tamaño de fuente */
         }
         .cc{
-          background: linear-gradient(to right, rgb(255, 208, 147), rgb(172, 166, 111)); /* Combina dos colores */
+          background: linear-gradient(to right, rgb(172, 166, 111), rgb(245, 180, 94), rgb(172, 166, 111)); /* Combina dos colores */
         height: 100px; /* Altura del elemento */
         }
+        
         body, html {
             margin: 0;
             padding: 0;
@@ -76,14 +77,14 @@
     <div class="body1">
       {% if usuario %}
       <div class="container border-top border-end border-start border-primary"  class="bg-danger">
-        <div class="alert alert" style='background-color: rgb(227, 228, 196);'>
+        <div class="alert alert" style='background: linear-gradient(to right, rgb(0, 0, 0), rgb(150, 112, 63), rgb(0, 0, 0));'>
           <div class="container mt-5">
-            <div class="row">
-              <div class="alert alert-success">
+            <div class="row" >
+              <div class="alert alert-success" style='background: linear-gradient(to right, rgb(0, 0, 0), #2c0101, rgb(0, 0, 0));'>
                 <div id='error'>
                 </div>
-                <div class="col-md-6 offset-md-3">
-                    <h4 class="text-center mb-1 text-primary" style='font-style: italic;'>Buscador semantico</h4>
+                <div class="col-md-6 offset-md-3" >
+                    <h4 class="text-center mb-1" style='font-style: italic;color:white'>Buscador semantico</h4>
                     <div class="mb-3" style="position: relative;">
                         <textarea class="form-control mb-2 border-primary" rows="2" id='buscar' name='buscar'></textarea>
                         <button type="button" id='btn'class="btn btn-sm" style="position: absolute; bottom: 2px; right: 2px;background-color:RGBA(200,200,210,0.8)" onclick="buscarDatos()" title='Buscar'>
