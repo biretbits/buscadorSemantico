@@ -1605,7 +1605,7 @@ def buscando_google(consulta):
                 description = a.find_next('span', class_='aCOpRe').get_text() if a.find_next('span', class_='aCOpRe') else "No se encontro una descripcion"
                 results.append({'url':url,'titulo':title})
     
-    return results[:10]
+    return results[:6]
 
 def get_title_and_description(url):
     try:

@@ -5,7 +5,6 @@ def obtener_resultados_busqueda(consulta):
     response = requests.get(f'https://www.google.com/search?q={consulta}')
     results = []
     soup = b(response.text, 'html.parser')
-    results=[]
     for a in soup.find_all('a', href=True):
         href = a['href']
         if href.startswith('/url?q='):
@@ -17,9 +16,6 @@ def obtener_resultados_busqueda(consulta):
                 description = a.find_next('span', class_='aCOpRe').get_text() if a.find_next('span', class_='aCOpRe') else "No se encontro una descripcion"
                 results.append({'url':url,'titulo':title})
     
-   
-    resultados = []
-  
     return results[:5]
 
 def mostrar_resultados(resultados):
@@ -32,10 +28,11 @@ def mostrar_resultados(resultados):
 def main():
     consulta = input("Ingrese su consulta de búsqueda: ")
     resultados = obtener_resultados_busqueda(consulta)
-    
+    vector = []
     if resultados:
         for re in resultados:
             url,titulo,descripcion = (get_title_and_description(re))
+            vector.append({'url':url,'decripcion':descripcion,'titulo':titulo})
     else:
         print("No se encontraron resultados o hubo un error en la solicitud.")
 
@@ -48,8 +45,6 @@ def get_title_and_description(url):
         response = requests.get(url1, timeout=10)
         response.raise_for_status()  # Verifica si la solicitud fue exitosa
         soup = b(response.text, 'html.parser')
-
-        # Obtener el título
         #texto = soup.get_text() if soup.get_text() else 'No se encontró título'
         # Obtener la descripción
         description = ''
@@ -67,8 +62,8 @@ def get_title_and_description(url):
             if candidates:
                 # Tomar el primer candidato no vacío
                 description = next((text for text in candidates if text.strip()), 'No se encontró descripción')
-        print("titulosssssssssssssssssssssssssssssssssssssss")
-        print('titulo: ',titulo," descripcion ", description)
+        #print("titulosssssssssssssssssssssssssssssssssssssss")
+        #print('titulo: ',titulo," descripcion ", description)
         return url,titulo,descripcion
     except Exception as e:
         return 'Error', str(e)

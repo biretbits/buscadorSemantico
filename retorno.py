@@ -6006,13 +6006,14 @@ def  retornar_valores(datos,ress,search_results):
                         html += "</div>"
                     html += "</div>"
                     html += "<br>"
+    html+="<p></p>"
     html+=busqueda_enlaces(search_results)                
     html += "</container>"
     return html
 
 def busqueda_enlaces(resultados_busqueda):
     html=''
-    html+="<br><div class='alert alert-success'>Tambien te presento los siguientes enlaces para que pueda informarce con mas conocimiento.</div>"    
+    html+="<div class='alert alert-success'>Tambien te presento los siguientes enlaces para que pueda informarce.</div>"    
     if resultados_busqueda:
         k =0
         for link in resultados_busqueda:
