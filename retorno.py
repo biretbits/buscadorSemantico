@@ -1053,10 +1053,10 @@ def  retornar_valores(datos,ress,search_results):
         for row in datos:#recorremos los datos obtenidos de la base de datos
             if not isinstance(row[14], type(None)) and  row[14]>=fecha1 and row[14] <= fecha2:
                 anoBD = int(obtener_ano_de_fecha(row[14].strftime("%Y-%m-%d")))
-                if row[4] == 'si':#contar los de primer año
+                if row[4] == 'si' and row[18]==1:#contar los de primer año
                     vasigDeser[row[12]][anoBD][row[8]][row[4]]+=1
                     vasigCar[row[10]][anoBD][row[11]][row[8]][row[4]]+=1
-                elif row[4] == 'no':#contamos solo de 5to año y aprobados
+                elif row[4] == 'no'and row[18]==1:#contamos solo de 5to año y aprobados
                     vasigDeser[row[12]][anoBD][row[8]][row[4]]+=1
                     vasigCar[row[10]][anoBD][row[11]][row[8]][row[4]]+=1
         if si_car_n == "si_car_n":#esta buscando carreras
@@ -2292,8 +2292,9 @@ def  retornar_valores(datos,ress,search_results):
         for row in titulados_re:
             if not isinstance(row[8], type(None)) and row[8]>=fecha1 and row[8] <= fecha2:
                 anoBD = int(obtener_ano_de_fecha(row[8].strftime("%Y-%m-%d")))
-                carrerasTitu[anoBD][row[6]-1]+=1
-                vareasTitu[anoBD][row[7]-1]+=1
+                if row[1] == 'aprobado':
+                    carrerasTitu[anoBD][row[6]-1]+=1
+                    vareasTitu[anoBD][row[7]-1]+=1
 
         if si_car_n == "si_car_n":#esta buscando carreras
             s_dupli = eliminar_dobles(id_car)#si hay doble veces repetido el id lo eliminamos a 1
@@ -3077,7 +3078,7 @@ def  retornar_valores(datos,ress,search_results):
         for row in datos:#recorremos los datos obtenidos de la base de datos
             if not isinstance(row[14], type(None)) and row[14]>=fecha1 and row[14] <= fecha2:
                 anoBD = int(obtener_ano_de_fecha(row[14].strftime("%Y-%m-%d")))
-                if row[8] != '' or row[8] is not None:
+                if row[8] != '' or row[8] is not None and row[18] == 1:
                     vcar[row[10]][anoBD][row[11]][row[8]]['inscritos']+=1
         si_are = ress[0]
         if si_ar == "si_ar":#si es diferente de no existe una area o areas
@@ -4553,10 +4554,10 @@ def  retornar_valores(datos,ress,search_results):
           if not isinstance(row[14], type(None)) and row[14]>=fecha1 and row[14] <= fecha2:
               anoBD = int(obtener_ano_de_fecha(row[14].strftime("%Y-%m-%d")))
               mate1 = row[8]
-              if row[2]>50:
+              if row[2]>50 and row[18] == 1:
                   vcar[row[8]][anoBD]['aprobado']+=1
                   mate1 = row[8]
-              elif row[2]!=0 or row[8] != mate1 and row[2]>0:
+              elif row[2]<51 and row[18] == 1:
                   vcar[row[8]][anoBD]['reprobado']+=1
                   mate1 = row[8]
         html+="<div class='alert alert-secondary'>Los estudiantes aprobados y reprobados son los siguiente</div>"
@@ -4644,12 +4645,12 @@ def  retornar_valores(datos,ress,search_results):
             if not isinstance(row[14], type(None)) and row[14]>=fecha1 and row[14] <= fecha2:
                 anoBD = int(obtener_ano_de_fecha(row[14].strftime("%Y-%m-%d")))
                 mate1 = row[8]
-                if row[2]>50:
+                if row[2]>50 and row[18] == 1:
                     varea[row[12]][row[10]][anoBD][row[11]][row[8]]['aprobado']+=1
                     vcar[row[10]][anoBD][row[11]][row[8]]['aprobado']+=1
                     mate1 = row[8]
 
-                elif row[2]!=0 or row[8] != mate1 and row[2]>0:
+                elif row[2]<51  and row[18] == 1:
                     varea[row[12]][row[10]][anoBD][row[11]][row[8]]['reprobado']+=1
                     vcar[row[10]][anoBD][row[11]][row[8]]['reprobado']+=1
                     mate1 = row[8]
@@ -5172,9 +5173,9 @@ def  retornar_valores(datos,ress,search_results):
         for row in datos:#recorremos los datos obtenidos de la base de datos
           if not isinstance(row[14], type(None)) and row[14]>=fecha1 and row[14] <= fecha2:
               anoBD = int(obtener_ano_de_fecha(row[14].strftime("%Y-%m-%d")))
-              if row[3]=='activo':
+              if row[3]=='activo'and row[18] == 1:
                   vcar[row[8]][anoBD]['aprobado']+=1
-              else:
+              elif row[18] == 1:
                   vcar[row[8]][anoBD]['reprobado']+=1
         html+="<div class='alert alert-secondary'>Los estudiantes regulares e irregulares son lo siguiente</div>"
         for mat in id_materias:
@@ -5244,9 +5245,9 @@ def  retornar_valores(datos,ress,search_results):
         for row in datos:#recorremos los datos obtenidos de la base de datos
           if not isinstance(row[14], type(None)) and row[14]>=fecha1 and row[14] <= fecha2:
               anoBD = int(obtener_ano_de_fecha(row[14].strftime("%Y-%m-%d")))
-              if row[4]=='si':
+              if row[4]=='si' and row[18] == 1:
                   vcar[row[8]][anoBD]['aprobado']+=1
-              else:
+              elif row[4]=='no' and row[18] == 1:
                   vcar[row[8]][anoBD]['reprobado']+=1
         html+="<div class='alert alert-secondary'>Los estudiantes que desertaron son lo siguiente</div>"
         for mat in id_materias:
@@ -5319,19 +5320,19 @@ def  retornar_valores(datos,ress,search_results):
         if isinstance(fecha2, str):
             fecha2 = datetime.strptime(fecha2, "%Y-%m-%d").date()
         for row in datos:#recorremos los datos obtenidos de la base de datos
-          if not isinstance(row[7], type(None)) and row[7]>=fecha1 and row[7] <= fecha2:
-              anoBD = int(obtener_ano_de_fecha(row[7].strftime("%Y-%m-%d")))
-              if row[1]>50:
-                  vcar[row[4]][anoBD]['aprobado']+=1
-              elif row[1]<51:
-                  vcar[row[4]][anoBD]['reprobado']+=1
-              if row[3] == 'si':
-                  vcar[row[4]][anoBD]['desercion']+=1
-              if row[2] == 'activo':
-                  vcar[row[4]][anoBD]['regulares']+=1
-
-              vcar[row[4]][anoBD]['inscritos']+=1
-              vcar[row[4]][anoBD]['avance']=row[0]
+            if not isinstance(row[7], type(None)) and row[7]>=fecha1 and row[7] <= fecha2:
+                anoBD = int(obtener_ano_de_fecha(row[7].strftime("%Y-%m-%d")))
+                if row[1]>50 and row[8] == 1:
+                    vcar[row[4]][anoBD]['aprobado']+=1
+                elif row[1]<51 and row[8] == 1:
+                    vcar[row[4]][anoBD]['reprobado']+=1
+                if row[3] == 'si' and row[8] == 1:
+                    vcar[row[4]][anoBD]['desercion']+=1
+                if row[2] == 'activo' and row[8] == 1:
+                    vcar[row[4]][anoBD]['regulares']+=1
+                if row[8] == 1:
+                    vcar[row[4]][anoBD]['inscritos']+=1
+                    vcar[row[4]][anoBD]['avance']=row[0]
 
 
         html+="<div class='alert alert-secondary'>El resumen estadistico es lo siguiente</div>"
