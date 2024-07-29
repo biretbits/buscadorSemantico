@@ -1618,15 +1618,14 @@ def get_title_and_description(url):
         soup = b(response.text, 'html.parser')
         #texto = soup.get_text() if soup.get_text() else 'No se encontró título'
         # Obtener la descripción
-        description = ''
+        description = 'No se encontro'
         if soup.find('meta', attrs={'name': 'description'}):
             description = soup.find('meta', attrs={'name': 'description'}).get('content', '')
         elif soup.find('meta', attrs={'property': 'og:description'}):
             description = soup.find('meta', attrs={'property': 'og:description'}).get('content', '')
-        else:
-            description="No se encontro"
+        
         print("---------------------------------------------------------")
-        print('titulo: ',titulo," descripcion ", description," url",url1)
+        print('titulo:-- ',titulo," descripcion-- ", description," url+-",url1)
         print("---------------------------------------------------------")
         return url1,titulo,description
     except Exception as e:
