@@ -222,10 +222,11 @@ def respuesta():
                         html+=(f'''
                         <div class="row">
                         <div class="col-12">
+                         <div class="d-flex align-items-center">
                             <h6>
                             {link['title']}
                             <a href="{link['url']}" target="_blank">{link['url']}</a></h6>
-                            <p>{link['description']}</p>
+                            </div><p>{link['description']}</p>
                         </div></div>''')
                         k+=1
                 else:
@@ -244,8 +245,9 @@ def respuesta():
                     html+=(f'''
                     <div class="row">
                     <div class="col-12">
+                     <div class="d-flex align-items-center">
                         <h6>{link['title']}<a href="{link['url']}" target="_blank">{link['url']}</a></h6>
-                        <p>{link['description']}</p>
+                        </div><p>{link['description']}</p>
                     </div></div>''')
                     k+=1
             else:
