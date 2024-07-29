@@ -1645,6 +1645,7 @@ def search_google(consulta):
     print(si," si tiene o no")
     if si:
         resultados = buscando_google(consulta)
+        print("hay enlaces ",resultados)
         if resultados:
             for re in resultados:
                 url,titulo,descripcion = get_title_and_description(re)
