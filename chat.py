@@ -1653,9 +1653,9 @@ def search_google(consulta):
                 print("-------------------------------------------")
                 print(re)
                 print("-------------------------------------------")
-                
-                url,titulo,descripcion = get_title_and_description(re)
-                vector.append({'url':url,'description':descripcion,'title':titulo})
+
+                #url,titulo,descripcion = get_title_and_description(re)
+                #vector.append({'url':url,'description':descripcion,'title':titulo})
 
     return vector
 
