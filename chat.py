@@ -1628,7 +1628,7 @@ def search_google(consulta):
         if resultados:
             k = 0
             for re in resultados:
-                vector.append({'url':re['url'],'description':"No se tiene una descripción",'title':re['titulo'])
+                vector.append({'url':re['url'],'description':"No se tiene una descripción",'title':re['titulo']})
                 if k == 5:
                     break
                 k = k + 1
