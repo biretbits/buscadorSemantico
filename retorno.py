@@ -6025,7 +6025,7 @@ def busqueda_enlaces(resultados_busqueda):
             <div class="row">
             <div class="col-12">
              <div class="d-flex align-items-center">
-                <h6>{link['title']}<a href="{link['url']}" target="_blank">{link['url']}</a></h6>
+                <h6>{link['title']}<a href="{link['url']}"class="ms-md-2 mt-1 mt-md-0" target="_blank">{link['url']}</a></h6>
                 </div>
                  <p>{link['description']}</p>
              </div></div>''')
