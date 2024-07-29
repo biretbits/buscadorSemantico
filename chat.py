@@ -1626,14 +1626,12 @@ def search_google(consulta):
         resultados = buscando_google(consulta)
         print("hay enlaces ",resultados)
         if resultados:
+            k = 0
             for re in resultados:
-                print("-------------------------------------------")
-                print(re)
-                print("-------------------------------------------")
-                description='456456'
-                url,titulo,descripcion = get_title_and_description(re)
-                vector.append({'url':url,'description':descripcion,'title':titulo})
-
+                vector.append({'url':re['url'],'description':"No se tiene una descripción",'title':re['titulo'])
+                if k == 5:
+                    break
+                k = k + 1
     return vector
 
 def detectar_internet():
