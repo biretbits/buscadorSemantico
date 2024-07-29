@@ -1613,17 +1613,8 @@ def get_title_and_description(url):
         url1 = url['url']
         titulo = url['titulo']
         print(url1,"  ",titulo)
-        response = requests.get(url1, timeout=10)
-        response.raise_for_status()  # Verifica si la solicitud fue exitosa
-        soup = b(response.text, 'html.parser')
-        #texto = soup.get_text() if soup.get_text() else 'No se encontró título'
-        # Obtener la descripción
-        description = 'No se encontro'
-    
-        print("---------------------------------------------------------")
-        print('titulo:-- ',titulo," descripcion-- ", description," url+-",url1)
-        print("---------------------------------------------------------")
-        return url1,titulo,description
+
+        return url1,titulo
     except Exception as e:
         return 'Error', str(e)
 
@@ -1639,7 +1630,7 @@ def search_google(consulta):
                 print("-------------------------------------------")
                 print(re)
                 print("-------------------------------------------")
-
+                description='456456'
                 url,titulo,descripcion = get_title_and_description(re)
                 vector.append({'url':url,'description':descripcion,'title':titulo})
 
