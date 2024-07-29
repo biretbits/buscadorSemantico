@@ -486,7 +486,7 @@ def buscar(texto,posible_respuesta):
     resultados_busqueda = ''
 
     resultados_busqueda = search_google(texto_tomar)
-
+    print(resultados_busqueda," resultadoss")
     if response:
         vec1=[]
         print(response,"  repuesta")
