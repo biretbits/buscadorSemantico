@@ -189,11 +189,11 @@ def respuesta():
         posible_respuesta = request.form.get('posible_respuesta')
         respuesta,resultados_busqueda = buscar(busqueda,posible_respuesta)
         html = ""
-       
+
         preg = respuesta[-1]
         sql_consulta = respuesta[-1]
         print("sql ",sql_consulta)
-        
+
         if preg != "argumentar_poco_mas":
             # Establecer la conexión a la base de datos
             conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
@@ -211,17 +211,19 @@ def respuesta():
             else:
                 # Si no hay resultados, realiza alguna acción adecuada
                 html+="<div class = 'alert alert-secondary'>Lo siento, no tengo una respuesta para esa pregunta, no cuento con la suficiente información para responder a su pregunta. puede argumentar un poco mas y tratare de responderle.</div>";
-                html+="<div class='alert alert-success'> Pero aqui te presento algunos enlaces para que pueda informarse un poco mas.</div>"    
-   
+                html+="<div class='alert alert-success'> Pero aqui te presento algunos enlaces para que pueda informarse un poco mas.</div>"
+
                 if resultados_busqueda:
                     k =0
                     for link in resultados_busqueda:
                         if k == 6:
-                            break  
+                            break
                         #html+= (f'<a href="{link}" target="_blank">{link}</a><br>')
                         html+=(f'''
                         <div class="result p-1">
-                            <h6><a href="{link['url']}" target="_blank">{link['title']}</a></h6>
+                            <h6>
+                            {link['title']}
+                            <a href="{link['url']}" target="_blank">{link['url']}</a></h6>
                             <p>{link['description']}</p>
                         </div>''')
                         k+=1
@@ -229,25 +231,25 @@ def respuesta():
                     html+=("<div class = 'alert alert-secondary'>No se encontraron resultados.</div>")
                 return html
         else:
-            html+="<div class = 'alert alert-secondary'>Lo siento, no tengo una respuesta para esa pregunta o puede argumentar un poco mas</div>"    
-            html+="<div class='alert alert-success'> Pero aqui te presento algunos enlaces para que pueda informarse un poco mas.</div>"    
-   
+            html+="<div class = 'alert alert-secondary'>Lo siento, no tengo una respuesta para esa pregunta o puede argumentar un poco mas</div>"
+            html+="<div class='alert alert-success'> Pero aqui te presento algunos enlaces para que pueda informarse un poco mas.</div>"
+
             if resultados_busqueda:
                 k =0
                 for link in resultados_busqueda:
                     if k == 6:
-                        break  
+                        break
                     #html+= (f'<a href="{link}" target="_blank">{link}</a><br>')
                     html+=(f'''
                     <div class="result p-1">
-                        <h6><a href="{link['url']}" target="_blank">{link['title']}</a></h6>
+                        <h6>{link['title']}<a href="{link['url']}" target="_blank">{link['url']}</a></h6>
                         <p>{link['description']}</p>
                     </div>''')
                     k+=1
             else:
                 html+=("<div class = 'alert alert-secondary'>No se encontraron resultados.</div>")
             #html = ''.join(f'<a href="{link}" target="_blank">{link}</a><br>' for link in resultados_busqueda)
-    
+
             return  html
     else:
         # Si no es una solicitud POST, puedes manejarlo aquí
@@ -1824,7 +1826,7 @@ def open_in_browser(browser_name, url):
     else:
         print(f"Browser {browser_name} is not supported.")
         return
-    
+
     driver.get(url)
     input("Press Enter to close the browser...")
     driver.quit()

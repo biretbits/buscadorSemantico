@@ -5772,7 +5772,7 @@ def  retornar_valores(datos,ress,search_results):
             html+="<div class='alert alert-secondary'>Los inscritos en la siguiente materia es</div>"
         else:
             html+="<div class='alert alert-secondary'>Los inscritos en las siguientes materias es</div>"
-           
+
         for mat in id_materias:
             index = int(mat)
             for anio in range(a1, a2 + 1):
@@ -5797,7 +5797,7 @@ def  retornar_valores(datos,ress,search_results):
                         html+="<div class='alert alert-secondary'>La asignatura de "+nombre_asignatura(index)+" de la carrera de "+nombre_carrera_retor(vcar[index][anio]['carrera'])+" tiene "+str(vcar[index][anio]['inscritos'])+" estudiantes inscritos  del año "+str(anio)+"</div>"
                     else:#materia de un area completo
                         html+="<div class='alert alert-secondary'>La asignatura de "+nombre_asignatura(index)+" del area de "+nombre_area_id(vcar[index][anio]['area'])+" tiene "+str(vcar[index][anio]['inscritos'])+" estudiantes inscritos  del año "+str(anio)+"</div>"
-    
+
     if accion1 == "estudiantes_regulares":
         si_car_n = ress[0]
         id_car   = ress[1]
@@ -5845,7 +5845,7 @@ def  retornar_valores(datos,ress,search_results):
                     vare[row[7]][anoBD]['regular']+=1
                     vcar[row[5]][anoBD]['regular']+=1
                     vcarCur[row[5]][anoBD][row[3]]['regular']+=1
-                
+
         grado = seleccionarGrado()
         if si_car_n == "si_car_n":#esta buscando carreras
             s_dupli = eliminar_dobles(id_car)#si hay doble veces repetido el id lo eliminamos a 1
@@ -6008,28 +6008,28 @@ def  retornar_valores(datos,ress,search_results):
                     html += "</div>"
                     html += "<br>"
     html+="<p></p>"
-    html+=busqueda_enlaces(search_results)                
+    html+=busqueda_enlaces(search_results)
     html += "</container>"
     return html
 
 def busqueda_enlaces(resultados_busqueda):
     html=''
-    html+="<div class='alert alert-success'>Tambien te presento los siguientes enlaces para que pueda informarce.</div>"    
+    html+="<div class='alert alert-success'>Tambien te presento los siguientes enlaces para que pueda informarce.</div>"
     if resultados_busqueda:
         k =0
         for link in resultados_busqueda:
             if k == 6:
-                break  
+                break
                     #html+= (f'<a href="{link}" target="_blank">{link}</a><br>')
             html+=(f'''
             <div class="result p-1">
-                <h6><a href="{link['url']}" target="_blank">{link['title']}</a></h6>
+                <h6>{link['title']}<a href="{link['url']}" target="_blank">{link['url']}</a></h6>
                  <p>{link['description']}</p>
              </div>''')
             k+=1
     else:
          html+=("<div class = 'alert alert-secondary'>No se encontraron enlaces referenciados a tu busqueda.</div>")
-    return html        
+    return html
 def apro(total,valor):
     if valor == 0:
         return '0'
