@@ -1619,11 +1619,7 @@ def get_title_and_description(url):
         #texto = soup.get_text() if soup.get_text() else 'No se encontró título'
         # Obtener la descripción
         description = 'No se encontro'
-        if soup.find('meta', attrs={'name': 'description'}):
-            description = soup.find('meta', attrs={'name': 'description'}).get('content', '')
-        elif soup.find('meta', attrs={'property': 'og:description'}):
-            description = soup.find('meta', attrs={'property': 'og:description'}).get('content', '')
-        
+    
         print("---------------------------------------------------------")
         print('titulo:-- ',titulo," descripcion-- ", description," url+-",url1)
         print("---------------------------------------------------------")
