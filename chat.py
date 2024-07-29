@@ -25,6 +25,8 @@ from bs4 import BeautifulSoup as b
 from urllib.parse import urljoin, parse_qs, urlparse
 
 nltk.download('omw-1.4')
+nltk.download('wordnet')
+
 # Cargar el modelo pre-entrenado
 model = SentenceTransformer('all-MiniLM-L6-v1')
 nlp = spacy.load("es_core_news_sm")
