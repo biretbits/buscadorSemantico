@@ -1624,16 +1624,7 @@ def get_title_and_description(url):
         elif soup.find('meta', attrs={'property': 'og:description'}):
             description = soup.find('meta', attrs={'property': 'og:description'}).get('content', '')
         else:
-            # Intentar obtener la descripción desde los primeros párrafos o encabezados
-            paragraphs = soup.find_all('p')
-            headers = soup.find_all(['h1', 'h2', 'h3'])
-
-            # Combinar textos de párrafos y encabezados en una lista de candidatos
-            candidates = [p.get_text() for p in paragraphs] + [h.get_text() for h in headers]
-            if candidates:
-                # Tomar el primer candidato no vacío
-                description = next((text for text in candidates if text.strip()), 'No se encontró descripción')
-        #print("titulosssssssssssssssssssssssssssssssssssssss")
+            description "No se encontro"
         print("---------------------------------------------------------")
         print('titulo: ',titulo," descripcion ", description," url",url1)
         print("---------------------------------------------------------")
@@ -1654,8 +1645,8 @@ def search_google(consulta):
                 print(re)
                 print("-------------------------------------------")
 
-                #url,titulo,descripcion = get_title_and_description(re)
-                #vector.append({'url':url,'description':descripcion,'title':titulo})
+                url,titulo,descripcion = get_title_and_description(re)
+                vector.append({'url':url,'description':descripcion,'title':titulo})
 
     return vector
 
