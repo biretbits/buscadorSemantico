@@ -6023,9 +6023,10 @@ def busqueda_enlaces(resultados_busqueda):
                     #html+= (f'<a href="{link}" target="_blank">{link}</a><br>')
             html+=(f'''
             <div class="row">
+            <div class="col-12">
                 <h6>{link['title']}<a href="{link['url']}" target="_blank">{link['url']}</a></h6>
                  <p>{link['description']}</p>
-             </div>''')
+             </div></div>''')
             k+=1
     else:
          html+=("<div class = 'alert alert-secondary'>No se encontraron enlaces referenciados a tu busqueda.</div>")
