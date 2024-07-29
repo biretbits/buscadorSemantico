@@ -24,7 +24,7 @@ import requests
 from bs4 import BeautifulSoup as b
 from urllib.parse import urljoin, parse_qs, urlparse
 
-#nltk.download('omw-1.4')
+nltk.download('omw-1.4')
 # Cargar el modelo pre-entrenado
 model = SentenceTransformer('all-MiniLM-L6-v1')
 nlp = spacy.load("es_core_news_sm")
@@ -270,13 +270,13 @@ def clasificando(diccionario,top_10_textos,top_10_codigos,sino,claves,posiciones
                 if pa in claves:
                     descartar.append(pa)
         print(j, "  =  ",pal,'pal',contar_cor," contar",len(descartar)," = des")
-        
+
         if contar_cor > 0 and len(descartar) == 0:
             print("llego 1")
             if(len(materias_user)>0):
                 si_mater = obtener_id_materia(top_10_textos[j],pal)
                 if(len(si_mater)>0):
-                    vec_suma[j]+=contar_cor 
+                    vec_suma[j]+=contar_cor
             else:
                 vec_suma[j]+=contar_cor
         else:
@@ -292,7 +292,7 @@ def clasificando(diccionario,top_10_textos,top_10_codigos,sino,claves,posiciones
                     if(len(materias_user)>0):
                         si_mater = obtener_id_materia(top_10_textos[j],pal)
                         if(len(si_mater)>0):
-                            vec_suma[j]+=contar_cor 
+                            vec_suma[j]+=contar_cor
                     else:
                         vec_suma[j]+=contar_cor
                     print('llego')
@@ -460,7 +460,7 @@ def buscar(texto,posible_respuesta):
         id_max = vec_ids[posicion]
         for nu in nuevo:
             texto_tomar +=' '+nu
-        texto_tomar+=' unsxx'    
+        texto_tomar+=' unsxx'
     elif len(vec_suma) != contar_cero_primero:
         maximo = max(vec_suma)
         posicion = vec_suma.index(maximo)
@@ -468,11 +468,11 @@ def buscar(texto,posible_respuesta):
         id_max = top_10_codigos[posicion]
         for nu in nuevo:
             texto_tomar +=' '+nu
-        texto_tomar+=' unsxx' 
+        texto_tomar+=' unsxx'
     else:
         for nu in nuevo:
             texto_tomar +=' '+nu
-        texto_tomar+=' unsxx' 
+        texto_tomar+=' unsxx'
     if id_max != 0:
         respuesta_bd = seleccionar_respuesta_y_consulta(id_max)
         consultas_sql={}
@@ -484,9 +484,9 @@ def buscar(texto,posible_respuesta):
             #sorted_results = sorted(resultados, key=lambda x: x[1], reverse=True)
             #resultado_tensor = sorted_results[0][1]
     resultados_busqueda = ''
-    
+
     resultados_busqueda = search_google(texto_tomar)
-    
+
     if response:
         vec1=[]
         print(response,"  repuesta")
@@ -815,7 +815,7 @@ def buscar(texto,posible_respuesta):
             res = busqueda(texto,"estudiantes_regulares",consultas_sql)
             for r in res:
                 vec1.append(r)
-        
+
         return vec1,resultados_busqueda
     else:
         vec1=[]
@@ -854,7 +854,7 @@ def construir_consulta_materia_datos(texto,respuesta,consultas_sql,materias):
         fecha2 = anio+"-12-30"
     response2 = ''
     existe = 'si'
-  
+
     response = " where c.cod_parcial = 1 and "
     if materias:
         vec1.append("si_mat")
@@ -1604,15 +1604,15 @@ def buscando_google(consulta):
                 title = a.get_text() or "No se encontro titulo"
                 description = a.find_next('span', class_='aCOpRe').get_text() if a.find_next('span', class_='aCOpRe') else "No se encontro una descripcion"
                 results.append({'url':url,'titulo':title})
-    
+
     return results[:6]
 
 def get_title_and_description(url):
     try:
-        print(url)
+
         url1 = url['url']
         titulo = url['titulo']
-        print(url1)
+        print(url1,"  ",titulo)
         response = requests.get(url1, timeout=10)
         response.raise_for_status()  # Verifica si la solicitud fue exitosa
         soup = b(response.text, 'html.parser')
@@ -1627,7 +1627,7 @@ def get_title_and_description(url):
             # Intentar obtener la descripción desde los primeros párrafos o encabezados
             paragraphs = soup.find_all('p')
             headers = soup.find_all(['h1', 'h2', 'h3'])
-            
+
             # Combinar textos de párrafos y encabezados en una lista de candidatos
             candidates = [p.get_text() for p in paragraphs] + [h.get_text() for h in headers]
             if candidates:
@@ -1637,7 +1637,7 @@ def get_title_and_description(url):
         #print('titulo: ',titulo," descripcion ", description)
         return url1,titulo,description
     except Exception as e:
-        return 'Error', str(e)  
+        return 'Error', str(e)
 
 def search_google(consulta):
     vector = []
@@ -1647,9 +1647,9 @@ def search_google(consulta):
         resultados = buscando_google(consulta)
         if resultados:
             for re in resultados:
-                url,titulo,descripcion = (get_title_and_description(re))
+                url,titulo,descripcion = get_title_and_description(re)
                 vector.append({'url':url,'description':descripcion,'title':titulo})
-    
+
     return vector
 
 def detectar_internet():
