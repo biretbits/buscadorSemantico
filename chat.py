@@ -1634,7 +1634,9 @@ def get_title_and_description(url):
                 # Tomar el primer candidato no vacío
                 description = next((text for text in candidates if text.strip()), 'No se encontró descripción')
         #print("titulosssssssssssssssssssssssssssssssssssssss")
-        #print('titulo: ',titulo," descripcion ", description)
+        print("---------------------------------------------------------")
+        print('titulo: ',titulo," descripcion ", description," url",url1)
+        print("---------------------------------------------------------")
         return url1,titulo,description
     except Exception as e:
         return 'Error', str(e)
