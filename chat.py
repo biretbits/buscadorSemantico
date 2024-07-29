@@ -1650,6 +1650,10 @@ def search_google(consulta):
         print("hay enlaces ",resultados)
         if resultados:
             for re in resultados:
+                print("-------------------------------------------")
+                print(re)
+                print("-------------------------------------------")
+                
                 url,titulo,descripcion = get_title_and_description(re)
                 vector.append({'url':url,'description':descripcion,'title':titulo})
 
