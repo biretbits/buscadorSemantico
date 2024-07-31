@@ -1083,10 +1083,10 @@ def consulta_pasaron(texto,respuesta,consultas_sql):
             response = response+" "+response3
             vec1.append(nombre_posicion_sql)
             vec1.append(response)
-        return vec1,resultados_busqueda
+        return vec1
     else:
         vec1.append("argumentar_poco_mas")
-        return vec1,resultados_busqueda
+        return vec1
 
 def buscarDatosCarrera(texto,respuesta,consultas_sql):
     vec1 = []

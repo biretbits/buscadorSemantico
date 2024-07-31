@@ -1144,7 +1144,7 @@ def  retornar_valores(datos,ress,search_results):
                             if vasigDeser[index1][anio][asi[0]]['si']>0:
                                 html += "<tr><td>"+str(vasigDeser[index1][anio][asi[0]]['asignatura'])+"</td>"
                                 html += "<td>"+str(vasigDeser[index1][anio][asi[0]]['si'])+"</td>"
-                                html += "<td>"+str(vasigDeser[index1][anio][asi[0]]['carrera'])+"</td></tr>"
+                                html += "<td>"+nombre_carrera_retor(str(vasigDeser[index1][anio][asi[0]]['carrera']))+"</td></tr>"
                                     #html += "<td>"+str(nombre_carrera(vareasT[i+1][asi[0]].get(1)))+"</td></tr>"
                                 contar = 1
                         if contar == 0:
@@ -1198,7 +1198,7 @@ def  retornar_valores(datos,ress,search_results):
                             if vasigDeser[index1][anio][asi[0]]['si']>0:
                                 html += "<tr><td>"+str(vasigDeser[index1][anio][asi[0]]['asignatura'])+"</td>"
                                 html += "<td>"+str(vasigDeser[index1][anio][asi[0]]['si'])+"</td>"
-                                html += "<td>"+str(vasigDeser[index1][anio][asi[0]]['carrera'])+"</td></tr>"
+                                html += "<td>"+nombre_carrera_retor(str(vasigDeser[index1][anio][asi[0]]['carrera']))+"</td></tr>"
                                 contar = 1
                         if contar == 0:
                             html+="<tr><td colspan='3'>No se encontro información</td></tr>"
@@ -4972,26 +4972,24 @@ def  retornar_valores(datos,ress,search_results):
             if not isinstance(row[16], type(None)) and row[16]>=fecha1 and row[16] <= fecha2:
                 anoBD = int(obtener_ano_de_fecha(row[16].strftime("%Y-%m-%d")))
                 area[anoBD][row[12]-1]+=1
-        if si_total == "si_total":
-            html += "<div align='center' class='alert alert-secondary'>La cantidad de estudiantes que tienen las áreas son lo siguiente</div>"
-            areas = seleccionarAreas()
-            for are in areas:#recorremos todo los id de areas
-                html+="<div class='row'>"
-                for anio in range(a1, a2 + (1)):
+       
+        html += "<div align='center' class='alert alert-secondary'>La cantidad de estudiantes que tienen las áreas son lo siguiente</div>"
+        areas = seleccionarAreas()
+        for are in areas:#recorremos todo los id de areas
+            html+="<div class='row'>"
+            for anio in range(a1, a2 + (1)):
 
-                    html += "<div class='col-lg-4'>"
-                    html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
-                    html += "<div class='panel-heading'>"
-                    html += "<b>Area "+str(nombre_area_id(are[0]))+"</b>"
-                    html += "</div>"
-                    html += "<div class='panel-body'>"
-                    html += "El total de estudiantes que tiene el área es de "+str(area[anio][are[0]-1])+" Estudiantes en el año "+str(anio)
-                    html += "</div>"
-                    html += "</div>"
-                    html += "</div>"
-                html+="<div><br>"
-        else:
-            html+="<div class = 'alert alert-secondary'>Lo siento, no tengo una respuesta para esa pregunta o puede argumentar un poco mas</div>"
+                html += "<div class='col-lg-4'>"
+                html += "<div class='panel panel-default text-center' style = 'border: 1px solid black;background-color:khaki'>"
+                html += "<div class='panel-heading'>"
+                html += "<b>Area "+str(nombre_area_id(are[0]))+"</b>"
+                html += "</div>"
+                html += "<div class='panel-body'>"
+                html += "El total de estudiantes que tiene el área es de "+str(area[anio][are[0]-1])+" Estudiantes en el año "+str(anio)
+                html += "</div>"
+                html += "</div>"
+                html += "</div>"
+            html+="<div><br>"
     if accion1 == "pasaron_de_curso":
         id_grados = ress[0]
         si_car_n = ress[1]
