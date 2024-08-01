@@ -528,7 +528,7 @@ def obtener_id_materia(texto,texto_sin_nada):
     # Imprimir todas las asignaturas mencionadas
     codigos_encontrado = []
     for codigo, asignatura, similitud in asignaturas_mencionadas:
-        print(f"Código: {codigo}, Asignatura: {asignatura}, Similitud: {similitud:.2f}")
+        #print(f"Código: {codigo}, Asignatura: {asignatura}, Similitud: {similitud:.2f}")
         codigos_encontrado.append(codigo)
     return codigos_encontrado  # Suponiendo que los índices coinciden con los códigos
 

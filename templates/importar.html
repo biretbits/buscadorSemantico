@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Flask App</title>
+  <script src="{{ url_for('static', filename='jquery-3.5.1.min.js') }}" charset="utf-8"></script>
+
+  <link href="{{ url_for('static', filename='bootstrap-5.0.2/css/bootstrap.min.css') }}" type="text/css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script></head>
+<body class="cc">
+    {% include 'menu.html' %}
+    <br><br><br>
+    <div class="container mt-5">
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <div id="error">
+
+              </div>
+              <h4>Subir archivo sql</h4>
+              <form  enctype="multipart/form-data">
+                  <input type="file" name="file" id='file'class='form form-control'accept=".sql" required>
+                    <br>
+                  <button type="button" onclick="registrar()" class = 'btn btn-primary' >Importar</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='respuesta'>
+
+      </div>
+    </div>
+{% include 'footer.html' %}
+</body>
+</html>
+
+    <script type="text/javascript">
+    function vaciar(){
+      setTimeout(function() {
+        $('#error').html("");
+      }, 3000);
+    }
+    function registrar(){
+        
+        var formData = new FormData();
+        var file = $('#file')[0].files[0];
+       
+        formData.append('file', file);
+      //alert(pregunta_nuevo+"   "+posible_respuesta);
+      $('#error').html("<div class='alert alert-warning'>Espere por favor</div>");
+      $.ajax({
+        type: "POST", //type of submit
+        cache: false, //important or else you might get wrong data returned to you
+        url: "/ImportarSql", //destination
+        datatype: "html", //expected data format from process.php
+        data: formData, //target your form's data and serialize for a POST
+        contentType:false,
+        processData:false,
+        success: function(data){
+        //  alert(data);
+          console.log(data);
+          if(data == "correcto"){
+            $('#error').html("<div class='alert alert-success'>Se importo exitosamente la base de datos</div>");
+          }else if(data == "error_importar"){ 
+            $('#error').html("<div class='alert alert-danger'>Ocurrio un error al querer impotar la base de datos</div>");
+          }else if(data == 'error_no_sql'){
+            $('#error').html("<div class='alert alert-danger'>El archivo no es un .sql</div>");
+          
+          }else if(data=='error'){
+            $('#error').html("<div class='alert alert-danger'>Ocurrio un problema con el archivo</div>");
+          }
+          vaciar();
+            //retorno1(data);
+        },
+        error: function() {
+          $('#error').html("<div class='alert alert-danger'>Ocurrio un error</div>");
+            vaciar();
+        }
+      });
+    }
+
+function redireccionar(){
+  // Redireccionar a una URL específica
+  window.location.href = "/preg";
+}
+
+</script>
+<script src="{{ url_for('static', filename='bootstrap-5.0.2/js/bootstrap.min.js') }}" charset="utf-8"></script>

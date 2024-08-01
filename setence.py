@@ -1,6 +1,11 @@
 import random
 import pymysql
-
+import spacy
+from unidecode import unidecode
+from sentence_transformers import SentenceTransformer, util
+import numpy as np
+nlp = spacy.load("es_core_news_sm")
+model = SentenceTransformer('all-MiniLM-L6-v1')
 def seleccionar():
     # Conexión a la base de datos
     conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
@@ -137,4 +142,59 @@ def crear():
         archivo.write(html)
       
 
-crear2()
+#crear2()
+
+def seleccionarEmbeddinBd():
+    # Conexión a la base de datos
+    conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+
+    cursor = conn.cursor()
+    # Consulta SQL para obtener el embedding
+    sql_consulta = "SELECT cod_respuesta,texto FROM embeddings WHERE cod_respuesta is not null"
+    # Ejecutar la consulta SQL
+    cursor.execute(sql_consulta)
+    codigos = []
+    texto = []
+    # Obtener todos los embeddings y códigos de asignatura
+    for row in cursor.fetchall():
+        codigos.append(row[0])
+        texto.append(row[1])
+    return codigos,texto
+
+
+def obtener_texto():
+    codigos, texto = seleccionarEmbeddinBd()
+    palabra = 'ingenieria'
+    p = []
+
+    for codigo, tex in zip(codigos, texto):
+        doc = nlp(tex)
+        unir = ''
+        c = 0
+        for pal in doc:
+           
+            if pal.text in ['necesito', 'fuentes'] and c<2:
+                c+=1
+            else:
+                unir = unir + pal.text + " "
+        if c == 1:
+            unir ="hola muchas gracias por tu atencion deseo saber "+unir
+            print("cod  ",codigo,"  texto  ",unir)
+            p.append({'cod_respuesta': codigo, 'texto_nuevo': unir})
+    
+    conn = pymysql.connect(host='localhost', user='unsxx', password='123', database='academico')
+    cursor = conn.cursor()
+
+    for u in p:
+        posible_respuesta= u['cod_respuesta']
+        texto = u['texto_nuevo']
+        texto_embedding = model.encode(unidecode(texto).lower())
+        # Convertir el embedding a bytes
+        embedding_bytes = texto_embedding.tobytes()
+        # Insertar el texto y el embedding en la base de datos
+        # Si no se encuentra el embedding, calcularlo con el modelo
+        sql_insert = "INSERT INTO embeddings (texto, embedding, cod_respuesta) VALUES (%s, %s, %s)"
+        cursor.execute(sql_insert, (texto, embedding_bytes, posible_respuesta))
+    
+    conn.commit()
+obtener_texto()

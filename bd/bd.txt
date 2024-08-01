@@ -2926,3 +2926,8 @@ update cursa_asignatura set desercion = 'si' where cod_cursa = 15;
 
 
 LOAD DATA INFILE '/var/lib/mysql-files/preguntas.csv' INTO TABLE embeddings FIELDS TERMINATED BY ';' LINES TERMINATED BY '\n' IGNORE 1 LINES (texto, embedding, cod_respuesta,estado);
+
+
+
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '';
+FLUSH PRIVILEGES;

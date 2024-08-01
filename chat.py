@@ -271,10 +271,10 @@ def clasificando(diccionario,top_10_textos,top_10_codigos,sino,claves,posiciones
             else:
                 if pa in claves:
                     descartar.append(pa)
-        print(j, "  =  ",pal,'pal',contar_cor," contar",len(descartar)," = des")
+        #print(j, "  =  ",pal,'pal',contar_cor," contar",len(descartar)," = des")
 
         if contar_cor > 0 and len(descartar) == 0:
-            print("llego 1")
+           # print("llego 1")
             if(len(materias_user)>0):
                 si_mater = obtener_id_materia(top_10_textos[j],pal)
                 if(len(si_mater)>0):
@@ -297,8 +297,8 @@ def clasificando(diccionario,top_10_textos,top_10_codigos,sino,claves,posiciones
                             vec_suma[j]+=contar_cor
                     else:
                         vec_suma[j]+=contar_cor
-                    print('llego')
-                print("llego 2")
+                    #print('llego')
+                #print("llego 2")
         j += 1
     return vec_suma
 
@@ -331,7 +331,7 @@ def clasificacando_por_segunda_ves(vec_new_id,vec_new_text,otro,claves,palabras_
         for pa in palabra:
             if pa in resultado:
                 contar=contar+1
-        print(palabra," contar  ",contar)
+        #print(palabra," contar  ",contar)
         if contar > 0:
             vec_contar[kk] +=contar
             vec_new_ids[kk] = vec_new_id[kk]
@@ -400,7 +400,7 @@ def buscar(texto,posible_respuesta):
     indices_ordenados = np.argsort(similitudes[0])[::-1]
 
     # Seleccionar los 10 máximos o mas
-    top_10_indices = indices_ordenados[:25]
+    top_10_indices = indices_ordenados[:60]
     # Obtener los códigos y respuestas asociadas a los 10 máximos
     top_10_textos = [text_new[idx] for idx in top_10_indices]
     top_10_codigos = [codigos[idx] for idx in top_10_indices]
@@ -429,18 +429,18 @@ def buscar(texto,posible_respuesta):
     vec_new_id = []
     vec_new_text = []
     k = 0
-    print(vec_suma)
+    #print(vec_suma)
     if len(vec_suma)>0:
         for da in vec_suma:
             if da != 0:
                 vec_new_id.append(top_10_codigos[k])
                 vec_new_text.append(diccionario[k])
             k+=1
-    print(vec_new_id,"    ",vec_new_text)
-    print(palabras_filtradas," palabras filtradas")
+    #print(vec_new_id,"    ",vec_new_text)
+    #print(palabras_filtradas," palabras filtradas")
 
     vec_contar,vec_ids = clasificacando_por_segunda_ves(vec_new_id,vec_new_text,otro,claves,palabras_filtradas,resultado)
-    print(vec_contar,"    ",vec_ids)
+    #print(vec_contar,"    ",vec_ids)
     maximo = 0
     id_max = 0
     contar_cero = 0

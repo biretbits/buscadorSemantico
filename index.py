@@ -15,12 +15,17 @@ from math import ceil
 import os
 import subprocess
 from datetime import datetime
-
+db_config = {
+    'user': 'root',  # Cambia a tu usuario de MySQL
+    'password': '',  # Cambia a tu contraseña de MySQL
+    'host': 'localhost'
+}
 
 app = Flask("Buscador semantico")
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SECRET_KEY'] = 'supersecretkey'  # Clave secreta para firmar cookies de sesión
-
+app.config['UPLOAD_FOLDER'] = 'uploads'
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 '''
 @app.route("/")
@@ -939,6 +944,57 @@ def backup():
 
     except subprocess.CalledProcessError as e:
         return jsonify({"error": str(e)})
+
+@app.route('/Importar')
+def importarBD():
+    if 'usuario' in session:
+        return render_template('importar.html',usuario=session['usuario'],admin = session['user'])
+    return render_template('importar.html',usuario=None,admin = None)
+
+
+
+
+@app.route('/ImportarSql',methods=['POST'])
+def Importar_sql():
+    if 'file' not in request.files:
+        return "error"
+    
+    file = request.files['file']
+    if file.filename == '':
+        return "error"
+    
+    if file and file.filename.endswith('.sql'):
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+        file.save(filepath)
+        print(filepath)
+        try:
+            # Crear la base de datos
+            conn = pymysql.connect(**db_config)
+            cursor = conn.cursor()
+            cursor.execute(f"CREATE DATABASE IF NOT EXISTS academico")
+            cursor.close()
+            conn.close()
+            
+            # Crear el usuario y otorgarle permisos
+            conn = pymysql.connect(user=db_config['user'], host=db_config['host'])
+            cursor = conn.cursor()
+            cursor.execute(f"CREATE USER IF NOT EXISTS 'unsxx'@'localhost' IDENTIFIED BY '123'")
+            cursor.execute(f"GRANT ALL PRIVILEGES ON academico.* TO 'unsxx'@'localhost'")
+            cursor.execute("FLUSH PRIVILEGES")
+            cursor.close()
+            conn.close()
+            # Importar el archivo SQL
+            command = f"mysql -u root  academico< {filepath}"
+            subprocess.run(command, shell=True, check=True)
+            
+            return "correcto"
+        
+        except subprocess.CalledProcessError as err:
+            return "error_importar"    
+    else:
+        return "error_no_sql"
+ 
+
 
 @app.route('/FormCarrera')
 def FormCarrera():
